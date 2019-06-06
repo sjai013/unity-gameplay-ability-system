@@ -1,0 +1,750 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class GameplayAbility
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class GameplayAbility
+   ">
+    <meta name="generator" content="docfx 2.42.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility">
+  
+  
+  <h1 id="GameplayAbilitySystem_Abilities_GameplayAbility" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility" class="text-break">Class GameplayAbility
+  </h1>
+  <div class="markdown level0 summary"><p>This interfaces defines Gameplay Abilities.  Gameplay Abilities represent &quot;things&quot; that players can cast, etc.
+E.g. a <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbility.html">IGameplayAbility</a> might represent a fireball ability which the player casts and which damages a target</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">GameplayAbility</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbility.html">IGameplayAbility</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="GameplayAbilitySystem.Abilities.html">GameplayAbilitySystem.Abilities</a></h6>
+  <h6><strong>Assembly</strong>: Assembly-CSharp-firstpass.dll</h6>
+  <h5 id="GameplayAbilitySystem_Abilities_GameplayAbility_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class GameplayAbility : ScriptableObject, IGameplayAbility</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_AbilityLogic.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.AbilityLogic%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L60">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_AbilityLogic_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.AbilityLogic*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_AbilityLogic" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.AbilityLogic">AbilityLogic</h4>
+  <div class="markdown level1 summary"><p>Defines what the ability actually does</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AbstractAbilityActivation AbilityLogic { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Abilities.AbilityActivations.AbstractAbilityActivation.html">AbstractAbilityActivation</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_GameplayCooldowns.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.GameplayCooldowns%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L52">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_GameplayCooldowns_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.GameplayCooldowns*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_GameplayCooldowns" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.GameplayCooldowns">GameplayCooldowns</h4>
+  <div class="markdown level1 summary"><p>Cooldowns associated with this ability</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;GameplayCooldown&gt; GameplayCooldowns { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="GameplayAbilitySystem.GameplayCooldown.html">GameplayCooldown</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_GameplayCost.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.GameplayCost%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L50">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_GameplayCost_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.GameplayCost*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_GameplayCost" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.GameplayCost">GameplayCost</h4>
+  <div class="markdown level1 summary"><p>Cost of using this ability</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IGameplayCost GameplayCost { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayCost.html">IGameplayCost</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_OnGameplayAbilityCancelled.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.OnGameplayAbilityCancelled%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L56">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_OnGameplayAbilityCancelled_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.OnGameplayAbilityCancelled*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_OnGameplayAbilityCancelled" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.OnGameplayAbilityCancelled">OnGameplayAbilityCancelled</h4>
+  <div class="markdown level1 summary"><p>This is called whenever this ability is cancelled.
+This event does not pass on details of which <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a>
+was responsible for using this ability.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GenericAbilityEvent OnGameplayAbilityCancelled { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Events.GenericAbilityEvent.html">GenericAbilityEvent</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_OnGameplayAbilityCommitted.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.OnGameplayAbilityCommitted%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L54">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_OnGameplayAbilityCommitted_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.OnGameplayAbilityCommitted*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_OnGameplayAbilityCommitted" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.OnGameplayAbilityCommitted">OnGameplayAbilityCommitted</h4>
+  <div class="markdown level1 summary"><p>This is called whenever this ability is commited.
+This event does not pass on details of which <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a>
+was responsible for using this ability.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GenericAbilityEvent OnGameplayAbilityCommitted { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Events.GenericAbilityEvent.html">GenericAbilityEvent</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_OnGameplayAbilityEnded.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.OnGameplayAbilityEnded%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L58">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_OnGameplayAbilityEnded_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.OnGameplayAbilityEnded*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_OnGameplayAbilityEnded" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.OnGameplayAbilityEnded">OnGameplayAbilityEnded</h4>
+  <div class="markdown level1 summary"><p>This is called whenever this ability ends.
+This event does not pass on details of which <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a>
+was responsible for using this ability.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GenericAbilityEvent OnGameplayAbilityEnded { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Events.GenericAbilityEvent.html">GenericAbilityEvent</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_Tags.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.Tags%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L48">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_Tags_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.Tags*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_Tags" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.Tags">Tags</h4>
+  <div class="markdown level1 summary"><p>Tags that this ability has/provides</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IAbilityTags Tags { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Interfaces.IAbilityTags.html">IAbilityTags</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_AbilityOffCooldown_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.AbilityOffCooldown(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L148">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_AbilityOffCooldown_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.AbilityOffCooldown*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_AbilityOffCooldown_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.AbilityOffCooldown(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)">AbilityOffCooldown(IGameplayAbilitySystem)</h4>
+  <div class="markdown level1 summary"><p>Checks to see if the <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a> is off cooldown on the target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool AbilityOffCooldown(IGameplayAbilitySystem AbilitySystem)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></td>
+        <td><span class="parametername">AbilitySystem</span></td>
+        <td><p>The target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_ActivateAbility_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.ActivateAbility(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L76">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_ActivateAbility_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.ActivateAbility*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_ActivateAbility_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.ActivateAbility(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)">ActivateAbility(IGameplayAbilitySystem)</h4>
+  <div class="markdown level1 summary"><p>Activates this ability on the target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ActivateAbility(IGameplayAbilitySystem AbilitySystem)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></td>
+        <td><span class="parametername">AbilitySystem</span></td>
+        <td><p>The target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_ApplyCooldown_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.ApplyCooldown(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L101">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_ApplyCooldown_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.ApplyCooldown*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_ApplyCooldown_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.ApplyCooldown(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)">ApplyCooldown(IGameplayAbilitySystem)</h4>
+  <div class="markdown level1 summary"><p>Applies cooldown.  Cooldown is applied even if the  ability is already
+on cooldown</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void ApplyCooldown(IGameplayAbilitySystem abilitySystem)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></td>
+        <td><span class="parametername">abilitySystem</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_ApplyCost.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.ApplyCost%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L92">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_ApplyCost_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.ApplyCost*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_ApplyCost" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.ApplyCost">ApplyCost()</h4>
+  <div class="markdown level1 summary"><p>Applies the ability cost, decreasing the specified cost resource from the player.
+If player doesn't have the required resource, the resource goes to negative (or clamps to 0)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void ApplyCost()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_ApplyGameplayEffectToTarget_GameplayAbilitySystem_GameplayEffects_GameplayEffect_GameplayAbilitySystem_AbilitySystemComponent_.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.ApplyGameplayEffectToTarget(GameplayAbilitySystem.GameplayEffects.GameplayEffect%2CGameplayAbilitySystem.AbilitySystemComponent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L70">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_ApplyGameplayEffectToTarget_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.ApplyGameplayEffectToTarget*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_ApplyGameplayEffectToTarget_GameplayAbilitySystem_GameplayEffects_GameplayEffect_GameplayAbilitySystem_AbilitySystemComponent_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.ApplyGameplayEffectToTarget(GameplayAbilitySystem.GameplayEffects.GameplayEffect,GameplayAbilitySystem.AbilitySystemComponent)">ApplyGameplayEffectToTarget(GameplayEffect, AbilitySystemComponent)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void ApplyGameplayEffectToTarget(GameplayEffect effect, AbilitySystemComponent target)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.GameplayEffects.GameplayEffect.html">GameplayEffect</a></td>
+        <td><span class="parametername">effect</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.AbilitySystemComponent.html">AbilitySystemComponent</a></td>
+        <td><span class="parametername">target</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_CommitAbility_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.CommitAbility(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L139">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_CommitAbility_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.CommitAbility*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_CommitAbility_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.CommitAbility(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)">CommitAbility(IGameplayAbilitySystem)</h4>
+  <div class="markdown level1 summary"><p>Commits the <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a> on the target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CommitAbility(IGameplayAbilitySystem AbilitySystem)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></td>
+        <td><span class="parametername">AbilitySystem</span></td>
+        <td><p>The target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_EndAbility_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.EndAbility(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L110">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_EndAbility_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.EndAbility*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_EndAbility_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.EndAbility(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)">EndAbility(IGameplayAbilitySystem)</h4>
+  <div class="markdown level1 summary"><p>Ends this ability on the target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void EndAbility(IGameplayAbilitySystem AbilitySystem)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></td>
+        <td><span class="parametername">AbilitySystem</span></td>
+        <td><p>The target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_GetAbilityCooldownTags.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.GetAbilityCooldownTags%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L169">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_GetAbilityCooldownTags_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.GetAbilityCooldownTags*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_GetAbilityCooldownTags" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.GetAbilityCooldownTags">GetAbilityCooldownTags()</h4>
+  <div class="markdown level1 summary"><p>The cooldown tags associated with this <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbility.html">IGameplayAbility</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;GameplayTag&gt; GetAbilityCooldownTags()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="GameplayAbilitySystem.GameplayTag.html">GameplayTag</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_IsAbilityActivatable_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.IsAbilityActivatable(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L83">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_IsAbilityActivatable_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.IsAbilityActivatable*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_IsAbilityActivatable_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.IsAbilityActivatable(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)">IsAbilityActivatable(IGameplayAbilitySystem)</h4>
+  <div class="markdown level1 summary"><p>Check if this ability can be activated by <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsAbilityActivatable(IGameplayAbilitySystem AbilitySystem)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></td>
+        <td><span class="parametername">AbilitySystem</span></td>
+        <td><p>The target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility_PlayerHasResourceToCast_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility.PlayerHasResourceToCast(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L133">View Source</a>
+  </span>
+  <a id="GameplayAbilitySystem_Abilities_GameplayAbility_PlayerHasResourceToCast_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.PlayerHasResourceToCast*"></a>
+  <h4 id="GameplayAbilitySystem_Abilities_GameplayAbility_PlayerHasResourceToCast_GameplayAbilitySystem_Interfaces_IGameplayAbilitySystem_" data-uid="GameplayAbilitySystem.Abilities.GameplayAbility.PlayerHasResourceToCast(GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem)">PlayerHasResourceToCast(IGameplayAbilitySystem)</h4>
+  <div class="markdown level1 summary"><p>Checks to see if the target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a> has the required resources to cast this ability</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool PlayerHasResourceToCast(IGameplayAbilitySystem AbilitySystem)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></td>
+        <td><span class="parametername">AbilitySystem</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if the target <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a> has required resources, false otherwise</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbility.html">IGameplayAbility</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/new/master/apiSpec/new?filename=GameplayAbilitySystem_Abilities_GameplayAbility.md&amp;value=---%0Auid%3A%20GameplayAbilitySystem.Abilities.GameplayAbility%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/sjai013/UnityGameplayAbilitySystem/blob/master/Assets/Plugins/GameplayAbilitySystem/GameplayAbility.cs/#L17" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,872 @@
+{
+  "homepages": [],
+  "source_base_path": "E:/Repos/test/docfx_project",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Abilities.AbilityActivations.AbstractAbilityActivation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Abilities.AbilityActivations.AbstractAbilityActivation.html",
+          "hash": "XIDgWSukHHu+zJ5SrzhVSg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Abilities.AbilityActivations.RangeAttack.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Abilities.AbilityActivations.RangeAttack.html",
+          "hash": "p6oO7J0qU/R31hTnmYvL4w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Abilities.AbilityActivations.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Abilities.AbilityActivations.html",
+          "hash": "XHJ4BgG1peMJVppNv7BpPQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Abilities.GameplayAbility.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Abilities.GameplayAbility.html",
+          "hash": "pOWDt2npC6IZ37TjRYw9DA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Abilities.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Abilities.html",
+          "hash": "RbgCpO184Y3oGQ9iFbnzEA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.AbilitySystemComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.AbilitySystemComponent.html",
+          "hash": "nb0975XFpLEo0qe1VqB13g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.ActiveGameplayEffectData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.ActiveGameplayEffectData.html",
+          "hash": "9WtlhC4iVVOT0KwjJzdPog=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.AnimationEvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.AnimationEvent.html",
+          "hash": "2qvD9N6IxKedIujCLXnSQA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.AnimationEventSystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.AnimationEventSystem.html",
+          "hash": "tBkg4kn5kQx3mHjogvOLjA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Attribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Attribute.html",
+          "hash": "di0oY8sBC9dCiCqi15o/Xw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Attributes.AttributeChangeData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Attributes.AttributeChangeData.html",
+          "hash": "CBYjhPo/0NdHgA5ReM9Lmg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Attributes.AttributeChangeDataEvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Attributes.AttributeChangeDataEvent.html",
+          "hash": "7tL6OZYL8N1Y91TsMzxnJg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Attributes.AttributeSet.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Attributes.AttributeSet.html",
+          "hash": "LpbxryHf0Y5vfal/TM++3w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Attributes.AttributeType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Attributes.AttributeType.html",
+          "hash": "vlSLgO0OiR8y13ikgc+ukw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Attributes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Attributes.html",
+          "hash": "DdW+i3DJNv4WtWRdrdsdww=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.CustomAnimationUnityEvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.CustomAnimationUnityEvent.html",
+          "hash": "FjNQSMeYqphEEUxUL4URcw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Enums.EDurationPolicy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Enums.EDurationPolicy.html",
+          "hash": "USOH/fGUMt/TDsHiIQSh1A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Enums.EMagnitudeCalculationTypes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Enums.EMagnitudeCalculationTypes.html",
+          "hash": "KO4EQNZyn0swhSOmcA4Zvw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Enums.EModifierOperationType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Enums.EModifierOperationType.html",
+          "hash": "ed54TzNxZAgBj2cw30KiFA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Enums.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Enums.html",
+          "hash": "GNclN/B7vwjYXTf9yUWfMg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Events.GameplayEvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Events.GameplayEvent.html",
+          "hash": "gsoGUOnCR+1edtfcistGMA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Events.GameplayEventData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Events.GameplayEventData.html",
+          "hash": "BCZiQbsPGRyAF+Z7X0mgYA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Events.GenericAbilityEvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Events.GenericAbilityEvent.html",
+          "hash": "+mZ0fAPRQPHnjCsy7u0XUQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Events.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Events.html",
+          "hash": "9NRAwDTDVS1vjr3Q0lYCig=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.ExtensionMethods.UnityEventExtensionMethods.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.ExtensionMethods.UnityEventExtensionMethods.html",
+          "hash": "bt/YYApBH+Gp81cGlOKj4g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.ExtensionMethods.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.ExtensionMethods.html",
+          "hash": "l829assjkxinNhEjgP9c0Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayAbilityTags.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayAbilityTags.html",
+          "hash": "UmQCw1G6NMpZadRRM34InQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayCooldown.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayCooldown.html",
+          "hash": "JWGjpFASB0ejgNRlkre3oQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayCost.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayCost.html",
+          "hash": "ZQlYf9HTqsA0xsZi0yfoeQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayCues.AbstractGameplayCueImplementation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayCues.AbstractGameplayCueImplementation.html",
+          "hash": "1KEj+wsRbyrBKI3+SjrlmQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayCues.AbstractGameplayCueNotify_Actor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayCues.AbstractGameplayCueNotify_Actor.html",
+          "hash": "C0EI0GHNZhENqYatkmtHLQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayCues.EGameplayCueEventTypes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayCues.EGameplayCueEventTypes.html",
+          "hash": "MrMoCDla+ZbnZl/1Q7enwA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayCues.GameplayCueParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayCues.GameplayCueParameters.html",
+          "hash": "rQuDyEeZDoaLjrSv3KJShg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayCues.SpawnObjectAtTarget_GameplayCueImplementation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayCues.SpawnObjectAtTarget_GameplayCueImplementation.html",
+          "hash": "eYkfKq6Gp0yA+I4QHk2FEw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayCues.SpawnObjectAtTarget_GameplayCueNotify_Actor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayCues.SpawnObjectAtTarget_GameplayCueNotify_Actor.html",
+          "hash": "VuzNFSdfNFxCLaYSdi60Sw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayCues.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayCues.html",
+          "hash": "mNPQMmaQCpbN7nECmZv/jw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayEffectModifier.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayEffectModifier.html",
+          "hash": "tNEaxGvE52LkSz7QSXhm2g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayEffects.GameplayEffect.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayEffects.GameplayEffect.html",
+          "hash": "knrY9p8hiQSEor5GbGp7xg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayEffects.GameplayEffectPolicy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayEffects.GameplayEffectPolicy.html",
+          "hash": "mCEDXI9Gc/i9bj1owrKzaQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayEffects.GameplayEffectTagContainer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayEffects.GameplayEffectTagContainer.html",
+          "hash": "8Ikm2ChET4mOJk6w16XX7A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayEffects.GameplayEffectTags.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayEffects.GameplayEffectTags.html",
+          "hash": "g1SUhyrzRaeqU7p1jUeCww=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayEffects.GameplayModifierEvaluatedData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayEffects.GameplayModifierEvaluatedData.html",
+          "hash": "5de/l7tcAvEbYDWZ6hRGZw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayEffects.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayEffects.html",
+          "hash": "EOdSsGFaUmmuC2Vc425flg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.GameplayTag.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.GameplayTag.html",
+          "hash": "Lxw8vko2cZcz+evnL8Ajsg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.GameplayEffectModifierTagCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.GameplayEffectModifierTagCollection.html",
+          "hash": "jDsqsFlscd5O6rGhLwrZLQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IAbilityTags.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IAbilityTags.html",
+          "hash": "BkBCTSd70nYyzBnkFoICmg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IAddedRemovedTags.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IAddedRemovedTags.html",
+          "hash": "J0rHKbAqY02NMHkbDosB2Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IAttribute.html",
+          "hash": "r8F2dSMeMx5Qygt7ROfdcA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IAttributeSet.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IAttributeSet.html",
+          "hash": "LuPCUubTz2fQgUnMKjDRZg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayAbility.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayAbility.html",
+          "hash": "i5wl9xV5P7uTk+7XxRMXlQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html",
+          "hash": "/jGMwdCEZCHIW9hZwJMsOw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayCooldown.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayCooldown.html",
+          "hash": "vI7Li4xQma6DRN2zkf2EYg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayCost.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayCost.html",
+          "hash": "kD6A5XaZRBFlbwQ75Pvuyw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayEffectModifier.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayEffectModifier.html",
+          "hash": "23GPGjI551q6bhvm9NDpaw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayEffectPolicy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayEffectPolicy.html",
+          "hash": "h24s0X6ouCups74aAjq55Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayEffectTags.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.IGameplayEffectTags.html",
+          "hash": "Vz4Mzay65768z2SvkrCYIQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Interfaces.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Interfaces.html",
+          "hash": "BEdiCeMJOFq6fRBkzIEzhA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Statics.AbilitySystemStatics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Statics.AbilitySystemStatics.html",
+          "hash": "WyjutmPVCZCg7jLeVHDS4w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Statics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Statics.html",
+          "hash": "5RXH5SxoYlLG3m3yGiud0Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Structs.GameplayAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Structs.GameplayAttribute.html",
+          "hash": "8byh8p+r+4Tx83GgVY1TVA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.Structs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.Structs.html",
+          "hash": "3vBOUbd3dRTYMnjRDWuZBw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/GameplayAbilitySystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/GameplayAbilitySystem.html",
+          "hash": "bQBoMcXB2RcroI3VKUdUAw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "YZPXuSiMhkp799ctPw/CSw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "S2waIy7hiDTcSj5T8pdLFQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "1Y4Ih9Eg9LLTk7wJXw+ZQw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "t7iiFrmuYmrKWisdq+lN6Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "yFZzXCuLA+zP2NtugeWLPQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "k+/dkjFuwAVS32HduMpmBw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 62,
+          "skipped_file_count": 0
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 3,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

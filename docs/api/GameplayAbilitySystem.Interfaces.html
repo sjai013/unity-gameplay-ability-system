@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace GameplayAbilitySystem.Interfaces
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace GameplayAbilitySystem.Interfaces
+   ">
+    <meta name="generator" content="docfx 2.42.4.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="GameplayAbilitySystem.Interfaces">
+  
+  <h1 id="GameplayAbilitySystem_Interfaces" data-uid="GameplayAbilitySystem.Interfaces" class="text-break">Namespace GameplayAbilitySystem.Interfaces
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.GameplayEffectModifierTagCollection.html">GameplayEffectModifierTagCollection</a></h4>
+      <section><p>Defines tags that must be present/must not be present on a <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IAbilityTags.html">IAbilityTags</a></h4>
+      <section></section>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IAddedRemovedTags.html">IAddedRemovedTags</a></h4>
+      <section><p>List of added or removed tags.  We only have added tags for now, but maybe we might need removed tags in the future?</p>
+</section>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IAttribute.html">IAttribute</a></h4>
+      <section><p>Attributes are used to define parameters (such as health, speed) for a character.</p>
+</section>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IAttributeSet.html">IAttributeSet</a></h4>
+      <section><p>
+An <a class="xref" href="GameplayAbilitySystem.Interfaces.IAttributeSet.html">IAttributeSet</a> defines the list of <a class="xref" href="GameplayAbilitySystem.Interfaces.IAttribute.html">IAttribute</a> that a player (that has an <a class="xref" href="GameplayAbilitySystem.AbilitySystemComponent.html">AbilitySystemComponent</a>) possesses.  
+The attributes themselves are assigned to the <a class="xref" href="GameplayAbilitySystem.Interfaces.IAttributeSet.html">IAttributeSet</a> by dragging <see cref="!:ScriptableObject"></see> of type
+<a class="xref" href="GameplayAbilitySystem.Interfaces.IAttribute.html">IAttribute</a> to the <a class="xref" href="GameplayAbilitySystem.Interfaces.IAttributeSet.html">IAttributeSet</a> in the Unity Inspector.
+</p>
+<p>
+This will usually include <a class="xref" href="GameplayAbilitySystem.Interfaces.IAttribute.html">IAttribute</a>s such as Health, Mana, Speed, etc.
+</p>
+</section>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbility.html">IGameplayAbility</a></h4>
+      <section><p>This interfaces defines Gameplay Abilities.  Gameplay Abilities represent &quot;things&quot; that players can cast, etc.
+E.g. a <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbility.html">IGameplayAbility</a> might represent a fireball ability which the player casts and which damages a target</p>
+</section>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a></h4>
+      <section><p>The <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a> is the primary component of the Gameplay Ability System.
+Every component that needs to participate with the Ability System (such as receiving or dealing damage)
+needs to have this component.</p>
+</section>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayCooldown.html">IGameplayCooldown</a></h4>
+      <section><p>This is used to represent cooldowns for a <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbility.html">IGameplayAbility</a>.<br>
+Multiple <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayCooldown.html">IGameplayCooldown</a> can be set for an ability to represent multiple
+shared cooldowns (e.g. a global cooldown shared by all abilities, and a <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbility.html">IGameplayAbility</a> specific cooldown)</p>
+</section>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayCost.html">IGameplayCost</a></h4>
+      <section><p>Represents the cost of a <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbility.html">IGameplayAbility</a>.
+The <a class="xref" href="GameplayAbilitySystem.GameplayEffects.GameplayEffect.html">GameplayEffect</a> defines the actual cost of the ability by describing which <a class="xref" href="GameplayAbilitySystem.Interfaces.IAttribute.html">IAttribute</a> are reduced on the
+casting <a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayAbilitySystem.html">IGameplayAbilitySystem</a> (e.g. mana)</p>
+</section>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayEffectModifier.html">IGameplayEffectModifier</a></h4>
+      <section><p>This class defines how a  <a class="xref" href="GameplayAbilitySystem.GameplayEffects.GameplayEffect.html">GameplayEffect</a> modifies attributes (e.g. doing damage, healing)</p>
+</section>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayEffectPolicy.html">IGameplayEffectPolicy</a></h4>
+      <section><p>This is used to define how long the <a class="xref" href="GameplayAbilitySystem.GameplayEffects.GameplayEffect.html">GameplayEffect</a> lasts, and what it does (e.g. how much damage)</p>
+</section>
+      <h4><a class="xref" href="GameplayAbilitySystem.Interfaces.IGameplayEffectTags.html">IGameplayEffectTags</a></h4>
+      <section><p>Gameplay effect tags</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
