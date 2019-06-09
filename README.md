@@ -85,7 +85,7 @@ Clone this repository and open it in Unity.  The Demo project is set up with two
         }
 ```
 
-## Constributing
+## Contributing
 You can contribute to this project by:
 * Posting issues
 * Creating PRs with bug fixes or new features
