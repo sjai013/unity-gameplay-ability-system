@@ -1,8 +1,12 @@
+using System.Xml.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using GameplayAbilitySystem.Interfaces;
 using GameplayAbilitySystem.Attributes;
 using System;
 using UnityEngine.Events;
+using UniRx.Async;
+using System.Threading.Tasks;
 
 namespace GameplayAbilitySystem.GameplayEffects
 {
@@ -26,12 +30,16 @@ namespace GameplayAbilitySystem.GameplayEffects
 
         public ActiveGameplayEffectsEvent ActiveGameplayEffectAdded = new ActiveGameplayEffectsEvent();
 
-        public ActiveGameplayEffectData ApplyGameEffect(ActiveGameplayEffectData EffectData)
+        public async Task<ActiveGameplayEffectData> ApplyGameEffect(ActiveGameplayEffectData EffectData)
         {
             // Durational effect.  Add granted modifiers to active list
             AddActiveGameplayEffectGrantedTagsAndModifiers(EffectData);
-            // Register callbacks for removal of effects when duration expires
             ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
+
+            // Register callbacks for removal of effects when duration expires
+            await UniTask.Delay((int)(EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f));
+            RemoveActiveGameplayEffectGrantedTagsAndModifiers(EffectData);
+
             return null;
         }
 
@@ -45,9 +53,46 @@ namespace GameplayAbilitySystem.GameplayEffects
             ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
         }
 
-        private void AddActiveGameplayEffectGrantedTagsAndModifiers(ActiveGameplayEffectData EffectData)
+        private void ModifyActiveGameplayEffectGrantedTagsAndModifiers(ActiveGameplayEffectData EffectData, Action<GameplayEffectModifier> action)
         {
             foreach (var modifier in EffectData.Effect.GameplayEffectPolicy.Modifiers)
+            {
+                action(modifier);
+            }
+        }
+
+        private void RemoveActiveGameplayEffectGrantedTagsAndModifiers(ActiveGameplayEffectData EffectData)
+        {
+            // There could be multiple stacked effects, due to multiple casts
+            // Remove one instance of this effect from the active list
+            ModifyActiveGameplayEffectGrantedTagsAndModifiers(EffectData, modifier =>
+            {
+                // Find in the active list, and remove
+                var attributeAggregatorMap = AbilitySystem.ActiveGameplayEffectsContainer.AttributeAggregatorMap;
+                // If aggregator for this attribute doesn't exist, don't do anything.  
+                // It may have never been added, or has already been removed
+                if (attributeAggregatorMap.TryGetValue(modifier.Attribute, out var aggregator))
+                {
+                    aggregator.Mods[modifier.ModifierOperation].RemoveAll(x =>
+                    {
+                        x.ProviderEffect.TryGetTarget(out var Effect);
+                        return Effect;
+
+                    });
+
+                    if (aggregator.Mods[modifier.ModifierOperation].Count == 0)
+                    {
+                        aggregator.Mods.Remove(modifier.ModifierOperation);
+                    }
+                }
+                aggregator.MarkDirty();
+            });
+
+        }
+
+        private void AddActiveGameplayEffectGrantedTagsAndModifiers(ActiveGameplayEffectData EffectData)
+        {
+            ModifyActiveGameplayEffectGrantedTagsAndModifiers(EffectData, modifier =>
             {
                 modifier.AttemptCalculateMagnitude(out var EvaluatedMagnitude);
 
@@ -61,8 +106,9 @@ namespace GameplayAbilitySystem.GameplayEffects
                 }
                 aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation, EffectData.Effect);
                 aggregator.MarkDirty();
-            }
+            });
         }
+
 
         private void UpdateAttribute(Aggregator Aggregator, AttributeType AttributeType)
         {
