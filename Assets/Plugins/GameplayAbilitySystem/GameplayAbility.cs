@@ -154,7 +154,7 @@ namespace GameplayAbilitySystem.Abilities
             // and check if any of them provide these tags
 
             // Check each active gameplay effect.  If we have a match, store the reference
-            foreach (var gameplayEffect in AbilitySystem.ActiveGameplayEffects)
+            foreach (var gameplayEffect in AbilitySystem.ActiveGameplayEffectsContainer.ActiveGameplayEffects)
             {
                 if (gameplayEffect.Effect.GetOwningTags().Intersect(cooldownTags).Count() > 0)
                 {

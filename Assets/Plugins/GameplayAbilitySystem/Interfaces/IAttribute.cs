@@ -28,10 +28,10 @@ namespace GameplayAbilitySystem.Interfaces
 
 
         /// <summary>
-        /// Set the value of thie attribute
+        /// Set the current value of the attribute
         /// </summary>
         /// <param name="AttributeSet"><see cref="IAttributeSet"/> this attribute belongs to</param>
         /// <param name="NewValue">New value of the attribute</param>
-        void SetNumericValueChecked(IAttributeSet AttributeSet, ref float NewValue);
+        void SetAttributeCurrentValue(IAttributeSet AttributeSet, ref float NewValue);
     }
 }

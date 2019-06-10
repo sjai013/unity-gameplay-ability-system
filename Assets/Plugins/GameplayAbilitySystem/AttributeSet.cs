@@ -14,14 +14,19 @@ namespace GameplayAbilitySystem.Attributes
     public class AttributeSet : MonoBehaviour, IAttributeSet
     {
         [SerializeField]
-        private AttributeChangeDataEvent _attributeValueChanged = new AttributeChangeDataEvent();
+        private AttributeChangeDataEvent _attributeBaseValueChanged = new AttributeChangeDataEvent();
         /// <inheritdoc />
-        public AttributeChangeDataEvent AttributeValueChanged => _attributeValueChanged;
+        public AttributeChangeDataEvent AttributeBaseValueChanged => _attributeBaseValueChanged;
 
         /// <inheritdoc />
         [SerializeField]
         private List<Attribute> _attributes;
         public List<Attribute> Attributes { get => _attributes; set => _attributes = value; }
+
+        /// <inheritDoc />
+        [SerializeField]
+        private AttributeChangeDataEvent _attributeCurrentValueChanged = new AttributeChangeDataEvent();
+        public AttributeChangeDataEvent AttributeCurrentValueChanged => _attributeCurrentValueChanged;
 
         /// <inheritdoc />
         public AbilitySystemComponent GetOwningAbilitySystem()

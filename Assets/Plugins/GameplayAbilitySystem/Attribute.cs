@@ -29,7 +29,7 @@ namespace GameplayAbilitySystem
         public AttributeType AttributeType { get => _attributeType; set => _attributeType = AttributeType; }
 
         /// <inheritdoc />
-        public void SetNumericValueChecked(IAttributeSet AttributeSet, ref float NewValue)
+        public void  SetAttributeCurrentValue(IAttributeSet AttributeSet, ref float NewValue)
         {
             AttributeSet.PreAttributeChange(this, ref NewValue);
             this.CurrentValue = NewValue;

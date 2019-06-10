@@ -48,7 +48,7 @@ namespace GameplayAbilitySystem
         public GameplayEffectModifierTagCollection TargetTags => _targetTags;
 
         /// <inheritdoc />
-        public bool AttemptCalculateMagnitude(GameplayEffect GameplayEffect, out float EvaluatedMagnitude)
+        public bool AttemptCalculateMagnitude(out float EvaluatedMagnitude)
         {
             //TODO: PROPER IMPLEMENTATION
             EvaluatedMagnitude = this.ScaledMagnitude;

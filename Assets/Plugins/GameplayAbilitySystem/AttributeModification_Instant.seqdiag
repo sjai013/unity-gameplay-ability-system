@@ -1,0 +1,15 @@
+Title: What Happens When an Instant GameplayEffect is Applied?
+Participant AbilityLogic
+Participant AbilitySystem
+Participant ActiveGameplayEffectsContainer
+Participant Aggregator
+
+AbilityLogic->AbilitySystem: Apply GameplayEffect
+AbilitySystem->ActiveGameplayEffectsContainer: Add GameplayEffect to List of Active GameplayEffect
+AbilitySystem->AbilitySystem: Register callback for removal of Effect on expiration
+AbilitySystem->AbilitySystem: Register callback for removal of associated Cooldown Effect on expiration
+AbilitySystem->AbilitySystem: Update Attribute Base
+ActiveGameplayEffectsContainer->Aggregator: Mark Attribute Aggregator dirty
+Aggregator->Aggregator: Re-calculate new Current Value for Attributes
+Aggregator->AbilitySystem: Update Current Value for attributes
+

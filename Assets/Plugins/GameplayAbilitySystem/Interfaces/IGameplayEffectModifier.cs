@@ -46,8 +46,7 @@ namespace GameplayAbilitySystem.Interfaces
         /// <see cref="GameplayTag"/> that must be present/must not be present on the target of the <see cref="IGameplayAbilitySystem"/>
         GameplayEffectModifierTagCollection TargetTags { get; }
 
-        bool AttemptCalculateMagnitude(GameplayEffect GameplayEffect, out float EvaluatedMagnitude);
-
+        bool AttemptCalculateMagnitude(out float EvaluatedMagnitude);
     }
 
     /// <summary>

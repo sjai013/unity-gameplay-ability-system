@@ -55,7 +55,7 @@ namespace GameplayAbilitySystem.Interfaces
         GameplayEffectTagContainer OngoingTagRequirements { get; }
 
         /// <summary>
-        /// These <see cref="GameplayTag"/> are required to apply the <see cref="GameplayEffect"/>.  Once the <see cref="GameplayEffect"/> is applied,
+        /// These <see cref="GameplayTag"/> are required on the target to apply the <see cref="GameplayEffect"/>.  Once the <see cref="GameplayEffect"/> is applied,
         /// this has no effect.
         /// </summary>
         /// <value></value>

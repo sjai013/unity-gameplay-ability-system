@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameplayEffectPolicy:
     _durationPolicy: 0
-    _durationMagnitude: 5
+    _durationMagnitude: 15
     _modifiers:
     - _attributeType: {fileID: 11400000, guid: 08c3bc3be14b22e4aadc300234c0587a, type: 2}
       _modifierOperationType: 0
       _magnitudeCalculationType: 0
-      _scaledMagnitude: 5
+      _scaledMagnitude: 3
       _sourceTags:
         RequireTags: []
         IgnoreTags: []
