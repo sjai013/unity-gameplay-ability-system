@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameplayEffectPolicy:
     _durationPolicy: 2
-    _durationMagnitude: 1
+    _durationMagnitude: 5
     _modifiers: []
   _gameplayEffectTags:
     _assetTags:

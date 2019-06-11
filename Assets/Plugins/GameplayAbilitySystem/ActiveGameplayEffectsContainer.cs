@@ -7,6 +7,7 @@ using System;
 using UnityEngine.Events;
 using UniRx.Async;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace GameplayAbilitySystem.GameplayEffects
 {
@@ -26,26 +27,38 @@ namespace GameplayAbilitySystem.GameplayEffects
         /// <value></value>
         public Dictionary<AttributeType, Aggregator> AttributeAggregatorMap { get; } = new Dictionary<AttributeType, Aggregator>();
 
+        [SerializeField]
+        private List<ActiveGameplayEffectData> _activeCooldowns = new List<ActiveGameplayEffectData>();
+        public List<ActiveGameplayEffectData> ActiveCooldowns { get => _activeCooldowns; }
+
         public List<ActiveGameplayEffectData> ActiveGameplayEffects = new List<ActiveGameplayEffectData>();
 
+        
         public ActiveGameplayEffectsEvent ActiveGameplayEffectAdded = new ActiveGameplayEffectsEvent();
 
         public async Task<ActiveGameplayEffectData> ApplyGameEffect(ActiveGameplayEffectData EffectData)
         {
             // Durational effect.  Add granted modifiers to active list
-            AddActiveGameplayEffectGrantedTagsAndModifiers(EffectData);
+            AddActiveGameplayEffect(EffectData);
             ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
 
             // Register callbacks for removal of effects when duration expires
             await UniTask.Delay((int)(EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f));
-            RemoveActiveGameplayEffectGrantedTagsAndModifiers(EffectData);
+            RemoveActiveGameplayEffect(EffectData);
 
             return null;
         }
 
-        public ActiveGameplayEffectData ApplyCooldownEffect(ActiveGameplayEffectData EffectData)
+        public async void ApplyCooldownEffect(ActiveGameplayEffectData EffectData)
         {
-            return null;
+            this.ActiveCooldowns.Add(EffectData);
+            await UniTask.Delay((int)(EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f));
+            this.ActiveCooldowns.Remove(EffectData);
+        }
+
+        public bool IsCooldownEffectPresent(GameplayEffect Effect)
+        {
+            return (this.ActiveCooldowns.Any(x => x.Effect == Effect));
         }
 
         private void OnActiveGameplayEffectAdded(ActiveGameplayEffectData EffectData)
@@ -53,7 +66,7 @@ namespace GameplayAbilitySystem.GameplayEffects
             ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
         }
 
-        private void ModifyActiveGameplayEffectGrantedTagsAndModifiers(ActiveGameplayEffectData EffectData, Action<GameplayEffectModifier> action)
+        private void ModifyActiveGameplayEffect(ActiveGameplayEffectData EffectData, Action<GameplayEffectModifier> action)
         {
             foreach (var modifier in EffectData.Effect.GameplayEffectPolicy.Modifiers)
             {
@@ -61,11 +74,13 @@ namespace GameplayAbilitySystem.GameplayEffects
             }
         }
 
-        private void RemoveActiveGameplayEffectGrantedTagsAndModifiers(ActiveGameplayEffectData EffectData)
+
+
+        private void RemoveActiveGameplayEffect(ActiveGameplayEffectData EffectData)
         {
             // There could be multiple stacked effects, due to multiple casts
             // Remove one instance of this effect from the active list
-            ModifyActiveGameplayEffectGrantedTagsAndModifiers(EffectData, modifier =>
+            ModifyActiveGameplayEffect(EffectData, modifier =>
             {
                 // Find in the active list, and remove
                 var attributeAggregatorMap = AbilitySystem.ActiveGameplayEffectsContainer.AttributeAggregatorMap;
@@ -73,12 +88,16 @@ namespace GameplayAbilitySystem.GameplayEffects
                 // It may have never been added, or has already been removed
                 if (attributeAggregatorMap.TryGetValue(modifier.Attribute, out var aggregator))
                 {
-                    aggregator.Mods[modifier.ModifierOperation].RemoveAll(x =>
+                    var aggregatorToRemove = aggregator.Mods[modifier.ModifierOperation].FirstOrDefault(x =>
                     {
                         x.ProviderEffect.TryGetTarget(out var Effect);
-                        return Effect;
-
+                        return Effect == EffectData.Effect;
                     });
+
+                    if (aggregatorToRemove != null)
+                    {
+                        aggregator.Mods[modifier.ModifierOperation].Remove(aggregatorToRemove);
+                    }
 
                     if (aggregator.Mods[modifier.ModifierOperation].Count == 0)
                     {
@@ -90,9 +109,9 @@ namespace GameplayAbilitySystem.GameplayEffects
 
         }
 
-        private void AddActiveGameplayEffectGrantedTagsAndModifiers(ActiveGameplayEffectData EffectData)
+        private void AddActiveGameplayEffect(ActiveGameplayEffectData EffectData)
         {
-            ModifyActiveGameplayEffectGrantedTagsAndModifiers(EffectData, modifier =>
+            ModifyActiveGameplayEffect(EffectData, modifier =>
             {
                 modifier.AttemptCalculateMagnitude(out var EvaluatedMagnitude);
 
@@ -107,7 +126,14 @@ namespace GameplayAbilitySystem.GameplayEffects
                 aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation, EffectData.Effect);
                 aggregator.MarkDirty();
             });
+
+
+            // Add cooldown effect as well.  Application of cooldown effect
+            // is different to other game effects, because we don't take
+            // attribute modifiers into account
+            OnActiveGameplayEffectAdded(EffectData);
         }
+
 
 
         private void UpdateAttribute(Aggregator Aggregator, AttributeType AttributeType)

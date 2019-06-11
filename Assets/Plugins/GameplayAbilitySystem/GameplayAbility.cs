@@ -100,9 +100,9 @@ namespace GameplayAbilitySystem.Abilities
         /// </summary>
         protected void ApplyCooldown(IGameplayAbilitySystem abilitySystem)
         {
-            for (var i = 0; i < this.GameplayCooldowns.Count; i++)
+            foreach (var cooldown in this.GameplayCooldowns)
             {
-                abilitySystem.AddGameplayEffectToActiveList(this.GameplayCooldowns[i].CooldownGameplayEffect);
+                abilitySystem.ActiveGameplayEffectsContainer.ApplyCooldownEffect(new ActiveGameplayEffectData(cooldown.CooldownGameplayEffect, 0));
             }
         }
 
@@ -149,20 +149,13 @@ namespace GameplayAbilitySystem.Abilities
         {
             var cooldownTags = this.GetAbilityCooldownTags();
 
-            // Check if the ability system has any of these tags.  Since tags are provided
-            // by game effects, that means we need to iterate through all active game effects
-            // and check if any of them provide these tags
+            // Check if we have the cooldown effect
+            var cooldownEffectsMatched = AbilitySystem.ActiveGameplayEffectsContainer.ActiveCooldowns.Select(x => x.Effect)
+                .Intersect(this.GameplayCooldowns.Select(x => x.CooldownGameplayEffect)).Count();
 
-            // Check each active gameplay effect.  If we have a match, store the reference
-            foreach (var gameplayEffect in AbilitySystem.ActiveGameplayEffectsContainer.ActiveGameplayEffects)
-            {
-                if (gameplayEffect.Effect.GetOwningTags().Intersect(cooldownTags).Count() > 0)
-                {
-                    return false;
-                }
-            }
 
-            return true;
+
+            return cooldownEffectsMatched == 0;
         }
 
         /// <inheritdoc />

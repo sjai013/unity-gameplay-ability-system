@@ -69,8 +69,7 @@ namespace GameplayAbilitySystem
         public Dictionary<GameplayEffect, List<(AttributeType AttributeType, float Modifier)>> PersistedAttributeModifiers
             => _persistedAttributeModifiers;
 
-        protected List<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects =
-        new List<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)>();
+        public List<ActiveGameplayEffectData> ActiveCooldowns { get; } = new List<ActiveGameplayEffectData>();
 
         public void Awake()
         {
@@ -126,12 +125,7 @@ namespace GameplayAbilitySystem
             return true;
         }
 
-        public void BatchGameplayEffect(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
-        {
-            BatchedGameplayEffects.Add((Effect, Target, Level));
-        }
-
-        public void ApplyBatchedGameEffects()
+        public async void ApplyBatchGameplayEffects(IEnumerable<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects)
         {
 
             var instantEffects = BatchedGameplayEffects.Where(x => x.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant);
@@ -144,7 +138,7 @@ namespace GameplayAbilitySystem
             // Apply instant effects
             foreach (var item in instantEffects)
             {
-                if (ApplyGamEffectToTarget_Instant(item.Effect, item.Target))
+                if (await ApplyGameEffectToTarget(item.Effect, item.Target))
                 {
                     // item.Target.AddGameplayEffectToActiveList(Effect);
 
@@ -154,7 +148,7 @@ namespace GameplayAbilitySystem
             // Apply durational effects
             foreach (var effect in durationalEffects)
             {
-                if (ApplyGamEffectToTarget_Durational(effect.Effect, effect.Target))
+                if (await ApplyGameEffectToTarget(effect.Effect, effect.Target))
                 {
 
                 }
@@ -162,20 +156,15 @@ namespace GameplayAbilitySystem
 
         }
 
-        private bool ApplyGamEffectToTarget_Instant(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
-        {
-            return Effect.ExecuteEffect(Target);
-        }
-
-        private bool ApplyGamEffectToTarget_Durational(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
+        private async Task<bool> ApplyGamEffectToTarget_Durational(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
         {
             var EffectData = new ActiveGameplayEffectData(Effect);
-            ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
+            await ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
             return true;
         }
 
         /// <inheritdoc />
-        public GameplayEffect ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
+        public async Task<GameplayEffect> ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
         {
             // TODO: Check to make sure all the attributes being modified by this gameplay effect exist on the target
 
@@ -200,21 +189,13 @@ namespace GameplayAbilitySystem
             else
             {
                 var EffectData = new ActiveGameplayEffectData(Effect);
-                ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
+                await ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
             }
 
 
             return Effect;
         }
 
-        /// <inheritdoc />
-        public void AddGameplayEffectToActiveList(GameplayEffect Effect)
-        {
-            // TODO: Respect stacking
-
-            if (this._activeGameplayEffectsContainer.ActiveGameplayEffects.Any(x => x.Effect == Effect)) return;
-            this._activeGameplayEffectsContainer.ActiveGameplayEffects.Add(new ActiveGameplayEffectData(Effect));
-        }
 
         /// <inheritdoc />
         public float GetNumericAttributeBase(AttributeType AttributeType)

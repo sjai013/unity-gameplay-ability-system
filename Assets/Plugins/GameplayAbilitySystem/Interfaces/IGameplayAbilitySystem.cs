@@ -7,6 +7,7 @@ using GameplayAbilitySystem.GameplayEffects;
 using UnityEngine;
 using UnityEngine.Events;
 using GameplayAbilitySystem.Enums;
+using System.Threading.Tasks;
 
 namespace GameplayAbilitySystem.Interfaces
 {
@@ -70,6 +71,8 @@ namespace GameplayAbilitySystem.Interfaces
         ActiveGameplayEffectsContainer ActiveGameplayEffectsContainer { get; }
 
 
+        List<ActiveGameplayEffectData> ActiveCooldowns { get; }
+
 
         [Obsolete]
         Dictionary<GameplayEffect, List<(AttributeType AttributeType, float Modifier)>> PersistedAttributeModifiers { get; }
@@ -96,19 +99,13 @@ namespace GameplayAbilitySystem.Interfaces
         /// <param name="Target">Target on which effect is to be applied</param>
         /// <param name="Level">Level of the effect.  May be used to affect the "strength" of the effect</param>
         /// <returns><see cref="GameplayEffect"/> that was applied  to the target</returns>
-        GameplayEffect ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0f);
+        Task<GameplayEffect> ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0f);
 
         /// <summary>
         /// Notifies this <see cref="IGameplayAbilitySystem"/> that the specified <see cref="GameplayAbility"/> has ended
         /// </summary>
         /// <param name="Ability"><see cref="GameplayAbility"/> which has ended</param>
         void NotifyAbilityEnded(GameplayAbility Ability);
-
-        /// <summary>
-        /// Applies a <see cref="GameplayEffect"/> to this <see cref="IGameplayAbilitySystem"/>
-        /// </summary>
-        /// <param name="Effect">Effect to be applied</param>
-        void AddGameplayEffectToActiveList(GameplayEffect Effect);
 
         /// <summary>
         /// Gets the parent <see cref="Transform"/> of this <see cref="IGameplayAbilitySystem"/>
@@ -151,16 +148,7 @@ namespace GameplayAbilitySystem.Interfaces
         /// could be different depending on the order in which the <see cref="GameplayEffect"/> are applied.
         /// </para>
         /// </summary>
-        void ApplyBatchedGameEffects();
-
-        /// <summary>
-        /// Batches a <see cref="GameplayEffect"/> for application at the same time as all other <see cref="GameplayEffect"/> in the batch.  See documentation
-        /// for <see cref="ApplyBatchedGameEffects"/> for details of advantages/disadvantages.
-        /// </summary>
-        /// <param name="Effect">Effect to batch</param>
-        /// <param name="Target">Target of the effect</param>
-        /// <param name="Level"></param>
-        void BatchGameplayEffect(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0);
+        void ApplyBatchGameplayEffects(IEnumerable<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects);
     }
 
     public class GenericGameplayEffectEvent : UnityEvent<GameplayEffect>

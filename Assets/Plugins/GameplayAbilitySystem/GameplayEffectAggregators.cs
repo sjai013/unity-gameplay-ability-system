@@ -76,7 +76,7 @@ namespace GameplayAbilitySystem.GameplayEffects
 
     }
 
-    public struct AggregatorModifier
+    public class AggregatorModifier
     {
         public AggregatorModifier(GameplayEffect ProviderEffect, float EvaluatedMagnitude, float Stacks = 1)
         {
