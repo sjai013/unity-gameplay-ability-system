@@ -10,10 +10,10 @@ namespace GameplayAbilitySystem.GameplayEffects
     public class GameplayEffectPolicy : IGameplayEffectPolicy
     {
         [SerializeField]
-        private EDurationPolicy _durationPolicy;
+        private EDurationPolicy _durationPolicy = default;
 
         [SerializeField]
-        private float _durationMagnitude;
+        private float _durationMagnitude = 0f;
 
         [SerializeField]
         private List<GameplayEffectModifier> _modifiers = new List<GameplayEffectModifier>();

@@ -12,27 +12,27 @@ namespace GameplayAbilitySystem
 {
     /// <inheritdoc />
     [Serializable]
-    public struct GameplayEffectModifier : IGameplayEffectModifier
+    public class GameplayEffectModifier : IGameplayEffectModifier
     {
         [SerializeField]
-        private AttributeType _attributeType;
+        private AttributeType _attributeType = null;
 
         [SerializeField]
-        private EModifierOperationType _modifierOperationType;
+        private EModifierOperationType _modifierOperationType = default;
         [Space(10)]
 
         [SerializeField]
-        private EMagnitudeCalculationTypes _magnitudeCalculationType;
+        private EMagnitudeCalculationTypes _magnitudeCalculationType = default;
 
         [SerializeField]
-        private float _scaledMagnitude;
+        private float _scaledMagnitude = 0f;
         [Space(10)]
 
         [SerializeField]
-        private GameplayEffectModifierTagCollection _sourceTags;
+        private GameplayEffectModifierTagCollection _sourceTags = null;
 
         [SerializeField]
-        private GameplayEffectModifierTagCollection _targetTags;
+        private GameplayEffectModifierTagCollection _targetTags = null;
 
         /// <inheritdoc />
         public AttributeType Attribute => _attributeType;

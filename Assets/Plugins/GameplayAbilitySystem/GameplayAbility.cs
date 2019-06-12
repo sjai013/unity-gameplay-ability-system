@@ -40,7 +40,7 @@ namespace GameplayAbilitySystem.Abilities
         private GenericAbilityEvent _onGameplayAbilityEnded = new GenericAbilityEvent();
 
         [SerializeField]
-        private AbstractAbilityActivation _abilityLogic;
+        private AbstractAbilityActivation _abilityLogic = null;
 
 
 

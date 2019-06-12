@@ -39,11 +39,13 @@ namespace GameplayAbilitySystem.GameplayEffects
             AddActiveGameplayEffect(EffectData);
             ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
 
+            // We only remove the effect if it is "Duration"
+            if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy != Enums.EDurationPolicy.HasDuration) return EffectData;
             // Register callbacks for removal of effects when duration expires
             await UniTask.Delay((int)(EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f));
             RemoveActiveGameplayEffect(EffectData);
 
-            return null;
+            return EffectData;
         }
 
         public async void ApplyCooldownEffect(ActiveGameplayEffectData EffectData)
