@@ -24,9 +24,6 @@ namespace GameplayAbilitySystem
         /// <inheritdoc />
         public GenericAbilityEvent OnGameplayAbilityActivated => _onGameplayAbilityActivated;
 
-
-
-
         [SerializeField]
         private GenericAbilityEvent _onGameplayAbilityEnded = new GenericAbilityEvent();
         /// <inheritdoc />
@@ -68,8 +65,6 @@ namespace GameplayAbilitySystem
         /// <inheritdoc />
         public Dictionary<GameplayEffect, List<(AttributeType AttributeType, float Modifier)>> PersistedAttributeModifiers
             => _persistedAttributeModifiers;
-
-        public List<ActiveGameplayEffectData> ActiveCooldowns { get; } = new List<ActiveGameplayEffectData>();
 
         public void Awake()
         {
@@ -154,13 +149,6 @@ namespace GameplayAbilitySystem
                 }
             }
 
-        }
-
-        private async Task<bool> ApplyGamEffectToTarget_Durational(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
-        {
-            var EffectData = new ActiveGameplayEffectData(Effect);
-            await ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
-            return true;
         }
 
         /// <inheritdoc />

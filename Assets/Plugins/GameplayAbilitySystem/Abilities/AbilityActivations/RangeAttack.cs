@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.AbilityActivations
 {
-    [CreateAssetMenu(fileName="Ability", menuName="Ability System/Ability Logic/Ability")]
+    [CreateAssetMenu(fileName = "Ability", menuName = "Ability System/Ability Logic/Ability")]
     public class RangeAttack : AbstractAbilityActivation
     {
         public GameplayEffect TargetGameplayEffect;
@@ -34,7 +34,7 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations
 
             var beh = animatorComponent.GetBehaviour<AnimationBehaviourEventSystem>();
             await beh.StateEnter.WaitForEvent((animator, stateInfo, layerIndex) => stateInfo.fullPathHash == Animator.StringToHash(CompletionAnimatorStateFullHash));
-    
+
             // Commit ability cost
             // TODO: ApplyCost();
 

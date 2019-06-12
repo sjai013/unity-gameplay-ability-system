@@ -31,9 +31,6 @@ namespace GameplayAbilitySystem.GameplayEffects
         private List<ActiveGameplayEffectData> _activeCooldowns = new List<ActiveGameplayEffectData>();
         public List<ActiveGameplayEffectData> ActiveCooldowns { get => _activeCooldowns; }
 
-        public List<ActiveGameplayEffectData> ActiveGameplayEffects = new List<ActiveGameplayEffectData>();
-
-        
         public ActiveGameplayEffectsEvent ActiveGameplayEffectAdded = new ActiveGameplayEffectsEvent();
 
         public async Task<ActiveGameplayEffectData> ApplyGameEffect(ActiveGameplayEffectData EffectData)
@@ -91,7 +88,7 @@ namespace GameplayAbilitySystem.GameplayEffects
                     var aggregatorToRemove = aggregator.Mods[modifier.ModifierOperation].FirstOrDefault(x =>
                     {
                         x.ProviderEffect.TryGetTarget(out var Effect);
-                        return Effect == EffectData.Effect;
+                        return Effect == EffectData;
                     });
 
                     if (aggregatorToRemove != null)
@@ -123,7 +120,7 @@ namespace GameplayAbilitySystem.GameplayEffects
                     aggregator.Dirtied.AddListener(UpdateAttribute);
                     attributeAggregatorMap.Add(modifier.Attribute, aggregator);
                 }
-                aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation, EffectData.Effect);
+                aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation, EffectData);
                 aggregator.MarkDirty();
             });
 

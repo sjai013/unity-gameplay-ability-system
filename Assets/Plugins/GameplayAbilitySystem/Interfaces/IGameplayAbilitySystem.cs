@@ -71,9 +71,6 @@ namespace GameplayAbilitySystem.Interfaces
         ActiveGameplayEffectsContainer ActiveGameplayEffectsContainer { get; }
 
 
-        List<ActiveGameplayEffectData> ActiveCooldowns { get; }
-
-
         [Obsolete]
         Dictionary<GameplayEffect, List<(AttributeType AttributeType, float Modifier)>> PersistedAttributeModifiers { get; }
 

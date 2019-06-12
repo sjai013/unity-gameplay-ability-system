@@ -102,7 +102,7 @@ namespace GameplayAbilitySystem.Abilities
         {
             foreach (var cooldown in this.GameplayCooldowns)
             {
-                abilitySystem.ActiveGameplayEffectsContainer.ApplyCooldownEffect(new ActiveGameplayEffectData(cooldown.CooldownGameplayEffect, 0));
+                abilitySystem.ActiveGameplayEffectsContainer.ApplyCooldownEffect(new ActiveGameplayEffectData(cooldown.CooldownGameplayEffect));
             }
         }
 

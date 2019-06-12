@@ -298,6 +298,11 @@ PrefabInstance:
       propertyPath: _attributeValueChanged.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7899279095267793603, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
+      propertyPath: _activeGameplayEffectsContainer._activeCooldowns.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fddc582aed5bbbd4ab4ac8025536d369, type: 3}
 --- !u!4 &1124098576 stripped

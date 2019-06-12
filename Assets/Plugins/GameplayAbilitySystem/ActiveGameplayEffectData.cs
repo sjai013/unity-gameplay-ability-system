@@ -9,16 +9,17 @@ namespace GameplayAbilitySystem.GameplayEffects
     [Serializable]
     public class ActiveGameplayEffectData
     {
-        public ActiveGameplayEffectData(GameplayEffect effect, float cooldownTimeElapsed = 0f)
+        public ActiveGameplayEffectData(GameplayEffect effect)
         {
             this._gameplayEffect = effect;
-            this._cooldownTimeElapsed = cooldownTimeElapsed;
+            this._startWorldTime = Time.time;
         }
 
         /// <summary>
         /// The actual <see cref="GameplayEffect"/>. 
         /// </summary>
         /// <value></value>
+        [SerializeField]
         public GameplayEffect Effect { get => _gameplayEffect; }
 
 
@@ -26,7 +27,7 @@ namespace GameplayAbilitySystem.GameplayEffects
         /// The cooldown time that has already elapsed for this gameplay effect
         /// </summary>
         /// <value>Cooldown time elapsed</value>
-        public float CooldownTimeElapsed { get => _cooldownTimeElapsed; set => _cooldownTimeElapsed = value; }
+        public float CooldownTimeElapsed { get => Time.time - _startWorldTime; }
 
         [SerializeField]
         private int _stacks;
@@ -35,7 +36,7 @@ namespace GameplayAbilitySystem.GameplayEffects
         private GameplayEffect _gameplayEffect;
 
         [SerializeField]
-        private float _cooldownTimeElapsed;
+        private float _startWorldTime;
 
         public void CheckOngoingTagRequirements()
         {

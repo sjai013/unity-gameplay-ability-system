@@ -19,7 +19,7 @@ namespace GameplayAbilitySystem.GameplayEffects
         public Dictionary<EModifierOperationType, List<AggregatorModifier>> Mods { get; } = new Dictionary<EModifierOperationType, List<AggregatorModifier>>();
         public AggregatorEvent Dirtied { get; set; } = new AggregatorEvent();
 
-        public void AddAggregatorMod(float EvaluatedMagnitude, EModifierOperationType ModifierOperation, GameplayEffect Effect)
+        public void AddAggregatorMod(float EvaluatedMagnitude, EModifierOperationType ModifierOperation, ActiveGameplayEffectData EffectData)
         {
             // If aggregator exists, check if we have a definition for this modifier operation
             if (!Mods.TryGetValue(ModifierOperation, out var aggregateMods))
@@ -27,7 +27,7 @@ namespace GameplayAbilitySystem.GameplayEffects
                 aggregateMods = new List<AggregatorModifier>();
                 Mods.Add(ModifierOperation, aggregateMods);
             }
-            aggregateMods.Add(new AggregatorModifier(Effect, EvaluatedMagnitude));
+            aggregateMods.Add(new AggregatorModifier(EffectData, EvaluatedMagnitude));
         }
 
         public void MarkDirty()
@@ -78,16 +78,16 @@ namespace GameplayAbilitySystem.GameplayEffects
 
     public class AggregatorModifier
     {
-        public AggregatorModifier(GameplayEffect ProviderEffect, float EvaluatedMagnitude, float Stacks = 1)
+        public AggregatorModifier(ActiveGameplayEffectData ProviderEffectData, float EvaluatedMagnitude, float Stacks = 1)
         {
             this.Stacks = Stacks;
             this.EvaluatedMagnitude = EvaluatedMagnitude;
-            this.ProviderEffect = new WeakReference<GameplayEffect>(ProviderEffect);
+            this.ProviderEffect = new WeakReference<ActiveGameplayEffectData>(ProviderEffectData);
         }
 
         public float Stacks { get; private set; }
         public readonly float EvaluatedMagnitude;
-        public readonly WeakReference<GameplayEffect> ProviderEffect;
+        public readonly WeakReference<ActiveGameplayEffectData> ProviderEffect;
     }
 
     public class AggregatorEvent : UnityEvent<Aggregator, AttributeType>
