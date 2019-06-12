@@ -71,9 +71,6 @@ namespace GameplayAbilitySystem.Interfaces
         ActiveGameplayEffectsContainer ActiveGameplayEffectsContainer { get; }
 
 
-        [Obsolete]
-        Dictionary<GameplayEffect, List<(AttributeType AttributeType, float Modifier)>> PersistedAttributeModifiers { get; }
-
         /// <summary>
         /// Checks to see if the <see cref="GameplayAbility"/> can be activated on this component.  Does not execute the ability.
         /// </summary>

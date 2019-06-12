@@ -12,6 +12,7 @@ using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 using GameplayAbilitySystem.Attributes;
 using UnityEngine.Events;
+using GameplayAbilitySystem.Enums;
 
 namespace GameplayAbilitySystem
 {
@@ -58,13 +59,6 @@ namespace GameplayAbilitySystem
         private GenericAbilityEvent _onGameplayAbilityCommitted = new GenericAbilityEvent();
         /// <inheritdoc />
         public GenericAbilityEvent OnGameplayAbilityCommitted => _onGameplayAbilityCommitted;
-
-        [SerializeField]
-        protected Dictionary<GameplayEffect, List<(AttributeType AttributeType, float Modifier)>> _persistedAttributeModifiers
-            = new Dictionary<GameplayEffect, List<(AttributeType AttributeType, float Modifier)>>();
-        /// <inheritdoc />
-        public Dictionary<GameplayEffect, List<(AttributeType AttributeType, float Modifier)>> PersistedAttributeModifiers
-            => _persistedAttributeModifiers;
 
         public void Awake()
         {
@@ -172,7 +166,65 @@ namespace GameplayAbilitySystem
             // Handling Instant effects is different to handling HasDuration and Infinite effects
             if (Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant)
             {
-                // Modify base attribute values
+                // Modify base attribute values.  Collect the overall change for each modifier
+                Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> modifierTotals = new Dictionary<AttributeType, Dictionary<EModifierOperationType, float>>();
+                foreach (var modifier in Effect.GameplayEffectPolicy.Modifiers)
+                {
+                    if (!modifierTotals.TryGetValue(modifier.Attribute, out var modifierType))
+                    {
+                        // This attribute hasn't been recorded before, so create a blank new record
+                        modifierType = new Dictionary<EModifierOperationType, float>();
+                        modifierTotals.Add(modifier.Attribute, modifierType);
+                    }
+
+                    if (!modifierType.TryGetValue(modifier.ModifierOperation, out var value))
+                    {
+                        value = 0;
+                        modifierType.Add(modifier.ModifierOperation, 0);
+
+                    }
+
+                    switch (modifier.ModifierOperation)
+                    {
+                        case EModifierOperationType.Add:
+                            modifierTotals[modifier.Attribute][modifier.ModifierOperation] += modifier.ScaledMagnitude;
+                            break;
+                        case EModifierOperationType.Multiply:
+                            modifierTotals[modifier.Attribute][modifier.ModifierOperation] *= modifier.ScaledMagnitude;
+                            break;
+                        case EModifierOperationType.Divide:
+                            modifierTotals[modifier.Attribute][modifier.ModifierOperation] *= modifier.ScaledMagnitude;
+                            break;
+                    }
+                }
+
+                // For each attribute, calculate the final value as (base + added) * (multiplied/divided)
+                foreach (var attribute in modifierTotals)
+                {
+                    if (!attribute.Value.TryGetValue(EModifierOperationType.Add, out var addition))
+                    {
+                        addition = 0;
+                    }
+
+                    if (!attribute.Value.TryGetValue(EModifierOperationType.Multiply, out var multiplication))
+                    {
+                        multiplication = 1;
+                    }
+
+                    if (!attribute.Value.TryGetValue(EModifierOperationType.Multiply, out var division))
+                    {
+                        division = 1;
+                    }
+
+                    var oldBase = this.GetNumericAttributeBase(attribute.Key);
+                    var newBase = (oldBase + addition) * (multiplication / division);
+                    this.SetNumericAttributeBase(attribute.Key, newBase);
+
+                    // mark the corresponding aggregator as dirty so we can recalculate the current values
+                    this.ActiveGameplayEffectsContainer.AttributeAggregatorMap.TryGetValue(attribute.Key, out var aggregator);
+                    aggregator.MarkDirty();
+
+                }
             }
             else
             {
@@ -192,11 +244,19 @@ namespace GameplayAbilitySystem
             return attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType).BaseValue;
         }
 
+        public void SetNumericAttributeBase(AttributeType AttributeType, float modifier)
+        {
+            var attributeSet = this.GetComponent<AttributeSet>();
+            var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
+            var newValue = modifier;
+            attribute.SetAttributeBaseValue(attributeSet, ref newValue);
+        }
+
         public void SetNumericAttributeCurrent(AttributeType AttributeType, float NewValue)
         {
             var attributeSet = this.GetComponent<AttributeSet>();
             var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
-            attribute.CurrentValue = NewValue;
+            attribute.SetAttributeCurrentValue(attributeSet, ref NewValue);
         }
 
     }

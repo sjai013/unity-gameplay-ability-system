@@ -20,10 +20,10 @@ namespace GameplayAbilitySystem
         float _currentValue;
 
         /// <inheritdoc />
-        public float BaseValue { get => _baseValue; set => _baseValue = value; }
+        public float BaseValue { get => _baseValue;  }
 
         /// <inheritdoc />
-        public float CurrentValue { get => _currentValue; set => _currentValue = value; }
+        public float CurrentValue { get => _currentValue; }
 
         /// <inheritdoc />
         public AttributeType AttributeType { get => _attributeType; set => _attributeType = AttributeType; }
@@ -32,7 +32,12 @@ namespace GameplayAbilitySystem
         public void  SetAttributeCurrentValue(IAttributeSet AttributeSet, ref float NewValue)
         {
             AttributeSet.PreAttributeChange(this, ref NewValue);
-            this.CurrentValue = NewValue;
+            _currentValue = NewValue;
+        }
+
+        public void SetAttributeBaseValue(IAttributeSet AttributeSet, ref float NewValue) {
+            AttributeSet.PreAttributeBaseChange(this, ref NewValue);
+            _baseValue = NewValue;
         }
     }
 }

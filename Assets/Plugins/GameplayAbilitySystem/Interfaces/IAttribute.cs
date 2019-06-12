@@ -18,13 +18,13 @@ namespace GameplayAbilitySystem.Interfaces
         /// The base value of the attribute, unaffected by e.g. buffs
         /// </summary>
         /// <value></value>
-        float BaseValue { get; set; }
+        float BaseValue { get;  }
 
         /// <summary>
         /// This current value of the attribute, after application of temporary effects, e.g. buffs
         /// </summary>
         /// <value></value>        
-        float CurrentValue { get; set; }
+        float CurrentValue { get;  }
 
 
         /// <summary>
