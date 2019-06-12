@@ -143,6 +143,7 @@ namespace GameplayAbilitySystem.Interfaces
         /// </para>
         /// </summary>
         void ApplyBatchGameplayEffects(IEnumerable<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects);
+        void SetNumericAttributeBase(AttributeType AttributeType, float modifier);
     }
 
     public class GenericGameplayEffectEvent : UnityEvent<GameplayEffect>

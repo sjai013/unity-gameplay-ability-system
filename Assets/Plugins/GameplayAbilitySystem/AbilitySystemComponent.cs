@@ -13,6 +13,7 @@ using UnityEngine;
 using GameplayAbilitySystem.Attributes;
 using UnityEngine.Events;
 using GameplayAbilitySystem.Enums;
+using GameplayAbilitySystem.GameplayCues;
 
 namespace GameplayAbilitySystem
 {
@@ -216,22 +217,34 @@ namespace GameplayAbilitySystem
                         division = 1;
                     }
 
-                    var oldBase = this.GetNumericAttributeBase(attribute.Key);
+                    var oldBase = Target.GetNumericAttributeBase(attribute.Key);
                     var newBase = (oldBase + addition) * (multiplication / division);
-                    this.SetNumericAttributeBase(attribute.Key, newBase);
+                    Target.SetNumericAttributeBase(attribute.Key, newBase);
 
                     // mark the corresponding aggregator as dirty so we can recalculate the current values
-                    this.ActiveGameplayEffectsContainer.AttributeAggregatorMap.TryGetValue(attribute.Key, out var aggregator);
-                    aggregator.MarkDirty();
-
+                    Target.ActiveGameplayEffectsContainer.AttributeAggregatorMap.TryGetValue(attribute.Key, out var aggregator);
+                    if (aggregator != null)
+                    {
+                        aggregator.MarkDirty();
+                    } else {
+                        // No modifications, so set current value = base value
+                        Target.SetNumericAttributeCurrent(attribute.Key, Target.GetNumericAttributeBase(attribute.Key));
+                    }
                 }
             }
             else
             {
                 var EffectData = new ActiveGameplayEffectData(Effect);
-                await ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
+                _ = Target.ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
             }
 
+            var gameplayCues = Effect.GameplayCues;
+            // Apply gamecues
+            for (var i = 0; i < gameplayCues.Count; i++)
+            {
+                var cue = gameplayCues[i];
+                cue.HandleGameplayCue(Target.GetActor().gameObject, EGameplayCueEventTypes.Executed, new GameplayCueParameters(null, null, null));
+            }
 
             return Effect;
         }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gameplay Effect - Heal and Speed
   m_EditorClassIdentifier: 
   _gameplayEffectPolicy:
-    _durationPolicy: 1
+    _durationPolicy: 0
     _durationMagnitude: 5
     _modifiers:
     - _attributeType: {fileID: 11400000, guid: 08c3bc3be14b22e4aadc300234c0587a, type: 2}
