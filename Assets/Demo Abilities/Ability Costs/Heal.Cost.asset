@@ -10,26 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02cc1ff66db5d0749b0bab3afccec0ce, type: 3}
-  m_Name: Gameplay Effect - Damaging
+  m_Name: Heal.Cost
   m_EditorClassIdentifier: 
   _gameplayEffectPolicy:
-    _durationPolicy: 2
-    _durationMagnitude: 10
+    _durationPolicy: 0
+    _durationMagnitude: 0
     _modifiers:
-    - _attributeType: {fileID: 11400000, guid: 08c3bc3be14b22e4aadc300234c0587a, type: 2}
-      _modifierOperationType: 1
-      _magnitudeCalculationType: 0
-      _scaledMagnitude: 0.9
-      _sourceTags:
-        RequireTags: []
-        IgnoreTags: []
-      _targetTags:
-        RequireTags: []
-        IgnoreTags: []
-    - _attributeType: {fileID: 11400000, guid: e5f56864ce3c4b742868ac560a891f48, type: 2}
+    - _attributeType: {fileID: 11400000, guid: 124a7a186e5666c4b8fdc11ca51efeb7, type: 2}
       _modifierOperationType: 0
       _magnitudeCalculationType: 0
-      _scaledMagnitude: 5
+      _scaledMagnitude: -1
       _sourceTags:
         RequireTags: []
         IgnoreTags: []
@@ -47,5 +37,4 @@ MonoBehaviour:
       _added: []
     _removeGameplayEffectsWithTag:
       _added: []
-  GameplayCues:
-  - {fileID: 11400000, guid: 9e972e85e71dd3d4692ce68c6f8b8dee, type: 2}
+  GameplayCues: []

@@ -25,7 +25,8 @@ MonoBehaviour:
     _targetRequiredTags: []
     _targetBlockedTags: []
   _gameplayCost:
-    _costGameplayEffect: {fileID: 0}
+    _costGameplayEffect: {fileID: 11400000, guid: 520415e26382f224c867fce4071958df,
+      type: 2}
   _gameplayCooldowns:
   - _cooldownGameplayEffect: {fileID: 11400000, guid: 422c677cf42e423488b2acaffaa9e642,
       type: 2}

@@ -89,9 +89,12 @@ namespace GameplayAbilitySystem.Abilities
         /// Applies the ability cost, decreasing the specified cost resource from the player.
         /// If player doesn't have the required resource, the resource goes to negative (or clamps to 0)
         /// </summary>
-        protected void ApplyCost()
+        protected void ApplyCost(IGameplayAbilitySystem AbilitySystem)
         {
-            throw new NotImplementedException();
+            var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();
+            var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers);
+            this.GameplayCost.CostGameplayEffect.ApplyInstantEffect(AbilitySystem);
+
         }
 
         /// <summary>
@@ -132,15 +135,23 @@ namespace GameplayAbilitySystem.Abilities
         /// <inheritdoc />
         public bool PlayerHasResourceToCast(IGameplayAbilitySystem AbilitySystem)
         {
+            // Check the modifiers on the ability cost GameEffect
+            var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();
+            var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers);
+
+            foreach (var attribute in attributeModification)
+            {
+                if (attribute.Value.NewBase < 0) return false;
+            }
             return true;
         }
 
         /// <inheritdoc />
         public bool CommitAbility(IGameplayAbilitySystem AbilitySystem)
         {
-            if (!IsAbilityActivatable(AbilitySystem)) return false;
-            // this.abilitySystem.OnGameplayAbilityActivated.Invoke(this);
-            ApplyCost();
+            ActivateAbility(AbilitySystem);
+            AbilitySystem.OnGameplayAbilityActivated.Invoke(this);
+            ApplyCost(AbilitySystem);
             return true;
         }
 

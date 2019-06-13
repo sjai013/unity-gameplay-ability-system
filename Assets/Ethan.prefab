@@ -2297,11 +2297,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _onGameplayAbilityCommitted:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _onGameplayAbilityEnded:
     m_PersistentCalls:
       m_Calls: []
@@ -2312,7 +2307,13 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: GameplayAbilitySystem.Events.GameplayEvent, Assembly-CSharp-firstpass,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _activeGameplayEffects: []
+  _activeGameplayEffectsContainer:
+    _activeCooldowns: []
+  _onGameplayAbilityCommitted:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &7899279095267793608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2325,20 +2326,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b4ca8122047dc4a9f205f9a7323c6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attributeValueChanged:
+  _attributeBaseValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 995664942}
-        m_MethodName: Execute
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp-firstpass,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _attributes:
@@ -2351,6 +2341,17 @@ MonoBehaviour:
   - _attributeType: {fileID: 11400000, guid: e5f56864ce3c4b742868ac560a891f48, type: 2}
     _baseValue: 5
     _currentValue: 5
+  - _attributeType: {fileID: 11400000, guid: 124a7a186e5666c4b8fdc11ca51efeb7, type: 2}
+    _baseValue: 20
+    _currentValue: 20
+  - _attributeType: {fileID: 11400000, guid: 9513cbcc3a089f742b9c48ae4201b1db, type: 2}
+    _baseValue: 20
+    _currentValue: 20
+  _attributeCurrentValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &7899279095267793607
 MonoBehaviour:
   m_ObjectHideFlags: 0
