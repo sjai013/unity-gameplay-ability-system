@@ -2464,8 +2464,8 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 7899279095267793605}
-          m_MethodName: CastAbility1
-          m_Mode: 1
+          m_MethodName: CastAbility
+          m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2482,12 +2482,12 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 7899279095267793605}
-          m_MethodName: CastAbility2
-          m_Mode: 1
+          m_MethodName: CastAbility
+          m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
+            m_IntArgument: 1
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
@@ -2510,6 +2510,11 @@ MonoBehaviour:
   Ability2: {fileID: 11400000, guid: 2583a21c4bcf5a240a37b1568534e68f, type: 2}
   Target1: {fileID: 0}
   Target2: {fileID: 7899279095267793603}
+  Abilities:
+  - Ability: {fileID: 11400000, guid: ae33e3a3cccb84e4fb4bfb4c2d5c089e, type: 2}
+    AbilityTarget: {fileID: 0}
+  - Ability: {fileID: 11400000, guid: 2583a21c4bcf5a240a37b1568534e68f, type: 2}
+    AbilityTarget: {fileID: 7899279095267793603}
 --- !u!114 &995664942
 MonoBehaviour:
   m_ObjectHideFlags: 0

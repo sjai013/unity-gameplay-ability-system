@@ -8,14 +8,14 @@ using GameplayAbilitySystem.Abilities;
 using GameplayAbilitySystem.Events;
 using UniRx.Async;
 using UnityEngine;
+using System;
 
 public class AbilityCharacter : MonoBehaviour
 {
     GameplayAbilitySystem.AbilitySystemComponent SelfAbilitySystem;
-    public GameplayAbility Ability1;
-    public GameplayAbility Ability2;
-    public GameplayAbilitySystem.AbilitySystemComponent Target1;
-    public GameplayAbilitySystem.AbilitySystemComponent Target2;
+
+    public List<CastingAbilityContainer> Abilities = new List<CastingAbilityContainer>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,35 +26,38 @@ public class AbilityCharacter : MonoBehaviour
 
     public void CastAbility1()
     {
-        var eventTag = Ability1.Tags.AbilityTags.Count > 0 ? Ability1.Tags.AbilityTags[0] : new GameplayTag();
-        var gameplayEventData = new GameplayEventData();
-        gameplayEventData.EventTag = eventTag;
-        gameplayEventData.Target = this.Target1;
 
-        // If ability can be activated
-        if (SelfAbilitySystem.TryActivateAbility(Ability1))
-        {
-            // Send gameplay event to this player with information on target etc
-            AbilitySystemStatics.SendGameplayEventToComponent(SelfAbilitySystem, eventTag, gameplayEventData);
-        }
 
     }
 
-    public void CastAbility2()
+    public void CastAbility(int n)
     {
-        var eventTag = Ability2.Tags.AbilityTags.Count > 0 ? Ability2.Tags.AbilityTags[0] : new GameplayTag();
+        if (n >= this.Abilities.Count) return;
+        if (this.Abilities[n] == null) return;
+        if (this.Abilities[n].Ability == null) return;
+        if (this.Abilities[n].AbilityTarget == null) return;
+    
+        var Ability = this.Abilities[n].Ability;
+        var Target = this.Abilities[n].AbilityTarget;
+        var eventTag = Ability.Tags.AbilityTags.Count > 0 ? Ability.Tags.AbilityTags[0] : new GameplayTag();
         var gameplayEventData = new GameplayEventData();
         gameplayEventData.EventTag = eventTag;
-        gameplayEventData.Target = this.Target2;
+        gameplayEventData.Target = Target;
 
         // If ability can be activated
-        if (SelfAbilitySystem.TryActivateAbility(Ability2))
+        if (SelfAbilitySystem.TryActivateAbility(Ability))
         {
             // Send gameplay event to this player with information on target etc
             AbilitySystemStatics.SendGameplayEventToComponent(SelfAbilitySystem, eventTag, gameplayEventData);
         }
+    }
 
-    }    
+}
 
+[Serializable]
+public class CastingAbilityContainer
+{
+    public GameplayAbility Ability;
 
+    public GameplayAbilitySystem.AbilitySystemComponent AbilityTarget;
 }
