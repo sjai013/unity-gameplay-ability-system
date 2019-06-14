@@ -30,8 +30,6 @@ MonoBehaviour:
   _gameplayCooldowns:
   - _cooldownGameplayEffect: {fileID: 11400000, guid: 422c677cf42e423488b2acaffaa9e642,
       type: 2}
-  - _cooldownGameplayEffect: {fileID: 11400000, guid: c0b5b25c4db1c8345acb375a405fdda4,
-      type: 2}
   _onGameplayAbilityCommitted:
     m_PersistentCalls:
       m_Calls: []

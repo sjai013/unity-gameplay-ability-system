@@ -75,6 +75,11 @@ namespace GameplayAbilitySystem.Interfaces
         /// </summary>
         /// <value>List of <see cref="IAttribute"/> </value>
         List<Attribute> Attributes { get; set; }
+
+        BaseAttributeChangeHandler PreAttributeBaseChangeHandler {get; }
+        BaseAttributeChangeHandler PreAttributeChangeHandler {get; }
+
+        
     }
 
 

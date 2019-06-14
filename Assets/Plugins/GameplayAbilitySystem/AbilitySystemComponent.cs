@@ -148,7 +148,7 @@ namespace GameplayAbilitySystem
         }
 
         /// <inheritdoc />
-        public async Task<GameplayEffect> ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
+        public Task<GameplayEffect> ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
         {
             // TODO: Check to make sure all the attributes being modified by this gameplay effect exist on the target
 
@@ -184,7 +184,7 @@ namespace GameplayAbilitySystem
                 cue.HandleGameplayCue(Target.GetActor().gameObject, EGameplayCueEventTypes.Executed, new GameplayCueParameters(null, null, null));
             }
 
-            return Effect;
+            return Task.FromResult(Effect);
         }
 
 
@@ -193,6 +193,13 @@ namespace GameplayAbilitySystem
         {
             var attributeSet = this.GetComponent<AttributeSet>();
             return attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType).BaseValue;
+        }
+
+        /// <inheritdoc />
+        public float GetNumericAttributeCurrent(AttributeType AttributeType)
+        {
+            var attributeSet = this.GetComponent<AttributeSet>();
+            return attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType).CurrentValue;
         }
 
         public void SetNumericAttributeBase(AttributeType AttributeType, float modifier)

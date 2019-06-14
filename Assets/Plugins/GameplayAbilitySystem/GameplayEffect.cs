@@ -137,7 +137,19 @@ namespace GameplayAbilitySystem.GameplayEffects
                 if (!modifierType.TryGetValue(modifier.ModifierOperation, out var value))
                 {
                     value = 0;
-                    modifierType.Add(modifier.ModifierOperation, 0);
+                    switch (modifier.ModifierOperation)
+                    {
+                        case EModifierOperationType.Multiply:
+                            value = 1;
+                            break;
+                        case EModifierOperationType.Divide:
+                            value = 1;
+                            break;
+                        default:
+                            value = 0;
+                            break;
+                    }
+                    modifierType.Add(modifier.ModifierOperation, value);
 
                 }
 
@@ -157,7 +169,8 @@ namespace GameplayAbilitySystem.GameplayEffects
 
             return modifierTotals;
         }
-        public Dictionary<AttributeType, AttributeModificationValues> CalculateAttributeModification(IGameplayAbilitySystem AbilitySystem, Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> Modifiers)
+        
+        public Dictionary<AttributeType, AttributeModificationValues> CalculateAttributeModification(IGameplayAbilitySystem AbilitySystem, Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> Modifiers, bool operateOnCurrentValue = false)
         {
             var attributeModification = new Dictionary<AttributeType, AttributeModificationValues>();
 
@@ -173,13 +186,22 @@ namespace GameplayAbilitySystem.GameplayEffects
                     multiplication = 1;
                 }
 
-                if (!attribute.Value.TryGetValue(EModifierOperationType.Multiply, out var division))
+                if (!attribute.Value.TryGetValue(EModifierOperationType.Divide, out var division))
                 {
                     division = 1;
                 }
 
-                var oldBase = AbilitySystem.GetNumericAttributeBase(attribute.Key);
-                var newBase = (oldBase + addition) * (multiplication / division);
+                var oldAttributeValue = 0f;
+                if (!operateOnCurrentValue)
+                {
+                    oldAttributeValue = AbilitySystem.GetNumericAttributeBase(attribute.Key);
+                }
+                else
+                {
+                    oldAttributeValue = AbilitySystem.GetNumericAttributeCurrent(attribute.Key);
+                }
+
+                var newAttributeValue = (oldAttributeValue + addition) * (multiplication / division);
 
                 if (!attributeModification.TryGetValue(attribute.Key, out var values))
                 {
@@ -187,8 +209,8 @@ namespace GameplayAbilitySystem.GameplayEffects
                     attributeModification.Add(attribute.Key, values);
                 }
 
-                values.NewBase += newBase;
-                values.OldBase += oldBase;
+                values.NewAttribueValue += newAttributeValue;
+                values.OldAttributeValue += oldAttributeValue;
 
             }
 
@@ -203,7 +225,7 @@ namespace GameplayAbilitySystem.GameplayEffects
             // Finally, For each attribute, apply the new modified values
             foreach (var attribute in attributeModifications)
             {
-                Target.SetNumericAttributeBase(attribute.Key, attribute.Value.NewBase);
+                Target.SetNumericAttributeBase(attribute.Key, attribute.Value.NewAttribueValue);
 
                 // mark the corresponding aggregator as dirty so we can recalculate the current values
                 Target.ActiveGameplayEffectsContainer.AttributeAggregatorMap.TryGetValue(attribute.Key, out var aggregator);
@@ -225,8 +247,8 @@ namespace GameplayAbilitySystem.GameplayEffects
 
     public class AttributeModificationValues
     {
-        public float OldBase = 0f;
-        public float NewBase = 0f;
+        public float OldAttributeValue = 0f;
+        public float NewAttribueValue = 0f;
     }
     public struct GameplayModifierEvaluatedData
     {

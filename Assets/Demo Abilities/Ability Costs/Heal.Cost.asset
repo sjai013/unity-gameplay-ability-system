@@ -16,10 +16,10 @@ MonoBehaviour:
     _durationPolicy: 0
     _durationMagnitude: 0
     _modifiers:
-    - _attributeType: {fileID: 11400000, guid: 124a7a186e5666c4b8fdc11ca51efeb7, type: 2}
+    - _attributeType: {fileID: 11400000, guid: 08c3bc3be14b22e4aadc300234c0587a, type: 2}
       _modifierOperationType: 0
       _magnitudeCalculationType: 0
-      _scaledMagnitude: -1
+      _scaledMagnitude: -30
       _sourceTags:
         RequireTags: []
         IgnoreTags: []

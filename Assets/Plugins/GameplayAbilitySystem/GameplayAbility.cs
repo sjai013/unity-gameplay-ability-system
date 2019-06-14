@@ -1,13 +1,8 @@
-using System.Threading;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using GameplayAbilitySystem.Events;
 using GameplayAbilitySystem.Interfaces;
 using GameplayAbilitySystem.GameplayEffects;
 using UnityEngine;
-using UnityEngine.Events;
-using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.Abilities.AbilityActivations;
 using System.Linq;
 
@@ -137,11 +132,11 @@ namespace GameplayAbilitySystem.Abilities
         {
             // Check the modifiers on the ability cost GameEffect
             var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();
-            var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers);
+            var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers,operateOnCurrentValue: true);
 
             foreach (var attribute in attributeModification)
             {
-                if (attribute.Value.NewBase < 0) return false;
+                if (attribute.Value.NewAttribueValue < 0) return false;
             }
             return true;
         }

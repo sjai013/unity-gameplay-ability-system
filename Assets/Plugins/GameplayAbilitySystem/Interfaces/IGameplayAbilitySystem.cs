@@ -115,14 +115,21 @@ namespace GameplayAbilitySystem.Interfaces
         void HandleGameplayEvent(GameplayTag EventTag, GameplayEventData Payload);
 
         /// <summary>
-        /// Gets the numerical value of an attribute attached to this <see cref="GameObject"/>
+        /// Gets the base numerical value of an attribute attached to this <see cref="GameObject"/>
         /// </summary>
         /// <param name="AttributeType">Type of attribute to get value of</param>
         /// <returns>Current value of attribute</returns>
         float GetNumericAttributeBase(AttributeType AttributeType);
 
         /// <summary>
-        /// Sets the numerical value of an attribute attached to this <see cref="GameObject"/>
+        /// Gets the current numerical value of an attribute attached to this <see cref="GameObject"/>
+        /// </summary>
+        /// <param name="AttributeType">Type of attribute to get value of</param>
+        /// <returns>Current value of attribute</returns>
+        float GetNumericAttributeCurrent(AttributeType AttributeType);        
+
+        /// <summary>
+        /// Sets the current numerical value of an attribute attached to this <see cref="GameObject"/>
         /// </summary>
         /// <param name="AttributeType">Type of attribute to get value of</param>
         /// <param name="NewValue">New value of attribute</param>
