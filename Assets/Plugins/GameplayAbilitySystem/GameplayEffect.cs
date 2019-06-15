@@ -21,31 +21,31 @@ namespace GameplayAbilitySystem.GameplayEffects
         GameplayEffectTags _gameplayEffectTags = new GameplayEffectTags();
 
         [SerializeField]
-        List<AbstractGameplayCueImplementation> GameplayCues = new List<AbstractGameplayCueImplementation>();
+        public List<AbstractGameplayCueImplementation> GameplayCues = new List<AbstractGameplayCueImplementation>();
 
         public GameplayEffectTags GameplayEffectTags { get => _gameplayEffectTags; }
         public GameplayEffectPolicy GameplayEffectPolicy { get => _gameplayEffectPolicy; }
 
-        public bool ExecuteEffect(IGameplayAbilitySystem TargetAbilitySystem)
+        public void ExecuteEffect(IGameplayAbilitySystem TargetAbilitySystem)
         {
-            bool allExecuted = false;
-            var attributeSet = TargetAbilitySystem.GetActor().GetComponent<AttributeSet>();
-            for (var i = 0; i < this._gameplayEffectPolicy.Modifiers.Count; i++)
-            {
-                var modifier = this._gameplayEffectPolicy.Modifiers[i];
-                var attribute = attributeSet.Attributes.Find(x => x.AttributeType == modifier.Attribute);
 
-                if (attribute == null) continue;
+            // TODO: These are applied regardless of whether the effect was applied or not
+            // and regardless of whether we are "refreshing" a stack.
 
-                var evalData = new GameplayModifierEvaluatedData()
-                {
-                    Attribute = attribute,
-                    ModOperation = modifier.ModifierOperation,
-                    Magnitude = CalculateModifierMagnitude(modifier)
-                };
+            // // Apply the persisted attribute modifiers to the current value
+            // if (TargetAbilitySystem.PersistedAttributeModifiers.ContainsKey(this))
+            // {
+            //     var effectPersistedModifiers = TargetAbilitySystem.PersistedAttributeModifiers[this];
 
-                allExecuted |= _ExecuteModification(TargetAbilitySystem, attributeSet, modifier, evalData);
-            }
+            //     if (effectPersistedModifiers != null)
+            //     {
+            //         for (int i = 0; i < effectPersistedModifiers.Count; i++)
+            //         {
+            //             TargetAbilitySystem.AdjustNumericAttributeCurrent(effectPersistedModifiers[i].AttributeType, effectPersistedModifiers[i].Modifier);
+            //         }
+            //     }
+            // }
+
 
             // Apply gamecues
             for (var i = 0; i < GameplayCues.Count; i++)
@@ -54,10 +54,9 @@ namespace GameplayAbilitySystem.GameplayEffects
                 cue.HandleGameplayCue(TargetAbilitySystem.GetActor().gameObject, EGameplayCueEventTypes.Executed, new GameplayCueParameters(null, null, null));
             }
 
-            return allExecuted;
         }
 
-        public bool EffectExpired(float CooldownTimeElapsed)
+        public bool EffectExpired(float durationElapsed)
         {
             var effectExpired = false;
             switch (this.GameplayEffectPolicy.DurationPolicy)
@@ -66,7 +65,7 @@ namespace GameplayAbilitySystem.GameplayEffects
                     effectExpired = false;
                     break;
                 case EDurationPolicy.HasDuration:
-                    if (CooldownTimeElapsed >= this.GameplayEffectPolicy.DurationMagnitude)
+                    if (durationElapsed >= this.GameplayEffectPolicy.DurationMagnitude)
                     {
                         effectExpired = true;
                     }
@@ -91,53 +90,165 @@ namespace GameplayAbilitySystem.GameplayEffects
 
         }
 
-        private bool _ExecuteModification(IGameplayAbilitySystem TargetAbilitySystem, IAttributeSet AttributeSet, GameplayEffectModifier Modifier, GameplayModifierEvaluatedData EvalData)
-        {
-            var executed = false;
-            if (!AttributeSet.PreGameplayEffectExecute(this, EvalData)) return executed;
-            float oldAttributeValue = EvalData.Attribute.BaseValue;
-            ApplyModificationToAttribute(TargetAbilitySystem, AttributeSet, Modifier, EvalData);
-            AttributeSet.PostGameplayEffectExecute(this, EvalData);
-            executed = true;
-            return executed;
 
+        public float GetModifierMagnitude(GameplayEffectModifier modifier)
+        {
+            modifier.AttemptCalculateMagnitude(out var evaluatedMagnitude);
+            return evaluatedMagnitude;
         }
 
-        private void ApplyModificationToAttribute(IGameplayAbilitySystem TargetAbilitySystem, IAttributeSet AttributeSet, GameplayEffectModifier Modifier, GameplayModifierEvaluatedData EvalData)
+        /// <summary> Calculate the magnitudes of all modifiers on this <see cref="GameplayEffec"/> </summary>
+        /// <returns>  Return List of Attribute-Magnitude tuples  </returns>
+        public List<(AttributeType Attribute, float Magnitude)> CalculateModifierMagnitudes()
         {
-            var currentBase = EvalData.Attribute.BaseValue;
-            var newBase = AbilitySystemStatics.CalculateModifiedBaseAttribute(currentBase, Modifier.ModifierOperation, Modifier.ScaledMagnitude);
-            SetAttributeBaseValue(TargetAbilitySystem, AttributeSet, EvalData.Attribute, Modifier, newBase);
-
-        }
-
-        private void SetAttributeBaseValue(IGameplayAbilitySystem TargetAbilitySystem, IAttributeSet AttributeSet, IAttribute Attribute, GameplayEffectModifier Modifier, float NewBaseValue)
-        {
-            AttributeSet.PreAttributeBaseChange(Attribute, ref NewBaseValue);
-            float currentBase = Attribute.BaseValue;
-
-            if (currentBase != NewBaseValue)
+            var modifierList = new List<(AttributeType Attribute, float Magnitude)>();
+            foreach (var modifier in this.GameplayEffectPolicy.Modifiers)
             {
-                var AttributeChangeData = new AttributeChangeData()
-                {
-                    NewValue = NewBaseValue,
-                    OldValue = currentBase,
-                    Modifier = Modifier,
-                    Effect = this,
-                    Target = TargetAbilitySystem
-                };
-                Attribute.BaseValue = NewBaseValue;
-                AttributeSet.AttributeValueChanged?.Invoke(AttributeChangeData);
+                float magnitude = 0;
+                modifier.AttemptCalculateMagnitude(out magnitude);
+                modifierList.Add((modifier.Attribute, magnitude));
+            }
 
-                Attribute.SetNumericValueChecked(AttributeSet, ref NewBaseValue);
+            return modifierList;
+        }
+
+        public Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> CalculateModifierEffect(Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> Existing = null)
+        {
+            Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> modifierTotals;
+            if (Existing == null)
+            {
+                modifierTotals = new Dictionary<AttributeType, Dictionary<EModifierOperationType, float>>();
+
+            }
+            else
+            {
+                modifierTotals = Existing;
+            }
+
+            foreach (var modifier in this.GameplayEffectPolicy.Modifiers)
+            {
+                if (!modifierTotals.TryGetValue(modifier.Attribute, out var modifierType))
+                {
+                    // This attribute hasn't been recorded before, so create a blank new record
+                    modifierType = new Dictionary<EModifierOperationType, float>();
+                    modifierTotals.Add(modifier.Attribute, modifierType);
+                }
+
+                if (!modifierType.TryGetValue(modifier.ModifierOperation, out var value))
+                {
+                    value = 0;
+                    switch (modifier.ModifierOperation)
+                    {
+                        case EModifierOperationType.Multiply:
+                            value = 1;
+                            break;
+                        case EModifierOperationType.Divide:
+                            value = 1;
+                            break;
+                        default:
+                            value = 0;
+                            break;
+                    }
+                    modifierType.Add(modifier.ModifierOperation, value);
+
+                }
+
+                switch (modifier.ModifierOperation)
+                {
+                    case EModifierOperationType.Add:
+                        modifierTotals[modifier.Attribute][modifier.ModifierOperation] += modifier.ScaledMagnitude;
+                        break;
+                    case EModifierOperationType.Multiply:
+                        modifierTotals[modifier.Attribute][modifier.ModifierOperation] *= modifier.ScaledMagnitude;
+                        break;
+                    case EModifierOperationType.Divide:
+                        modifierTotals[modifier.Attribute][modifier.ModifierOperation] *= modifier.ScaledMagnitude;
+                        break;
+                }
+            }
+
+            return modifierTotals;
+        }
+        
+        public Dictionary<AttributeType, AttributeModificationValues> CalculateAttributeModification(IGameplayAbilitySystem AbilitySystem, Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> Modifiers, bool operateOnCurrentValue = false)
+        {
+            var attributeModification = new Dictionary<AttributeType, AttributeModificationValues>();
+
+            foreach (var attribute in Modifiers)
+            {
+                if (!attribute.Value.TryGetValue(EModifierOperationType.Add, out var addition))
+                {
+                    addition = 0;
+                }
+
+                if (!attribute.Value.TryGetValue(EModifierOperationType.Multiply, out var multiplication))
+                {
+                    multiplication = 1;
+                }
+
+                if (!attribute.Value.TryGetValue(EModifierOperationType.Divide, out var division))
+                {
+                    division = 1;
+                }
+
+                var oldAttributeValue = 0f;
+                if (!operateOnCurrentValue)
+                {
+                    oldAttributeValue = AbilitySystem.GetNumericAttributeBase(attribute.Key);
+                }
+                else
+                {
+                    oldAttributeValue = AbilitySystem.GetNumericAttributeCurrent(attribute.Key);
+                }
+
+                var newAttributeValue = (oldAttributeValue + addition) * (multiplication / division);
+
+                if (!attributeModification.TryGetValue(attribute.Key, out var values))
+                {
+                    values = new AttributeModificationValues();
+                    attributeModification.Add(attribute.Key, values);
+                }
+
+                values.NewAttribueValue += newAttributeValue;
+                values.OldAttributeValue += oldAttributeValue;
+
+            }
+
+            return attributeModification;
+        }
+        public void ApplyInstantEffect(IGameplayAbilitySystem Target)
+        {
+            // Modify base attribute values.  Collect the overall change for each modifier
+            var modifierTotals = this.CalculateModifierEffect();
+            var attributeModifications = this.CalculateAttributeModification(Target, modifierTotals);
+
+            // Finally, For each attribute, apply the new modified values
+            foreach (var attribute in attributeModifications)
+            {
+                Target.SetNumericAttributeBase(attribute.Key, attribute.Value.NewAttribueValue);
+
+                // mark the corresponding aggregator as dirty so we can recalculate the current values
+                Target.ActiveGameplayEffectsContainer.AttributeAggregatorMap.TryGetValue(attribute.Key, out var aggregator);
+                if (aggregator != null)
+                {
+                    aggregator.MarkDirty();
+                }
+                else
+                {
+                    // No modifications, so set current value = base value
+                    Target.SetNumericAttributeCurrent(attribute.Key, Target.GetNumericAttributeBase(attribute.Key));
+                }
             }
         }
 
-        private float CalculateModifierMagnitude(GameplayEffectModifier modifier)
-        {
-            return modifier.ScaledMagnitude;
-        }
+    }
 
+
+
+    public class AttributeModificationValues
+    {
+        public float OldAttributeValue = 0f;
+        public float NewAttribueValue = 0f;
     }
     public struct GameplayModifierEvaluatedData
     {
@@ -146,5 +257,15 @@ namespace GameplayAbilitySystem.GameplayEffects
         public float Magnitude;
 
     }
+
+    public static class GameplayEffectExtensionMethods
+    {
+        public static Dictionary<AttributeType, AttributeModificationValues> CalculateAttributeModification(this Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> modifier, IGameplayAbilitySystem AbilitySystem, GameplayEffect Effect)
+        {
+            return Effect.CalculateAttributeModification(AbilitySystem, modifier);
+        }
+
+    }
+
 }
 

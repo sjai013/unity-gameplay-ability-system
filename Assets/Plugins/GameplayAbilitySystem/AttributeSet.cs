@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GameplayAbilitySystem.GameplayEffects;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
@@ -14,14 +13,27 @@ namespace GameplayAbilitySystem.Attributes
     public class AttributeSet : MonoBehaviour, IAttributeSet
     {
         [SerializeField]
-        private AttributeChangeDataEvent _attributeValueChanged = new AttributeChangeDataEvent();
+        private AttributeChangeDataEvent _attributeBaseValueChanged = default;
         /// <inheritdoc />
-        public AttributeChangeDataEvent AttributeValueChanged => _attributeValueChanged;
+        public AttributeChangeDataEvent AttributeBaseValueChanged => _attributeBaseValueChanged;
+
+        /// <inheritDoc />
+        [SerializeField]
+        private AttributeChangeDataEvent _attributeCurrentValueChanged = default;
+        public AttributeChangeDataEvent AttributeCurrentValueChanged => _attributeCurrentValueChanged;
 
         /// <inheritdoc />
         [SerializeField]
         private List<Attribute> _attributes;
         public List<Attribute> Attributes { get => _attributes; set => _attributes = value; }
+
+        [SerializeField]
+        private BaseAttributeChangeHandler _preAttributeBaseChangeHandler = default;
+        public BaseAttributeChangeHandler PreAttributeBaseChangeHandler => _preAttributeBaseChangeHandler;
+
+        [SerializeField]
+        private BaseAttributeChangeHandler _preAttributeChangeHandler = default;
+        public BaseAttributeChangeHandler PreAttributeChangeHandler => _preAttributeChangeHandler;
 
         /// <inheritdoc />
         public AbilitySystemComponent GetOwningAbilitySystem()
@@ -38,12 +50,20 @@ namespace GameplayAbilitySystem.Attributes
         /// <inheritdoc />
         public void PreAttributeBaseChange(IAttribute Attribute, ref float newMagnitude)
         {
+            if (_preAttributeBaseChangeHandler != null)
+            {
+                _preAttributeBaseChangeHandler.OnAttributeChange(Attribute, ref newMagnitude);
+            }
             return;
         }
 
         /// <inheritdoc />
         public void PreAttributeChange(IAttribute Attribute, ref float NewValue)
         {
+            if (_preAttributeChangeHandler != null)
+            {
+                _preAttributeChangeHandler.OnAttributeChange(Attribute, ref NewValue);
+            }
             return;
         }
 

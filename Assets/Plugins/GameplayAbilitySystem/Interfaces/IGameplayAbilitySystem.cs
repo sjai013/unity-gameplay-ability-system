@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
 using GameplayAbilitySystem.Abilities;
 using GameplayAbilitySystem.Attributes;
 using GameplayAbilitySystem.Events;
 using GameplayAbilitySystem.GameplayEffects;
 using UnityEngine;
+using UnityEngine.Events;
+using GameplayAbilitySystem.Enums;
+using System.Threading.Tasks;
 
 namespace GameplayAbilitySystem.Interfaces
 {
@@ -49,10 +53,23 @@ namespace GameplayAbilitySystem.Interfaces
         GameplayEvent OnGameplayEvent { get; }
 
         /// <summary>
+        /// Event called when an effect is removed on this <see cref="IGameplayAbilitySystem"/>
+        /// </summary>
+        /// <value></value>
+        GenericGameplayEffectEvent OnEffectRemoved { get; }
+
+        /// <summary>
+        /// Event called when an effect is added on this <see cref="IGameplayAbilitySystem"/>
+        /// </summary>
+        /// <value></value>
+        GenericGameplayEffectEvent OnEffectAdded { get; }
+
+        /// <summary>
         /// Lists all active <see cref="GameplayEffect"/> on this <see cref="IGameplayAbilitySystem"/>
         /// </summary>
         /// <value></value>
-        List<ActiveGameplayEffectData> ActiveGameplayEffects { get; }
+        ActiveGameplayEffectsContainer ActiveGameplayEffectsContainer { get; }
+
 
         /// <summary>
         /// Checks to see if the <see cref="GameplayAbility"/> can be activated on this component.  Does not execute the ability.
@@ -76,19 +93,13 @@ namespace GameplayAbilitySystem.Interfaces
         /// <param name="Target">Target on which effect is to be applied</param>
         /// <param name="Level">Level of the effect.  May be used to affect the "strength" of the effect</param>
         /// <returns><see cref="GameplayEffect"/> that was applied  to the target</returns>
-        GameplayEffect ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0f);
+        Task<GameplayEffect> ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0f);
 
         /// <summary>
         /// Notifies this <see cref="IGameplayAbilitySystem"/> that the specified <see cref="GameplayAbility"/> has ended
         /// </summary>
         /// <param name="Ability"><see cref="GameplayAbility"/> which has ended</param>
         void NotifyAbilityEnded(GameplayAbility Ability);
-
-        /// <summary>
-        /// Applies a <see cref="GameplayEffect"/> to this <see cref="IGameplayAbilitySystem"/>
-        /// </summary>
-        /// <param name="Effect">Effect to be applied</param>
-        void AddGameplayEffectToActiveList(GameplayEffect Effect);
 
         /// <summary>
         /// Gets the parent <see cref="Transform"/> of this <see cref="IGameplayAbilitySystem"/>
@@ -104,12 +115,48 @@ namespace GameplayAbilitySystem.Interfaces
         void HandleGameplayEvent(GameplayTag EventTag, GameplayEventData Payload);
 
         /// <summary>
-        /// Gets the numerical value of an attribute attached to this <see cref="GameObject"/>
+        /// Gets the base numerical value of an attribute attached to this <see cref="GameObject"/>
         /// </summary>
         /// <param name="AttributeType">Type of attribute to get value of</param>
         /// <returns>Current value of attribute</returns>
-        float GetNumericAttribute(AttributeType AttributeType);
+        float GetNumericAttributeBase(AttributeType AttributeType);
 
+        /// <summary>
+        /// Gets the current numerical value of an attribute attached to this <see cref="GameObject"/>
+        /// </summary>
+        /// <param name="AttributeType">Type of attribute to get value of</param>
+        /// <returns>Current value of attribute</returns>
+        float GetNumericAttributeCurrent(AttributeType AttributeType);        
+
+        /// <summary>
+        /// Sets the current numerical value of an attribute attached to this <see cref="GameObject"/>
+        /// </summary>
+        /// <param name="AttributeType">Type of attribute to get value of</param>
+        /// <param name="NewValue">New value of attribute</param>
+        /// <returns>Current value of attribute</returns>
+        void SetNumericAttributeCurrent(AttributeType AttributeType, float NewValue);
+
+        /// <summary>
+        /// <para>
+        /// Applies batched <see cref="GameplayEffect"/>.  This can be useful if e.g. an ability applies
+        /// a number of <see cref="GameplayEffect"/>, some with <see cref="EDurationPolicy.Instant"/> Instant modifiers, and some with 
+        /// <see cref="EDurationPolicy.Infinite"/> or <see cref="EDurationPolicy.HasDuration"/> modifiers.  
+        /// By batching these <see cref="GameplayEffect"/>, we can ensure that all of these <see cref="GameplayEffect"/> happen
+        /// with reference to the same base attribute value.  
+        /// </para>
+        /// <para>
+        /// If you were to apply these as separate <see cref="GameplayEffect"/>, then the effect of the same game effect
+        /// could be different depending on the order in which the <see cref="GameplayEffect"/> are applied.
+        /// </para>
+        /// </summary>
+        void ApplyBatchGameplayEffects(IEnumerable<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects);
+        void SetNumericAttributeBase(AttributeType AttributeType, float modifier);
+    }
+
+    public class GenericGameplayEffectEvent : UnityEvent<GameplayEffect>
+    {
 
     }
+
+
 }

@@ -16,7 +16,7 @@ namespace GameplayAbilitySystem
 
         /// <inheritdoc />
         [SerializeField]
-        private GameplayEffect _cooldownGameplayEffect;
+        private GameplayEffect _cooldownGameplayEffect = null;
 
         /// <inheritdoc />
         public IEnumerable<GameplayTag> GetCooldownTags()

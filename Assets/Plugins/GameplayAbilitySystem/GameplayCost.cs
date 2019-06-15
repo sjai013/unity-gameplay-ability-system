@@ -14,6 +14,6 @@ namespace GameplayAbilitySystem
 
         /// <inheritdoc />
         [SerializeField]
-        private GameplayEffect _costGameplayEffect;
+        private GameplayEffect _costGameplayEffect = null;
     }
 }

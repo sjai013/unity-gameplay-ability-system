@@ -11,49 +11,60 @@ using GameplayAbilitySystem.GameplayEffects;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 using GameplayAbilitySystem.Attributes;
+using UnityEngine.Events;
+using GameplayAbilitySystem.Enums;
+using GameplayAbilitySystem.GameplayCues;
 
 namespace GameplayAbilitySystem
 {
     /// <inheritdoc />
-    [AddComponentMenu("Gameplay Ability System/Ablity System")]
+    [AddComponentMenu("Gameplay Ability System/Ability System")]
     public class AbilitySystemComponent : MonoBehaviour, IGameplayAbilitySystem
     {
         [SerializeField]
         private GenericAbilityEvent _onGameplayAbilityActivated = new GenericAbilityEvent();
-
-        [SerializeField]
-        private GenericAbilityEvent _onGameplayAbilityCommitted = new GenericAbilityEvent();
-
-        [SerializeField]
-        private GenericAbilityEvent _onGameplayAbilityEnded = new GenericAbilityEvent();
-
-        [SerializeField]
-        private GameplayEvent _onGameplayEvent = new GameplayEvent();
-
-        [SerializeField]
-        protected List<ActiveGameplayEffectData> _activeGameplayEffects = new List<ActiveGameplayEffectData>();
-
         /// <inheritdoc />
         public GenericAbilityEvent OnGameplayAbilityActivated => _onGameplayAbilityActivated;
 
-        /// <inheritdoc />
-        public GenericAbilityEvent OnGameplayAbilityCommitted => _onGameplayAbilityCommitted;
-
+        [SerializeField]
+        private GenericAbilityEvent _onGameplayAbilityEnded = new GenericAbilityEvent();
         /// <inheritdoc />
         public GenericAbilityEvent OnGameplayAbilityEnded => _onGameplayAbilityEnded;
 
+        [SerializeField]
+        private GameplayEvent _onGameplayEvent = new GameplayEvent();
         /// <inheritdoc />
         public GameplayEvent OnGameplayEvent => _onGameplayEvent;
 
+        [SerializeField]
+        protected ActiveGameplayEffectsContainer _activeGameplayEffectsContainer;
         /// <inheritdoc />
+        public ActiveGameplayEffectsContainer ActiveGameplayEffectsContainer => _activeGameplayEffectsContainer;
+
+        [SerializeField]
         protected List<IGameplayAbility> _runningAbilities = new List<IGameplayAbility>();
-
-        /// <inheritdoc />
-        public List<ActiveGameplayEffectData> ActiveGameplayEffects => _activeGameplayEffects;
-
         /// <inheritdoc />
         public List<IGameplayAbility> RunningAbilities => _runningAbilities;
 
+        [SerializeField]
+        protected GenericGameplayEffectEvent _onEffectAdded = new GenericGameplayEffectEvent();
+        /// <inheritdoc />
+        public GenericGameplayEffectEvent OnEffectAdded => _onEffectAdded;
+
+        [SerializeField]
+        protected GenericGameplayEffectEvent _onEffectRemoved = new GenericGameplayEffectEvent();
+        /// <inheritdoc />
+        public GenericGameplayEffectEvent OnEffectRemoved => _onEffectRemoved;
+
+        [SerializeField]
+        private GenericAbilityEvent _onGameplayAbilityCommitted = new GenericAbilityEvent();
+        /// <inheritdoc />
+        public GenericAbilityEvent OnGameplayAbilityCommitted => _onGameplayAbilityCommitted;
+
+        public void Awake()
+        {
+            this._activeGameplayEffectsContainer = new ActiveGameplayEffectsContainer(this);
+        }
         /// <inheritdoc />
         public Transform GetActor()
         {
@@ -62,19 +73,7 @@ namespace GameplayAbilitySystem
 
         void Update()
         {
-            UpdateCooldowns();
-        }
 
-        protected void UpdateCooldowns()
-        {
-            // Update gameplay effect times
-            for (var i = 0; i < _activeGameplayEffects.Count; i++)
-            {
-                var effect = _activeGameplayEffects[i];
-                effect.CooldownTimeElapsed += Time.deltaTime;
-            }
-
-            _activeGameplayEffects.RemoveAll(x => x.Effect.EffectExpired(x.CooldownTimeElapsed));
         }
 
         /// <inheritdoc />
@@ -100,7 +99,8 @@ namespace GameplayAbilitySystem
             if (!this.CanActivateAbility(Ability)) return false;
             if (!Ability.IsAbilityActivatable(this)) return false;
             _runningAbilities.Add(Ability);
-            Ability.ActivateAbility(this);
+            Ability.CommitAbility(this);
+
             return true;
         }
 
@@ -116,71 +116,110 @@ namespace GameplayAbilitySystem
             return true;
         }
 
-        /// <inheritdoc />
-        public GameplayEffect ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
+        public async void ApplyBatchGameplayEffects(IEnumerable<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects)
         {
-            if (Effect.ExecuteEffect(Target))
+
+            var instantEffects = BatchedGameplayEffects.Where(x => x.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant);
+            var durationalEffects = BatchedGameplayEffects.Where(
+                x =>
+                    x.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration ||
+                    x.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Infinite
+                    );
+
+            // Apply instant effects
+            foreach (var item in instantEffects)
             {
-                this.AddGameplayEffectToActiveList(Effect);
+                if (await ApplyGameEffectToTarget(item.Effect, item.Target))
+                {
+                    // item.Target.AddGameplayEffectToActiveList(Effect);
+
+                }
             }
-            return Effect;
+
+            // Apply durational effects
+            foreach (var effect in durationalEffects)
+            {
+                if (await ApplyGameEffectToTarget(effect.Effect, effect.Target))
+                {
+
+                }
+            }
+
         }
 
         /// <inheritdoc />
-        public void AddGameplayEffectToActiveList(GameplayEffect Effect)
+        public Task<GameplayEffect> ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
         {
-            this._activeGameplayEffects.Add(new ActiveGameplayEffectData(Effect));
+            // TODO: Check to make sure all the attributes being modified by this gameplay effect exist on the target
+
+            // TODO: Get list of tags owned by target
+
+            // TODO: Check for immunity tags, and don't apply gameplay effect if target is immune (and also add Immunity Tags container to IGameplayEffect)
+
+            // TODO: Check to make sure Application Tag Requirements are met (i.e. target has the required tags, if any)
+
+            // If this is a non-instant gameplay effect (i.e. it will modify the current value, not the base value)
+
+            // If this is an instant gameplay effect (i.e. it will modify the base value)
+
+            // If we can apply the GameEffect, apply it to target
+            //Effect.ExecuteEffect(Target);
+
+            // Handling Instant effects is different to handling HasDuration and Infinite effects
+            if (Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant)
+            {
+                Effect.ApplyInstantEffect(Target);
+            }
+            else
+            {
+                var EffectData = new ActiveGameplayEffectData(Effect);
+                _ = Target.ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
+            }
+
+            var gameplayCues = Effect.GameplayCues;
+            // Apply gamecues
+            for (var i = 0; i < gameplayCues.Count; i++)
+            {
+                var cue = gameplayCues[i];
+                cue.HandleGameplayCue(Target.GetActor().gameObject, EGameplayCueEventTypes.Executed, new GameplayCueParameters(null, null, null));
+            }
+
+            return Task.FromResult(Effect);
         }
 
+
         /// <inheritdoc />
-        public float GetNumericAttribute(AttributeType AttributeType)
+        public float GetNumericAttributeBase(AttributeType AttributeType)
         {
             var attributeSet = this.GetComponent<AttributeSet>();
             return attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType).BaseValue;
         }
 
-
-    }
-
-    /// <summary>
-    /// This class is used to keep track of active <see cref="GameplayEffect"/>.  
-    /// </summary>
-    [Serializable]
-    public class ActiveGameplayEffectData
-    {
-        public ActiveGameplayEffectData(GameplayEffect effect, float cooldownTimeElapsed = 0f)
+        /// <inheritdoc />
+        public float GetNumericAttributeCurrent(AttributeType AttributeType)
         {
-            this._gameplayEffect = effect;
-            this._cooldownTimeElapsed = cooldownTimeElapsed;
-            this._stacks = 1;
+            var attributeSet = this.GetComponent<AttributeSet>();
+            return attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType).CurrentValue;
         }
 
-        /// <summary>
-        /// The actual <see cref="GameplayEffect"/>. 
-        /// </summary>
-        /// <value></value>
-        public GameplayEffect Effect { get => _gameplayEffect; }
+        public void SetNumericAttributeBase(AttributeType AttributeType, float modifier)
+        {
+            var attributeSet = this.GetComponent<AttributeSet>();
+            var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
+            var newValue = modifier;
+            attribute.SetAttributeBaseValue(attributeSet, ref newValue);
+        }
 
-        /// <summary>
-        /// The number of stacks of this <see cref="GameplayEffect"/>
-        /// </summary>
-        /// <value></value>
-        public int Stacks { get => _stacks; set => _stacks = value; }
-        
-        /// <summary>
-        /// The cooldown time that has already elapsed for this gameplay effect
-        /// </summary>
-        /// <value>Cooldown time elapsed</value>
-        public float CooldownTimeElapsed { get => _cooldownTimeElapsed; set => _cooldownTimeElapsed = value; }
-
-        [SerializeField]
-        private int _stacks;
-
-        [SerializeField]
-        private GameplayEffect _gameplayEffect;
-
-        [SerializeField]
-        private float _cooldownTimeElapsed;
+        public void SetNumericAttributeCurrent(AttributeType AttributeType, float NewValue)
+        {
+            var attributeSet = this.GetComponent<AttributeSet>();
+            var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
+            attribute.SetAttributeCurrentValue(attributeSet, ref NewValue);
+        }
 
     }
+
+
+
+
 }

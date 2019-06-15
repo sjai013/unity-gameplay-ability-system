@@ -32,5 +32,24 @@ namespace GameplayAbilitySystem.Statics
 
             return BaseValue;
         }
+
+        public static float CalculateModificationValue(float CurrentValue, EModifierOperationType ModType, float EvaluatedMagnitude)
+        {
+            var modifier = 0f;
+            switch (ModType)
+            {
+                case EModifierOperationType.Add:
+                    modifier = EvaluatedMagnitude;
+                    break;
+                case EModifierOperationType.Divide:
+                    modifier = CurrentValue / EvaluatedMagnitude;
+                    break;
+                case EModifierOperationType.Multiply:
+                    modifier = CurrentValue * EvaluatedMagnitude;
+                    break;
+            }
+
+            return modifier;
+        }
     }
 }

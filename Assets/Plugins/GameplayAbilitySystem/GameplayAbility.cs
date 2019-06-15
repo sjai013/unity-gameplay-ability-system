@@ -1,13 +1,8 @@
-using System.Threading;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using GameplayAbilitySystem.Events;
 using GameplayAbilitySystem.Interfaces;
 using GameplayAbilitySystem.GameplayEffects;
 using UnityEngine;
-using UnityEngine.Events;
-using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.Abilities.AbilityActivations;
 using System.Linq;
 
@@ -40,7 +35,7 @@ namespace GameplayAbilitySystem.Abilities
         private GenericAbilityEvent _onGameplayAbilityEnded = new GenericAbilityEvent();
 
         [SerializeField]
-        private AbstractAbilityActivation _abilityLogic;
+        private AbstractAbilityActivation _abilityLogic = null;
 
 
 
@@ -89,9 +84,12 @@ namespace GameplayAbilitySystem.Abilities
         /// Applies the ability cost, decreasing the specified cost resource from the player.
         /// If player doesn't have the required resource, the resource goes to negative (or clamps to 0)
         /// </summary>
-        protected void ApplyCost()
+        protected void ApplyCost(IGameplayAbilitySystem AbilitySystem)
         {
-            throw new NotImplementedException();
+            var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();
+            var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers);
+            this.GameplayCost.CostGameplayEffect.ApplyInstantEffect(AbilitySystem);
+
         }
 
         /// <summary>
@@ -100,9 +98,9 @@ namespace GameplayAbilitySystem.Abilities
         /// </summary>
         protected void ApplyCooldown(IGameplayAbilitySystem abilitySystem)
         {
-            for (var i = 0; i < this.GameplayCooldowns.Count; i++)
+            foreach (var cooldown in this.GameplayCooldowns)
             {
-                abilitySystem.AddGameplayEffectToActiveList(this.GameplayCooldowns[i].CooldownGameplayEffect);
+                abilitySystem.ActiveGameplayEffectsContainer.ApplyCooldownEffect(new ActiveGameplayEffectData(cooldown.CooldownGameplayEffect));
             }
         }
 
@@ -132,15 +130,23 @@ namespace GameplayAbilitySystem.Abilities
         /// <inheritdoc />
         public bool PlayerHasResourceToCast(IGameplayAbilitySystem AbilitySystem)
         {
+            // Check the modifiers on the ability cost GameEffect
+            var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();
+            var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers, operateOnCurrentValue: true);
+
+            foreach (var attribute in attributeModification)
+            {
+                if (attribute.Value.NewAttribueValue < 0) return false;
+            }
             return true;
         }
 
         /// <inheritdoc />
         public bool CommitAbility(IGameplayAbilitySystem AbilitySystem)
         {
-            if (!IsAbilityActivatable(AbilitySystem)) return false;
-            // this.abilitySystem.OnGameplayAbilityActivated.Invoke(this);
-            ApplyCost();
+            ActivateAbility(AbilitySystem);
+            AbilitySystem.OnGameplayAbilityActivated.Invoke(this);
+            ApplyCost(AbilitySystem);
             return true;
         }
 
@@ -149,20 +155,13 @@ namespace GameplayAbilitySystem.Abilities
         {
             var cooldownTags = this.GetAbilityCooldownTags();
 
-            // Check if the ability system has any of these tags.  Since tags are provided
-            // by game effects, that means we need to iterate through all active game effects
-            // and check if any of them provide these tags
+            // Check if we have the cooldown effect
+            var cooldownEffectsMatched = AbilitySystem.ActiveGameplayEffectsContainer.ActiveCooldowns.Select(x => x.Effect)
+                .Intersect(this.GameplayCooldowns.Select(x => x.CooldownGameplayEffect)).Count();
 
-            // Check each active gameplay effect.  If we have a match, store the reference
-            foreach (var gameplayEffect in AbilitySystem.ActiveGameplayEffects)
-            {
-                if (gameplayEffect.Effect.GetOwningTags().Intersect(cooldownTags).Count() > 0)
-                {
-                    return false;
-                }
-            }
 
-            return true;
+
+            return cooldownEffectsMatched == 0;
         }
 
         /// <inheritdoc />
@@ -175,6 +174,27 @@ namespace GameplayAbilitySystem.Abilities
             }
 
             return tags;
+        }
+
+        public (float CooldownElapsed, float CooldownTotal) CalculateCooldown(IGameplayAbilitySystem AbilitySystem)
+        {
+            var dominantCooldown = this.GameplayCooldowns
+                                .Select(abilityCooldown => abilityCooldown.CooldownGameplayEffect)
+                                .Select(abilityCooldown =>
+                                            AbilitySystem.ActiveGameplayEffectsContainer.ActiveCooldowns
+                                                .FirstOrDefault(activeCooldownOnCharacter => activeCooldownOnCharacter.Effect == abilityCooldown))
+
+                                .Where(x => x != null && x.Effect != null)
+                                .DefaultIfEmpty()
+                                .OrderByDescending(activeEffect => activeEffect?.CooldownTimeRemaining)
+                                .FirstOrDefault();
+
+            if (dominantCooldown == null)
+            {
+                return (0f, 0f);
+            }
+
+            return (dominantCooldown.CooldownTimeElapsed, dominantCooldown.CooldownTimeTotal);
         }
 
     }

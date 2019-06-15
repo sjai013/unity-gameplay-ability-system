@@ -18,20 +18,20 @@ namespace GameplayAbilitySystem.Interfaces
         /// The base value of the attribute, unaffected by e.g. buffs
         /// </summary>
         /// <value></value>
-        float BaseValue { get; set; }
+        float BaseValue { get;  }
 
         /// <summary>
         /// This current value of the attribute, after application of temporary effects, e.g. buffs
         /// </summary>
         /// <value></value>        
-        float CurrentValue { get; set; }
+        float CurrentValue { get;  }
 
 
         /// <summary>
-        /// Set the value of thie attribute
+        /// Set the current value of the attribute
         /// </summary>
         /// <param name="AttributeSet"><see cref="IAttributeSet"/> this attribute belongs to</param>
         /// <param name="NewValue">New value of the attribute</param>
-        void SetNumericValueChecked(IAttributeSet AttributeSet, ref float NewValue);
+        void SetAttributeCurrentValue(IAttributeSet AttributeSet, ref float NewValue);
     }
 }

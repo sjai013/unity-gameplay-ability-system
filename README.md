@@ -8,7 +8,7 @@ The approach for this is taken from that used by Unreal's Gameplay Ability Syste
 ## Installation
 1. Head over to [Releases](https://github.com/sjai013/UnityGameplayAbilitySystem/releases) and download the latest version.
 2. Import package into your Unity project
-3. Add the [UniRx](https://assetstore.unity.com/packages/tools/integration/unirx-reactive-extensions-for-unity-17276) extension from the Asset Store.
+3. Add the [UniRx](https://assetstore.unity.com/packages/tools/integration/unirx-reactive-extensions-for-unity-17276) extension from the Asset Store (or install the [UniRx Async](https://github.com/Cysharp/UniTask) package from GitHub)
 
 ## Demo
 Clone this repository and open it in Unity.  The Demo project is set up with two abilities, bound to the 'f' and 'g' keys respectively.  Pressing the 'f' key will fire an ability which will damage the enemy character, and pressing the 'g' key will heal the player-controller character and grant movement speed.
@@ -85,7 +85,7 @@ Clone this repository and open it in Unity.  The Demo project is set up with two
         }
 ```
 
-## Constributing
+## Contributing
 You can contribute to this project by:
 * Posting issues
 * Creating PRs with bug fixes or new features

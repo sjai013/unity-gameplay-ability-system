@@ -107,8 +107,6 @@ namespace GameplayAbilitySystem.Interfaces
         /// </summary>
         /// <returns></returns>
         List<GameplayTag> GetAbilityCooldownTags();
-
-
-
+        (float CooldownElapsed, float CooldownTotal) CalculateCooldown(IGameplayAbilitySystem AbilitySystem);
     }
 }
