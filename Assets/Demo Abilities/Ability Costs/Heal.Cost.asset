@@ -19,7 +19,17 @@ MonoBehaviour:
     - _attributeType: {fileID: 11400000, guid: 08c3bc3be14b22e4aadc300234c0587a, type: 2}
       _modifierOperationType: 0
       _magnitudeCalculationType: 0
-      _scaledMagnitude: -30
+      _scaledMagnitude: -15
+      _sourceTags:
+        RequireTags: []
+        IgnoreTags: []
+      _targetTags:
+        RequireTags: []
+        IgnoreTags: []
+    - _attributeType: {fileID: 11400000, guid: 08c3bc3be14b22e4aadc300234c0587a, type: 2}
+      _modifierOperationType: 1
+      _magnitudeCalculationType: 0
+      _scaledMagnitude: 0.85
       _sourceTags:
         RequireTags: []
         IgnoreTags: []

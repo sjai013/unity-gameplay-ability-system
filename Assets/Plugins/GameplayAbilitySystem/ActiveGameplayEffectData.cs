@@ -29,6 +29,19 @@ namespace GameplayAbilitySystem.GameplayEffects
         /// <value>Cooldown time elapsed</value>
         public float CooldownTimeElapsed { get => Time.time - _startWorldTime; }
 
+        /// <summary>
+        /// The total cooldown time for this gameplay effect
+        /// </summary>
+        /// <value>Cooldown time total</value>
+        public float CooldownTimeTotal { get => Effect.GameplayEffectPolicy.DurationMagnitude; }
+
+        /// <summary>
+        /// The cooldown time that is remaining for this gameplay effect
+        /// </summary>
+        /// <value>Cooldown time remaining</value>
+        public float CooldownTimeRemaining { get => CooldownTimeTotal - CooldownTimeElapsed; }
+
+
         [SerializeField]
         private int _stacks;
 

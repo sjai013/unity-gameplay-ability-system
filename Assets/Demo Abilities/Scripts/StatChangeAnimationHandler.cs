@@ -18,11 +18,14 @@ namespace AbilitySystemDemo
             // If health was reduced, play a damage taken animation.  We could be fancy here and do
             // a check on the actual gameplay effect.  For example, this could have been a self-cast
             // ability that reduced health for increasing some other stat
+
+            /* 
             if (Change.Modifier.Attribute == HealthAttribute && Change.NewValue < Change.OldValue)
             {
                 Change.Target.GetActor().GetComponent<Animator>().SetTrigger("Take Damage");
                 return;
             }
+            */
 
         }
 

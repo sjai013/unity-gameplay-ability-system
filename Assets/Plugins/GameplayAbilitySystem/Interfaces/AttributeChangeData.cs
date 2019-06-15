@@ -10,33 +10,35 @@ namespace GameplayAbilitySystem.Attributes
     /// Container for attribute change events
     /// </summary>
     [Serializable]
-    public struct  AttributeChangeData
+    public struct AttributeChangeData
     {
-        /// <summary>
-        /// Old value of the <see cref="IAttribute"/>
-        /// </summary>
-        public float OldValue;
 
         /// <summary>
-        /// New value of the <see cref="IAttribute"/>
+        /// <see cref="IAttribute"/> that was cahnged
         /// </summary>
-        public float NewValue;
+        public IAttribute Attribute;
+        
 
-        /// <summary>
-        /// The <see cref="GameplayEffect"/> that caused the <see cref="IAttribute"/> change
-        /// </summary>
-        public GameplayEffect Effect;
+        // /// <summary>
+        // /// Old value of the <see cref="IAttribute"/>
+        // /// </summary>
+        // public float OldValue;
 
-        /// <summary>
-        /// <see cref="IGameplayEffectModifier"> belonging to the <see cref="GameplayEffect"/> that caused this change.
-        /// We can extract the <see cref="IAttribute"/> from here to see what attribute was modified.
-        /// </summary>
-        public IGameplayEffectModifier Modifier;
+        // /// <summary>
+        // /// The <see cref="GameplayEffect"/> that caused the <see cref="IAttribute"/> change
+        // /// </summary>
+        // public GameplayEffect Effect;
 
-        /// <summary>
-        /// The target of this effect
-        /// </summary>
-        public IGameplayAbilitySystem Target;
+        // /// <summary>
+        // /// <see cref="IGameplayEffectModifier"> belonging to the <see cref="GameplayEffect"/> that caused this change.
+        // /// We can extract the <see cref="IAttribute"/> from here to see what attribute was modified.
+        // /// </summary>
+        // public IGameplayEffectModifier Modifier;
+
+        // /// <summary>
+        // /// The target of this effect
+        // /// </summary>
+        // public IGameplayAbilitySystem Target;
 
     }
 

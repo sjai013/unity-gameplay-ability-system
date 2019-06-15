@@ -132,7 +132,7 @@ namespace GameplayAbilitySystem.Abilities
         {
             // Check the modifiers on the ability cost GameEffect
             var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();
-            var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers,operateOnCurrentValue: true);
+            var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers, operateOnCurrentValue: true);
 
             foreach (var attribute in attributeModification)
             {
@@ -174,6 +174,27 @@ namespace GameplayAbilitySystem.Abilities
             }
 
             return tags;
+        }
+
+        public (float CooldownElapsed, float CooldownTotal) CalculateCooldown(IGameplayAbilitySystem AbilitySystem)
+        {
+            var dominantCooldown = this.GameplayCooldowns
+                                .Select(abilityCooldown => abilityCooldown.CooldownGameplayEffect)
+                                .Select(abilityCooldown =>
+                                            AbilitySystem.ActiveGameplayEffectsContainer.ActiveCooldowns
+                                                .FirstOrDefault(activeCooldownOnCharacter => activeCooldownOnCharacter.Effect == abilityCooldown))
+
+                                .Where(x => x != null && x.Effect != null)
+                                .DefaultIfEmpty()
+                                .OrderByDescending(activeEffect => activeEffect?.CooldownTimeRemaining)
+                                .FirstOrDefault();
+
+            if (dominantCooldown == null)
+            {
+                return (0f, 0f);
+            }
+
+            return (dominantCooldown.CooldownTimeElapsed, dominantCooldown.CooldownTimeTotal);
         }
 
     }
