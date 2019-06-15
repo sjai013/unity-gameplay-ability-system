@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02cc1ff66db5d0749b0bab3afccec0ce, type: 3}
-  m_Name: Gameplay Effect - Heal and Speed
+  m_Name: Gameplay Effect - Blood Pact
   m_EditorClassIdentifier: 
   _gameplayEffectPolicy:
     _durationPolicy: 2

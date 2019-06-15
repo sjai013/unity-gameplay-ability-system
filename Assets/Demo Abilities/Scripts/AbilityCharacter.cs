@@ -33,6 +33,7 @@ public class AbilityCharacter : MonoBehaviour
 
     public (float CooldownElapsed, float CooldownTotal) GetCooldownOfAbility(int n)
     {
+        if (n >= this.Abilities.Count) return (0f, 0f);
         var ability = this.Abilities[n].Ability;
         return ability.CalculateCooldown(SelfAbilitySystem);
         // foreach (var item in SelfAbilitySystem.ActiveGameplayEffectsContainer.ActiveCooldowns)

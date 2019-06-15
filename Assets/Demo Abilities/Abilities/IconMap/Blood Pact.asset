@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 693dcab1d31af7744b28f721da4f30d4, type: 3}
-  m_Name: Ability.Magic.Heal
+  m_Script: {fileID: 11500000, guid: 64213770ac1891a4bb059196f0ef53a7, type: 3}
+  m_Name: Blood Pact
   m_EditorClassIdentifier: 
-  Comment: Lightning magic ability
+  Ability: {fileID: 11400000, guid: 2583a21c4bcf5a240a37b1568534e68f, type: 2}
+  Sprite: {fileID: 21300000, guid: 1e82c0b745885eb47b3352f4754feb46, type: 3}
+  SpriteColor: {r: 1, g: 1, b: 1, a: 1}

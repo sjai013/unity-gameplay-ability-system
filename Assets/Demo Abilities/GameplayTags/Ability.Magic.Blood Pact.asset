@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 693dcab1d31af7744b28f721da4f30d4, type: 3}
-  m_Name: Ability.Magic.Heal.Cooldown
+  m_Name: Ability.Magic.Blood Pact
   m_EditorClassIdentifier: 
-  Comment: 
+  Comment: Lightning magic ability
