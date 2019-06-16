@@ -51,6 +51,7 @@ namespace GameplayAbilitySystem.GameplayEffects
         [SerializeField]
         private float _startWorldTime;
 
+        public float StartWorldTime { get => _startWorldTime; }
         public void CheckOngoingTagRequirements()
         {
 

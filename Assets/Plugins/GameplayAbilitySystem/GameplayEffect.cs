@@ -169,7 +169,7 @@ namespace GameplayAbilitySystem.GameplayEffects
 
             return modifierTotals;
         }
-        
+
         public Dictionary<AttributeType, AttributeModificationValues> CalculateAttributeModification(IGameplayAbilitySystem AbilitySystem, Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> Modifiers, bool operateOnCurrentValue = false)
         {
             var attributeModification = new Dictionary<AttributeType, AttributeModificationValues>();
@@ -228,14 +228,15 @@ namespace GameplayAbilitySystem.GameplayEffects
                 Target.SetNumericAttributeBase(attribute.Key, attribute.Value.NewAttribueValue);
 
                 // mark the corresponding aggregator as dirty so we can recalculate the current values
-                Target.ActiveGameplayEffectsContainer.AttributeAggregatorMap.TryGetValue(attribute.Key, out var aggregator);
-                if (aggregator != null)
+                var aggregators = Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(attribute.Key);
+                // Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.Select(x => x.Value[attribute.Key]).AttributeAggregatorMap.TryGetValue(attribute.Key, out var aggregator);
+                if (aggregators.Count() != 0)
                 {
-                    aggregator.MarkDirty();
+                    Target.ActiveGameplayEffectsContainer.UpdateAttribute(aggregators, attribute.Key);
                 }
                 else
                 {
-                    // No modifications, so set current value = base value
+                    // No aggregators, so set current value = base value
                     Target.SetNumericAttributeCurrent(attribute.Key, Target.GetNumericAttributeBase(attribute.Key));
                 }
             }

@@ -25,7 +25,7 @@ namespace GameplayAbilitySystem.GameplayEffects
         /// so we can calculate them all as f(Base, Added, Multiplied, Divided) = (Base + Added) * (Multiplied/Divided)
         /// </summary>
         /// <value></value>
-        public Dictionary<AttributeType, Aggregator> AttributeAggregatorMap { get; } = new Dictionary<AttributeType, Aggregator>();
+        public ActiveEffectAttributeAggregator ActiveEffectAttributeAggregator { get; } = new ActiveEffectAttributeAggregator();
 
         [SerializeField]
         private List<ActiveGameplayEffectData> _activeCooldowns = new List<ActiveGameplayEffectData>();
@@ -39,7 +39,7 @@ namespace GameplayAbilitySystem.GameplayEffects
             AddActiveGameplayEffect(EffectData);
             ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
 
-            // We only remove the effect if it is "Duration"
+            // We only remove the effect if it is "Duration" (i.e. not "Infinite")
             if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy != Enums.EDurationPolicy.HasDuration) return EffectData;
             // Register callbacks for removal of effects when duration expires
             await UniTask.Delay((int)(EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f));
@@ -74,56 +74,28 @@ namespace GameplayAbilitySystem.GameplayEffects
         }
 
 
-
-        private void RemoveActiveGameplayEffect(ActiveGameplayEffectData EffectData)
-        {
-            // There could be multiple stacked effects, due to multiple casts
-            // Remove one instance of this effect from the active list
-            ModifyActiveGameplayEffect(EffectData, modifier =>
-            {
-                // Find in the active list, and remove
-                var attributeAggregatorMap = AbilitySystem.ActiveGameplayEffectsContainer.AttributeAggregatorMap;
-                // If aggregator for this attribute doesn't exist, don't do anything.  
-                // It may have never been added, or has already been removed
-                if (attributeAggregatorMap.TryGetValue(modifier.Attribute, out var aggregator))
-                {
-                    var aggregatorToRemove = aggregator.Mods[modifier.ModifierOperation].FirstOrDefault(x =>
-                    {
-                        x.ProviderEffect.TryGetTarget(out var Effect);
-                        return Effect == EffectData;
-                    });
-
-                    if (aggregatorToRemove != null)
-                    {
-                        aggregator.Mods[modifier.ModifierOperation].Remove(aggregatorToRemove);
-                    }
-
-                    if (aggregator.Mods[modifier.ModifierOperation].Count == 0)
-                    {
-                        aggregator.Mods.Remove(modifier.ModifierOperation);
-                    }
-                }
-                aggregator.MarkDirty();
-            });
-
-        }
-
         private void AddActiveGameplayEffect(ActiveGameplayEffectData EffectData)
         {
             ModifyActiveGameplayEffect(EffectData, modifier =>
             {
                 modifier.AttemptCalculateMagnitude(out var EvaluatedMagnitude);
 
-                var attributeAggregatorMap = AbilitySystem.ActiveGameplayEffectsContainer.AttributeAggregatorMap;
+                // Check if we already have an entry for this gameplay effect attribute modifier
+                var attributeAggregatorMap = ActiveEffectAttributeAggregator.AddOrGet(EffectData);
+
                 // If aggregator for this attribute doesn't exist, add it.
                 if (!attributeAggregatorMap.TryGetValue(modifier.Attribute, out var aggregator))
                 {
                     aggregator = new Aggregator(modifier.Attribute);
-                    aggregator.Dirtied.AddListener(UpdateAttribute);
+                    // aggregator.Dirtied.AddListener(UpdateAttribute);
                     attributeAggregatorMap.Add(modifier.Attribute, aggregator);
                 }
-                aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation, EffectData);
-                aggregator.MarkDirty();
+
+                aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation);
+
+                // Recalculate new value by recomputing all aggregators
+                var aggregators = AbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(modifier.Attribute);
+                AbilitySystem.ActiveGameplayEffectsContainer.UpdateAttribute(aggregators, modifier.Attribute);
             });
 
 
@@ -134,11 +106,38 @@ namespace GameplayAbilitySystem.GameplayEffects
         }
 
 
+        private void RemoveActiveGameplayEffect(ActiveGameplayEffectData EffectData)
+        {
+            // There could be multiple stacked effects, due to multiple casts
+            // Remove one instance of this effect from the active list
+            ModifyActiveGameplayEffect(EffectData, modifier =>
+            {
 
-        private void UpdateAttribute(Aggregator Aggregator, AttributeType AttributeType)
+                AbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.RemoveEffect(EffectData);
+
+
+                // Find all remaining aggregators of the same type and recompute values
+                var aggregators = AbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(modifier.Attribute);
+
+                // If there are no aggregators, set base = current
+                if (aggregators.Count() == 0)
+                {
+                    var current = AbilitySystem.GetNumericAttributeBase(modifier.Attribute);
+                    if (current < 0) AbilitySystem.SetNumericAttributeBase(modifier.Attribute, 0f);
+                    AbilitySystem.SetNumericAttributeCurrent(modifier.Attribute, current);
+                }
+                else
+                {
+                    UpdateAttribute(aggregators, modifier.Attribute);
+                }
+            });
+
+        }
+        
+        public void UpdateAttribute(IEnumerable<Aggregator> Aggregator, AttributeType AttributeType)
         {
             var baseAttributeValue = AbilitySystem.GetNumericAttributeBase(AttributeType);
-            var newCurrentAttributeValue = Aggregator.Evaluate(baseAttributeValue);
+            var newCurrentAttributeValue = Aggregator.Sum(x => x.Evaluate(baseAttributeValue));
             AbilitySystem.SetNumericAttributeCurrent(AttributeType, newCurrentAttributeValue);
 
         }
