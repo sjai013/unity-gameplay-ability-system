@@ -137,7 +137,7 @@ namespace GameplayAbilitySystem.GameplayEffects
         public void UpdateAttribute(IEnumerable<Aggregator> Aggregator, AttributeType AttributeType)
         {
             var baseAttributeValue = AbilitySystem.GetNumericAttributeBase(AttributeType);
-            var newCurrentAttributeValue = Aggregator.Sum(x => x.Evaluate(baseAttributeValue));
+            var newCurrentAttributeValue = Aggregator.Evaluate(baseAttributeValue);
             AbilitySystem.SetNumericAttributeCurrent(AttributeType, newCurrentAttributeValue);
 
         }

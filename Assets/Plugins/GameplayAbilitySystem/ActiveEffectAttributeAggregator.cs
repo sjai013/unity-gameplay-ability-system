@@ -25,7 +25,8 @@ namespace GameplayAbilitySystem.GameplayEffects
             return attributeAggregatorMap;
         }
 
-        public List<ActiveGameplayEffectData> GetActiveEffects() {
+        public List<ActiveGameplayEffectData> GetActiveEffects()
+        {
             return Map.Keys.ToList();
         }
 

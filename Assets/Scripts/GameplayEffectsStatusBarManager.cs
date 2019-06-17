@@ -16,25 +16,42 @@ public class GameplayEffectsStatusBarManager : MonoBehaviour
         this.availableEffectsForShow = GameplayEffectIcons.ToDictionary(x => x.GameEffect);
     }
 
-    List<ActiveGameplayEffectData> GetEffectsToShow()
+    List<(ActiveGameplayEffectData EffectData, int stacks)> GetEffectsToShow()
     {
         var activeEffectData = AbilityCharacter.SelfAbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetActiveEffects();
-        var effectsToShow = activeEffectData.Where(x => availableEffectsForShow.ContainsKey(x.Effect)).OrderBy(x => x.StartWorldTime).ToList();
+        var effectsToShow = activeEffectData
+                            .Where(x => availableEffectsForShow
+                            .ContainsKey(x.Effect))
+                            .OrderBy(x => x.StartWorldTime)
+                            .Select(x => (x, 1))
+                            .ToList();
         return effectsToShow;
+    }
 
+    List<(ActiveGameplayEffectData EffectData, int stacks)> GetStackedEffectsToShow()
+    {
+        var effectsToShow = GetEffectsToShow()
+                            .Select(x => x.EffectData)
+                            .GroupBy(x => x.Effect)
+                            .Select(x =>(x.Last(), x.Count()))
+                            .ToList();
+
+        return effectsToShow;
     }
 
     void Update()
     {
-        var effectsToShow = GetEffectsToShow();
-
+        // var stackedEffectsToShow = GetEffectsToShow();
+        var stackedEffectsToShow = GetStackedEffectsToShow();
         var effectNum = 0;
-        for (int i = 0; i < effectsToShow.Count; i++)
+        for (int i = 0; i < stackedEffectsToShow.Count; i++)
         {
+            var effectToShow = stackedEffectsToShow[i].EffectData;
+
+            var stacks = stackedEffectsToShow[i].stacks;
             // No more space to show buffs - just ignore the rest until space opens up
             if (GameplayEffectIndicator.Count < effectNum) return;
 
-            var effectToShow = effectsToShow[i];
             availableEffectsForShow.TryGetValue(effectToShow.Effect, out var iconMap);
             if (iconMap == null) continue;
 
@@ -51,6 +68,7 @@ public class GameplayEffectsStatusBarManager : MonoBehaviour
             GameplayEffectIndicator[effectNum].ImageIcon.sprite = iconMap.Sprite;
             GameplayEffectIndicator[effectNum].ImageIcon.color = iconMap.SpriteColor;
             GameplayEffectIndicator[effectNum].GetComponentInChildren<RectTransform>(true).gameObject.SetActive(true);
+            GameplayEffectIndicator[effectNum].SetStacks(stacks);
 
             ++effectNum;
         }
@@ -62,6 +80,7 @@ public class GameplayEffectsStatusBarManager : MonoBehaviour
             GameplayEffectIndicator[i].ImageIcon.color = new Color(0, 0, 0, 0);
             GameplayEffectIndicator[i].SetCooldownRemainingPercent(0);
             GameplayEffectIndicator[i].GetComponentInChildren<RectTransform>(true).gameObject.SetActive(false);
+            GameplayEffectIndicator[i].SetStacks(0);
         }
 
     }

@@ -38,7 +38,6 @@ public class AbilityHotbarManager : MonoBehaviour
                 remainingPercent = 1 - cooldownElapsed / cooldownTotal;
             }
             button.SetCooldownRemainingPercent(1 - remainingPercent);
-
         }
 
     }

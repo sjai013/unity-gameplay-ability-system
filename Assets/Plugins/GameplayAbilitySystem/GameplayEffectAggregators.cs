@@ -50,6 +50,34 @@ namespace GameplayAbilitySystem.GameplayEffects
             return Mods.Select(x => x.EvaluatedMagnitude).Aggregate((result, item) => result * item);
         }
 
+        public float GetAdditives()
+        {
+            var additive = 0f;
+            if (Mods.TryGetValue(EModifierOperationType.Add, out var AddModifier))
+            {
+                additive = SumMods(AddModifier);
+            }
+
+            return additive;
+        }
+
+        public float GetMultipliers()
+        {
+            var multiplier = 1f;
+            var divider = 1f;
+            if (Mods.TryGetValue(EModifierOperationType.Multiply, out var MultiplyModifiers))
+            {
+                multiplier = ProductMods(Mods[EModifierOperationType.Multiply]);
+            }
+
+            if (Mods.TryGetValue(EModifierOperationType.Divide, out var DivideModifier))
+            {
+                divider = ProductMods(Mods[EModifierOperationType.Divide]);
+            }
+
+            return multiplier / divider;
+        }
+
         public float Evaluate(float BaseValue)
         {
             float additive = 0;
@@ -74,6 +102,8 @@ namespace GameplayAbilitySystem.GameplayEffects
             return (BaseValue + additive) * (multiplicative / divisive);
         }
 
+
+
     }
 
     public class AggregatorModifier
@@ -92,5 +122,16 @@ namespace GameplayAbilitySystem.GameplayEffects
     {
 
     }
+
+        public static partial class ExtensionMethods
+        {
+            public static float Evaluate(this IEnumerable<Aggregator> Aggregators, float BaseValue)
+            {
+                var additives = Aggregators.Select(x => x.GetAdditives()).Sum();
+                var multipliers = Aggregators.Select(x => x.GetMultipliers()).Aggregate((result, item) => result * item);
+                return (BaseValue + additives) * multipliers;
+            }
+        }
+
 }
 
