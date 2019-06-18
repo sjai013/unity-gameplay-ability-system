@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 
-namespace GameplayAbilitySystem
-{
+namespace GameplayAbilitySystem {
     /// <inheritdoc />
     [Serializable]
-    public class GameplayAbilityTags : IAbilityTags
-    {
+    public class GameplayAbilityTags : IAbilityTags {
         /// <inheritdoc />
         public List<GameplayTag> AbilityTags => _abilityTags;
         /// <inheritdoc />
@@ -52,7 +50,7 @@ namespace GameplayAbilitySystem
         [SerializeField]
         protected List<GameplayTag> _activationOwnedTags;
 
-   
+
         [Tooltip("Ability can only be activated if the activating object has all of these tags")]
         [SerializeField]
         protected List<GameplayTag> _activationRequiredTags;

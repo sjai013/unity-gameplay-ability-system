@@ -2,10 +2,8 @@ using System;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.GameplayCues
-{
-    public class GameplayCueParameters
-    {
+namespace GameplayAbilitySystem.GameplayCues {
+    public class GameplayCueParameters {
         public float NormalisedMagnitude = 0f;
         public float RawMagnitude = 0f;
         public Vector3 Location = Vector3.zero;
@@ -13,8 +11,7 @@ namespace GameplayAbilitySystem.GameplayCues
         public int GameplayEffectLevel = 1;
         public int AbilityLevel = 1;
 
-        public GameplayCueParameters(IGameplayAbilitySystem Instigator, GameObject EffectCauser, GameObject SourceObject)
-        {
+        public GameplayCueParameters(IGameplayAbilitySystem Instigator, GameObject EffectCauser, GameObject SourceObject) {
             this.Instigator = Instigator;
             this.EffectCauser = EffectCauser;
             this.SourceObject = SourceObject;

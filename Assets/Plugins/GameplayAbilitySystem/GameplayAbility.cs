@@ -6,13 +6,11 @@ using UnityEngine;
 using GameplayAbilitySystem.Abilities.AbilityActivations;
 using System.Linq;
 
-namespace GameplayAbilitySystem.Abilities
-{
+namespace GameplayAbilitySystem.Abilities {
     /// <inheritdoc />
     [AddComponentMenu("Ability System/Ability")]
     [CreateAssetMenu(fileName = "Ability", menuName = "Ability System/Ability")]
-    public class GameplayAbility : ScriptableObject, IGameplayAbility
-    {
+    public class GameplayAbility : ScriptableObject, IGameplayAbility {
 
         [SerializeField]
         private GameplayAbilityTags _tags = new GameplayAbilityTags();
@@ -56,27 +54,23 @@ namespace GameplayAbilitySystem.Abilities
 
 
 
-        void Start()
-        {
+        void Start() {
         }
 
 
 
-        protected void ApplyGameplayEffectToTarget(GameplayEffect effect, AbilitySystemComponent target)
-        {
+        protected void ApplyGameplayEffectToTarget(GameplayEffect effect, AbilitySystemComponent target) {
             //
         }
 
         /// <inheritdoc />
-        public virtual void ActivateAbility(IGameplayAbilitySystem AbilitySystem)
-        {
+        public virtual void ActivateAbility(IGameplayAbilitySystem AbilitySystem) {
             _abilityLogic.ActivateAbility(AbilitySystem, this);
             ApplyCooldown(AbilitySystem);
         }
 
         /// <inheritdoc />
-        public virtual bool IsAbilityActivatable(IGameplayAbilitySystem AbilitySystem)
-        {
+        public virtual bool IsAbilityActivatable(IGameplayAbilitySystem AbilitySystem) {
             return PlayerHasResourceToCast(AbilitySystem) && AbilityOffCooldown(AbilitySystem);
         }
 
@@ -84,8 +78,7 @@ namespace GameplayAbilitySystem.Abilities
         /// Applies the ability cost, decreasing the specified cost resource from the player.
         /// If player doesn't have the required resource, the resource goes to negative (or clamps to 0)
         /// </summary>
-        protected void ApplyCost(IGameplayAbilitySystem AbilitySystem)
-        {
+        protected void ApplyCost(IGameplayAbilitySystem AbilitySystem) {
             var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();
             var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers);
             this.GameplayCost.CostGameplayEffect.ApplyInstantEffect(AbilitySystem);
@@ -96,17 +89,14 @@ namespace GameplayAbilitySystem.Abilities
         /// Applies cooldown.  Cooldown is applied even if the  ability is already
         /// on cooldown
         /// </summary>
-        protected void ApplyCooldown(IGameplayAbilitySystem abilitySystem)
-        {
-            foreach (var cooldown in this.GameplayCooldowns)
-            {
+        protected void ApplyCooldown(IGameplayAbilitySystem abilitySystem) {
+            foreach (var cooldown in this.GameplayCooldowns) {
                 abilitySystem.ActiveGameplayEffectsContainer.ApplyCooldownEffect(new ActiveGameplayEffectData(cooldown.CooldownGameplayEffect));
             }
         }
 
         /// <inheritdoc />
-        public void EndAbility(IGameplayAbilitySystem AbilitySystem)
-        {
+        public void EndAbility(IGameplayAbilitySystem AbilitySystem) {
             _onGameplayAbilityEnded.Invoke(this);
 
             // Ability finished.  Remove all listeners.
@@ -128,22 +118,19 @@ namespace GameplayAbilitySystem.Abilities
 
 
         /// <inheritdoc />
-        public bool PlayerHasResourceToCast(IGameplayAbilitySystem AbilitySystem)
-        {
+        public bool PlayerHasResourceToCast(IGameplayAbilitySystem AbilitySystem) {
             // Check the modifiers on the ability cost GameEffect
             var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();
             var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers, operateOnCurrentValue: true);
 
-            foreach (var attribute in attributeModification)
-            {
+            foreach (var attribute in attributeModification) {
                 if (attribute.Value.NewAttribueValue < 0) return false;
             }
             return true;
         }
 
         /// <inheritdoc />
-        public bool CommitAbility(IGameplayAbilitySystem AbilitySystem)
-        {
+        public bool CommitAbility(IGameplayAbilitySystem AbilitySystem) {
             ActivateAbility(AbilitySystem);
             AbilitySystem.OnGameplayAbilityActivated.Invoke(this);
             ApplyCost(AbilitySystem);
@@ -151,8 +138,7 @@ namespace GameplayAbilitySystem.Abilities
         }
 
         /// <inheritdoc />
-        public bool AbilityOffCooldown(IGameplayAbilitySystem AbilitySystem)
-        {
+        public bool AbilityOffCooldown(IGameplayAbilitySystem AbilitySystem) {
             var cooldownTags = this.GetAbilityCooldownTags();
 
             // Check if we have the cooldown effect
@@ -165,19 +151,16 @@ namespace GameplayAbilitySystem.Abilities
         }
 
         /// <inheritdoc />
-        public List<GameplayTag> GetAbilityCooldownTags()
-        {
+        public List<GameplayTag> GetAbilityCooldownTags() {
             var tags = new List<GameplayTag>();
-            for (var i = 0; i < this._gameplayCooldowns.Count; i++)
-            {
+            for (var i = 0; i < this._gameplayCooldowns.Count; i++) {
                 tags.AddRange(this._gameplayCooldowns[i].GetCooldownTags());
             }
 
             return tags;
         }
 
-        public (float CooldownElapsed, float CooldownTotal) CalculateCooldown(IGameplayAbilitySystem AbilitySystem)
-        {
+        public (float CooldownElapsed, float CooldownTotal) CalculateCooldown(IGameplayAbilitySystem AbilitySystem) {
             var dominantCooldown = this.GameplayCooldowns
                                 .Select(abilityCooldown => abilityCooldown.CooldownGameplayEffect)
                                 .Select(abilityCooldown =>
@@ -189,8 +172,7 @@ namespace GameplayAbilitySystem.Abilities
                                 .OrderByDescending(activeEffect => activeEffect?.CooldownTimeRemaining)
                                 .FirstOrDefault();
 
-            if (dominantCooldown == null)
-            {
+            if (dominantCooldown == null) {
                 return (0f, 0f);
             }
 

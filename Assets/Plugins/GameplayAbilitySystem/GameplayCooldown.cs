@@ -5,12 +5,10 @@ using GameplayAbilitySystem.GameplayEffects;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace GameplayAbilitySystem
-{
+namespace GameplayAbilitySystem {
     /// <inheritdoc />
     [Serializable]
-    public class GameplayCooldown : IGameplayCooldown
-    {
+    public class GameplayCooldown : IGameplayCooldown {
         /// <inheritdoc />
         public GameplayEffect CooldownGameplayEffect => _cooldownGameplayEffect;
 
@@ -19,8 +17,7 @@ namespace GameplayAbilitySystem
         private GameplayEffect _cooldownGameplayEffect = null;
 
         /// <inheritdoc />
-        public IEnumerable<GameplayTag> GetCooldownTags()
-        {
+        public IEnumerable<GameplayTag> GetCooldownTags() {
             return _cooldownGameplayEffect.GameplayEffectTags.GrantedTags.Added;
         }
     }

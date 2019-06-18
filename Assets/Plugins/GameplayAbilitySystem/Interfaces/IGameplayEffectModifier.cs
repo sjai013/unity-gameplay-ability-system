@@ -5,14 +5,12 @@ using GameplayAbilitySystem.Attributes;
 using GameplayAbilitySystem.Enums;
 using GameplayAbilitySystem.GameplayEffects;
 
-namespace GameplayAbilitySystem.Interfaces
-{
+namespace GameplayAbilitySystem.Interfaces {
 
     /// <summary>
     /// This class defines how a  <see cref="GameplayEffect"/> modifies attributes (e.g. doing damage, healing)
     /// </summary>
-    public interface IGameplayEffectModifier
-    {
+    public interface IGameplayEffectModifier {
         /// <summary>
         /// The attribute to modify
         /// </summary>
@@ -53,8 +51,7 @@ namespace GameplayAbilitySystem.Interfaces
     /// Defines tags that must be present/must not be present on a <see cref="IGameplayAbilitySystem"/>
     /// </summary>
     [Serializable]
-    public class GameplayEffectModifierTagCollection
-    {
+    public class GameplayEffectModifierTagCollection {
         /// <summary>
         /// <see cref="GameplayTag"/> that must be present on the source <see cref="IGameplayAbilitySystem"/>
         /// </summary>

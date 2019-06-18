@@ -5,19 +5,16 @@ using GameplayAbilitySystem.GameplayEffects;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.Abilities.AbilityActivations
-{
+namespace GameplayAbilitySystem.Abilities.AbilityActivations {
     [CreateAssetMenu(fileName = "Ability", menuName = "Ability System/Ability Logic/Ability")]
-    public class RangeAttack : AbstractAbilityActivation
-    {
+    public class RangeAttack : AbstractAbilityActivation {
         public GameplayEffect TargetGameplayEffect;
         public AnimationEvent FireProjectile;
         public GameplayTag WaitForEventTag;
         public string AnimationTriggerName;
         public string CompletionAnimatorStateFullHash;
 
-        public override async void ActivateAbility(IGameplayAbilitySystem AbilitySystem, IGameplayAbility Ability)
-        {
+        public override async void ActivateAbility(IGameplayAbilitySystem AbilitySystem, IGameplayAbility Ability) {
             var abilitySystemActor = AbilitySystem.GetActor();
             var animationEventSystemComponent = abilitySystemActor.GetComponent<AnimationEventSystem>();
             var animatorComponent = abilitySystemActor.GetComponent<Animator>();
@@ -31,7 +28,7 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations
             // projectile.transform.position = abilitySystemActor.transform.position + abilitySystemActor.transform.forward * 1.2f + new Vector3(0, 1.5f, 0);
             await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == FireProjectile);
             _ = AbilitySystem.ApplyGameEffectToTarget(TargetGameplayEffect, gameplayEventData.Target);
-            
+
 
             var beh = animatorComponent.GetBehaviour<AnimationBehaviourEventSystem>();
             await beh.StateEnter.WaitForEvent((animator, stateInfo, layerIndex) => stateInfo.fullPathHash == Animator.StringToHash(CompletionAnimatorStateFullHash));

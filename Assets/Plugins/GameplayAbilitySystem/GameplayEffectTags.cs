@@ -2,11 +2,9 @@ using System;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.GameplayEffects
-{
+namespace GameplayAbilitySystem.GameplayEffects {
     [Serializable]
-    public class GameplayEffectTags : IGameplayEffectTags
-    {
+    public class GameplayEffectTags : IGameplayEffectTags {
         [SerializeField]
         private GameplayEffectTagContainer _assetTags = new GameplayEffectTagContainer();
 
@@ -28,7 +26,7 @@ namespace GameplayAbilitySystem.GameplayEffects
         public GameplayEffectTagContainer ApplicationTagRequirements => _applicationTagRequirements;
         public GameplayEffectTagContainer RemoveGameplayEffectsWithTag => _removeGameplayEffectsWithTag;
 
-        
+
     }
 
 }

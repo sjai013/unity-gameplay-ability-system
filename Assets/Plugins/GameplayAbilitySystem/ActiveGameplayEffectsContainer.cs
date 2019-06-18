@@ -9,14 +9,11 @@ using UniRx.Async;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.GameplayEffects
-{
+namespace GameplayAbilitySystem.GameplayEffects {
     [Serializable]
-    public class ActiveGameplayEffectsContainer
-    {
+    public class ActiveGameplayEffectsContainer {
         private IGameplayAbilitySystem AbilitySystem;
-        public ActiveGameplayEffectsContainer(IGameplayAbilitySystem AbilitySystem)
-        {
+        public ActiveGameplayEffectsContainer(IGameplayAbilitySystem AbilitySystem) {
             this.AbilitySystem = AbilitySystem;
         }
 
@@ -33,8 +30,7 @@ namespace GameplayAbilitySystem.GameplayEffects
 
         public ActiveGameplayEffectsEvent ActiveGameplayEffectAdded = new ActiveGameplayEffectsEvent();
 
-        public async Task<ActiveGameplayEffectData> ApplyGameEffect(ActiveGameplayEffectData EffectData)
-        {
+        public async Task<ActiveGameplayEffectData> ApplyGameEffect(ActiveGameplayEffectData EffectData) {
             // Durational effect.  Add granted modifiers to active list
             AddActiveGameplayEffect(EffectData);
             ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
@@ -48,44 +44,36 @@ namespace GameplayAbilitySystem.GameplayEffects
             return EffectData;
         }
 
-        public async void ApplyCooldownEffect(ActiveGameplayEffectData EffectData)
-        {
+        public async void ApplyCooldownEffect(ActiveGameplayEffectData EffectData) {
             this.ActiveCooldowns.Add(EffectData);
             await UniTask.Delay((int)(EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f));
             this.ActiveCooldowns.Remove(EffectData);
         }
 
-        public bool IsCooldownEffectPresent(GameplayEffect Effect)
-        {
+        public bool IsCooldownEffectPresent(GameplayEffect Effect) {
             return (this.ActiveCooldowns.Any(x => x.Effect == Effect));
         }
 
-        private void OnActiveGameplayEffectAdded(ActiveGameplayEffectData EffectData)
-        {
+        private void OnActiveGameplayEffectAdded(ActiveGameplayEffectData EffectData) {
             ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
         }
 
-        private void ModifyActiveGameplayEffect(ActiveGameplayEffectData EffectData, Action<GameplayEffectModifier> action)
-        {
-            foreach (var modifier in EffectData.Effect.GameplayEffectPolicy.Modifiers)
-            {
+        private void ModifyActiveGameplayEffect(ActiveGameplayEffectData EffectData, Action<GameplayEffectModifier> action) {
+            foreach (var modifier in EffectData.Effect.GameplayEffectPolicy.Modifiers) {
                 action(modifier);
             }
         }
 
 
-        private void AddActiveGameplayEffect(ActiveGameplayEffectData EffectData)
-        {
-            ModifyActiveGameplayEffect(EffectData, modifier =>
-            {
+        private void AddActiveGameplayEffect(ActiveGameplayEffectData EffectData) {
+            ModifyActiveGameplayEffect(EffectData, modifier => {
                 modifier.AttemptCalculateMagnitude(out var EvaluatedMagnitude);
 
                 // Check if we already have an entry for this gameplay effect attribute modifier
                 var attributeAggregatorMap = ActiveEffectAttributeAggregator.AddOrGet(EffectData);
 
                 // If aggregator for this attribute doesn't exist, add it.
-                if (!attributeAggregatorMap.TryGetValue(modifier.Attribute, out var aggregator))
-                {
+                if (!attributeAggregatorMap.TryGetValue(modifier.Attribute, out var aggregator)) {
                     aggregator = new Aggregator(modifier.Attribute);
                     // aggregator.Dirtied.AddListener(UpdateAttribute);
                     attributeAggregatorMap.Add(modifier.Attribute, aggregator);
@@ -106,12 +94,10 @@ namespace GameplayAbilitySystem.GameplayEffects
         }
 
 
-        private void RemoveActiveGameplayEffect(ActiveGameplayEffectData EffectData)
-        {
+        private void RemoveActiveGameplayEffect(ActiveGameplayEffectData EffectData) {
             // There could be multiple stacked effects, due to multiple casts
             // Remove one instance of this effect from the active list
-            ModifyActiveGameplayEffect(EffectData, modifier =>
-            {
+            ModifyActiveGameplayEffect(EffectData, modifier => {
 
                 AbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.RemoveEffect(EffectData);
 
@@ -120,22 +106,18 @@ namespace GameplayAbilitySystem.GameplayEffects
                 var aggregators = AbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(modifier.Attribute);
 
                 // If there are no aggregators, set base = current
-                if (aggregators.Count() == 0)
-                {
+                if (aggregators.Count() == 0) {
                     var current = AbilitySystem.GetNumericAttributeBase(modifier.Attribute);
                     if (current < 0) AbilitySystem.SetNumericAttributeBase(modifier.Attribute, 0f);
                     AbilitySystem.SetNumericAttributeCurrent(modifier.Attribute, current);
-                }
-                else
-                {
+                } else {
                     UpdateAttribute(aggregators, modifier.Attribute);
                 }
             });
 
         }
-        
-        public void UpdateAttribute(IEnumerable<Aggregator> Aggregator, AttributeType AttributeType)
-        {
+
+        public void UpdateAttribute(IEnumerable<Aggregator> Aggregator, AttributeType AttributeType) {
             var baseAttributeValue = AbilitySystem.GetNumericAttributeBase(AttributeType);
             var newCurrentAttributeValue = Aggregator.Evaluate(baseAttributeValue);
             AbilitySystem.SetNumericAttributeCurrent(AttributeType, newCurrentAttributeValue);
@@ -143,8 +125,7 @@ namespace GameplayAbilitySystem.GameplayEffects
         }
 
     }
-    public class ActiveGameplayEffectsEvent : UnityEvent<IGameplayAbilitySystem, ActiveGameplayEffectData>
-    {
+    public class ActiveGameplayEffectsEvent : UnityEvent<IGameplayAbilitySystem, ActiveGameplayEffectData> {
 
     }
 }

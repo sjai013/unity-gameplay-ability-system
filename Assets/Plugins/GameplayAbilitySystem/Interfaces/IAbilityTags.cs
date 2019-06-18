@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 
-namespace GameplayAbilitySystem.Interfaces
-{
-    public interface IAbilityTags
-    {
+namespace GameplayAbilitySystem.Interfaces {
+    public interface IAbilityTags {
         /// <summary>
         /// Any additional tags that the ability has
         /// </summary>

@@ -8,12 +8,10 @@ using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GameplayAbilitySystem
-{
+namespace GameplayAbilitySystem {
     /// <inheritdoc />
     [Serializable]
-    public class GameplayEffectModifier : IGameplayEffectModifier
-    {
+    public class GameplayEffectModifier : IGameplayEffectModifier {
         [SerializeField]
         private AttributeType _attributeType = null;
 
@@ -48,8 +46,7 @@ namespace GameplayAbilitySystem
         public GameplayEffectModifierTagCollection TargetTags => _targetTags;
 
         /// <inheritdoc />
-        public bool AttemptCalculateMagnitude(out float EvaluatedMagnitude)
-        {
+        public bool AttemptCalculateMagnitude(out float EvaluatedMagnitude) {
             //TODO: PROPER IMPLEMENTATION
             EvaluatedMagnitude = this.ScaledMagnitude;
             return true;

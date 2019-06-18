@@ -1,16 +1,13 @@
 using UnityEngine;
 using System;
 
-namespace GameplayAbilitySystem.GameplayEffects
-{
+namespace GameplayAbilitySystem.GameplayEffects {
     /// <summary>
     /// This class is used to keep track of active <see cref="GameplayEffect"/>.  
     /// </summary>
     [Serializable]
-    public class ActiveGameplayEffectData
-    {
-        public ActiveGameplayEffectData(GameplayEffect effect)
-        {
+    public class ActiveGameplayEffectData {
+        public ActiveGameplayEffectData(GameplayEffect effect) {
             this._gameplayEffect = effect;
             this._startWorldTime = Time.time;
         }
@@ -33,7 +30,7 @@ namespace GameplayAbilitySystem.GameplayEffects
         /// The total cooldown time for this gameplay effect
         /// </summary>
         /// <value>Cooldown time total</value>
-        public float CooldownTimeTotal { get => Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration ? Effect.GameplayEffectPolicy.DurationMagnitude: 0; }
+        public float CooldownTimeTotal { get => Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration ? Effect.GameplayEffectPolicy.DurationMagnitude : 0; }
 
         /// <summary>
         /// The cooldown time that is remaining for this gameplay effect
@@ -52,8 +49,7 @@ namespace GameplayAbilitySystem.GameplayEffects
         private float _startWorldTime;
 
         public float StartWorldTime { get => _startWorldTime; }
-        public void CheckOngoingTagRequirements()
-        {
+        public void CheckOngoingTagRequirements() {
 
         }
     }
