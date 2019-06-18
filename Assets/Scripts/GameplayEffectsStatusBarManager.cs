@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameplayAbilitySystem.GameplayEffects;
 
-public class GameplayEffectsStatusBarManager : MonoBehaviour
-{
+public class GameplayEffectsStatusBarManager : MonoBehaviour {
     public AbilityCharacter AbilityCharacter;
     public List<GameplayEffectStatusBarButton> GameplayEffectIndicator;
     public List<GameplayEffectIconMap> GameplayEffectIcons;
 
     private Dictionary<GameplayEffect, GameplayEffectIconMap> availableEffectsForShow;
 
-    void Awake()
-    {
+    void Awake() {
         this.availableEffectsForShow = GameplayEffectIcons.ToDictionary(x => x.GameEffect);
     }
 
-    List<(ActiveGameplayEffectData EffectData, int stacks)> GetEffectsToShow()
-    {
+    List<(ActiveGameplayEffectData EffectData, int stacks)> GetEffectsToShow() {
         var activeEffectData = AbilityCharacter.SelfAbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetActiveEffects();
         var effectsToShow = activeEffectData
                             .Where(x => availableEffectsForShow
@@ -28,24 +25,21 @@ public class GameplayEffectsStatusBarManager : MonoBehaviour
         return effectsToShow;
     }
 
-    List<(ActiveGameplayEffectData EffectData, int stacks)> GetStackedEffectsToShow()
-    {
+    List<(ActiveGameplayEffectData EffectData, int stacks)> GetStackedEffectsToShow() {
         var effectsToShow = GetEffectsToShow()
                             .Select(x => x.EffectData)
                             .GroupBy(x => x.Effect)
-                            .Select(x =>(x.Last(), x.Count()))
+                            .Select(x => (x.Last(), x.Count()))
                             .ToList();
 
         return effectsToShow;
     }
 
-    void Update()
-    {
+    void Update() {
         // var stackedEffectsToShow = GetEffectsToShow();
         var stackedEffectsToShow = GetStackedEffectsToShow();
         var effectNum = 0;
-        for (int i = 0; i < stackedEffectsToShow.Count; i++)
-        {
+        for (int i = 0; i < stackedEffectsToShow.Count; i++) {
             var effectToShow = stackedEffectsToShow[i].EffectData;
 
             var stacks = stackedEffectsToShow[i].stacks;
@@ -59,8 +53,7 @@ public class GameplayEffectsStatusBarManager : MonoBehaviour
             var cooldownTotal = effectToShow.CooldownTimeTotal;
 
             var remainingPercent = 0f;
-            if (cooldownTotal != 0)
-            {
+            if (cooldownTotal != 0) {
                 remainingPercent = 1 - cooldownElapsed / cooldownTotal;
             }
 
@@ -74,8 +67,7 @@ public class GameplayEffectsStatusBarManager : MonoBehaviour
         }
 
         // These are all empty - reset them
-        for (int i = effectNum; i < GameplayEffectIndicator.Count; i++)
-        {
+        for (int i = effectNum; i < GameplayEffectIndicator.Count; i++) {
             GameplayEffectIndicator[i].ImageIcon.sprite = null;
             GameplayEffectIndicator[i].ImageIcon.color = new Color(0, 0, 0, 0);
             GameplayEffectIndicator[i].SetCooldownRemainingPercent(0);
