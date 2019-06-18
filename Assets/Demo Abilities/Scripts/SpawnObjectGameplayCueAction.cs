@@ -1,17 +1,20 @@
+
 using System;
-using System.Threading.Tasks;
+using GameplayAbilitySystem.GameplayCues;
 using UniRx.Async;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.GameplayCues {
-    [CreateAssetMenu(fileName = "SpawnObjectAtTarget", menuName = "Ability System/Gameplay Cue/Spawn Object At Target")]
-    public class SpawnObjectAtTarget_GameplayCueImplementation : AbstractGameplayCueImplementation {
+namespace AbilitySystemDemo {
+
+    [CreateAssetMenu(fileName = "Spawn Object Gameplay Cue", menuName = "Ability System Demo/Gameplay Cue/Spawn Object Gameplay Cue")]
+    class SpawnObjectGameplayCueAction : BaseGameplayCueAction {
         public GameObject ObjectToSpawn;
         public Vector3 Position;
         public Quaternion Rotation;
         public Vector3 Scale = Vector3.one;
         public float DestroyInSeconds = -1;
-        public override async void HandleGameplayCue(GameObject Target, EGameplayCueEventTypes EventType, GameplayCueParameters Parameters) {
+        
+        public override async void Action(UnityEngine.GameObject Target, GameplayCueParameters Parameters) {
             Time.timeScale = 0.5f;
             await UniTask.DelayFrame(5);
             Time.timeScale = 1;

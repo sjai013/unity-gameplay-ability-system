@@ -158,10 +158,10 @@ namespace GameplayAbilitySystem {
             }
 
             var gameplayCues = Effect.GameplayCues;
-            // Apply gamecues
+            // Execute gameplay cue
             for (var i = 0; i < gameplayCues.Count; i++) {
                 var cue = gameplayCues[i];
-                cue.HandleGameplayCue(Target.GetActor().gameObject, EGameplayCueEventTypes.Executed, new GameplayCueParameters(null, null, null));
+                cue.HandleGameplayCue_Execute(Target.GetActor().gameObject,new GameplayCueParameters(null, null, null));
             }
 
             return Task.FromResult(Effect);

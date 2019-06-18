@@ -48,4 +48,4 @@ MonoBehaviour:
     _removeGameplayEffectsWithTag:
       _added: []
   GameplayCues:
-  - {fileID: 11400000, guid: d919b508ac75f0446a4be8b261e710d5, type: 2}
+  - {fileID: 11400000, guid: 74a66fb2dcac9bd499073ecdc7d3cdd1, type: 2}

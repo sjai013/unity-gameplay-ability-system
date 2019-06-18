@@ -1,8 +1,9 @@
+using GameplayAbilitySystem.Attributes;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 
 
-namespace GameplayAbilitySystem.Attributes
+namespace AbilitySystemDemo.Attributes
 {
     [CreateAssetMenu(fileName = "Simple Attribute Change Handler", menuName = "Ability System Demo/Attributes/Simple Attribute Change Handler")]
     public class SimpleAttributeChangeHandler : BaseAttributeChangeHandler

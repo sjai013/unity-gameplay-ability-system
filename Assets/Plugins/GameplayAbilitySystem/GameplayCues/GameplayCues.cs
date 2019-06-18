@@ -42,14 +42,14 @@ namespace GameplayAbilitySystem.GameplayCues {
     /// <para></para>
     /// <para>WhileActive/OnActive is called for Infinite effects</para>
     /// <para></para>
-    /// <para>Executed is called for Instant effects</para>
+    /// <para>Executed is called for Instant effects/on each tick</para>
     /// <para></para>
     /// <para>WhileActive/OnActive/Removed is called for Duration effects</para>
     /// </summary>
     public enum EGameplayCueEventTypes {
-        OnActive, // Called when GameplayCue is activated
+        OnActive, // Called when GameplayCue is first activated
         WhileActive, // Called *while* GameplayCue is active
-        Executed, // Called when a GameplayCue is executed (e.g. periodic/tick)
+        Executed, // Called when a GameplayCue is executed (e.g. instant/periodic/tick)
         Removed // Called when a GameplayCue is removed
     }
 

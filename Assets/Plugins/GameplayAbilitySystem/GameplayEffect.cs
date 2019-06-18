@@ -19,7 +19,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
         GameplayEffectTags _gameplayEffectTags = new GameplayEffectTags();
 
         [SerializeField]
-        public List<AbstractGameplayCueImplementation> GameplayCues = new List<AbstractGameplayCueImplementation>();
+        public List<GameplayCue> GameplayCues = new List<GameplayCue>();
 
         public GameplayEffectTags GameplayEffectTags { get => _gameplayEffectTags; }
         public GameplayEffectPolicy GameplayEffectPolicy { get => _gameplayEffectPolicy; }

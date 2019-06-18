@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91db4f3cf1f16a34599868fe726d49da, type: 3}
-  m_Name: SpawnObjectAtTarget 2
+  m_Script: {fileID: 11500000, guid: 7b45c006d6c71954daab1ce6af98c39b, type: 3}
+  m_Name: Spawn Fireball Gameplay Cue
   m_EditorClassIdentifier: 
-  ObjectToSpawn: {fileID: 1329845292236604, guid: 9bba9cf244c53c5439505dfc96fdd11c,
+  ObjectToSpawn: {fileID: 1121192042590650, guid: bd23c876debdaf643b3f90aca5310b55,
     type: 3}
-  Position: {x: 0, y: 1.3, z: 0}
+  Position: {x: 0, y: 0, z: 0}
   Rotation: {x: 0, y: 0, z: 0, w: 0}
   Scale: {x: 1, y: 1, z: 1}
   DestroyInSeconds: 2
