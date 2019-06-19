@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectToSpawn: {fileID: 1329845292236604, guid: 9bba9cf244c53c5439505dfc96fdd11c,
     type: 3}
-  Position: {x: 0, y: 1.5, z: 0}
+  Position: {x: 0, y: 0.9, z: 0}
   Rotation: {x: 0, y: 0, z: 0, w: 0}
-  Scale: {x: 1, y: 1, z: 1}
+  Scale: {x: 2, y: 2, z: 2}
   DestroyInSeconds: 2

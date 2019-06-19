@@ -52,6 +52,14 @@ namespace GameplayAbilitySystem.GameplayEffects {
         public void CheckOngoingTagRequirements() {
 
         }
+
+        public void ResetDuration() {
+            this._startWorldTime = Time.time;
+        }
+
+        public void EndEffect() {
+            this._startWorldTime = Time.time - CooldownTimeTotal;
+        }
     }
 }
 

@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
@@ -32,14 +33,29 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
         public async Task<ActiveGameplayEffectData> ApplyGameEffect(ActiveGameplayEffectData EffectData) {
             // Durational effect.  Add granted modifiers to active list
-            AddActiveGameplayEffect(EffectData);
-            ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
+
+            switch (EffectData.Effect.StackingPolicy.StackingType) {
+                // Add effect as a separate instance. 
+                // We still need to respect stacking limit, so check to see how many stacks we are allowed (0 = infinite)
+                case EStackingType.None:
+                    if (EffectData.Effect.StackingPolicy.StackLimit >= 0
+                        && this.ActiveEffectAttributeAggregator.GetActiveEffects().Where(x => x.Effect == EffectData.Effect).Count() >= EffectData.Effect.StackingPolicy.StackLimit) {
+                        // End oldest effect before applying this one, so we don't exceed the maximum
+                        var closestEffectToExpiry = this.ActiveEffectAttributeAggregator.GetActiveEffects().OrderBy(x => x.StartWorldTime).First();
+                        closestEffectToExpiry.EndEffect();
+                    }
+                    AddActiveGameplayEffect(EffectData);
+                    ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
+                    break;
+
+
+            }
 
             // We only remove the effect if it is "Duration" (i.e. not "Infinite")
             if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy != Enums.EDurationPolicy.HasDuration) return EffectData;
             // Register callbacks for removal of effects when duration expires
-            await UniTask.Delay((int)(EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f));
-            RemoveActiveGameplayEffect(EffectData);
+            var removalTime = EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f;
+            ScheduleRemoveActiveGameplayEffect(EffectData);
 
             return EffectData;
         }
@@ -94,7 +110,26 @@ namespace GameplayAbilitySystem.GameplayEffects {
         }
 
 
-        private void RemoveActiveGameplayEffect(ActiveGameplayEffectData EffectData) {
+        /// <summary>
+        /// This is currently updated every frame.  Perhaps there are ways to make this more efficient?
+        /// The main advantage of checking every frame is we can manipulate the WorldStartTime to
+        /// effectively "refresh" the effect or end it at will.
+        /// </summary>
+        /// <param name="EffectData"></param>
+        /// <returns></returns>
+        private async Task WaitForEffectExpiryTime(ActiveGameplayEffectData EffectData) {
+            bool durationExpired = false;
+            while (!durationExpired) {
+                await UniTask.DelayFrame(0);
+                // Check whether required time has expired
+                durationExpired = EffectData.CooldownTimeRemaining <= 0 ? true : false;
+
+            }
+        }
+
+        private async void ScheduleRemoveActiveGameplayEffect(ActiveGameplayEffectData EffectData) {
+            await WaitForEffectExpiryTime(EffectData);
+
             // There could be multiple stacked effects, due to multiple casts
             // Remove one instance of this effect from the active list
             ModifyActiveGameplayEffect(EffectData, modifier => {

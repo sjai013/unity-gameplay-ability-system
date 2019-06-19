@@ -8,6 +8,7 @@ using GameplayAbilitySystem.Attributes;
 using GameplayAbilitySystem.Enums;
 using UnityEngine;
 using GameplayAbilitySystem.GameplayCues;
+using System;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     [CreateAssetMenu(fileName = "Gameplay Effect", menuName = "Ability System/Gameplay Effect")]
@@ -21,6 +22,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
         [SerializeField]
         public List<GameplayCue> GameplayCues = new List<GameplayCue>();
 
+        public StackingPolicy StackingPolicy = new StackingPolicy();
         public GameplayEffectTags GameplayEffectTags { get => _gameplayEffectTags; }
         public GameplayEffectPolicy GameplayEffectPolicy { get => _gameplayEffectPolicy; }
 
@@ -157,6 +159,26 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
     }
 
+    [Serializable]
+    public class StackingPolicy {
+        public EStackingType StackingType;
+        public int StackLimit;
+        public EStackRefreshPolicy StackDurationRefreshPolicy;
+        public EStackRefreshPolicy StackPeriodResetPolicy;
+        public EStackExpirationPolicy StackExpirationPolicy;
+    }
+
+    public enum EStackingType {
+        None, AggregatedBySource, AggregatedByTarget
+    }
+
+    public enum EStackRefreshPolicy {
+        RefreshOnSuccessfulApplication, NeverRefresh
+    }
+
+    public enum EStackExpirationPolicy {
+        ClearEntireStack, RemoveSingleStackAndRefreshDuration, RefreshDuration
+    }
 
 }
 

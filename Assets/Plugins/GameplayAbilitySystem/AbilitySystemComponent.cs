@@ -153,6 +153,8 @@ namespace GameplayAbilitySystem {
             if (Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
                 Effect.ApplyInstantEffect(Target);
             } else {
+                // Durational effects require attention to many more things than instant effects
+                // Such as stacking and effect durations
                 var EffectData = new ActiveGameplayEffectData(Effect);
                 _ = Target.ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
             }
