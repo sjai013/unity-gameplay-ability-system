@@ -59,3 +59,9 @@ MonoBehaviour:
       _added: []
   GameplayCues:
   - {fileID: 11400000, guid: 576d4a44a75bd1941b1ac46abc36be6d, type: 2}
+  StackingPolicy:
+    StackingType: 0
+    StackLimit: 0
+    StackDurationRefreshPolicy: 0
+    StackPeriodResetPolicy: 0
+    StackExpirationPolicy: 1

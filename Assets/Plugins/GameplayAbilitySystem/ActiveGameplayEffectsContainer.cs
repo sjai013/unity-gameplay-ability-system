@@ -33,29 +33,35 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
         public async Task<ActiveGameplayEffectData> ApplyGameEffect(ActiveGameplayEffectData EffectData) {
             // Durational effect.  Add granted modifiers to active list
+            var existingStacks = -1;
+            var maxStacks = EffectData.Effect.StackingPolicy.StackLimit;
+            IEnumerable<ActiveGameplayEffectData> matchingStackedActiveEffects = GetMatchingEffectsForActiveEffect(EffectData);
 
-            switch (EffectData.Effect.StackingPolicy.StackingType) {
-                // Add effect as a separate instance. 
-                // We still need to respect stacking limit, so check to see how many stacks we are allowed (0 = infinite)
-                case EStackingType.None:
-                    if (EffectData.Effect.StackingPolicy.StackLimit >= 0
-                        && this.ActiveEffectAttributeAggregator.GetActiveEffects().Where(x => x.Effect == EffectData.Effect).Count() >= EffectData.Effect.StackingPolicy.StackLimit) {
-                        // End oldest effect before applying this one, so we don't exceed the maximum
-                        var closestEffectToExpiry = this.ActiveEffectAttributeAggregator.GetActiveEffects().OrderBy(x => x.StartWorldTime).First();
-                        closestEffectToExpiry.EndEffect();
+            switch (EffectData.Effect.StackingPolicy.StackDurationRefreshPolicy) {
+                case EStackRefreshPolicy.RefreshOnSuccessfulApplication: // We refresh all instances of this game effect
+                    foreach (var effect in matchingStackedActiveEffects) {
+                        effect.ResetDuration();
                     }
-                    AddActiveGameplayEffect(EffectData);
-                    ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
                     break;
-
+                case EStackRefreshPolicy.NeverRefresh: // Don't do anything.  Effect will expire naturally
+                    break;
 
             }
 
-            // We only remove the effect if it is "Duration" (i.e. not "Infinite")
-            if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy != Enums.EDurationPolicy.HasDuration) return EffectData;
-            // Register callbacks for removal of effects when duration expires
-            var removalTime = EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f;
-            ScheduleRemoveActiveGameplayEffect(EffectData);
+
+            existingStacks = matchingStackedActiveEffects?.Count() ?? -1;
+            if (existingStacks < maxStacks) { // We can still add more stacks.
+                AddActiveGameplayEffect(EffectData);
+                ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
+                // We only remove the effect if it is "Duration" (i.e. not "Infinite")
+                if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration) {
+                    // Register callbacks for removal of effects when duration expires
+                    var removalTime = EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f;
+                    ScheduleRemoveActiveGameplayEffect(EffectData);
+                }
+
+            }
+
 
             return EffectData;
         }
@@ -124,11 +130,44 @@ namespace GameplayAbilitySystem.GameplayEffects {
                 // Check whether required time has expired
                 durationExpired = EffectData.CooldownTimeRemaining <= 0 ? true : false;
 
+                IEnumerable<ActiveGameplayEffectData> matchingEffects;
+                if (durationExpired) { // This effect is due for expiry
+                    switch (EffectData.Effect.StackingPolicy.StackExpirationPolicy) {
+                        case EStackExpirationPolicy.ClearEntireStack: // Remove all effects which match
+                            matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
+                            foreach (var effect in matchingEffects) {
+                                effect.EndEffect();
+                            }
+                            break;
+                        case EStackExpirationPolicy.RemoveSingleStackAndRefreshDuration:
+                            // Remove this effect, and reset all other durations to max
+                            matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
+                            foreach (var effect in matchingEffects) {
+                                effect.ResetDuration();
+                            }
+                            // This effect was going to expire anyway, but we put this here to be explicit to future code readers
+                            EffectData.EndEffect();
+                            break;
+                        case EStackExpirationPolicy.RefreshDuration:
+                            // Refreshing duration on expiry basically means the effect can never expire
+                            matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
+                            foreach (var effect in matchingEffects) {
+                                effect.ResetDuration();
+                                durationExpired = false;
+                            }
+                            break;
+
+                    }
+                }
+
+
             }
         }
 
-        private async void ScheduleRemoveActiveGameplayEffect(ActiveGameplayEffectData EffectData) {
-            await WaitForEffectExpiryTime(EffectData);
+        private async void ScheduleRemoveActiveGameplayEffect(ActiveGameplayEffectData EffectData, bool RespectEffectExpiryTime = true) {
+            if (RespectEffectExpiryTime) {
+                await WaitForEffectExpiryTime(EffectData);
+            }
 
             // There could be multiple stacked effects, due to multiple casts
             // Remove one instance of this effect from the active list
@@ -157,6 +196,31 @@ namespace GameplayAbilitySystem.GameplayEffects {
             var newCurrentAttributeValue = Aggregator.Evaluate(baseAttributeValue);
             AbilitySystem.SetNumericAttributeCurrent(AttributeType, newCurrentAttributeValue);
 
+        }
+
+        public IEnumerable<ActiveGameplayEffectData> GetMatchingEffectsForActiveEffect(ActiveGameplayEffectData EffectData) {
+            IEnumerable<ActiveGameplayEffectData> matchingStackedActiveEffects = null;
+
+            switch (EffectData.Effect.StackingPolicy.StackingType) {
+                // Stacking Type None:
+                // Add effect as a separate instance. 
+                case EStackingType.None:
+                    break;
+
+                case EStackingType.AggregatedBySource:
+                    matchingStackedActiveEffects = this.ActiveEffectAttributeAggregator
+                                        .GetActiveEffects()
+                                        .Where(x => x.Instigator == EffectData.Instigator && x.Effect == EffectData.Effect);
+                    break;
+
+                case EStackingType.AggregatedByTarget:
+                    matchingStackedActiveEffects = this.ActiveEffectAttributeAggregator
+                                        .GetActiveEffects()
+                                        .Where(x => x.Effect == EffectData.Effect);
+                    break;
+            }
+
+            return matchingStackedActiveEffects;
         }
 
     }

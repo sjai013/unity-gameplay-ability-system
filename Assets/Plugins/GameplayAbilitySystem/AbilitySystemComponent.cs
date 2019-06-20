@@ -155,7 +155,7 @@ namespace GameplayAbilitySystem {
             } else {
                 // Durational effects require attention to many more things than instant effects
                 // Such as stacking and effect durations
-                var EffectData = new ActiveGameplayEffectData(Effect);
+                var EffectData = new ActiveGameplayEffectData(Effect, this);
                 _ = Target.ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
             }
 

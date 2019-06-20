@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using GameplayAbilitySystem.Interfaces;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     /// <summary>
@@ -7,9 +8,10 @@ namespace GameplayAbilitySystem.GameplayEffects {
     /// </summary>
     [Serializable]
     public class ActiveGameplayEffectData {
-        public ActiveGameplayEffectData(GameplayEffect effect) {
+        public ActiveGameplayEffectData(GameplayEffect effect, IGameplayAbilitySystem instigator) {
             this._gameplayEffect = effect;
             this._startWorldTime = Time.time;
+            this.Instigator = instigator;
         }
 
         /// <summary>
@@ -38,6 +40,8 @@ namespace GameplayAbilitySystem.GameplayEffects {
         /// <value>Cooldown time remaining</value>
         public float CooldownTimeRemaining { get => Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration ? CooldownTimeTotal - CooldownTimeElapsed : 0; }
 
+
+        public IGameplayAbilitySystem Instigator { get; private set; }
 
         [SerializeField]
         private int _stacks;
