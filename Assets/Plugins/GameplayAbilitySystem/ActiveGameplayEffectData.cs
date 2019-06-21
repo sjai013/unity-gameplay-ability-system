@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using GameplayAbilitySystem.Interfaces;
+using System.Collections.Generic;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     /// <summary>
@@ -8,10 +9,11 @@ namespace GameplayAbilitySystem.GameplayEffects {
     /// </summary>
     [Serializable]
     public class ActiveGameplayEffectData {
-        public ActiveGameplayEffectData(GameplayEffect effect, IGameplayAbilitySystem instigator) {
+        public ActiveGameplayEffectData(GameplayEffect effect, IGameplayAbilitySystem instigator, IGameplayAbilitySystem target) {
             this._gameplayEffect = effect;
             this._startWorldTime = Time.time;
             this.Instigator = instigator;
+            this.Target = target;
         }
 
         /// <summary>
@@ -40,8 +42,15 @@ namespace GameplayAbilitySystem.GameplayEffects {
         /// <value>Cooldown time remaining</value>
         public float CooldownTimeRemaining { get => Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration ? CooldownTimeTotal - CooldownTimeElapsed : 0; }
 
+        private float _timeOfLastPeriodicApplication = 0;
+
+        public float TimeSincePreviousPeriodicApplication { get => Time.time - _timeOfLastPeriodicApplication; }
+        public float TimeUntilNextPeriodicApplication { get => _timeOfLastPeriodicApplication + Effect.Period.Period - Time.time; }
+
+        private List<ActiveEffectAttributeAggregator> PeriodicEffectModificationsToDate = new List<ActiveEffectAttributeAggregator>();
 
         public IGameplayAbilitySystem Instigator { get; private set; }
+        public IGameplayAbilitySystem Target { get; private set; }
 
         [SerializeField]
         private int _stacks;
@@ -63,6 +72,14 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
         public void EndEffect() {
             this._startWorldTime = Time.time - CooldownTimeTotal;
+        }
+
+        public void ResetPeriodicTime() {
+            this._timeOfLastPeriodicApplication = Time.time;
+        }
+
+        public void AddPeriodicEffectAttributeModifiers() {
+            // Check out ActiveGameplayEffectContainer.AddActiveGameplayEffect to see how to populate the ActiveEffectAttributeAggregator object
         }
     }
 }

@@ -8,7 +8,6 @@ using GameplayAbilitySystem.Attributes;
 using GameplayAbilitySystem.Enums;
 using UnityEngine;
 using GameplayAbilitySystem.GameplayCues;
-using System;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     [CreateAssetMenu(fileName = "Gameplay Effect", menuName = "Ability System/Gameplay Effect")]
@@ -18,6 +17,8 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
         [SerializeField]
         GameplayEffectTags _gameplayEffectTags = new GameplayEffectTags();
+
+        public EffectPeriodicity Period;
 
         [SerializeField]
         public List<GameplayCue> GameplayCues = new List<GameplayCue>();
@@ -147,38 +148,6 @@ namespace GameplayAbilitySystem.GameplayEffects {
     }
 
 
-
-    public class AttributeModificationValues {
-        public float OldAttributeValue = 0f;
-        public float NewAttribueValue = 0f;
-    }
-    public struct GameplayModifierEvaluatedData {
-        public IAttribute Attribute;
-        public EModifierOperationType ModOperation;
-        public float Magnitude;
-
-    }
-
-    [Serializable]
-    public class StackingPolicy {
-        public EStackingType StackingType;
-        public int StackLimit;
-        public EStackRefreshPolicy StackDurationRefreshPolicy;
-        public EStackRefreshPolicy StackPeriodResetPolicy;
-        public EStackExpirationPolicy StackExpirationPolicy;
-    }
-
-    public enum EStackingType {
-        None, AggregatedBySource, AggregatedByTarget
-    }
-
-    public enum EStackRefreshPolicy {
-        RefreshOnSuccessfulApplication, NeverRefresh
-    }
-
-    public enum EStackExpirationPolicy {
-        ClearEntireStack, RemoveSingleStackAndRefreshDuration, RefreshDuration
-    }
 
 }
 

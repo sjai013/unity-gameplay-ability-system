@@ -91,7 +91,7 @@ namespace GameplayAbilitySystem.Abilities {
         /// </summary>
         protected void ApplyCooldown(IGameplayAbilitySystem abilitySystem) {
             foreach (var cooldown in this.GameplayCooldowns) {
-                abilitySystem.ActiveGameplayEffectsContainer.ApplyCooldownEffect(new ActiveGameplayEffectData(cooldown.CooldownGameplayEffect, abilitySystem));
+                abilitySystem.ActiveGameplayEffectsContainer.ApplyCooldownEffect(new ActiveGameplayEffectData(cooldown.CooldownGameplayEffect, abilitySystem, abilitySystem));
             }
         }
 

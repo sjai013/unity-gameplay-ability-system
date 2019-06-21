@@ -155,7 +155,7 @@ namespace GameplayAbilitySystem {
             } else {
                 // Durational effects require attention to many more things than instant effects
                 // Such as stacking and effect durations
-                var EffectData = new ActiveGameplayEffectData(Effect, this);
+                var EffectData = new ActiveGameplayEffectData(Effect, this, Target);
                 _ = Target.ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
             }
 
@@ -163,7 +163,7 @@ namespace GameplayAbilitySystem {
             // Execute gameplay cue
             for (var i = 0; i < gameplayCues.Count; i++) {
                 var cue = gameplayCues[i];
-                cue.HandleGameplayCue_Execute(Target.GetActor().gameObject,new GameplayCueParameters(null, null, null));
+                cue.HandleGameplayCue_OnActive(Target.GetActor().gameObject,new GameplayCueParameters(null, null, null));
             }
 
             return Task.FromResult(Effect);

@@ -53,11 +53,11 @@ namespace GameplayAbilitySystem.GameplayEffects {
             if (existingStacks < maxStacks) { // We can still add more stacks.
                 AddActiveGameplayEffect(EffectData);
                 ActiveGameplayEffectAdded?.Invoke(AbilitySystem, EffectData);
-                // We only remove the effect if it is "Duration" (i.e. not "Infinite")
-                if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration) {
-                    // Register callbacks for removal of effects when duration expires
+                // We only need to do timed checks for durational abilities
+                if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration
+                    || EffectData.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Infinite) {
                     var removalTime = EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f;
-                    ScheduleRemoveActiveGameplayEffect(EffectData);
+                    CheckGameplayEffectForTimedEffects(EffectData);
                 }
 
             }
@@ -117,6 +117,8 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
 
         /// <summary>
+        /// This function is used to do checks for things that may happen on a timed basis, such as
+        /// periodic effects or effect expiry
         /// This is currently updated every frame.  Perhaps there are ways to make this more efficient?
         /// The main advantage of checking every frame is we can manipulate the WorldStartTime to
         /// effectively "refresh" the effect or end it at will.
@@ -127,48 +129,67 @@ namespace GameplayAbilitySystem.GameplayEffects {
             bool durationExpired = false;
             while (!durationExpired) {
                 await UniTask.DelayFrame(0);
-                // Check whether required time has expired
-                durationExpired = EffectData.CooldownTimeRemaining <= 0 ? true : false;
 
-                IEnumerable<ActiveGameplayEffectData> matchingEffects;
-                if (durationExpired) { // This effect is due for expiry
-                    switch (EffectData.Effect.StackingPolicy.StackExpirationPolicy) {
-                        case EStackExpirationPolicy.ClearEntireStack: // Remove all effects which match
-                            matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
-                            foreach (var effect in matchingEffects) {
-                                effect.EndEffect();
-                            }
-                            break;
-                        case EStackExpirationPolicy.RemoveSingleStackAndRefreshDuration:
-                            // Remove this effect, and reset all other durations to max
-                            matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
-                            foreach (var effect in matchingEffects) {
-                                effect.ResetDuration();
-                            }
-                            // This effect was going to expire anyway, but we put this here to be explicit to future code readers
-                            EffectData.EndEffect();
-                            break;
-                        case EStackExpirationPolicy.RefreshDuration:
-                            // Refreshing duration on expiry basically means the effect can never expire
-                            matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
-                            foreach (var effect in matchingEffects) {
-                                effect.ResetDuration();
-                                durationExpired = false;
-                            }
-                            break;
-
-                    }
+                if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration) {
+                    // Check whether required time has expired
+                    // We only need to do this for effects with a finite duration
+                    durationExpired = EffectData.CooldownTimeRemaining <= 0 ? true : false;
                 }
 
+                if (EffectData.TimeUntilNextPeriodicApplication <= 0) {
+                    
+                    EffectData.ResetPeriodicTime();
+                }
+
+                Debug.Log(EffectData.TimeUntilNextPeriodicApplication);
+                
+
+
+                if (durationExpired) { // This effect is due for expiry
+                    ApplyStackExpirationPolicy(EffectData, ref durationExpired);
+                }
 
             }
         }
 
-        private async void ScheduleRemoveActiveGameplayEffect(ActiveGameplayEffectData EffectData, bool RespectEffectExpiryTime = true) {
-            if (RespectEffectExpiryTime) {
-                await WaitForEffectExpiryTime(EffectData);
-            }
+        private void CheckAndApplyPeriodicEffect(ActiveGameplayEffectData EffectData) {
+            // Get time since last periodic effect application
+        }
+        private void ApplyStackExpirationPolicy(ActiveGameplayEffectData EffectData, ref bool durationExpired) {
+            IEnumerable<ActiveGameplayEffectData> matchingEffects;
 
+            switch (EffectData.Effect.StackingPolicy.StackExpirationPolicy) {
+                case EStackExpirationPolicy.ClearEntireStack: // Remove all effects which match
+                    matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
+                    foreach (var effect in matchingEffects) {
+                        effect.EndEffect();
+                    }
+                    break;
+                case EStackExpirationPolicy.RemoveSingleStackAndRefreshDuration:
+                    // Remove this effect, and reset all other durations to max
+                    matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
+                    foreach (var effect in matchingEffects) {
+                        effect.ResetDuration();
+                    }
+                    // This effect was going to expire anyway, but we put this here to be explicit to future code readers
+                    EffectData.EndEffect();
+                    break;
+                case EStackExpirationPolicy.RefreshDuration:
+                    // Refreshing duration on expiry basically means the effect can never expire
+                    matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
+                    foreach (var effect in matchingEffects) {
+                        effect.ResetDuration();
+                        durationExpired = false; // Undo effect expiry.  This effect should never expire
+                    }
+                    break;
+            }
+        }
+        private async void CheckGameplayEffectForTimedEffects(ActiveGameplayEffectData EffectData) {
+            await WaitForEffectExpiryTime(EffectData);
+            var gameplayCues = EffectData.Effect.GameplayCues;
+            foreach (var cue in gameplayCues) {
+                cue.HandleGameplayCue_OnRemove(EffectData.Target.GetActor().gameObject, new GameplayCues.GameplayCueParameters(null, null, null));
+            }
             // There could be multiple stacked effects, due to multiple casts
             // Remove one instance of this effect from the active list
             ModifyActiveGameplayEffect(EffectData, modifier => {
