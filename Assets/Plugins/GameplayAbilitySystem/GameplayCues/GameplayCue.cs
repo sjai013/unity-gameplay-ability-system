@@ -20,15 +20,19 @@ namespace GameplayAbilitySystem.GameplayCues {
         public void HandleGameplayCue(GameObject Target, GameplayCueParameters Parameters, EGameplayCueEvent Event) {
             switch (Event) {
                 case EGameplayCueEvent.OnExecute:
+                    if (ExecuteAction == null) break;
                     ExecuteAction.Action(Target, Parameters);
                     break;
                 case EGameplayCueEvent.OnActive:
+                    if (OnActiveAction == null) break;
                     OnActiveAction.Action(Target, Parameters);
                     break;
                 case EGameplayCueEvent.WhileActive:
+                    if (WhileActiveAction == null) break;
                     WhileActiveAction.Action(Target, Parameters);
                     break;
                 case EGameplayCueEvent.OnRemove:
+                    if (OnRemoveAction == null) break;
                     OnRemoveAction.Action(Target, Parameters);
                     break;
             }

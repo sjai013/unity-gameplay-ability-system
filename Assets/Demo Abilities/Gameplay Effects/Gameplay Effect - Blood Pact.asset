@@ -48,7 +48,7 @@ MonoBehaviour:
     _removeGameplayEffectsWithTag:
       _added: []
   Period:
-    Period: 0
+    Period: 1
     ExecuteOnApplication: 0
   GameplayCues:
   - {fileID: 11400000, guid: 74a66fb2dcac9bd499073ecdc7d3cdd1, type: 2}

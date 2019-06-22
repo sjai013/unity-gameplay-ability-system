@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Mana Gameplay Cue
   m_EditorClassIdentifier: 
   ExecuteAction: {fileID: 11400000, guid: 2f452afd5a7bfcd4bbd46cede0395f1a, type: 2}
-  OnActiveAction: {fileID: 11400000, guid: 2f452afd5a7bfcd4bbd46cede0395f1a, type: 2}
+  OnActiveAction: {fileID: 0}
   WhileActiveAction: {fileID: 11400000, guid: 2f452afd5a7bfcd4bbd46cede0395f1a, type: 2}
   OnRemoveAction: {fileID: 11400000, guid: 2f452afd5a7bfcd4bbd46cede0395f1a, type: 2}

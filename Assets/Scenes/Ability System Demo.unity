@@ -1644,16 +1644,6 @@ PrefabInstance:
       propertyPath: Abilities.Array.data[0].AbilityTarget
       value: 
       objectReference: {fileID: 7899279095716547601}
-    - target: {fileID: 7899279095267793608, guid: fddc582aed5bbbd4ab4ac8025536d369,
-        type: 3}
-      propertyPath: _attributes.Array.data[3]._baseValue
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899279095267793608, guid: fddc582aed5bbbd4ab4ac8025536d369,
-        type: 3}
-      propertyPath: _attributes.Array.data[3]._currentValue
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fddc582aed5bbbd4ab4ac8025536d369, type: 3}
 --- !u!1001 &872576276
