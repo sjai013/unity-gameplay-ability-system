@@ -48,12 +48,12 @@ MonoBehaviour:
     _removeGameplayEffectsWithTag:
       _added: []
   Period:
-    Period: 1
-    ExecuteOnApplication: 1
+    Period: 0
+    ExecuteOnApplication: 0
   GameplayCues:
   - {fileID: 11400000, guid: 74a66fb2dcac9bd499073ecdc7d3cdd1, type: 2}
   StackingPolicy:
-    StackingType: 1
+    StackingType: 0
     StackLimit: 2
     StackDurationRefreshPolicy: 0
     StackPeriodResetPolicy: 0

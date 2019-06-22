@@ -40,6 +40,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
             switch (EffectData.Effect.StackingPolicy.StackDurationRefreshPolicy) {
                 case EStackRefreshPolicy.RefreshOnSuccessfulApplication: // We refresh all instances of this game effect
+                    if (matchingStackedActiveEffects == null) break;
                     foreach (var effect in matchingStackedActiveEffects) {
                         effect.ResetDuration();
                     }
@@ -51,6 +52,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
             switch (EffectData.Effect.StackingPolicy.StackPeriodResetPolicy) {
                 case EStackRefreshPolicy.RefreshOnSuccessfulApplication: // We refresh all instances of this game effect
+                    if (matchingStackedActiveEffects == null) break;
                     foreach (var effect in matchingStackedActiveEffects) {
                         effect.ResetPeriodicTime();
                     }
@@ -152,7 +154,10 @@ namespace GameplayAbilitySystem.GameplayEffects {
                     durationExpired = EffectData.CooldownTimeRemaining <= 0 ? true : false;
                 }
 
-                CheckAndApplyPeriodicEffect(EffectData);
+                // Periodic effects only occur if the period is > 0
+                if (EffectData.Effect.Period.Period > 0) {
+                    CheckAndApplyPeriodicEffect(EffectData);
+                }
 
 
                 if (durationExpired) { // This effect is due for expiry
@@ -165,6 +170,11 @@ namespace GameplayAbilitySystem.GameplayEffects {
         private void CheckAndApplyPeriodicEffect(ActiveGameplayEffectData EffectData) {
             var TimeUntilNextPeriodicApplication = EffectData.TimeUntilNextPeriodicApplication;
             if (EffectData.TimeUntilNextPeriodicApplication <= 0) {
+                var gameplayCues = EffectData.Effect.GameplayCues;
+                foreach (var cue in gameplayCues) {
+                    cue.HandleGameplayCue(EffectData.Target.GetActor().gameObject, new GameplayCues.GameplayCueParameters(null, null, null), EGameplayCueEvent.OnExecute);
+                }
+
                 EffectData.AddPeriodicEffectAttributeModifiers();
                 EffectData.ResetPeriodicTime();
             }
@@ -175,6 +185,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
             switch (EffectData.Effect.StackingPolicy.StackExpirationPolicy) {
                 case EStackExpirationPolicy.ClearEntireStack: // Remove all effects which match
                     matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
+                    if (matchingEffects == null) break;
                     foreach (var effect in matchingEffects) {
                         effect.EndEffect();
                     }
@@ -182,6 +193,8 @@ namespace GameplayAbilitySystem.GameplayEffects {
                 case EStackExpirationPolicy.RemoveSingleStackAndRefreshDuration:
                     // Remove this effect, and reset all other durations to max
                     matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
+                    if (matchingEffects == null) break;
+
                     foreach (var effect in matchingEffects) {
                         // We need to cater for the fact that the cooldown
                         // may have exceeded the actual limit by a little bit
@@ -196,6 +209,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
                 case EStackExpirationPolicy.RefreshDuration:
                     // Refreshing duration on expiry basically means the effect can never expire
                     matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
+                    if (matchingEffects == null) break;
                     foreach (var effect in matchingEffects) {
                         effect.ResetDuration();
                         durationExpired = false; // Undo effect expiry.  This effect should never expire

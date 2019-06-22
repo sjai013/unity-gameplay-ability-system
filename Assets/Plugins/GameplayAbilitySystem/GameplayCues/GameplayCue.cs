@@ -19,7 +19,7 @@ namespace GameplayAbilitySystem.GameplayCues {
 
         public void HandleGameplayCue(GameObject Target, GameplayCueParameters Parameters, EGameplayCueEvent Event) {
             switch (Event) {
-                case EGameplayCueEvent.Execute:
+                case EGameplayCueEvent.OnExecute:
                     ExecuteAction.Action(Target, Parameters);
                     break;
                 case EGameplayCueEvent.OnActive:
@@ -37,6 +37,6 @@ namespace GameplayAbilitySystem.GameplayCues {
 
 
     public enum EGameplayCueEvent {
-        Execute, OnActive, WhileActive, OnRemove
+        OnExecute, OnActive, WhileActive, OnRemove
     }
 }
