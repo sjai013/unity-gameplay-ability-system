@@ -2003,6 +2003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955d1cc64d738074886242fa61f0bdf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TargettingLocation: {fileID: 5555714685437583682}
   _onGameplayAbilityActivated:
     m_PersistentCalls:
       m_Calls: []

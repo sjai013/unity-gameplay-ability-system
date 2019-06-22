@@ -19,6 +19,8 @@ namespace GameplayAbilitySystem {
     /// <inheritdoc />
     [AddComponentMenu("Gameplay Ability System/Ability System")]
     public class AbilitySystemComponent : MonoBehaviour, IGameplayAbilitySystem {
+        public Transform TargettingLocation;
+        
         [SerializeField]
         private GenericAbilityEvent _onGameplayAbilityActivated = new GenericAbilityEvent();
         /// <inheritdoc />
