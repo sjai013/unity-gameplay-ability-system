@@ -8,13 +8,14 @@ namespace AbilitySystemDemo {
 
     [CreateAssetMenu(fileName = "Spawn Object Gameplay Cue", menuName = "Ability System Demo/Gameplay Cue/Spawn Object Gameplay Cue")]
     class SpawnObjectGameplayCueAction : BaseGameplayCueAction {
-        public GameObject ObjectToSpawn;
-        public Vector3 Position;
-        public Quaternion Rotation;
+        public GameObject ObjectToSpawn = default;
+        public Vector3 Position = default;
+        public Quaternion Rotation = default;
         public Vector3 Scale = Vector3.one;
         public float DestroyInSeconds = -1;
-        
+
         public override async void Action(UnityEngine.GameObject Target, GameplayCueParameters Parameters) {
+
             Time.timeScale = 0.5f;
             await UniTask.DelayFrame(5);
             Time.timeScale = 1;
@@ -29,5 +30,6 @@ namespace AbilitySystemDemo {
                 GameObject.DestroyImmediate(gameObject);
             }
         }
+
     }
 }

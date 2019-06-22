@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using GameplayAbilitySystem.Interfaces;
 using System.Collections.Generic;
+using GameplayAbilitySystem.Attributes;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     /// <summary>
@@ -47,7 +48,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
         public float TimeSincePreviousPeriodicApplication { get => Time.time - _timeOfLastPeriodicApplication; }
         public float TimeUntilNextPeriodicApplication { get => _timeOfLastPeriodicApplication + Effect.Period.Period - Time.time; }
 
-        private List<ActiveEffectAttributeAggregator> PeriodicEffectModificationsToDate = new List<ActiveEffectAttributeAggregator>();
+        private Dictionary<AttributeType, Aggregator> PeriodicEffectModificationsToDate = new Dictionary<AttributeType, Aggregator>();
 
         public IGameplayAbilitySystem Instigator { get; private set; }
         public IGameplayAbilitySystem Target { get; private set; }
@@ -66,7 +67,15 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
         }
 
-        public void ResetDuration() {
+
+        /// <summary>
+        /// Reset duration of this effect.
+        /// Optionally, we can provide an offset to compensate for
+        /// the fact that the reset did not happen at exactly 0
+        /// and over time this could cause time drift
+        /// </summary>
+        /// <param name="offset">Overflow time</param>
+        public void ResetDuration(float offset = 0) {
             this._startWorldTime = Time.time;
         }
 
@@ -74,12 +83,40 @@ namespace GameplayAbilitySystem.GameplayEffects {
             this._startWorldTime = Time.time - CooldownTimeTotal;
         }
 
-        public void ResetPeriodicTime() {
-            this._timeOfLastPeriodicApplication = Time.time;
+        /// <summary>
+        /// Reset time at which last periodic application occured.
+        /// Optionally, we can provide an offset to compensate for
+        /// the fact that the reset did not happen at exactly 0
+        /// and over time this could cause time drift
+        /// </summary>
+        /// <param name="offset">Overflow time</param>
+        public void ResetPeriodicTime(float offset = 0) {
+            this._timeOfLastPeriodicApplication = Time.time - offset;
         }
 
         public void AddPeriodicEffectAttributeModifiers() {
             // Check out ActiveGameplayEffectContainer.AddActiveGameplayEffect to see how to populate the ActiveEffectAttributeAggregator object
+            foreach (var modifier in Effect.GameplayEffectPolicy.Modifiers) {
+                modifier.AttemptCalculateMagnitude(out var EvaluatedMagnitude);
+
+                // If aggregator for this attribute doesn't exist, add it.
+                if (!PeriodicEffectModificationsToDate.TryGetValue(modifier.Attribute, out var aggregator)) {
+                    aggregator = new Aggregator(modifier.Attribute);
+                    // aggregator.Dirtied.AddListener(UpdateAttribute);
+                    PeriodicEffectModificationsToDate.Add(modifier.Attribute, aggregator);
+                }
+
+                aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation);
+
+                // Recalculate new value by recomputing all aggregators
+                var aggregators = Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(modifier.Attribute);
+                Target.ActiveGameplayEffectsContainer.UpdateAttribute(aggregators, modifier.Attribute);
+            }
+        }
+
+        public Aggregator GetPeriodicAggregatorForAttribute(AttributeType Attribute) {
+            PeriodicEffectModificationsToDate.TryGetValue(Attribute, out var aggregator);
+            return aggregator;
         }
     }
 }

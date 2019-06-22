@@ -30,7 +30,12 @@ namespace GameplayAbilitySystem.GameplayEffects {
                                 .Where(x => x.Value.ContainsKey(Attribute))
                                 .Select(x => x.Value[Attribute]);
 
-            return aggregators;
+            var periodic = Map
+                            .Where(x => x.Key.Effect.Period.Period > 0)
+                            .Select(x => x.Key.GetPeriodicAggregatorForAttribute(Attribute))
+                            .Where(x => x != null);
+
+            return aggregators.Concat(periodic);
         }
     }
 }

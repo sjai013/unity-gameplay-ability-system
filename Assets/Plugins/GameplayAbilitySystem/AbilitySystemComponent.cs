@@ -163,7 +163,7 @@ namespace GameplayAbilitySystem {
             // Execute gameplay cue
             for (var i = 0; i < gameplayCues.Count; i++) {
                 var cue = gameplayCues[i];
-                cue.HandleGameplayCue_OnActive(Target.GetActor().gameObject,new GameplayCueParameters(null, null, null));
+                cue.HandleGameplayCue(Target.GetActor().gameObject,new GameplayCueParameters(null, null, null), EGameplayCueEvent.OnActive);
             }
 
             return Task.FromResult(Effect);

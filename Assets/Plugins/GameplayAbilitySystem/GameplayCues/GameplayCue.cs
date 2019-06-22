@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.GameplayCues {
-    [CreateAssetMenu(fileName="GameplayCue", menuName="Ability System/Gameplay Cue/Gameplay Cue")]
+    [CreateAssetMenu(fileName = "GameplayCue", menuName = "Ability System/Gameplay Cue/Gameplay Cue")]
     public class GameplayCue : ScriptableObject {
 
         [SerializeField]
@@ -17,17 +17,26 @@ namespace GameplayAbilitySystem.GameplayCues {
         [SerializeField]
         protected BaseGameplayCueAction OnRemoveAction;
 
-        public void HandleGameplayCue_Execute(GameObject Target, GameplayCueParameters Parameters) {
-            ExecuteAction.Action(Target, Parameters);
+        public void HandleGameplayCue(GameObject Target, GameplayCueParameters Parameters, EGameplayCueEvent Event) {
+            switch (Event) {
+                case EGameplayCueEvent.Execute:
+                    ExecuteAction.Action(Target, Parameters);
+                    break;
+                case EGameplayCueEvent.OnActive:
+                    OnActiveAction.Action(Target, Parameters);
+                    break;
+                case EGameplayCueEvent.WhileActive:
+                    WhileActiveAction.Action(Target, Parameters);
+                    break;
+                case EGameplayCueEvent.OnRemove:
+                    OnRemoveAction.Action(Target, Parameters);
+                    break;
+            }
         }
-        public void HandleGameplayCue_OnActive(GameObject Target, GameplayCueParameters Parameters) {
-            OnActiveAction.Action(Target, Parameters);
-        }
-        public void HandleGameplayCue_WhileActive(GameObject Target, GameplayCueParameters Parameters) {
-            WhileActiveAction.Action(Target, Parameters);
-        }
-        public void HandleGameplayCue_OnRemove(GameObject Target, GameplayCueParameters Parameters) {
-            OnRemoveAction.Action(Target, Parameters);
-        }
+    }
+
+
+    public enum EGameplayCueEvent {
+        Execute, OnActive, WhileActive, OnRemove
     }
 }

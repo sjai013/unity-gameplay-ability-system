@@ -9,6 +9,7 @@ using UnityEngine.Events;
 using UniRx.Async;
 using System.Threading.Tasks;
 using UnityEngine;
+using GameplayAbilitySystem.GameplayCues;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     [Serializable]
@@ -86,7 +87,6 @@ namespace GameplayAbilitySystem.GameplayEffects {
             }
         }
 
-
         private void AddActiveGameplayEffect(ActiveGameplayEffectData EffectData) {
             ModifyActiveGameplayEffect(EffectData, modifier => {
                 modifier.AttemptCalculateMagnitude(out var EvaluatedMagnitude);
@@ -136,13 +136,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
                     durationExpired = EffectData.CooldownTimeRemaining <= 0 ? true : false;
                 }
 
-                if (EffectData.TimeUntilNextPeriodicApplication <= 0) {
-                    
-                    EffectData.ResetPeriodicTime();
-                }
-
-                Debug.Log(EffectData.TimeUntilNextPeriodicApplication);
-                
+                CheckAndApplyPeriodicEffect(EffectData);
 
 
                 if (durationExpired) { // This effect is due for expiry
@@ -153,7 +147,11 @@ namespace GameplayAbilitySystem.GameplayEffects {
         }
 
         private void CheckAndApplyPeriodicEffect(ActiveGameplayEffectData EffectData) {
-            // Get time since last periodic effect application
+            var TimeUntilNextPeriodicApplication = EffectData.TimeUntilNextPeriodicApplication;
+            if (EffectData.TimeUntilNextPeriodicApplication <= 0) {
+                EffectData.AddPeriodicEffectAttributeModifiers();
+                EffectData.ResetPeriodicTime();
+            }
         }
         private void ApplyStackExpirationPolicy(ActiveGameplayEffectData EffectData, ref bool durationExpired) {
             IEnumerable<ActiveGameplayEffectData> matchingEffects;
@@ -169,7 +167,12 @@ namespace GameplayAbilitySystem.GameplayEffects {
                     // Remove this effect, and reset all other durations to max
                     matchingEffects = GetMatchingEffectsForActiveEffect(EffectData);
                     foreach (var effect in matchingEffects) {
-                        effect.ResetDuration();
+                        // We need to cater for the fact that the cooldown
+                        // may have exceeded the actual limit by a little bit
+                        // due to framerate.  So, when we reset the other cooldowns
+                        // we need to account for this difference
+                        var timeOverflow = effect.CooldownTimeRemaining; 
+                        effect.ResetDuration(timeOverflow);
                     }
                     // This effect was going to expire anyway, but we put this here to be explicit to future code readers
                     EffectData.EndEffect();
@@ -188,7 +191,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
             await WaitForEffectExpiryTime(EffectData);
             var gameplayCues = EffectData.Effect.GameplayCues;
             foreach (var cue in gameplayCues) {
-                cue.HandleGameplayCue_OnRemove(EffectData.Target.GetActor().gameObject, new GameplayCues.GameplayCueParameters(null, null, null));
+                cue.HandleGameplayCue(EffectData.Target.GetActor().gameObject, new GameplayCues.GameplayCueParameters(null, null, null), EGameplayCueEvent.OnRemove);
             }
             // There could be multiple stacked effects, due to multiple casts
             // Remove one instance of this effect from the active list
