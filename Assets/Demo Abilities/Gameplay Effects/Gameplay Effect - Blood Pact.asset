@@ -49,7 +49,7 @@ MonoBehaviour:
       _added: []
   Period:
     Period: 1
-    ExecuteOnApplication: 0
+    ExecuteOnApplication: 1
   GameplayCues:
   - {fileID: 11400000, guid: 74a66fb2dcac9bd499073ecdc7d3cdd1, type: 2}
   StackingPolicy:

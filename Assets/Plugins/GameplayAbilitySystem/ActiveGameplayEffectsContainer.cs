@@ -49,6 +49,16 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
             }
 
+            switch (EffectData.Effect.StackingPolicy.StackPeriodResetPolicy) {
+                case EStackRefreshPolicy.RefreshOnSuccessfulApplication: // We refresh all instances of this game effect
+                    foreach (var effect in matchingStackedActiveEffects) {
+                        effect.ResetPeriodicTime();
+                    }
+                    break;
+                case EStackRefreshPolicy.NeverRefresh: // Don't do anything.  Each stack maintains its own periodic effect
+                    break;
+            }
+
 
             existingStacks = matchingStackedActiveEffects?.Count() ?? -1;
             if (existingStacks < maxStacks) { // We can still add more stacks.
@@ -89,6 +99,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
         private void AddActiveGameplayEffect(ActiveGameplayEffectData EffectData) {
             ModifyActiveGameplayEffect(EffectData, modifier => {
+                // We only apply if the effect has execute on application
                 modifier.AttemptCalculateMagnitude(out var EvaluatedMagnitude);
 
                 // Check if we already have an entry for this gameplay effect attribute modifier
@@ -101,7 +112,12 @@ namespace GameplayAbilitySystem.GameplayEffects {
                     attributeAggregatorMap.Add(modifier.Attribute, aggregator);
                 }
 
-                aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation);
+                // If this is a periodic effect, we don't add any attributes here.  They will be
+                // added as required on period expiry and stored in a separate structure
+                if (EffectData.Effect.Period.Period <= 0) {
+                    aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation);
+                }
+
 
                 // Recalculate new value by recomputing all aggregators
                 var aggregators = AbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(modifier.Attribute);
@@ -171,7 +187,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
                         // may have exceeded the actual limit by a little bit
                         // due to framerate.  So, when we reset the other cooldowns
                         // we need to account for this difference
-                        var timeOverflow = effect.CooldownTimeRemaining; 
+                        var timeOverflow = effect.CooldownTimeRemaining;
                         effect.ResetDuration(timeOverflow);
                     }
                     // This effect was going to expire anyway, but we put this here to be explicit to future code readers

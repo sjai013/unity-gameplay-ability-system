@@ -105,7 +105,9 @@ namespace GameplayAbilitySystem.GameplayEffects {
     public static partial class ExtensionMethods {
         public static float Evaluate(this IEnumerable<Aggregator> Aggregators, float BaseValue) {
             var additives = Aggregators.Select(x => x.GetAdditives()).Sum();
-            var multipliers = Aggregators.Select(x => x.GetMultipliers()).Aggregate((result, item) => result * item);
+            var multipliers = Aggregators
+                                    .Select(x => x.GetMultipliers())
+                                    .Aggregate(1f, (result, item) => result * item);
             return (BaseValue + additives) * multipliers;
         }
     }

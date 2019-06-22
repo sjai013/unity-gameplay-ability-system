@@ -15,6 +15,9 @@ namespace GameplayAbilitySystem.GameplayEffects {
             this._startWorldTime = Time.time;
             this.Instigator = instigator;
             this.Target = target;
+            if (!this.Effect.Period.ExecuteOnApplication) {
+                this._timeOfLastPeriodicApplication = Time.time;
+            }
         }
 
         /// <summary>
@@ -109,7 +112,8 @@ namespace GameplayAbilitySystem.GameplayEffects {
                 aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation);
 
                 // Recalculate new value by recomputing all aggregators
-                var aggregators = Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(modifier.Attribute);
+                var aggregators = Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator
+                                    .GetAggregatorsForAttribute(modifier.Attribute);
                 Target.ActiveGameplayEffectsContainer.UpdateAttribute(aggregators, modifier.Attribute);
             }
         }
