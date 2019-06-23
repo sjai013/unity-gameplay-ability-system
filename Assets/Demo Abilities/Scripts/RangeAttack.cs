@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameplayAbilitySystem.Events;
 using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects;
 using GameplayAbilitySystem.Interfaces;
@@ -8,7 +9,7 @@ using UniRx.Async;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.AbilityActivations {
-    [CreateAssetMenu(fileName = "Ability", menuName = "Ability System/Ability Logic/Ability")]
+    [CreateAssetMenu(fileName = "Ability", menuName = "Ability System Demo/Ability Logic/Range Attack")]
     public class RangeAttack : AbstractAbilityActivation {
 
         public GameObject Projectile;
@@ -44,31 +45,20 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
 
             // Animation complete.  Spawn and send projectile at target
             if (instantiatedProjectile != null) {
-                await instantiatedProjectile.GetComponent<Projectile>().SeekTarget(gameplayEventData.Target.TargettingLocation.gameObject, gameplayEventData.Target.gameObject);
+                SeekTargetAndDestroy(AbilitySystem, gameplayEventData, instantiatedProjectile);
             }
-
-            _ = AbilitySystem.ApplyGameEffectToTarget(TargetGameplayEffect, gameplayEventData.Target);
-
-
-            DestroyImmediate(instantiatedProjectile);
 
 
             var beh = animatorComponent.GetBehaviour<AnimationBehaviourEventSystem>();
             await beh.StateEnter.WaitForEvent((animator, stateInfo, layerIndex) => stateInfo.fullPathHash == Animator.StringToHash(CompletionAnimatorStateFullHash));
 
-            // Commit ability cost
-            // TODO: ApplyCost();
-
-            // Wait for some specific gameplay event
-            // Not applicable for base activate
-
-            // Commit ability cooldown
-            //TODO: ApplyCooldown();
-
-            // Apply game effect(s)
-
-            // End Ability
             Ability.EndAbility(AbilitySystem);
+        }
+
+        private async void SeekTargetAndDestroy(IGameplayAbilitySystem AbilitySystem, GameplayEventData gameplayEventData, GameObject projectile) {
+            await projectile.GetComponent<Projectile>().SeekTarget(gameplayEventData.Target.TargettingLocation.gameObject, gameplayEventData.Target.gameObject);
+            _ = AbilitySystem.ApplyGameEffectToTarget(TargetGameplayEffect, gameplayEventData.Target);
+            DestroyImmediate(projectile);
         }
 
     }

@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4778554132450660
 Transform:
   m_ObjectHideFlags: 0
@@ -4732,7 +4732,7 @@ GameObject:
   - component: {fileID: 198856239026640498}
   - component: {fileID: 199756426985724656}
   m_Layer: 0
-  m_Name: EnergyExplosion
+  m_Name: EnergyExplosion (Lesser)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4769,7 +4769,7 @@ ParticleSystem:
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -9516,8 +9516,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bf88af72084132746823869f28b070f8, type: 2}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 8a212bcc3fc1b074681658a30ee29ed9, type: 2}
+  - {fileID: 2100000, guid: 8a212bcc3fc1b074681658a30ee29ed9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9577,7 +9577,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4194869439727390
 Transform:
   m_ObjectHideFlags: 0

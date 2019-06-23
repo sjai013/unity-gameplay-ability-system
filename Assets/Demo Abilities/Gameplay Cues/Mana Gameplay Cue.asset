@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38d831ed4cecc204f96a38a796f398f7, type: 3}
   m_Name: Mana Gameplay Cue
   m_EditorClassIdentifier: 
-  ExecuteAction: {fileID: 11400000, guid: 2f452afd5a7bfcd4bbd46cede0395f1a, type: 2}
-  OnActiveAction: {fileID: 0}
+  ExecuteAction: {fileID: 11400000, guid: 18b01f624b6fd2f46853987e494b09e9, type: 2}
+  OnActiveAction: {fileID: 11400000, guid: 2f452afd5a7bfcd4bbd46cede0395f1a, type: 2}
   WhileActiveAction: {fileID: 11400000, guid: 2f452afd5a7bfcd4bbd46cede0395f1a, type: 2}
   OnRemoveAction: {fileID: 11400000, guid: 2f452afd5a7bfcd4bbd46cede0395f1a, type: 2}

@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc5b0a69b4e9aaf4f9ad40f33cf04195, type: 3}
+  m_Script: {fileID: 11500000, guid: da8376ce57df7894a8e62a6e646480d4, type: 3}
   m_Name: Blood Pact Ability Logic
   m_EditorClassIdentifier: 
   TargetGameplayEffect: {fileID: 11400000, guid: ffd023926afb8604da27388cef668ff7,
     type: 2}
-  FireProjectile: {fileID: 11400000, guid: a390e7f3b0587f24daef94744108743c, type: 2}
+  ExecuteEffectEvent: {fileID: 11400000, guid: a390e7f3b0587f24daef94744108743c, type: 2}
   WaitForEventTag: {fileID: 11400000, guid: 03b751e8ee9c2b54083e24e8634c0e1b, type: 2}
   AnimationTriggerName: Do_Magic
   CompletionAnimatorStateFullHash: Base.Idle

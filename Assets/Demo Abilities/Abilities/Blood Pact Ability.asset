@@ -45,4 +45,4 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _abilityLogic: {fileID: 11400000, guid: b1607fc93a2e028479794f3d4285988a, type: 2}
+  _abilityLogic: {fileID: 11400000, guid: f6deb5d957f373b4488dff3c2f2234f6, type: 2}
