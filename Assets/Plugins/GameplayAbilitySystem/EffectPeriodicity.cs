@@ -5,6 +5,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
     public class EffectPeriodicity {
         public float Period;
         public bool ExecuteOnApplication;
+        public GameplayEffect ApplyGameEffectOnExecute;
     }
 
 }

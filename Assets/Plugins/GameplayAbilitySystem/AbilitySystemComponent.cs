@@ -148,9 +148,6 @@ namespace GameplayAbilitySystem {
 
             // If this is an instant gameplay effect (i.e. it will modify the base value)
 
-            // If we can apply the GameEffect, apply it to target
-            //Effect.ExecuteEffect(Target);
-
             // Handling Instant effects is different to handling HasDuration and Infinite effects
             if (Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
                 Effect.ApplyInstantEffect(Target);
@@ -175,7 +172,9 @@ namespace GameplayAbilitySystem {
         /// <inheritdoc />
         public float GetNumericAttributeBase(AttributeType AttributeType) {
             var attributeSet = this.GetComponent<AttributeSet>();
-            return attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType).BaseValue;
+            var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
+            if (attribute == null) return 0;
+            return attribute.BaseValue;
         }
 
         /// <inheritdoc />

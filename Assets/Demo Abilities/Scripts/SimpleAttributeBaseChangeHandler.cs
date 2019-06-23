@@ -5,8 +5,8 @@ using UnityEngine;
 
 
 namespace AbilitySystemDemo.Attributes {
-    [CreateAssetMenu(fileName = "Simple Attribute Change Handler", menuName = "Ability System Demo/Attributes/Simple Attribute Change Handler")]
-    public class SimpleAttributeChangeHandler : BaseAttributeChangeHandler {
+    [CreateAssetMenu(fileName = "Simple Attribute Base Change Handler", menuName = "Ability System Demo/Attributes/Simple Attribute Base Change Handler")]
+    public class SimpleAttributeBaseChangeHandler : BaseAttributeChangeHandler {
         public AttributeType MaxHealth;
         public AttributeType Health;
         public AttributeType MaxMana;
@@ -21,11 +21,11 @@ namespace AbilitySystemDemo.Attributes {
         }
 
         private void HandleHealthChange(ref float Value, float maxValue) {
-            Value = Mathf.Clamp(Value, 0, maxValue);
+            Value = Mathf.Clamp(Value, -Mathf.Infinity, maxValue);
         }
 
         private void HandleManaChange(ref float Value, float maxValue) {
-            Value = Mathf.Clamp(Value, 0, maxValue);
+            Value = Mathf.Clamp(Value, -Mathf.Infinity, maxValue);
         }
 
 

@@ -15,27 +15,7 @@ MonoBehaviour:
   _gameplayEffectPolicy:
     _durationPolicy: 2
     _durationMagnitude: 10
-    _modifiers:
-    - _attributeType: {fileID: 11400000, guid: 124a7a186e5666c4b8fdc11ca51efeb7, type: 2}
-      _modifierOperationType: 0
-      _magnitudeCalculationType: 0
-      _scaledMagnitude: 1
-      _sourceTags:
-        RequireTags: []
-        IgnoreTags: []
-      _targetTags:
-        RequireTags: []
-        IgnoreTags: []
-    - _attributeType: {fileID: 11400000, guid: e5f56864ce3c4b742868ac560a891f48, type: 2}
-      _modifierOperationType: 0
-      _magnitudeCalculationType: 0
-      _scaledMagnitude: 1
-      _sourceTags:
-        RequireTags: []
-        IgnoreTags: []
-      _targetTags:
-        RequireTags: []
-        IgnoreTags: []
+    _modifiers: []
   _gameplayEffectTags:
     _assetTags:
       _added: []
@@ -49,7 +29,9 @@ MonoBehaviour:
       _added: []
   Period:
     Period: 1
-    ExecuteOnApplication: 0
+    ExecuteOnApplication: 1
+    ApplyGameEffectOnExecute: {fileID: 11400000, guid: 20fb0364cdae5e348854db1deb47d72e,
+      type: 2}
   GameplayCues:
   - {fileID: 11400000, guid: 74a66fb2dcac9bd499073ecdc7d3cdd1, type: 2}
   StackingPolicy:

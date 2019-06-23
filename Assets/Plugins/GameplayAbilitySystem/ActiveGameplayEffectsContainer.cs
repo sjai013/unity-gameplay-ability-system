@@ -97,6 +97,11 @@ namespace GameplayAbilitySystem.GameplayEffects {
             foreach (var modifier in EffectData.Effect.GameplayEffectPolicy.Modifiers) {
                 action(modifier);
             }
+
+            // If there are no gameplay effect modifiers, we need to add or get an empty entry
+            if (EffectData.Effect.GameplayEffectPolicy.Modifiers.Count == 0) {
+                action((new GameplayEffectModifier()).InitialiseEmpty());
+            }
         }
 
         private void AddActiveGameplayEffect(ActiveGameplayEffectData EffectData) {
@@ -106,24 +111,25 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
                 // Check if we already have an entry for this gameplay effect attribute modifier
                 var attributeAggregatorMap = ActiveEffectAttributeAggregator.AddOrGet(EffectData);
+                if (modifier.Attribute != null) {
+                    // If aggregator for this attribute doesn't exist, add it.
+                    if (!attributeAggregatorMap.TryGetValue(modifier.Attribute, out var aggregator)) {
+                        aggregator = new Aggregator(modifier.Attribute);
+                        // aggregator.Dirtied.AddListener(UpdateAttribute);
+                        attributeAggregatorMap.Add(modifier.Attribute, aggregator);
+                    }
 
-                // If aggregator for this attribute doesn't exist, add it.
-                if (!attributeAggregatorMap.TryGetValue(modifier.Attribute, out var aggregator)) {
-                    aggregator = new Aggregator(modifier.Attribute);
-                    // aggregator.Dirtied.AddListener(UpdateAttribute);
-                    attributeAggregatorMap.Add(modifier.Attribute, aggregator);
+                    // If this is a periodic effect, we don't add any attributes here.  They will be
+                    // added as required on period expiry and stored in a separate structure
+                    if (EffectData.Effect.Period.Period <= 0) {
+                        aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation);
+                    }
+
+                    // Recalculate new value by recomputing all aggregators
+                    var aggregators = AbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(modifier.Attribute);
+                    AbilitySystem.ActiveGameplayEffectsContainer.UpdateAttribute(aggregators, modifier.Attribute);
                 }
 
-                // If this is a periodic effect, we don't add any attributes here.  They will be
-                // added as required on period expiry and stored in a separate structure
-                if (EffectData.Effect.Period.Period <= 0) {
-                    aggregator.AddAggregatorMod(EvaluatedMagnitude, modifier.ModifierOperation);
-                }
-
-
-                // Recalculate new value by recomputing all aggregators
-                var aggregators = AbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(modifier.Attribute);
-                AbilitySystem.ActiveGameplayEffectsContainer.UpdateAttribute(aggregators, modifier.Attribute);
             });
 
 
@@ -170,6 +176,10 @@ namespace GameplayAbilitySystem.GameplayEffects {
         private void CheckAndApplyPeriodicEffect(ActiveGameplayEffectData EffectData) {
             var TimeUntilNextPeriodicApplication = EffectData.TimeUntilNextPeriodicApplication;
             if (EffectData.TimeUntilNextPeriodicApplication <= 0) {
+                // Apply gameplay effect defined for period.  
+                if (EffectData.Effect.Period.ApplyGameEffectOnExecute != null) {
+                    EffectData.Instigator.ApplyGameEffectToTarget(EffectData.Effect.Period.ApplyGameEffectOnExecute, EffectData.Target);
+                }
                 var gameplayCues = EffectData.Effect.GameplayCues;
                 foreach (var cue in gameplayCues) {
                     cue.HandleGameplayCue(EffectData.Target.GetActor().gameObject, new GameplayCues.GameplayCueParameters(null, null, null), EGameplayCueEvent.OnExecute);
@@ -228,7 +238,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
             ModifyActiveGameplayEffect(EffectData, modifier => {
 
                 AbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.RemoveEffect(EffectData);
-
+                if (modifier.Attribute == null) return;
 
                 // Find all remaining aggregators of the same type and recompute values
                 var aggregators = AbilitySystem.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(modifier.Attribute);

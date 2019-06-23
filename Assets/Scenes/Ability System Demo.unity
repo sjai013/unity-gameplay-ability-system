@@ -1690,6 +1690,12 @@ PrefabInstance:
       propertyPath: TargettingLocation
       value: 
       objectReference: {fileID: 34845138}
+    - target: {fileID: 7899279095267793608, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
+      propertyPath: _preAttributeBaseChangeHandler
+      value: 
+      objectReference: {fileID: 11400000, guid: 50647ac471124bf4bb71e322db6b76a8,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fddc582aed5bbbd4ab4ac8025536d369, type: 3}
 --- !u!1001 &872576276

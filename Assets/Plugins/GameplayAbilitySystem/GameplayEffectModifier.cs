@@ -52,5 +52,10 @@ namespace GameplayAbilitySystem {
             return true;
         }
 
+        public GameplayEffectModifier InitialiseEmpty() {
+            this._attributeType = null;
+            return this;
+        }
+
     }
 }
