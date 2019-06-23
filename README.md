@@ -3,7 +3,8 @@ Gameplay Ability System for Unity (or GAS for short) is a Unity framework for cr
 
 The approach for this is taken from that used by Unreal's Gameplay Ability System.
 
-![GAS in action](https://i.imgur.com/8eDC5Cz.gif)
+![GAS in action](https://i.imgur.com/0OTe4KG.gif)
+
 
 ## Installation
 1. Head over to [Releases](https://github.com/sjai013/UnityGameplayAbilitySystem/releases) and download the latest version.
