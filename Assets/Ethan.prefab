@@ -2201,9 +2201,9 @@ MonoBehaviour:
   - _attributeType: {fileID: 11400000, guid: 9513cbcc3a089f742b9c48ae4201b1db, type: 2}
     _baseValue: 20
     _currentValue: 20
-  _preAttributeBaseChangeHandler: {fileID: 11400000, guid: d0fb19ee49913db48946ce55707e8938,
+  _preAttributeBaseChangeHandler: {fileID: 0}
+  _preAttributeChangeHandler: {fileID: 11400000, guid: d0fb19ee49913db48946ce55707e8938,
     type: 2}
-  _preAttributeChangeHandler: {fileID: 0}
 --- !u!114 &7899279095267793607
 MonoBehaviour:
   m_ObjectHideFlags: 0

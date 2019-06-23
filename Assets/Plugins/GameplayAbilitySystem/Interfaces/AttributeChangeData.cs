@@ -4,20 +4,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-namespace GameplayAbilitySystem.Attributes
-{
+namespace GameplayAbilitySystem.Attributes {
     /// <summary>
     /// Container for attribute change events
     /// </summary>
     [Serializable]
-    public struct AttributeChangeData
-    {
+    public struct AttributeChangeData {
 
         /// <summary>
         /// <see cref="IAttribute"/> that was cahnged
         /// </summary>
         public IAttribute Attribute;
-        
+
 
         // /// <summary>
         // /// Old value of the <see cref="IAttribute"/>
@@ -43,8 +41,7 @@ namespace GameplayAbilitySystem.Attributes
     }
 
     [Serializable]
-    public class AttributeChangeDataEvent : UnityEvent<AttributeChangeData>
-    {
+    public class AttributeChangeDataEvent : UnityEvent<AttributeChangeData> {
 
     }
 }

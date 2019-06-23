@@ -5,8 +5,7 @@ using GameplayAbilitySystem.Attributes;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.Interfaces
-{
+namespace GameplayAbilitySystem.Interfaces {
     /// <summary>
     /// <para>
     /// An <see cref="IAttributeSet"/> defines the list of <see cref="IAttribute"/> that a player (that has an <see cref="AbilitySystemComponent"/>) possesses.  
@@ -17,8 +16,7 @@ namespace GameplayAbilitySystem.Interfaces
     /// This will usually include <see cref="IAttribute"/>s such as Health, Mana, Speed, etc.
     /// </para>
     /// </summary>
-    public interface IAttributeSet
-    {
+    public interface IAttributeSet {
         /// <summary>
         /// Decides whether this attribute change should take effect
         /// </summary>
@@ -62,7 +60,7 @@ namespace GameplayAbilitySystem.Interfaces
         /// Event called whenever a current attribute value changes
         /// </summary>
         /// <value>Event is raised with a payload of <see cref="AttributeChangeDataEvent"/></value>
-        AttributeChangeDataEvent AttributeCurrentValueChanged { get; }        
+        AttributeChangeDataEvent AttributeCurrentValueChanged { get; }
 
         /// <summary>
         /// Gets the <see cref="AbilitySystemComponent"/> that owns this Attribute Set
@@ -76,10 +74,10 @@ namespace GameplayAbilitySystem.Interfaces
         /// <value>List of <see cref="IAttribute"/> </value>
         List<Attribute> Attributes { get; set; }
 
-        BaseAttributeChangeHandler PreAttributeBaseChangeHandler {get; }
-        BaseAttributeChangeHandler PreAttributeChangeHandler {get; }
+        BaseAttributeChangeHandler PreAttributeBaseChangeHandler { get; }
+        BaseAttributeChangeHandler PreAttributeChangeHandler { get; }
 
-        
+
     }
 
 

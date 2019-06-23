@@ -1,0 +1,53 @@
+filename, language, C#, Sequence Diagram, XML, comment, blank, total
+Abilities\AbilityActivations\AbstractAbilityActivation.cs, C#, 9, 0, 0, 0, 1, 10
+Abilities\AbilityActivations\RangeAttack.cs, C#, 29, 0, 0, 10, 14, 53
+AbilitySequence.seqdiag, Sequence Diagram, 0, 16, 0, 0, 0, 16
+AbilitySequence.svg, XML, 0, 0, 1, 0, 0, 1
+AbilitySystemComponent.cs, C#, 121, 0, 0, 37, 46, 204
+ActiveEffectAttributeAggregator.cs, C#, 28, 0, 0, 1, 9, 38
+ActiveGameplayEffectData.cs, C#, 38, 0, 0, 19, 17, 74
+ActiveGameplayEffectsContainer.cs, C#, 160, 0, 0, 34, 47, 241
+AnimationBehaviourEventSystem.cs, C#, 38, 0, 0, 7, 13, 58
+AnimationEvent.cs, C#, 6, 0, 0, 0, 2, 8
+AnimationEventSystem.cs, C#, 24, 0, 0, 26, 9, 59
+Attribute.cs, C#, 34, 0, 0, 5, 10, 49
+AttributeModification_Durational.seqdiag, Sequence Diagram, 0, 12, 0, 0, 2, 14
+AttributeModification_Durational.svg, XML, 0, 0, 1, 0, 0, 1
+AttributeModification_Instant.seqdiag, Sequence Diagram, 0, 13, 0, 0, 3, 16
+AttributeModification_Instant.svg, XML, 0, 0, 1, 0, 0, 1
+AttributeSet.cs, C#, 47, 0, 0, 9, 12, 68
+AttributeType.cs, C#, 6, 0, 0, 0, 3, 9
+BaseAttributeChangeHandler.cs, C#, 8, 0, 0, 0, 5, 13
+Enums\EDurationPolicy.cs, C#, 5, 0, 0, 0, 2, 7
+Enums\EMagnitudeCalculationTypes.cs, C#, 5, 0, 0, 0, 1, 6
+Enums\EModifierOperationTypes.cs, C#, 5, 0, 0, 0, 1, 6
+Extension Methods\ExtensionMethods.cs, C#, 97, 0, 0, 10, 10, 117
+GameplayAbility.cs, C#, 102, 0, 0, 33, 49, 184
+GameplayAbilityTags.cs, C#, 49, 0, 0, 14, 17, 80
+GameplayCooldown.cs, C#, 17, 0, 0, 4, 4, 25
+GameplayCost.cs, C#, 12, 0, 0, 3, 3, 18
+GameplayCues\BaseGameplayCueAction.cs, C#, 7, 0, 0, 3, 3, 13
+GameplayCues\GameplayCue.cs, C#, 27, 0, 0, 0, 7, 34
+GameplayCues\GameplayCueNotify_Actor.cs, C#, 7, 0, 0, 0, 2, 9
+GameplayCues\GameplayCues.cs, C#, 27, 0, 0, 22, 8, 57
+GameplayEffect.cs, C#, 140, 0, 0, 6, 39, 185
+GameplayEffectAggregators.cs, C#, 85, 0, 0, 1, 29, 115
+GameplayEffectModifier.cs, C#, 38, 0, 0, 9, 10, 57
+GameplayEffectPolicy.cs, C#, 19, 0, 0, 0, 6, 25
+GameplayEffectTagContainer.cs, C#, 13, 0, 0, 0, 4, 17
+GameplayEffectTags.cs, C#, 23, 0, 0, 0, 10, 33
+GameplayTag.cs, C#, 19, 0, 0, 19, 6, 44
+Interfaces\AttributeChangeData.cs, C#, 14, 0, 0, 23, 11, 48
+Interfaces\IAbilityTags.cs, C#, 15, 0, 0, 30, 11, 56
+Interfaces\IAddedRemovedTags.cs, C#, 7, 0, 0, 7, 1, 15
+Interfaces\IAttribute.cs, C#, 9, 0, 0, 20, 7, 36
+Interfaces\IAttributeSet.cs, C#, 20, 0, 0, 50, 15, 85
+Interfaces\IGameplayAbility.cs, C#, 27, 0, 0, 69, 15, 111
+Interfaces\IGameplayAbilitySystem.cs, C#, 35, 0, 0, 100, 25, 160
+Interfaces\IGameplayCooldown.cs, C#, 8, 0, 0, 13, 3, 24
+Interfaces\IGameplayCost.cs, C#, 6, 0, 0, 9, 2, 17
+Interfaces\IGameplayEffect.cs, C#, 21, 0, 0, 40, 11, 72
+Interfaces\IGameplayEffectModifier.cs, C#, 22, 0, 0, 33, 11, 66
+Statics\AbilitySystemStatics.cs, C#, 11, 0, 0, 0, 2, 13
+UnityEvents\AbilityEvents.cs, C#, 23, 0, 0, 2, 8, 33
+Total, -, 1463, 41, 3, 668, 526, 2701

@@ -1,10 +1,8 @@
 using UnityEngine;
 
-namespace GameplayAbilitySystem
-{
+namespace GameplayAbilitySystem {
     [CreateAssetMenu(fileName = "AnimationEvent", menuName = "Ability System/Animation System/Animation Event")]
-    public class AnimationEvent : ScriptableObject
-    {
+    public class AnimationEvent : ScriptableObject {
 
     }
 }

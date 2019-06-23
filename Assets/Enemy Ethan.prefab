@@ -2003,6 +2003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955d1cc64d738074886242fa61f0bdf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TargettingLocation: {fileID: 5555714685437583682}
   _onGameplayAbilityActivated:
     m_PersistentCalls:
       m_Calls: []
@@ -2063,9 +2064,9 @@ MonoBehaviour:
   - _attributeType: {fileID: 11400000, guid: 9513cbcc3a089f742b9c48ae4201b1db, type: 2}
     _baseValue: 20
     _currentValue: 20
-  _preAttributeBaseChangeHandler: {fileID: 11400000, guid: d0fb19ee49913db48946ce55707e8938,
+  _preAttributeBaseChangeHandler: {fileID: 0}
+  _preAttributeChangeHandler: {fileID: 11400000, guid: d0fb19ee49913db48946ce55707e8938,
     type: 2}
-  _preAttributeChangeHandler: {fileID: 0}
 --- !u!114 &7899279095716547604
 MonoBehaviour:
   m_ObjectHideFlags: 0

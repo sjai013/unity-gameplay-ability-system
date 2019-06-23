@@ -9,16 +9,14 @@ using UnityEngine.Events;
 using GameplayAbilitySystem.Enums;
 using System.Threading.Tasks;
 
-namespace GameplayAbilitySystem.Interfaces
-{
+namespace GameplayAbilitySystem.Interfaces {
 
     /// <summary>
     /// The <see cref="IGameplayAbilitySystem"/> is the primary component of the Gameplay Ability System.
     /// Every component that needs to participate with the Ability System (such as receiving or dealing damage)
     /// needs to have this component.
     /// </summary>
-    public interface IGameplayAbilitySystem
-    {
+    public interface IGameplayAbilitySystem {
         /// <summary>
         /// Called when a <see cref="IGameplayAbility"/> is activated on this <see cref="IGameplayAbilitySystem"/>.
         /// Activation may or may not result in the ability actually running.  
@@ -126,7 +124,7 @@ namespace GameplayAbilitySystem.Interfaces
         /// </summary>
         /// <param name="AttributeType">Type of attribute to get value of</param>
         /// <returns>Current value of attribute</returns>
-        float GetNumericAttributeCurrent(AttributeType AttributeType);        
+        float GetNumericAttributeCurrent(AttributeType AttributeType);
 
         /// <summary>
         /// Sets the current numerical value of an attribute attached to this <see cref="GameObject"/>
@@ -153,8 +151,7 @@ namespace GameplayAbilitySystem.Interfaces
         void SetNumericAttributeBase(AttributeType AttributeType, float modifier);
     }
 
-    public class GenericGameplayEffectEvent : UnityEvent<GameplayEffect>
-    {
+    public class GenericGameplayEffectEvent : UnityEvent<GameplayEffect> {
 
     }
 

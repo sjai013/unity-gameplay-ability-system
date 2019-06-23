@@ -1,12 +1,10 @@
 using GameplayAbilitySystem.Attributes;
 
-namespace GameplayAbilitySystem.Interfaces
-{
+namespace GameplayAbilitySystem.Interfaces {
     /// <summary>
     /// Attributes are used to define parameters (such as health, speed) for a character.
     /// </summary>
-    public interface IAttribute
-    {
+    public interface IAttribute {
 
         /// <summary>
         /// Describes the type of this attribute
@@ -18,13 +16,13 @@ namespace GameplayAbilitySystem.Interfaces
         /// The base value of the attribute, unaffected by e.g. buffs
         /// </summary>
         /// <value></value>
-        float BaseValue { get;  }
+        float BaseValue { get; }
 
         /// <summary>
         /// This current value of the attribute, after application of temporary effects, e.g. buffs
         /// </summary>
         /// <value></value>        
-        float CurrentValue { get;  }
+        float CurrentValue { get; }
 
 
         /// <summary>

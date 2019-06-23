@@ -4,11 +4,9 @@ using GameplayAbilitySystem.Enums;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.GameplayEffects
-{
+namespace GameplayAbilitySystem.GameplayEffects {
     [Serializable]
-    public class GameplayEffectPolicy : IGameplayEffectPolicy
-    {
+    public class GameplayEffectPolicy : IGameplayEffectPolicy {
         [SerializeField]
         private EDurationPolicy _durationPolicy = default;
 

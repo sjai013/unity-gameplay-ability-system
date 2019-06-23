@@ -3,15 +3,13 @@ using GameplayAbilitySystem.GameplayEffects;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.Attributes
-{
+namespace GameplayAbilitySystem.Attributes {
 
     /// <inheritdoc />
     [AddComponentMenu("Gameplay Ability System/Attribute Set")]
     [System.Serializable]
     [RequireComponent(typeof(AbilitySystemComponent))]
-    public class AttributeSet : MonoBehaviour, IAttributeSet
-    {
+    public class AttributeSet : MonoBehaviour, IAttributeSet {
         [SerializeField]
         private AttributeChangeDataEvent _attributeBaseValueChanged = default;
         /// <inheritdoc />
@@ -36,40 +34,33 @@ namespace GameplayAbilitySystem.Attributes
         public BaseAttributeChangeHandler PreAttributeChangeHandler => _preAttributeChangeHandler;
 
         /// <inheritdoc />
-        public AbilitySystemComponent GetOwningAbilitySystem()
-        {
+        public AbilitySystemComponent GetOwningAbilitySystem() {
             return this.GetComponent<AbilitySystemComponent>();
         }
 
         /// <inheritdoc />
-        public bool PreGameplayEffectExecute(GameplayEffect Effect, GameplayModifierEvaluatedData EvalData)
-        {
+        public bool PreGameplayEffectExecute(GameplayEffect Effect, GameplayModifierEvaluatedData EvalData) {
             return true;
         }
 
         /// <inheritdoc />
-        public void PreAttributeBaseChange(IAttribute Attribute, ref float newMagnitude)
-        {
-            if (_preAttributeBaseChangeHandler != null)
-            {
-                _preAttributeBaseChangeHandler.OnAttributeChange(Attribute, ref newMagnitude);
+        public void PreAttributeBaseChange(IAttribute Attribute, ref float newMagnitude) {
+            if (_preAttributeBaseChangeHandler != null) {
+                _preAttributeBaseChangeHandler.OnAttributeChange(this, Attribute, ref newMagnitude);
             }
             return;
         }
 
         /// <inheritdoc />
-        public void PreAttributeChange(IAttribute Attribute, ref float NewValue)
-        {
-            if (_preAttributeChangeHandler != null)
-            {
-                _preAttributeChangeHandler.OnAttributeChange(Attribute, ref NewValue);
+        public void PreAttributeChange(IAttribute Attribute, ref float NewValue) {
+            if (_preAttributeChangeHandler != null) {
+                _preAttributeChangeHandler.OnAttributeChange(this, Attribute, ref NewValue);
             }
             return;
         }
 
         /// <inheritdoc />
-        public void PostGameplayEffectExecute(GameplayEffect Effect, GameplayModifierEvaluatedData EvalData)
-        {
+        public void PostGameplayEffectExecute(GameplayEffect Effect, GameplayModifierEvaluatedData EvalData) {
             return;
         }
     }

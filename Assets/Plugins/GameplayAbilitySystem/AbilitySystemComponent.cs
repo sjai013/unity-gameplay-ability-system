@@ -15,12 +15,12 @@ using UnityEngine.Events;
 using GameplayAbilitySystem.Enums;
 using GameplayAbilitySystem.GameplayCues;
 
-namespace GameplayAbilitySystem
-{
+namespace GameplayAbilitySystem {
     /// <inheritdoc />
     [AddComponentMenu("Gameplay Ability System/Ability System")]
-    public class AbilitySystemComponent : MonoBehaviour, IGameplayAbilitySystem
-    {
+    public class AbilitySystemComponent : MonoBehaviour, IGameplayAbilitySystem {
+        public Transform TargettingLocation;
+        
         [SerializeField]
         private GenericAbilityEvent _onGameplayAbilityActivated = new GenericAbilityEvent();
         /// <inheritdoc />
@@ -61,24 +61,20 @@ namespace GameplayAbilitySystem
         /// <inheritdoc />
         public GenericAbilityEvent OnGameplayAbilityCommitted => _onGameplayAbilityCommitted;
 
-        public void Awake()
-        {
+        public void Awake() {
             this._activeGameplayEffectsContainer = new ActiveGameplayEffectsContainer(this);
         }
         /// <inheritdoc />
-        public Transform GetActor()
-        {
+        public Transform GetActor() {
             return this.transform;
         }
 
-        void Update()
-        {
+        void Update() {
 
         }
 
         /// <inheritdoc />
-        public void HandleGameplayEvent(GameplayTag EventTag, GameplayEventData Payload)
-        {
+        public void HandleGameplayEvent(GameplayTag EventTag, GameplayEventData Payload) {
             /**
              * TODO: Handle triggered abilities
              * Search component for all abilities that are automatically triggered from a gameplay event
@@ -88,14 +84,12 @@ namespace GameplayAbilitySystem
         }
 
         /// <inheritdoc />
-        public void NotifyAbilityEnded(GameplayAbility ability)
-        {
+        public void NotifyAbilityEnded(GameplayAbility ability) {
             _runningAbilities.Remove(ability);
         }
 
         /// <inheritdoc />
-        public bool TryActivateAbility(GameplayAbility Ability)
-        {
+        public bool TryActivateAbility(GameplayAbility Ability) {
             if (!this.CanActivateAbility(Ability)) return false;
             if (!Ability.IsAbilityActivatable(this)) return false;
             _runningAbilities.Add(Ability);
@@ -105,19 +99,16 @@ namespace GameplayAbilitySystem
         }
 
         /// <inheritdoc />
-        public bool CanActivateAbility(GameplayAbility Ability)
-        {
+        public bool CanActivateAbility(GameplayAbility Ability) {
             // Check if an ability is already active on this ASC
-            if (_runningAbilities.Count > 0)
-            {
+            if (_runningAbilities.Count > 0) {
                 return false;
             }
 
             return true;
         }
 
-        public async void ApplyBatchGameplayEffects(IEnumerable<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects)
-        {
+        public async void ApplyBatchGameplayEffects(IEnumerable<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects) {
 
             var instantEffects = BatchedGameplayEffects.Where(x => x.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant);
             var durationalEffects = BatchedGameplayEffects.Where(
@@ -127,20 +118,16 @@ namespace GameplayAbilitySystem
                     );
 
             // Apply instant effects
-            foreach (var item in instantEffects)
-            {
-                if (await ApplyGameEffectToTarget(item.Effect, item.Target))
-                {
+            foreach (var item in instantEffects) {
+                if (await ApplyGameEffectToTarget(item.Effect, item.Target)) {
                     // item.Target.AddGameplayEffectToActiveList(Effect);
 
                 }
             }
 
             // Apply durational effects
-            foreach (var effect in durationalEffects)
-            {
-                if (await ApplyGameEffectToTarget(effect.Effect, effect.Target))
-                {
+            foreach (var effect in durationalEffects) {
+                if (await ApplyGameEffectToTarget(effect.Effect, effect.Target)) {
 
                 }
             }
@@ -148,8 +135,7 @@ namespace GameplayAbilitySystem
         }
 
         /// <inheritdoc />
-        public Task<GameplayEffect> ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0)
-        {
+        public Task<GameplayEffect> ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0) {
             // TODO: Check to make sure all the attributes being modified by this gameplay effect exist on the target
 
             // TODO: Get list of tags owned by target
@@ -162,26 +148,21 @@ namespace GameplayAbilitySystem
 
             // If this is an instant gameplay effect (i.e. it will modify the base value)
 
-            // If we can apply the GameEffect, apply it to target
-            //Effect.ExecuteEffect(Target);
-
             // Handling Instant effects is different to handling HasDuration and Infinite effects
-            if (Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant)
-            {
+            if (Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
                 Effect.ApplyInstantEffect(Target);
-            }
-            else
-            {
-                var EffectData = new ActiveGameplayEffectData(Effect);
+            } else {
+                // Durational effects require attention to many more things than instant effects
+                // Such as stacking and effect durations
+                var EffectData = new ActiveGameplayEffectData(Effect, this, Target);
                 _ = Target.ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
             }
 
             var gameplayCues = Effect.GameplayCues;
-            // Apply gamecues
-            for (var i = 0; i < gameplayCues.Count; i++)
-            {
+            // Execute gameplay cue
+            for (var i = 0; i < gameplayCues.Count; i++) {
                 var cue = gameplayCues[i];
-                cue.HandleGameplayCue(Target.GetActor().gameObject, EGameplayCueEventTypes.Executed, new GameplayCueParameters(null, null, null));
+                cue.HandleGameplayCue(Target.GetActor().gameObject,new GameplayCueParameters(null, null, null), EGameplayCueEvent.OnActive);
             }
 
             return Task.FromResult(Effect);
@@ -189,29 +170,27 @@ namespace GameplayAbilitySystem
 
 
         /// <inheritdoc />
-        public float GetNumericAttributeBase(AttributeType AttributeType)
-        {
+        public float GetNumericAttributeBase(AttributeType AttributeType) {
             var attributeSet = this.GetComponent<AttributeSet>();
-            return attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType).BaseValue;
+            var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
+            if (attribute == null) return 0;
+            return attribute.BaseValue;
         }
 
         /// <inheritdoc />
-        public float GetNumericAttributeCurrent(AttributeType AttributeType)
-        {
+        public float GetNumericAttributeCurrent(AttributeType AttributeType) {
             var attributeSet = this.GetComponent<AttributeSet>();
             return attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType).CurrentValue;
         }
 
-        public void SetNumericAttributeBase(AttributeType AttributeType, float modifier)
-        {
+        public void SetNumericAttributeBase(AttributeType AttributeType, float modifier) {
             var attributeSet = this.GetComponent<AttributeSet>();
             var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
             var newValue = modifier;
             attribute.SetAttributeBaseValue(attributeSet, ref newValue);
         }
 
-        public void SetNumericAttributeCurrent(AttributeType AttributeType, float NewValue)
-        {
+        public void SetNumericAttributeCurrent(AttributeType AttributeType, float NewValue) {
             var attributeSet = this.GetComponent<AttributeSet>();
             var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
             attribute.SetAttributeCurrentValue(attributeSet, ref NewValue);

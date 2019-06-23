@@ -36,16 +36,6 @@ MonoBehaviour:
       _targetTags:
         RequireTags: []
         IgnoreTags: []
-    - _attributeType: {fileID: 11400000, guid: e5f56864ce3c4b742868ac560a891f48, type: 2}
-      _modifierOperationType: 0
-      _magnitudeCalculationType: 0
-      _scaledMagnitude: 5
-      _sourceTags:
-        RequireTags: []
-        IgnoreTags: []
-      _targetTags:
-        RequireTags: []
-        IgnoreTags: []
   _gameplayEffectTags:
     _assetTags:
       _added: []
@@ -57,5 +47,15 @@ MonoBehaviour:
       _added: []
     _removeGameplayEffectsWithTag:
       _added: []
+  Period:
+    Period: 0
+    ExecuteOnApplication: 0
+    ApplyGameEffectOnExecute: {fileID: 0}
   GameplayCues:
-  - {fileID: 11400000, guid: 9e972e85e71dd3d4692ce68c6f8b8dee, type: 2}
+  - {fileID: 11400000, guid: 576d4a44a75bd1941b1ac46abc36be6d, type: 2}
+  StackingPolicy:
+    StackingType: 0
+    StackLimit: 0
+    StackDurationRefreshPolicy: 0
+    StackPeriodResetPolicy: 0
+    StackExpirationPolicy: 1

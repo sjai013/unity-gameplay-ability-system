@@ -2,14 +2,12 @@ using GameplayAbilitySystem.Attributes;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 
-namespace GameplayAbilitySystem
-{
+namespace GameplayAbilitySystem {
 
     /// <inheritdoc />
     [AddComponentMenu("Ability System/Attributes/Attribute")]
     [System.Serializable]
-    public class Attribute : IAttribute
-    {
+    public class Attribute : IAttribute {
         [SerializeField]
         AttributeType _attributeType;
 
@@ -29,8 +27,7 @@ namespace GameplayAbilitySystem
         public AttributeType AttributeType { get => _attributeType; set => _attributeType = AttributeType; }
 
         /// <inheritdoc />
-        public void SetAttributeCurrentValue(IAttributeSet AttributeSet, ref float NewValue)
-        {
+        public void SetAttributeCurrentValue(IAttributeSet AttributeSet, ref float NewValue) {
             AttributeSet.PreAttributeChange(this, ref NewValue);
             _currentValue = NewValue;
             AttributeSet.AttributeCurrentValueChanged.Invoke(new AttributeChangeData()
@@ -39,8 +36,7 @@ namespace GameplayAbilitySystem
             });
         }
 
-        public void SetAttributeBaseValue(IAttributeSet AttributeSet, ref float NewValue)
-        {
+        public void SetAttributeBaseValue(IAttributeSet AttributeSet, ref float NewValue) {
             AttributeSet.PreAttributeBaseChange(this, ref NewValue);
             _baseValue = NewValue;
             AttributeSet.AttributeBaseValueChanged.Invoke(new AttributeChangeData()

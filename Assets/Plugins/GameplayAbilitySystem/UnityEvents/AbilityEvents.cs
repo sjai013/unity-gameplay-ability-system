@@ -4,22 +4,19 @@ using UnityEngine.Events;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace GameplayAbilitySystem.Events
-{
+namespace GameplayAbilitySystem.Events {
     [Serializable]
-    public class GenericAbilityEvent : UnityEvent<IGameplayAbility>
-    {
+    public class GenericAbilityEvent : UnityEvent<IGameplayAbility> {
 
     }
 
     [Serializable]
-    public class GameplayEvent: UnityEvent<GameplayTag, GameplayEventData> {
+    public class GameplayEvent : UnityEvent<GameplayTag, GameplayEventData> {
 
     }
 
     [Serializable]
-    public struct GameplayEventData
-    {
+    public struct GameplayEventData {
         public GameplayTag EventTag;
         public AbilitySystemComponent Instigator;
         public AbilitySystemComponent Target;
@@ -29,8 +26,8 @@ namespace GameplayAbilitySystem.Events
         public List<GameplayTag> TargetTags;
         public float EventMagnitude;
         // Target Data?
-        
-        
+
+
     }
 
 }

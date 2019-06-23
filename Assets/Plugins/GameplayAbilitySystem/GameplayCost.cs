@@ -3,12 +3,10 @@ using GameplayAbilitySystem.Interfaces;
 using GameplayAbilitySystem.GameplayEffects;
 using UnityEngine;
 
-namespace GameplayAbilitySystem
-{
+namespace GameplayAbilitySystem {
     /// <inheritdoc />
     [Serializable]
-    public class GameplayCost : IGameplayCost
-    {
+    public class GameplayCost : IGameplayCost {
         /// <inheritdoc />
         public GameplayEffect CostGameplayEffect => _costGameplayEffect;
 

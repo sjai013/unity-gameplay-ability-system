@@ -7,14 +7,12 @@ using GameplayAbilitySystem.GameplayEffects;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GameplayAbilitySystem.Interfaces
-{
+namespace GameplayAbilitySystem.Interfaces {
     /// <summary>
     /// This interfaces defines Gameplay Abilities.  Gameplay Abilities represent "things" that players can cast, etc.
     /// E.g. a <see cref="IGameplayAbility"/> might represent a fireball ability which the player casts and which damages a target
     /// </summary>
-    public interface IGameplayAbility
-    {
+    public interface IGameplayAbility {
         /// <summary>
         /// Tags that this ability has/provides
         /// </summary>

@@ -1,5 +1,5 @@
 namespace GameplayAbilitySystem.Enums {
     public enum EMagnitudeCalculationTypes {
-        ScalableFloat, AttributeBased, CustomCalculationClass,SetByCaller
+        ScalableFloat, AttributeBased, CustomCalculationClass, SetByCaller
     }
 }
