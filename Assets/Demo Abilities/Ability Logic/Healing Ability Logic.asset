@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da8376ce57df7894a8e62a6e646480d4, type: 3}
-  m_Name: Blood Pact Ability Logic
+  m_Name: Healing Ability Logic
   m_EditorClassIdentifier: 
-  TargetGameplayEffect: {fileID: 11400000, guid: ffd023926afb8604da27388cef668ff7,
+  TargetGameplayEffect: {fileID: 11400000, guid: f47bf9c2e22e4654989594e61b0fc627,
     type: 2}
-  ExecuteEffectEvent: {fileID: 11400000, guid: b78d40ccd06acd54aab6aa0e215c87e0, type: 2}
-  WaitForEventTag: {fileID: 11400000, guid: 03b751e8ee9c2b54083e24e8634c0e1b, type: 2}
+  ExecuteEffectEvent: {fileID: 0}
+  WaitForEventTag: {fileID: 11400000, guid: 0f7aacaa3f81d2b419604039ea36b254, type: 2}
   AnimationTriggerName: Do_Magic
   CompletionAnimatorStateFullHash: Base.Idle
