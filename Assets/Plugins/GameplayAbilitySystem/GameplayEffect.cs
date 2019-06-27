@@ -37,6 +37,10 @@ namespace GameplayAbilitySystem.GameplayEffects {
             return tags;
         }
 
+        public List<GameplayTag> GetGrantedTags() {
+            return _gameplayEffectTags.GrantedTags.Added;
+        }
+
         public Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> CalculateModifierEffect(Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> Existing = null) {
             Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> modifierTotals;
             if (Existing == null) {

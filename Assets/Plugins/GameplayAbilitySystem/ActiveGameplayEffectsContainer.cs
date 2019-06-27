@@ -27,8 +27,6 @@ namespace GameplayAbilitySystem.GameplayEffects {
         public ActiveEffectAttributeAggregator ActiveEffectAttributeAggregator { get; } = new ActiveEffectAttributeAggregator();
 
         [SerializeField]
-        private List<ActiveGameplayEffectData> _activeCooldowns = new List<ActiveGameplayEffectData>();
-        public List<ActiveGameplayEffectData> ActiveCooldowns { get => _activeCooldowns; }
 
         public ActiveGameplayEffectsEvent ActiveGameplayEffectAdded = new ActiveGameplayEffectsEvent();
 
@@ -77,16 +75,6 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
 
             return EffectData;
-        }
-
-        public async void ApplyCooldownEffect(ActiveGameplayEffectData EffectData) {
-            this.ActiveCooldowns.Add(EffectData);
-            await UniTask.Delay((int)(EffectData.Effect.GameplayEffectPolicy.DurationMagnitude * 1000.0f));
-            this.ActiveCooldowns.Remove(EffectData);
-        }
-
-        public bool IsCooldownEffectPresent(GameplayEffect Effect) {
-            return (this.ActiveCooldowns.Any(x => x.Effect == Effect));
         }
 
         private void OnActiveGameplayEffectAdded(ActiveGameplayEffectData EffectData) {

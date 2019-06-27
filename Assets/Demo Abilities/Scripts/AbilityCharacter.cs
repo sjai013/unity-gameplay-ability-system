@@ -51,7 +51,7 @@ public class AbilityCharacter : MonoBehaviour
 
         var Ability = this.Abilities[n].Ability;
         var Target = this.Abilities[n].AbilityTarget;
-        var eventTag = Ability.Tags.AbilityTags.Count > 0 ? Ability.Tags.AbilityTags[0] : new GameplayTag();
+        var eventTag = Ability.Tags.AbilityTags.Added.Count > 0 ? Ability.Tags.AbilityTags.Added[0] : new GameplayTag();
         var gameplayEventData = new GameplayEventData();
         gameplayEventData.EventTag = eventTag;
         gameplayEventData.Target = Target;
