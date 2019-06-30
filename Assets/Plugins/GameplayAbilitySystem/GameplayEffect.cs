@@ -27,6 +27,8 @@ namespace GameplayAbilitySystem.GameplayEffects {
         public GameplayEffectTags GameplayEffectTags { get => _gameplayEffectTags; }
         public GameplayEffectPolicy GameplayEffectPolicy { get => _gameplayEffectPolicy; }
 
+        public IEnumerable<(GameplayTag Tag, GameplayEffect Effect)> EffectTags => this.GrantedTags.Select(x => (x, this));
+
         public List<GameplayTag> GetOwningTags() {
             var tags = new List<GameplayTag>(_gameplayEffectTags.GrantedTags.Added.Count
                                             + _gameplayEffectTags.AssetTags.Added.Count);
@@ -37,8 +39,12 @@ namespace GameplayAbilitySystem.GameplayEffects {
             return tags;
         }
 
-        public List<GameplayTag> GetGrantedTags() {
-            return _gameplayEffectTags.GrantedTags.Added;
+        public List<GameplayTag> GrantedTags => _gameplayEffectTags.GrantedTags.Added;
+
+        public bool ApplicationRequirementsPass(AbilitySystemComponent AbilitySystem) {
+            // return _gameplayEffectTags.ApplicationTagRequirements.RequirePresence;
+            
+            return true;
         }
 
         public Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> CalculateModifierEffect(Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> Existing = null) {

@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f388a162a5ef9848af39b7f1d10bf54, type: 3}
-  m_Name: Fire
+  m_Script: {fileID: 11500000, guid: 693dcab1d31af7744b28f721da4f30d4, type: 3}
+  m_Name: Ability.Global.Cooldown
   m_EditorClassIdentifier: 
-  Tag: {fileID: 11400000, guid: 84cc62e193ffc4940bb3c442938121f9, type: 2}
-  Sprite: {fileID: 21300000, guid: 012e223bae53ce3439432cd17309ca89, type: 3}
-  SpriteColor: {r: 1, g: 0.44866973, b: 0, a: 1}
+  Comment: 

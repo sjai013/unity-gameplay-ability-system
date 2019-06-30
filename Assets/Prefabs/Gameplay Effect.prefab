@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 2368979380633877765}
   - component: {fileID: 2368979380633877764}
   - component: {fileID: 223490127}
-  - component: {fileID: 7690535404062957972}
+  - component: {fileID: 4558498789277372632}
   m_Layer: 5
   m_Name: Gameplay Effect
   m_TagString: Untagged
@@ -257,7 +257,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2368979380633877766}
   m_CullTransparentMesh: 0
---- !u!114 &7690535404062957972
+--- !u!114 &4558498789277372632
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -266,7 +266,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2368979380633877766}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81fc9b51db7156f43b8d775690c18ea6, type: 3}
+  m_Script: {fileID: 11500000, guid: 321425062f13a8247aff859aa26c1789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ImageIcon: {fileID: 2368979379177886076}

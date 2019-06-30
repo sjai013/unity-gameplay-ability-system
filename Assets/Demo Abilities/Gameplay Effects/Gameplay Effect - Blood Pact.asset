@@ -20,11 +20,8 @@ MonoBehaviour:
     _assetTags:
       _added: []
     _grantedTags:
-      _added: []
-    _ongoingTagRequirements:
-      _added: []
-    _applicationTagRequirements:
-      _added: []
+      _added:
+      - {fileID: 11400000, guid: 03b751e8ee9c2b54083e24e8634c0e1b, type: 2}
     _removeGameplayEffectsWithTag:
       _added: []
   Period:

@@ -63,11 +63,6 @@ namespace GameplayAbilitySystem.Abilities {
         }
 
 
-
-        protected void ApplyGameplayEffectToTarget(GameplayEffect effect, AbilitySystemComponent target) {
-            //
-        }
-
         /// <inheritdoc />
         public virtual void ActivateAbility(IGameplayAbilitySystem AbilitySystem) {
             _abilityLogic.ActivateAbility(AbilitySystem, this);
@@ -76,6 +71,8 @@ namespace GameplayAbilitySystem.Abilities {
 
         /// <inheritdoc />
         public virtual bool IsAbilityActivatable(IGameplayAbilitySystem AbilitySystem) {
+            // Player must be "Idle" to begin ability activation
+            if (AbilitySystem.Animator.GetCurrentAnimatorStateInfo(0).fullPathHash != Animator.StringToHash("Base.Idle")) return false;
             return PlayerHasResourceToCast(AbilitySystem) && AbilityOffCooldown(AbilitySystem);
         }
 
@@ -160,7 +157,7 @@ namespace GameplayAbilitySystem.Abilities {
             var dominantCooldownEffect = AbilitySystem.ActiveGameplayEffectsContainer
                                     .ActiveEffectAttributeAggregator
                                     .GetActiveEffects()
-                                    .Where(x => x.Effect.GetGrantedTags().Intersect(cooldownTags).Any())
+                                    .Where(x => x.Effect.GrantedTags.Intersect(cooldownTags).Any())
                                     .DefaultIfEmpty()
                                     .OrderByDescending(x => x?.CooldownTimeRemaining)
                                     .FirstOrDefault();

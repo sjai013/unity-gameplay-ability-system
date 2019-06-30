@@ -19,6 +19,7 @@ MonoBehaviour:
     _cooldownTags:
       _added:
       - {fileID: 11400000, guid: 910dc94fbfa7a024e88265c21eafc190, type: 2}
+      - {fileID: 11400000, guid: 9a5e97d4d3432d14c81810a21c7a29d3, type: 2}
     _cancelAbilitiesWithTags:
       _added: []
     _blockAbilitiesWithTags:
@@ -42,6 +43,7 @@ MonoBehaviour:
       type: 2}
   _cooldownsToApply:
   - {fileID: 11400000, guid: 422c677cf42e423488b2acaffaa9e642, type: 2}
+  - {fileID: 11400000, guid: d4498b55c0a7526469977fa87a6259b9, type: 2}
   _effectsToApplyOnExecution: []
   _onGameplayAbilityCommitted:
     m_PersistentCalls:

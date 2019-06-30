@@ -9,77 +9,77 @@ namespace GameplayAbilitySystem {
     [Serializable]
     public class GameplayAbilityTags : IAbilityTags {
         /// <inheritdoc />
-        public GameplayEffectTagContainer AbilityTags => _abilityTags;
-        public GameplayEffectTagContainer CooldownTags => _cooldownTags;
+        public GameplayEffectAddRemoveTagContainer AbilityTags => _abilityTags;
+        public GameplayEffectAddRemoveTagContainer CooldownTags => _cooldownTags;
         /// <inheritdoc />
-        public GameplayEffectTagContainer CancelAbilitiesWithTags => _cancelAbilitiesWithTags;
+        public GameplayEffectAddRemoveTagContainer CancelAbilitiesWithTags => _cancelAbilitiesWithTags;
         /// <inheritdoc />
-        public GameplayEffectTagContainer BlockAbilitiesWithTags => _blockAbilitiesWithTags;
+        public GameplayEffectAddRemoveTagContainer BlockAbilitiesWithTags => _blockAbilitiesWithTags;
         /// <inheritdoc />
-        public GameplayEffectTagContainer ActivationOwnedTags => _activationOwnedTags;
+        public GameplayEffectAddRemoveTagContainer ActivationOwnedTags => _activationOwnedTags;
         /// <inheritdoc />
-        public GameplayEffectTagContainer ActivationRequiredTags => _activationRequiredTags;
+        public GameplayEffectAddRemoveTagContainer ActivationRequiredTags => _activationRequiredTags;
         /// <inheritdoc />
-        public GameplayEffectTagContainer ActivationBlockedTags => _activationBlockedTags;
+        public GameplayEffectAddRemoveTagContainer ActivationBlockedTags => _activationBlockedTags;
         /// <inheritdoc />
-        public GameplayEffectTagContainer SourceRequiredTags => _sourceRequiredTags;
+        public GameplayEffectAddRemoveTagContainer SourceRequiredTags => _sourceRequiredTags;
         /// <inheritdoc />
-        public GameplayEffectTagContainer SourceBlockedTags => _sourceBlockedTags;
+        public GameplayEffectAddRemoveTagContainer SourceBlockedTags => _sourceBlockedTags;
         /// <inheritdoc />
-        public GameplayEffectTagContainer TargetRequiredTags => _targetRequiredTags;
+        public GameplayEffectAddRemoveTagContainer TargetRequiredTags => _targetRequiredTags;
         /// <inheritdoc />
-        public GameplayEffectTagContainer TargetBlockedTags => _targetBlockedTags;
+        public GameplayEffectAddRemoveTagContainer TargetBlockedTags => _targetBlockedTags;
 
 
         [Tooltip("Tags for this ability")]
         [SerializeField]
-        protected GameplayEffectTagContainer _abilityTags;
+        protected GameplayEffectAddRemoveTagContainer _abilityTags;
 
         [Tooltip("Tags to determine whether the ability is on cooldown")]
         [SerializeField]
-        protected GameplayEffectTagContainer _cooldownTags;
+        protected GameplayEffectAddRemoveTagContainer _cooldownTags;
 
         [Tooltip("Active abilities on player with this AbilitySystem which have these tags are cancelled")]
         [SerializeField]
-        protected GameplayEffectTagContainer _cancelAbilitiesWithTags;
+        protected GameplayEffectAddRemoveTagContainer _cancelAbilitiesWithTags;
 
 
         [Tooltip("Abilities with these tags will be blocked")]
         [SerializeField]
-        protected GameplayEffectTagContainer _blockAbilitiesWithTags;
+        protected GameplayEffectAddRemoveTagContainer _blockAbilitiesWithTags;
 
         /// <summary>
         /// Tags to apply to activating owner while this ability is active
         /// </summary>
         [Tooltip("Tags to apply to activating owner while this ability is active")]
         [SerializeField]
-        protected GameplayEffectTagContainer _activationOwnedTags;
+        protected GameplayEffectAddRemoveTagContainer _activationOwnedTags;
 
 
         [Tooltip("Ability can only be activated if the activating object has all of these tags")]
         [SerializeField]
-        protected GameplayEffectTagContainer _activationRequiredTags;
+        protected GameplayEffectAddRemoveTagContainer _activationRequiredTags;
 
 
         [Tooltip("Ability is blocked if activating object has any of these tags")]
         [SerializeField]
-        protected GameplayEffectTagContainer _activationBlockedTags;
+        protected GameplayEffectAddRemoveTagContainer _activationBlockedTags;
 
         [Tooltip("Ability can only be activated if source object has all of these tags")]
         [SerializeField]
-        protected GameplayEffectTagContainer _sourceRequiredTags;
+        protected GameplayEffectAddRemoveTagContainer _sourceRequiredTags;
+
+        [Tooltip("Ability is blocked if source object has any of these tags")]
+        [SerializeField]
+        protected GameplayEffectAddRemoveTagContainer _sourceBlockedTags;
 
         [Tooltip("Ability can only be activated if source object has all of these tags")]
         [SerializeField]
-        protected GameplayEffectTagContainer _sourceBlockedTags;
+        protected GameplayEffectAddRemoveTagContainer _targetRequiredTags;
 
-        [Tooltip("Ability can only be activated if source object has all of these tags")]
+        [Tooltip("Ability is blocked if source object has any of these tags")]
         [SerializeField]
-        protected GameplayEffectTagContainer _targetRequiredTags;
-
-        [Tooltip("Ability can only be activated if source object has all of these tags")]
-        [SerializeField]
-        protected GameplayEffectTagContainer _targetBlockedTags;
+        protected GameplayEffectAddRemoveTagContainer _targetBlockedTags;
         
     }
 }
