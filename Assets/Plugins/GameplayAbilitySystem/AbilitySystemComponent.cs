@@ -193,6 +193,29 @@ namespace GameplayAbilitySystem {
                 _ = Target.ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
             }
 
+            // Remove all effects which have tags defined as "Remove Gameplay Effects With Tag". 
+            // We do this by setting the expiry time on the effect to make it end prematurely
+            // This is accomplished by finding all effects which grant these tags, and then adjusting start time
+            var tagsToRemove = Effect.GameplayEffectTags.RemoveGameplayEffectsWithTag.Added;
+            var activeGEs = Target.ActiveTagsByActiveGameplayEffect
+                                    .Where(x => tagsToRemove.Any(y => x.Tag == y.Tag))
+                                    .Join(tagsToRemove, x => x.Tag, x => x.Tag, (x, y) => new { Tag = x.Tag, EffectData = x.GrantingEffect, StacksToRemove = y.StacksToRemove })
+                                    .OrderBy(x => x.EffectData.CooldownTimeRemaining);
+
+            Dictionary<GameplayEffect, int> StacksRemoved = new Dictionary<GameplayEffect, int>();
+            foreach (var GE in activeGEs) {
+                if (!StacksRemoved.ContainsKey(GE.EffectData.Effect)) {
+                    StacksRemoved.Add(GE.EffectData.Effect, 0);
+                }
+                var stacksRemoved = StacksRemoved[GE.EffectData.Effect];
+                if (GE.StacksToRemove == 0 || stacksRemoved < GE.StacksToRemove) {
+                    GE.EffectData.ForceEndEffect();
+                }
+
+                StacksRemoved[GE.EffectData.Effect]++;
+            }
+
+
             var gameplayCues = Effect.GameplayCues;
             // Execute gameplay cue
             for (var i = 0; i < gameplayCues.Count; i++) {

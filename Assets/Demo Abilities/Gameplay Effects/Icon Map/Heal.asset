@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64213770ac1891a4bb059196f0ef53a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f388a162a5ef9848af39b7f1d10bf54, type: 3}
   m_Name: Heal
   m_EditorClassIdentifier: 
-  Ability: {fileID: 11400000, guid: 2ad2b404d2dbabc42ad72e779397634f, type: 2}
+  Tag: {fileID: 11400000, guid: 0f7aacaa3f81d2b419604039ea36b254, type: 2}
   Sprite: {fileID: 21300000, guid: 92a77166f9a72d840a4ad2cce89c7683, type: 3}
-  SpriteColor: {r: 1, g: 1, b: 1, a: 1}
+  SpriteColor: {r: 0.02666688, g: 1, b: 0, a: 1}

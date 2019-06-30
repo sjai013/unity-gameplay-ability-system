@@ -18,13 +18,13 @@ namespace GameplayAbilitySystem.GameplayEffects {
         private GameplayEffectRequireIgnoreTagContainer _applicationTagRequirements = new GameplayEffectRequireIgnoreTagContainer();
 
         [SerializeField]
-        private GameplayEffectAddRemoveTagContainer _removeGameplayEffectsWithTag = new GameplayEffectAddRemoveTagContainer();
+        private GameplayEffectAddRemoveStacksTagContainer _removeGameplayEffectsWithTag = new GameplayEffectAddRemoveStacksTagContainer();
 
         public GameplayEffectAddRemoveTagContainer AssetTags => _assetTags;
         public GameplayEffectAddRemoveTagContainer GrantedTags => _grantedTags;
         public GameplayEffectRequireIgnoreTagContainer OngoingTagRequirements => _ongoingTagRequirements;
         public GameplayEffectRequireIgnoreTagContainer ApplicationTagRequirements => _applicationTagRequirements;
-        public GameplayEffectAddRemoveTagContainer RemoveGameplayEffectsWithTag => _removeGameplayEffectsWithTag;
+        public GameplayEffectAddRemoveStacksTagContainer RemoveGameplayEffectsWithTag => _removeGameplayEffectsWithTag;
 
     }
 

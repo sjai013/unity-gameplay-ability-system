@@ -20,6 +20,10 @@ namespace GameplayAbilitySystem.GameplayEffects {
             }
         }
 
+        bool _bForceRemoveEffect = false;
+
+        public bool bForceRemoveEffect => _bForceRemoveEffect;
+
         /// <summary>
         /// The actual <see cref="GameplayEffect"/>. 
         /// </summary>
@@ -84,6 +88,11 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
         public void EndEffect() {
             this._startWorldTime = Time.time - CooldownTimeTotal;
+        }
+
+        public void ForceEndEffect() {
+            EndEffect();
+            _bForceRemoveEffect = true;
         }
 
         /// <summary>

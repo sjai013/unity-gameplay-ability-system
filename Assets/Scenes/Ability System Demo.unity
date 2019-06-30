@@ -583,6 +583,7 @@ MonoBehaviour:
   GameplayTagIcons:
   - {fileID: 11400000, guid: 7b209934d74a7d24bb7383048b1278ec, type: 2}
   - {fileID: 11400000, guid: ed85940f3735f294882ed592ed72d2ff, type: 2}
+  - {fileID: 11400000, guid: 264cfb9aa77a9a7479735a1d5596061e, type: 2}
 --- !u!1001 &381492119
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6085,6 +6086,16 @@ PrefabInstance:
     - target: {fileID: 3565287711552416142, guid: a5095e4e55136f74b9b9debb65e1356c,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979379789301124, guid: a5095e4e55136f74b9b9debb65e1356c,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.3647059
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979379789301124, guid: a5095e4e55136f74b9b9debb65e1356c,
+        type: 3}
+      propertyPath: m_FillAmount
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

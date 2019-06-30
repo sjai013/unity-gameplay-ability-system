@@ -65,7 +65,7 @@ namespace GameplayAbilitySystem.Interfaces
         /// Removes any existing <see cref="GameplayEffect"/> that have these <see cref="GameplayTag"/>.
         /// </summary>
         /// <value></value>
-        GameplayEffectAddRemoveTagContainer RemoveGameplayEffectsWithTag { get; }
+        GameplayEffectAddRemoveStacksTagContainer RemoveGameplayEffectsWithTag { get; }
     }
 
 }

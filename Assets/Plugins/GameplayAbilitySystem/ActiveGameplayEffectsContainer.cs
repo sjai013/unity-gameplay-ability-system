@@ -136,23 +136,27 @@ namespace GameplayAbilitySystem.GameplayEffects {
         /// effectively "refresh" the effect or end it at will.
         /// </summary>
         /// <param name="EffectData"></param>
-        /// <returns></returns>
+        /// <returns> </returns>
         private async Task WaitForEffectExpiryTime(ActiveGameplayEffectData EffectData) {
             bool durationExpired = false;
             while (!durationExpired) {
                 await UniTask.DelayFrame(0);
 
-                if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration) {
+                if (EffectData.bForceRemoveEffect) {
+                    durationExpired = true;
+                } else if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration) {
                     // Check whether required time has expired
                     // We only need to do this for effects with a finite duration
                     durationExpired = EffectData.CooldownTimeRemaining <= 0 ? true : false;
+                } else if (EffectData.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Infinite) {
+                    durationExpired = EffectData.StartWorldTime <= 0 ? true : false;
                 }
+
 
                 // Periodic effects only occur if the period is > 0
                 if (EffectData.Effect.Period.Period > 0) {
                     CheckAndApplyPeriodicEffect(EffectData);
                 }
-
 
                 if (durationExpired) { // This effect is due for expiry
                     ApplyStackExpirationPolicy(EffectData, ref durationExpired);
@@ -276,6 +280,8 @@ namespace GameplayAbilitySystem.GameplayEffects {
         }
 
     }
+
+    
     public class ActiveGameplayEffectsEvent : UnityEvent<IGameplayAbilitySystem, ActiveGameplayEffectData> {
 
     }

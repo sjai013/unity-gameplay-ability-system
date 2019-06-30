@@ -152,6 +152,7 @@ namespace GameplayAbilitySystem.Interfaces {
 
         IEnumerable <GameplayTag> ActiveTags { get; }
         Animator Animator { get; }
+        IEnumerable<(GameplayTag Tag, ActiveGameplayEffectData GrantingEffect)> ActiveTagsByActiveGameplayEffect { get; }
     }
 
     public class GenericGameplayEffectEvent : UnityEvent<GameplayEffect> {
