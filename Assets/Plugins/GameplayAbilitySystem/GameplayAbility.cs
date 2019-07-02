@@ -73,7 +73,35 @@ namespace GameplayAbilitySystem.Abilities {
         public virtual bool IsAbilityActivatable(IGameplayAbilitySystem AbilitySystem) {
             // Player must be "Idle" to begin ability activation
             if (AbilitySystem.Animator.GetCurrentAnimatorStateInfo(0).fullPathHash != Animator.StringToHash("Base.Idle")) return false;
-            return PlayerHasResourceToCast(AbilitySystem) && AbilityOffCooldown(AbilitySystem);
+            return PlayerHasResourceToCast(AbilitySystem) && AbilityOffCooldown(AbilitySystem) && TagRequirementsMet(AbilitySystem);
+        }
+
+        private bool TagRequirementsMet(IGameplayAbilitySystem AbilitySystem) {
+            // Checks to make sure Source ability system doesn't have prohibited tags
+            var activeTags = AbilitySystem.ActiveTags;
+            var hasActivationRequiredTags = true;
+            var hasActivationBlockedTags = false;
+            var hasSourceRequiredTags = false;
+            var hasSourceBlockedTags = false;
+
+
+            if (this.Tags.ActivationRequiredTags.Added.Count > 0) {
+                hasActivationRequiredTags = !this.Tags.ActivationRequiredTags.Added.Except(activeTags).Any();
+            }
+
+            if (this.Tags.ActivationBlockedTags.Added.Count > 0) {
+                hasActivationBlockedTags = activeTags.Any(x => this.Tags.ActivationBlockedTags.Added.Contains(x));
+            }
+
+            if (this.Tags.SourceRequiredTags.Added.Count > 0) {
+                hasSourceRequiredTags = !this.Tags.SourceRequiredTags.Added.Except(activeTags).Any();
+            }
+
+            if (this.Tags.SourceBlockedTags.Added.Count > 0) {
+                hasSourceBlockedTags = activeTags.Any(x => this.Tags.SourceBlockedTags.Added.Contains(x));
+            }
+
+            return !hasActivationBlockedTags && hasActivationRequiredTags;
         }
 
         /// <summary>

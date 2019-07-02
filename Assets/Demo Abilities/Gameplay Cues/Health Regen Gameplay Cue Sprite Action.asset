@@ -17,4 +17,4 @@ MonoBehaviour:
   Position: {x: 0, y: 0.1, z: 0}
   Rotation: {x: 0, y: 90, z: 90, w: 0}
   Scale: {x: 1, y: 1, z: 1}
-  DestroyInSeconds: 2.5
+  DestroyInSeconds: 3

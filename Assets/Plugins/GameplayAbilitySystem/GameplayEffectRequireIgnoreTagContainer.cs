@@ -1,9 +1,15 @@
+using System;
 using System.Collections.Generic;
 using GameplayAbilitySystem.Interfaces;
+using UnityEngine;
 
 namespace GameplayAbilitySystem.GameplayEffects {
+    [Serializable]
     public class GameplayEffectRequireIgnoreTagContainer : GameplayEffectTagContainer, IRequireIgnoreTags {
+        [SerializeField]
         private List<GameplayTag> _requirePresence = new List<GameplayTag>();
+        
+        [SerializeField]
         private List<GameplayTag> _requireAbsence = new List<GameplayTag>();
 
         public List<GameplayTag> RequirePresence => _requirePresence;

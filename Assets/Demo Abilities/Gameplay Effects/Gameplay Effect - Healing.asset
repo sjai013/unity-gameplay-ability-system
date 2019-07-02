@@ -22,6 +22,12 @@ MonoBehaviour:
     _grantedTags:
       _added:
       - {fileID: 11400000, guid: 0f7aacaa3f81d2b419604039ea36b254, type: 2}
+    _ongoingTagRequirements:
+      _requirePresence: []
+      _requireAbsence: []
+    _applicationTagRequirements:
+      _requirePresence: []
+      _requireAbsence: []
     _removeGameplayEffectsWithTag:
       _added:
       - Tag: {fileID: 11400000, guid: 03b751e8ee9c2b54083e24e8634c0e1b, type: 2}

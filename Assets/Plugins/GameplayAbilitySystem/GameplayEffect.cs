@@ -27,7 +27,23 @@ namespace GameplayAbilitySystem.GameplayEffects {
         public GameplayEffectTags GameplayEffectTags { get => _gameplayEffectTags; }
         public GameplayEffectPolicy GameplayEffectPolicy { get => _gameplayEffectPolicy; }
 
-        public IEnumerable<(GameplayTag Tag, GameplayEffect Effect)> EffectTags => this.GrantedTags.Select(x => (x, this));
+        public IEnumerable<(GameplayTag Tag, GameplayEffect Effect)> GrantedEffectTags => this.GrantedTags.Select(x => (x, this));
+
+        public bool ApplicationTagRequirementMet(IGameplayAbilitySystem AbilitySystem) {
+            var requiredTagsPresent = true;
+            var ignoredTagsAbsent = true;
+
+            if (this.GameplayEffectTags.ApplicationTagRequirements.RequirePresence.Count > 0) {
+                requiredTagsPresent = AbilitySystem.ActiveTags.Any(x => this.GameplayEffectTags.ApplicationTagRequirements.RequirePresence.Contains(x));
+            }
+
+            if (this.GameplayEffectTags.ApplicationTagRequirements.RequireAbsence.Count > 0) {
+                ignoredTagsAbsent = !AbilitySystem.ActiveTags.Any(x => this.GameplayEffectTags.ApplicationTagRequirements.RequireAbsence.Contains(x));
+            }
+
+
+            return requiredTagsPresent && ignoredTagsAbsent;
+        }
 
         public List<GameplayTag> GetOwningTags() {
             var tags = new List<GameplayTag>(_gameplayEffectTags.GrantedTags.Added.Count
@@ -43,7 +59,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
         public bool ApplicationRequirementsPass(AbilitySystemComponent AbilitySystem) {
             // return _gameplayEffectTags.ApplicationTagRequirements.RequirePresence;
-            
+
             return true;
         }
 

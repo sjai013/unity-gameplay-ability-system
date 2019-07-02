@@ -70,10 +70,12 @@ namespace GameplayAbilitySystem {
                 return this.ActiveGameplayEffectsContainer
                             .ActiveEffectAttributeAggregator
                             .GetActiveEffects()
-                            .DefaultIfEmpty()
-                            .SelectMany(x => x.Effect.GameplayEffectTags.GrantedTags.Added);
+                            .SelectMany(x => x.Effect.GameplayEffectTags.GrantedTags.Added)
+                            .Union(AbilityGrantedTags);
             }
         }
+
+        private IEnumerable<GameplayTag> AbilityGrantedTags => this._runningAbilities.SelectMany(x => x.Tags.ActivationOwnedTags.Added);
 
         public IEnumerable<(GameplayTag Tag, ActiveGameplayEffectData GrantingEffect)> ActiveTagsByActiveGameplayEffect {
             get {
@@ -177,7 +179,9 @@ namespace GameplayAbilitySystem {
             // TODO: Check for immunity tags, and don't apply gameplay effect if target is immune (and also add Immunity Tags container to IGameplayEffect)
 
             // TODO: Check to make sure Application Tag Requirements are met (i.e. target has all the required tags, and does not contain any prohibited tags )
-
+            if (!Effect.ApplicationTagRequirementMet(Target)) {
+                return null;
+            }
 
             // If this is a non-instant gameplay effect (i.e. it will modify the current value, not the base value)
 

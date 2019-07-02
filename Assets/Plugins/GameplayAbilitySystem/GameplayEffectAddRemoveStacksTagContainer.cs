@@ -28,6 +28,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
     public class GameplayTagStackComposite {
         [Tooltip("GameplayEffects with this tag will be candidates for removal")]
         public GameplayTag Tag;
+        
         [Tooltip("Number of stacks of each GameEffect to remove.  0 means remove all stacks.")]
         public int StacksToRemove = 0;
     }
