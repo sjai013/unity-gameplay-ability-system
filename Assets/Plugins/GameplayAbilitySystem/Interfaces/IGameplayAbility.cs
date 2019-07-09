@@ -29,7 +29,7 @@ namespace GameplayAbilitySystem.Interfaces {
         /// Cooldowns associated with this ability
         /// </summary>
         /// <value></value>
-        List<GameplayCooldown> GameplayCooldowns { get; }
+        List<GameplayEffect> CooldownsToApply { get; }
 
         /// <summary>
         /// This is called whenever this ability ends.

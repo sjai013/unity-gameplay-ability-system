@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02cc1ff66db5d0749b0bab3afccec0ce, type: 3}
+  m_Name: Gameplay Effect - Healing
+  m_EditorClassIdentifier: 
+  _gameplayEffectPolicy:
+    _durationPolicy: 2
+    _durationMagnitude: 21
+    _modifiers: []
+  _gameplayEffectTags:
+    _assetTags:
+      _added: []
+    _grantedTags:
+      _added:
+      - {fileID: 11400000, guid: 0f7aacaa3f81d2b419604039ea36b254, type: 2}
+    _ongoingTagRequirements:
+      _requirePresence: []
+      _requireAbsence: []
+    _applicationTagRequirements:
+      _requirePresence: []
+      _requireAbsence: []
+    _removeGameplayEffectsWithTag:
+      _added:
+      - Tag: {fileID: 11400000, guid: 03b751e8ee9c2b54083e24e8634c0e1b, type: 2}
+        StacksToRemove: 0
+  Period:
+    Period: 3
+    ExecuteOnApplication: 1
+    ApplyGameEffectOnExecute: {fileID: 11400000, guid: 2f67849ecd9684d42a69798734a9ff04,
+      type: 2}
+  GameplayCues:
+  - {fileID: 11400000, guid: c2fdf7b8b6a3efe4bb8950654af72d18, type: 2}
+  StackingPolicy:
+    StackingType: 0
+    StackLimit: 0
+    StackDurationRefreshPolicy: 0
+    StackPeriodResetPolicy: 0
+    StackExpirationPolicy: 1

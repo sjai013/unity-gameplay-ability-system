@@ -15,6 +15,7 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
         public AnimationEvent ExecuteEffectEvent;
         public GameplayTag WaitForEventTag;
         public string AnimationTriggerName;
+        public string AnimationCompleteTriggerName;
         public string CompletionAnimatorStateFullHash;
 
         public override async void ActivateAbility(IGameplayAbilitySystem AbilitySystem, IGameplayAbility Ability) {
@@ -26,8 +27,11 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
 
             (_, var gameplayEventData) = await AbilitySystem.OnGameplayEvent.WaitForEvent((gameplayTag, eventData) => gameplayTag == WaitForEventTag);
             animatorComponent.SetTrigger(AnimationTriggerName);
+            animatorComponent.SetTrigger(AnimationCompleteTriggerName);
 
-            await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == ExecuteEffectEvent);
+            if (ExecuteEffectEvent != null) {
+                await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == ExecuteEffectEvent);
+            }
             _ = AbilitySystem.ApplyGameEffectToTarget(TargetGameplayEffect, gameplayEventData.Target);
 
 

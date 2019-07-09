@@ -74,7 +74,7 @@ namespace GameplayAbilitySystem.Interfaces {
         /// </summary>
         /// <param name="Ability">The <see cref="GameplayAbility"/> to execute</param>
         /// <returns>True if the ability can be activated, false otherwise</returns>
-        bool CanActivateAbility(GameplayAbility Ability);
+        bool CanActivateAbility(IGameplayAbility Ability);
 
         /// <summary>
         /// Attempts to activate the <see cref="GameplayAbility"/>.
@@ -149,6 +149,10 @@ namespace GameplayAbilitySystem.Interfaces {
         /// </summary>
         void ApplyBatchGameplayEffects(IEnumerable<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects);
         void SetNumericAttributeBase(AttributeType AttributeType, float modifier);
+
+        IEnumerable <GameplayTag> ActiveTags { get; }
+        Animator Animator { get; }
+        IEnumerable<(GameplayTag Tag, ActiveGameplayEffectData GrantingEffect)> ActiveTagsByActiveGameplayEffect { get; }
     }
 
     public class GenericGameplayEffectEvent : UnityEvent<GameplayEffect> {

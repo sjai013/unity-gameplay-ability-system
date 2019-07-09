@@ -2141,6 +2141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 955d1cc64d738074886242fa61f0bdf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TargettingLocation: {fileID: 0}
   _onGameplayAbilityActivated:
     m_PersistentCalls:
       m_Calls: []
@@ -2253,6 +2254,24 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  - Button: Ability 3
+    ButtonState: 2
+    Handler:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7899279095267793605}
+          m_MethodName: CastAbility
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
 --- !u!114 &7899279095267793605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2269,6 +2288,8 @@ MonoBehaviour:
   - Ability: {fileID: 11400000, guid: ae33e3a3cccb84e4fb4bfb4c2d5c089e, type: 2}
     AbilityTarget: {fileID: 0}
   - Ability: {fileID: 11400000, guid: 2583a21c4bcf5a240a37b1568534e68f, type: 2}
+    AbilityTarget: {fileID: 7899279095267793603}
+  - Ability: {fileID: 11400000, guid: 2ad2b404d2dbabc42ad72e779397634f, type: 2}
     AbilityTarget: {fileID: 7899279095267793603}
 --- !u!114 &995664942
 MonoBehaviour:

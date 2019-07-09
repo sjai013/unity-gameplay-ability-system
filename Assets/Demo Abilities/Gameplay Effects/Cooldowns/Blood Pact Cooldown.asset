@@ -28,4 +28,14 @@ MonoBehaviour:
       _added: []
     _removeGameplayEffectsWithTag:
       _added: []
+  Period:
+    Period: 0
+    ExecuteOnApplication: 0
+    ApplyGameEffectOnExecute: {fileID: 0}
   GameplayCues: []
+  StackingPolicy:
+    StackingType: 0
+    StackLimit: 0
+    StackDurationRefreshPolicy: 0
+    StackPeriodResetPolicy: 0
+    StackExpirationPolicy: 0

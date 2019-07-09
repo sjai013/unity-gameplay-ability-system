@@ -16,9 +16,11 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
         public Vector3 ProjectilePositionOffset;
 
         public GameplayEffect TargetGameplayEffect;
+        public AnimationEvent CastingInitiated;
         public AnimationEvent FireProjectile;
         public GameplayTag WaitForEventTag;
         public string AnimationTriggerName;
+        public string ProjectileFireTriggerName;
         public string CompletionAnimatorStateFullHash;
 
         public override async void ActivateAbility(IGameplayAbilitySystem AbilitySystem, IGameplayAbility Ability) {
@@ -30,14 +32,20 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
 
             (_, var gameplayEventData) = await AbilitySystem.OnGameplayEvent.WaitForEvent((gameplayTag, eventData) => gameplayTag == WaitForEventTag);
             animatorComponent.SetTrigger(AnimationTriggerName);
+
             List<GameObject> objectsSpawned = new List<GameObject>();
 
             GameObject instantiatedProjectile = null;
+            
+            await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == CastingInitiated);
 
             if (Projectile != null) {
                 instantiatedProjectile = Instantiate(Projectile);
                 instantiatedProjectile.transform.position = abilitySystemActor.transform.position + this.ProjectilePositionOffset + abilitySystemActor.transform.forward * 1.2f;
             }
+
+            animatorComponent.SetTrigger(ProjectileFireTriggerName);
+
 
             await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == FireProjectile);
 

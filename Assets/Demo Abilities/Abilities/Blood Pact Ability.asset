@@ -14,22 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tags:
     _abilityTags:
-    - {fileID: 11400000, guid: 03b751e8ee9c2b54083e24e8634c0e1b, type: 2}
-    _cancelAbilitiesWithTags: []
-    _blockAbilitiesWithTags: []
-    _activationOwnedTags: []
-    _activationRequiredTags: []
-    _activationBlockedTags: []
-    _sourceRequiredTags: []
-    _sourceBlockedTags: []
-    _targetRequiredTags: []
-    _targetBlockedTags: []
+      _added:
+      - {fileID: 11400000, guid: 03b751e8ee9c2b54083e24e8634c0e1b, type: 2}
+    _cooldownTags:
+      _added:
+      - {fileID: 11400000, guid: bcc193d422b231841b87591da788bb05, type: 2}
+      - {fileID: 11400000, guid: 9a5e97d4d3432d14c81810a21c7a29d3, type: 2}
+    _cancelAbilitiesWithTags:
+      _added: []
+    _blockAbilitiesWithTags:
+      _added: []
+    _activationOwnedTags:
+      _added: []
+    _activationRequiredTags:
+      _added: []
+    _activationBlockedTags:
+      _added: []
+    _sourceRequiredTags:
+      _added: []
+    _sourceBlockedTags:
+      _added: []
+    _targetRequiredTags:
+      _added: []
+    _targetBlockedTags:
+      _added: []
   _gameplayCost:
     _costGameplayEffect: {fileID: 11400000, guid: 37b17980154ac5e46924458c6fb0c447,
       type: 2}
-  _gameplayCooldowns:
-  - _cooldownGameplayEffect: {fileID: 11400000, guid: c0b5b25c4db1c8345acb375a405fdda4,
-      type: 2}
+  _cooldownsToApply:
+  - {fileID: 11400000, guid: c0b5b25c4db1c8345acb375a405fdda4, type: 2}
+  - {fileID: 11400000, guid: d4498b55c0a7526469977fa87a6259b9, type: 2}
+  _effectsToApplyOnExecution: []
   _onGameplayAbilityCommitted:
     m_PersistentCalls:
       m_Calls: []

@@ -41,12 +41,10 @@ MonoBehaviour:
       _added: []
     _grantedTags:
       _added: []
-    _ongoingTagRequirements:
-      _added: []
-    _applicationTagRequirements:
-      _added: []
     _removeGameplayEffectsWithTag:
-      _added: []
+      _added:
+      - Tag: {fileID: 0}
+        StacksToRemove: 0
   Period:
     Period: 0
     ExecuteOnApplication: 0

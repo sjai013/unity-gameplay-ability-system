@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02cc1ff66db5d0749b0bab3afccec0ce, type: 3}
+  m_Name: Gameplay Effect - Regen Health
+  m_EditorClassIdentifier: 
+  _gameplayEffectPolicy:
+    _durationPolicy: 0
+    _durationMagnitude: 0
+    _modifiers:
+    - _attributeType: {fileID: 11400000, guid: 08c3bc3be14b22e4aadc300234c0587a, type: 2}
+      _modifierOperationType: 0
+      _magnitudeCalculationType: 0
+      _scaledMagnitude: 5
+      _sourceTags:
+        RequireTags: []
+        IgnoreTags: []
+      _targetTags:
+        RequireTags: []
+        IgnoreTags: []
+  _gameplayEffectTags:
+    _assetTags:
+      _added: []
+    _grantedTags:
+      _added: []
+    _removeGameplayEffectsWithTag:
+      _added: []
+  Period:
+    Period: 0
+    ExecuteOnApplication: 0
+    ApplyGameEffectOnExecute: {fileID: 0}
+  GameplayCues:
+  - {fileID: 11400000, guid: a0a0a94b358c56f45aaceb55727bf3d9, type: 2}
+  StackingPolicy:
+    StackingType: 0
+    StackLimit: 0
+    StackDurationRefreshPolicy: 0
+    StackPeriodResetPolicy: 0
+    StackExpirationPolicy: 1

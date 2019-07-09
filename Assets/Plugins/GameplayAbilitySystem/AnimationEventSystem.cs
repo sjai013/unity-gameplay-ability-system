@@ -19,6 +19,9 @@ namespace GameplayAbilitySystem {
     /// An Animation Event System for managing animation on a component and returning animation events
     /// </summary>
     public class AnimationEventSystem : MonoBehaviour {
+
+        public AnimationEvent PreviousAnimationEvent;
+
         /// <summary>
         /// Delegate to execute when custom animation events are triggered on the character
         /// </summary>
@@ -38,7 +41,7 @@ namespace GameplayAbilitySystem {
         /// <param name="eventName">Name of the animation event that occured</param>
         public void OnAnimationEvent(AnimationEvent evt) {
             CustomAnimationEvent?.Invoke(evt);
-
+            this.PreviousAnimationEvent = evt;
         }
 
         /// <summary>

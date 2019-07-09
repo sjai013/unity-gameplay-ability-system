@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameplayEffectPolicy:
     _durationPolicy: 2
-    _durationMagnitude: 0.5
+    _durationMagnitude: 2
     _modifiers: []
   _gameplayEffectTags:
     _assetTags:
@@ -31,6 +31,7 @@ MonoBehaviour:
   Period:
     Period: 0
     ExecuteOnApplication: 0
+    ApplyGameEffectOnExecute: {fileID: 0}
   GameplayCues: []
   StackingPolicy:
     StackingType: 0

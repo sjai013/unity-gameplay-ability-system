@@ -1,6 +1,6 @@
 using TMPro;
 
-public class GameplayEffectStatusBarButton : GenericUIIcon {
+public class GameplayTagStatusBarButton : GenericUIIcon {
     public TextMeshProUGUI TextMeshPro;
 
     public void SetStacks(int stacks) {

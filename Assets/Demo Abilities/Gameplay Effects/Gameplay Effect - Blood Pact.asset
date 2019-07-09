@@ -14,17 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameplayEffectPolicy:
     _durationPolicy: 2
-    _durationMagnitude: 5
+    _durationMagnitude: 20
     _modifiers: []
   _gameplayEffectTags:
     _assetTags:
       _added: []
     _grantedTags:
-      _added: []
-    _ongoingTagRequirements:
-      _added: []
-    _applicationTagRequirements:
-      _added: []
+      _added:
+      - {fileID: 11400000, guid: 03b751e8ee9c2b54083e24e8634c0e1b, type: 2}
     _removeGameplayEffectsWithTag:
       _added: []
   Period:
@@ -36,7 +33,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 74a66fb2dcac9bd499073ecdc7d3cdd1, type: 2}
   StackingPolicy:
     StackingType: 1
-    StackLimit: 2
+    StackLimit: 5
     StackDurationRefreshPolicy: 0
     StackPeriodResetPolicy: 0
     StackExpirationPolicy: 1

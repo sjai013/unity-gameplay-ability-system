@@ -15,11 +15,11 @@ MonoBehaviour:
   Projectile: {fileID: 1562012672535379221, guid: f7bc84987aa57c54490b6e94cb99c9ad,
     type: 3}
   ProjectilePositionOffset: {x: 0, y: 1.5, z: 0}
-  ProjectileRotationOffset: {x: 0, y: 0, z: 0}
   TargetGameplayEffect: {fileID: 11400000, guid: 0b4f7e812aed06446b00075efc10cbf7,
     type: 2}
+  CastingInitiated: {fileID: 11400000, guid: b78d40ccd06acd54aab6aa0e215c87e0, type: 2}
   FireProjectile: {fileID: 11400000, guid: a390e7f3b0587f24daef94744108743c, type: 2}
   WaitForEventTag: {fileID: 11400000, guid: 84cc62e193ffc4940bb3c442938121f9, type: 2}
   AnimationTriggerName: Do_Magic
+  ProjectileFireTriggerName: Execute_Magic
   CompletionAnimatorStateFullHash: Base.Idle
-  ProjectileSpeed: 1

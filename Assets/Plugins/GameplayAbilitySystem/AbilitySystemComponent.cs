@@ -20,7 +20,7 @@ namespace GameplayAbilitySystem {
     [AddComponentMenu("Gameplay Ability System/Ability System")]
     public class AbilitySystemComponent : MonoBehaviour, IGameplayAbilitySystem {
         public Transform TargettingLocation;
-        
+
         [SerializeField]
         private GenericAbilityEvent _onGameplayAbilityActivated = new GenericAbilityEvent();
         /// <inheritdoc />
@@ -61,8 +61,41 @@ namespace GameplayAbilitySystem {
         /// <inheritdoc />
         public GenericAbilityEvent OnGameplayAbilityCommitted => _onGameplayAbilityCommitted;
 
+        private Animator _animator;
+
+        public Animator Animator => _animator;
+
+        public IEnumerable<GameplayTag> ActiveTags {
+            get {
+                return this.ActiveGameplayEffectsContainer
+                            .ActiveEffectAttributeAggregator
+                            .GetActiveEffects()
+                            .SelectMany(x => x.Effect.GameplayEffectTags.GrantedTags.Added)
+                            .Union(AbilityGrantedTags);
+            }
+        }
+
+        private IEnumerable<GameplayTag> AbilityGrantedTags => this._runningAbilities.SelectMany(x => x.Tags.ActivationOwnedTags.Added);
+
+        public IEnumerable<(GameplayTag Tag, ActiveGameplayEffectData GrantingEffect)> ActiveTagsByActiveGameplayEffect {
+            get {
+                var activeEffects = this.ActiveGameplayEffectsContainer
+                            .ActiveEffectAttributeAggregator
+                            .GetActiveEffects();
+
+                if (activeEffects == null) return new List<(GameplayTag, ActiveGameplayEffectData)>();
+
+                var activeEffectsTags = activeEffects.SelectMany(x =>
+                     x.Effect.GrantedTags
+                     .Select(y => (y, x)));
+
+                return activeEffectsTags;
+            }
+        }
+
         public void Awake() {
             this._activeGameplayEffectsContainer = new ActiveGameplayEffectsContainer(this);
+            this._animator = this.GetComponent<Animator>();
         }
         /// <inheritdoc />
         public Transform GetActor() {
@@ -72,6 +105,8 @@ namespace GameplayAbilitySystem {
         void Update() {
 
         }
+
+
 
         /// <inheritdoc />
         public void HandleGameplayEvent(GameplayTag EventTag, GameplayEventData Payload) {
@@ -99,11 +134,12 @@ namespace GameplayAbilitySystem {
         }
 
         /// <inheritdoc />
-        public bool CanActivateAbility(GameplayAbility Ability) {
-            // Check if an ability is already active on this ASC
-            if (_runningAbilities.Count > 0) {
+        public bool CanActivateAbility(IGameplayAbility Ability) {
+            // Check if this ability is already active on this ASC
+            if (_runningAbilities.Contains(Ability)) {
                 return false;
             }
+
 
             return true;
         }
@@ -142,7 +178,10 @@ namespace GameplayAbilitySystem {
 
             // TODO: Check for immunity tags, and don't apply gameplay effect if target is immune (and also add Immunity Tags container to IGameplayEffect)
 
-            // TODO: Check to make sure Application Tag Requirements are met (i.e. target has the required tags, if any)
+            // TODO: Check to make sure Application Tag Requirements are met (i.e. target has all the required tags, and does not contain any prohibited tags )
+            if (!Effect.ApplicationTagRequirementMet(Target)) {
+                return null;
+            }
 
             // If this is a non-instant gameplay effect (i.e. it will modify the current value, not the base value)
 
@@ -158,11 +197,34 @@ namespace GameplayAbilitySystem {
                 _ = Target.ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
             }
 
+            // Remove all effects which have tags defined as "Remove Gameplay Effects With Tag". 
+            // We do this by setting the expiry time on the effect to make it end prematurely
+            // This is accomplished by finding all effects which grant these tags, and then adjusting start time
+            var tagsToRemove = Effect.GameplayEffectTags.RemoveGameplayEffectsWithTag.Added;
+            var activeGEs = Target.ActiveTagsByActiveGameplayEffect
+                                    .Where(x => tagsToRemove.Any(y => x.Tag == y.Tag))
+                                    .Join(tagsToRemove, x => x.Tag, x => x.Tag, (x, y) => new { Tag = x.Tag, EffectData = x.GrantingEffect, StacksToRemove = y.StacksToRemove })
+                                    .OrderBy(x => x.EffectData.CooldownTimeRemaining);
+
+            Dictionary<GameplayEffect, int> StacksRemoved = new Dictionary<GameplayEffect, int>();
+            foreach (var GE in activeGEs) {
+                if (!StacksRemoved.ContainsKey(GE.EffectData.Effect)) {
+                    StacksRemoved.Add(GE.EffectData.Effect, 0);
+                }
+                var stacksRemoved = StacksRemoved[GE.EffectData.Effect];
+                if (GE.StacksToRemove == 0 || stacksRemoved < GE.StacksToRemove) {
+                    GE.EffectData.ForceEndEffect();
+                }
+
+                StacksRemoved[GE.EffectData.Effect]++;
+            }
+
+
             var gameplayCues = Effect.GameplayCues;
             // Execute gameplay cue
             for (var i = 0; i < gameplayCues.Count; i++) {
                 var cue = gameplayCues[i];
-                cue.HandleGameplayCue(Target.GetActor().gameObject,new GameplayCueParameters(null, null, null), EGameplayCueEvent.OnActive);
+                cue.HandleGameplayCue(Target.GetActor().gameObject, new GameplayCueParameters(null, null, null), EGameplayCueEvent.OnActive);
             }
 
             return Task.FromResult(Effect);
