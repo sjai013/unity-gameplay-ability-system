@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetGameplayEffect: {fileID: 11400000, guid: ffd023926afb8604da27388cef668ff7,
     type: 2}
-  ExecuteEffectEvent: {fileID: 11400000, guid: b78d40ccd06acd54aab6aa0e215c87e0, type: 2}
+  ExecuteEffectEvent: {fileID: 11400000, guid: 7fd97a92d981e3c428c3b627a5f3d559, type: 2}
   WaitForEventTag: {fileID: 11400000, guid: 03b751e8ee9c2b54083e24e8634c0e1b, type: 2}
   AnimationTriggerName: Do_Magic
+  AnimationCompleteTriggerName: Execute_Magic_2
   CompletionAnimatorStateFullHash: Base.Idle

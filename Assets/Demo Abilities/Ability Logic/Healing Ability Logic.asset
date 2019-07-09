@@ -17,4 +17,5 @@ MonoBehaviour:
   ExecuteEffectEvent: {fileID: 0}
   WaitForEventTag: {fileID: 11400000, guid: 0f7aacaa3f81d2b419604039ea36b254, type: 2}
   AnimationTriggerName: Do_Magic
+  AnimationCompleteTriggerName: Execute_Magic_2
   CompletionAnimatorStateFullHash: Base.Idle
