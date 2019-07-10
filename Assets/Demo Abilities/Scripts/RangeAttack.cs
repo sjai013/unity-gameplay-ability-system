@@ -18,6 +18,9 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
         public GameplayEffect TargetGameplayEffect;
         public AnimationEvent CastingInitiated;
         public AnimationEvent FireProjectile;
+
+        public AnimationEvent StartComboSeek;
+        public AnimationEvent EndComboSeek;
         public GameplayTag WaitForEventTag;
         public string AnimationTriggerName;
         public string ProjectileFireTriggerName;
@@ -36,8 +39,10 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
             List<GameObject> objectsSpawned = new List<GameObject>();
 
             GameObject instantiatedProjectile = null;
-            
+
             await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == CastingInitiated);
+
+
 
             if (Projectile != null) {
                 instantiatedProjectile = Instantiate(Projectile);
@@ -46,10 +51,7 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
 
             animatorComponent.SetTrigger(ProjectileFireTriggerName);
 
-
             await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == FireProjectile);
-
-
 
             // Animation complete.  Spawn and send projectile at target
             if (instantiatedProjectile != null) {
@@ -61,6 +63,10 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
             await beh.StateEnter.WaitForEvent((animator, stateInfo, layerIndex) => stateInfo.fullPathHash == Animator.StringToHash(CompletionAnimatorStateFullHash));
 
             Ability.EndAbility(AbilitySystem);
+        }
+
+        private async Task<bool> WaitForComboPress(AnimationEvent StartEvent, AnimationEvent EndEvent) {
+            return false;
         }
 
         private async void SeekTargetAndDestroy(IGameplayAbilitySystem AbilitySystem, GameplayEventData gameplayEventData, GameObject projectile) {
