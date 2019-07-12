@@ -1995,6 +1995,7 @@ GameObject:
   - component: {fileID: 7899279095267793607}
   - component: {fileID: 7899279095267793605}
   - component: {fileID: 995664942}
+  - component: {fileID: 2062594784305420120}
   m_Layer: 0
   m_Name: Ethan
   m_TagString: Untagged
@@ -2114,6 +2115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 544bca395e0b0ef4d9dfece00bc3c242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PreviousAnimationEvent: {fileID: 0}
   CustomAnimationEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -2157,8 +2159,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: GameplayAbilitySystem.Events.GameplayEvent, Assembly-CSharp-firstpass,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _activeGameplayEffectsContainer:
-    _activeCooldowns: []
   _onGameplayAbilityCommitted:
     m_PersistentCalls:
       m_Calls: []
@@ -2304,6 +2304,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StatChangeHandler: {fileID: 11400000, guid: 80a161f938c6c674ca02402d6ecd7c52, type: 2}
+--- !u!114 &2062594784305420120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7899279095267793602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf10cdea1344482e91a4f2b58506b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7899279095267793604
 GameObject:
   m_ObjectHideFlags: 0

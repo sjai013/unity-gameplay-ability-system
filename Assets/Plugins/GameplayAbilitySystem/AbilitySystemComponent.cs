@@ -1,63 +1,72 @@
-﻿using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using GameplayAbilitySystem.Abilities;
+using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Enums;
+using GameplayAbilitySystem.Events;
+using GameplayAbilitySystem.ExtensionMethods;
+using GameplayAbilitySystem.GameplayCues;
+using GameplayAbilitySystem.GameplayEffects;
+using GameplayAbilitySystem.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using GameplayAbilitySystem.ExtensionMethods;
-using GameplayAbilitySystem.Abilities;
-using GameplayAbilitySystem.Events;
-using GameplayAbilitySystem.GameplayEffects;
-using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
-using GameplayAbilitySystem.Attributes;
 using UnityEngine.Events;
-using GameplayAbilitySystem.Enums;
-using GameplayAbilitySystem.GameplayCues;
 
 namespace GameplayAbilitySystem {
+
     /// <inheritdoc />
     [AddComponentMenu("Gameplay Ability System/Ability System")]
     public class AbilitySystemComponent : MonoBehaviour, IGameplayAbilitySystem {
         public Transform TargettingLocation;
 
         [SerializeField]
-        private GenericAbilityEvent _onGameplayAbilityActivated = new GenericAbilityEvent();
+        private readonly GenericAbilityEvent _onGameplayAbilityActivated = new GenericAbilityEvent();
+
         /// <inheritdoc />
         public GenericAbilityEvent OnGameplayAbilityActivated => _onGameplayAbilityActivated;
 
         [SerializeField]
-        private GenericAbilityEvent _onGameplayAbilityEnded = new GenericAbilityEvent();
+        private readonly GenericAbilityEvent _onGameplayAbilityEnded = new GenericAbilityEvent();
+
         /// <inheritdoc />
         public GenericAbilityEvent OnGameplayAbilityEnded => _onGameplayAbilityEnded;
 
         [SerializeField]
-        private GameplayEvent _onGameplayEvent = new GameplayEvent();
+        private readonly GameplayEvent _onGameplayEvent = new GameplayEvent();
+
         /// <inheritdoc />
         public GameplayEvent OnGameplayEvent => _onGameplayEvent;
 
         [SerializeField]
         protected ActiveGameplayEffectsContainer _activeGameplayEffectsContainer;
+
         /// <inheritdoc />
         public ActiveGameplayEffectsContainer ActiveGameplayEffectsContainer => _activeGameplayEffectsContainer;
 
         [SerializeField]
         protected List<IGameplayAbility> _runningAbilities = new List<IGameplayAbility>();
+
         /// <inheritdoc />
         public List<IGameplayAbility> RunningAbilities => _runningAbilities;
 
         [SerializeField]
         protected GenericGameplayEffectEvent _onEffectAdded = new GenericGameplayEffectEvent();
+
         /// <inheritdoc />
         public GenericGameplayEffectEvent OnEffectAdded => _onEffectAdded;
 
         [SerializeField]
         protected GenericGameplayEffectEvent _onEffectRemoved = new GenericGameplayEffectEvent();
+
         /// <inheritdoc />
         public GenericGameplayEffectEvent OnEffectRemoved => _onEffectRemoved;
 
         [SerializeField]
-        private GenericAbilityEvent _onGameplayAbilityCommitted = new GenericAbilityEvent();
+        private readonly GenericAbilityEvent _onGameplayAbilityCommitted = new GenericAbilityEvent();
+
         /// <inheritdoc />
         public GenericAbilityEvent OnGameplayAbilityCommitted => _onGameplayAbilityCommitted;
 
@@ -67,7 +76,7 @@ namespace GameplayAbilitySystem {
 
         public IEnumerable<GameplayTag> ActiveTags {
             get {
-                return this.ActiveGameplayEffectsContainer
+                return ActiveGameplayEffectsContainer
                             .ActiveEffectAttributeAggregator
                             .GetActiveEffects()
                             .SelectMany(x => x.Effect.GameplayEffectTags.GrantedTags.Added)
@@ -75,11 +84,11 @@ namespace GameplayAbilitySystem {
             }
         }
 
-        private IEnumerable<GameplayTag> AbilityGrantedTags => this._runningAbilities.SelectMany(x => x.Tags.ActivationOwnedTags.Added);
+        private IEnumerable<GameplayTag> AbilityGrantedTags => _runningAbilities.SelectMany(x => x.Tags.ActivationOwnedTags.Added);
 
         public IEnumerable<(GameplayTag Tag, ActiveGameplayEffectData GrantingEffect)> ActiveTagsByActiveGameplayEffect {
             get {
-                var activeEffects = this.ActiveGameplayEffectsContainer
+                var activeEffects = ActiveGameplayEffectsContainer
                             .ActiveEffectAttributeAggregator
                             .GetActiveEffects();
 
@@ -94,19 +103,17 @@ namespace GameplayAbilitySystem {
         }
 
         public void Awake() {
-            this._activeGameplayEffectsContainer = new ActiveGameplayEffectsContainer(this);
-            this._animator = this.GetComponent<Animator>();
+            _activeGameplayEffectsContainer = new ActiveGameplayEffectsContainer(this);
+            _animator = GetComponent<Animator>();
         }
+
         /// <inheritdoc />
         public Transform GetActor() {
-            return this.transform;
+            return transform;
         }
 
-        void Update() {
-
+        private void Update() {
         }
-
-
 
         /// <inheritdoc />
         public void HandleGameplayEvent(GameplayTag EventTag, GameplayEventData Payload) {
@@ -125,7 +132,7 @@ namespace GameplayAbilitySystem {
 
         /// <inheritdoc />
         public bool TryActivateAbility(GameplayAbility Ability) {
-            if (!this.CanActivateAbility(Ability)) return false;
+            if (!CanActivateAbility(Ability)) return false;
             if (!Ability.IsAbilityActivatable(this)) return false;
             _runningAbilities.Add(Ability);
             Ability.CommitAbility(this);
@@ -140,12 +147,10 @@ namespace GameplayAbilitySystem {
                 return false;
             }
 
-
             return true;
         }
 
         public async void ApplyBatchGameplayEffects(IEnumerable<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects) {
-
             var instantEffects = BatchedGameplayEffects.Where(x => x.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant);
             var durationalEffects = BatchedGameplayEffects.Where(
                 x =>
@@ -157,17 +162,14 @@ namespace GameplayAbilitySystem {
             foreach (var item in instantEffects) {
                 if (await ApplyGameEffectToTarget(item.Effect, item.Target)) {
                     // item.Target.AddGameplayEffectToActiveList(Effect);
-
                 }
             }
 
             // Apply durational effects
             foreach (var effect in durationalEffects) {
                 if (await ApplyGameEffectToTarget(effect.Effect, effect.Target)) {
-
                 }
             }
-
         }
 
         /// <inheritdoc />
@@ -190,14 +192,15 @@ namespace GameplayAbilitySystem {
             // Handling Instant effects is different to handling HasDuration and Infinite effects
             if (Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
                 Effect.ApplyInstantEffect(Target);
-            } else {
+            }
+            else {
                 // Durational effects require attention to many more things than instant effects
                 // Such as stacking and effect durations
                 var EffectData = new ActiveGameplayEffectData(Effect, this, Target);
                 _ = Target.ActiveGameplayEffectsContainer.ApplyGameEffect(EffectData);
             }
 
-            // Remove all effects which have tags defined as "Remove Gameplay Effects With Tag". 
+            // Remove all effects which have tags defined as "Remove Gameplay Effects With Tag".
             // We do this by setting the expiry time on the effect to make it end prematurely
             // This is accomplished by finding all effects which grant these tags, and then adjusting start time
             var tagsToRemove = Effect.GameplayEffectTags.RemoveGameplayEffectsWithTag.Added;
@@ -219,7 +222,6 @@ namespace GameplayAbilitySystem {
                 StacksRemoved[GE.EffectData.Effect]++;
             }
 
-
             var gameplayCues = Effect.GameplayCues;
             // Execute gameplay cue
             for (var i = 0; i < gameplayCues.Count; i++) {
@@ -230,10 +232,9 @@ namespace GameplayAbilitySystem {
             return Task.FromResult(Effect);
         }
 
-
         /// <inheritdoc />
         public float GetNumericAttributeBase(AttributeType AttributeType) {
-            var attributeSet = this.GetComponent<AttributeSet>();
+            var attributeSet = GetComponent<AttributeSet>();
             var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
             if (attribute == null) return 0;
             return attribute.BaseValue;
@@ -241,26 +242,21 @@ namespace GameplayAbilitySystem {
 
         /// <inheritdoc />
         public float GetNumericAttributeCurrent(AttributeType AttributeType) {
-            var attributeSet = this.GetComponent<AttributeSet>();
+            var attributeSet = GetComponent<AttributeSet>();
             return attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType).CurrentValue;
         }
 
         public void SetNumericAttributeBase(AttributeType AttributeType, float modifier) {
-            var attributeSet = this.GetComponent<AttributeSet>();
+            var attributeSet = GetComponent<AttributeSet>();
             var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
             var newValue = modifier;
             attribute.SetAttributeBaseValue(attributeSet, ref newValue);
         }
 
         public void SetNumericAttributeCurrent(AttributeType AttributeType, float NewValue) {
-            var attributeSet = this.GetComponent<AttributeSet>();
+            var attributeSet = GetComponent<AttributeSet>();
             var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
             attribute.SetAttributeCurrentValue(attributeSet, ref NewValue);
         }
-
     }
-
-
-
-
 }
