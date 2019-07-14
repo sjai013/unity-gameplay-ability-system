@@ -41,9 +41,7 @@ MonoBehaviour:
   _gameplayCost:
     _costGameplayEffect: {fileID: 11400000, guid: 520415e26382f224c867fce4071958df,
       type: 2}
-  _cooldownsToApply:
-  - {fileID: 11400000, guid: 422c677cf42e423488b2acaffaa9e642, type: 2}
-  - {fileID: 11400000, guid: d4498b55c0a7526469977fa87a6259b9, type: 2}
+  _cooldownsToApply: []
   _effectsToApplyOnExecution: []
   _onGameplayAbilityCommitted:
     m_PersistentCalls:
