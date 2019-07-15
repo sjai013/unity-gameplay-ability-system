@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
@@ -18,8 +19,15 @@ public struct TagContainer : ITagIdentifier {
     }
 }
 
-public static class GameplayTagCache {
-    public static int[] TagHash;
-    public static int[] TagParentHash;
-    public static bool[] HasValidParent;
+public struct GameplayTagCache  {
+    public int[] TagHash;
+    public int[] TagParentHash;
+    public Bbool[] HasValidParent;
 }
+
+public struct GameplayTagComponent : IComponentData {
+    public int TagHash;
+    public int TagParentHash;
+    public Bbool HasValidParent;
+}
+    

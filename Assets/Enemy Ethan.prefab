@@ -1976,10 +1976,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 544bca395e0b0ef4d9dfece00bc3c242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PreviousAnimationEvent: {fileID: 0}
   CustomAnimationEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.CustomAnimationUnityEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.CustomAnimationUnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   AnimationComplete:
     m_PersistentCalls:
@@ -2004,28 +2005,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargettingLocation: {fileID: 5555714685437583682}
-  _onGameplayAbilityActivated:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _onGameplayAbilityEnded:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _onGameplayEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GameplayEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _activeGameplayEffectsContainer:
-    _activeCooldowns: []
-  _onGameplayAbilityCommitted:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &5555714685437361608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2041,12 +2020,12 @@ MonoBehaviour:
   _attributeBaseValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _attributeCurrentValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _attributes:
   - _attributeType: {fileID: 11400000, guid: 8769ea8817563784a87cb6142aef671b, type: 2}
@@ -2059,11 +2038,11 @@ MonoBehaviour:
     _baseValue: 5
     _currentValue: 5
   - _attributeType: {fileID: 11400000, guid: 124a7a186e5666c4b8fdc11ca51efeb7, type: 2}
-    _baseValue: 20
-    _currentValue: 20
+    _baseValue: 5
+    _currentValue: 5
   - _attributeType: {fileID: 11400000, guid: 9513cbcc3a089f742b9c48ae4201b1db, type: 2}
-    _baseValue: 20
-    _currentValue: 20
+    _baseValue: 5
+    _currentValue: 5
   _preAttributeBaseChangeHandler: {fileID: 0}
   _preAttributeChangeHandler: {fileID: 11400000, guid: d0fb19ee49913db48946ce55707e8938,
     type: 2}

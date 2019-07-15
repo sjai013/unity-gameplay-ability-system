@@ -6,16 +6,12 @@ using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-public class GameplayTagHasher : MonoBehaviour {
+public class GameplayTagHasher : MonoBehaviour, IConvertGameObjectToEntity {
 
     [SerializeField]
     private List<GameplayTag> Tags;
 
-    // Start is called before the first frame update
-    private void Awake() {
-        BuildHash();
-    }
-
+    private GameplayTagCache TagHash;
     private void BuildHash() {
         //GameplayTagHashList.TagHash.TryAdd(Tags[0])
         Dictionary<GameplayTag, GameplayTag> TagHierarchy = new Dictionary<GameplayTag, GameplayTag>();
@@ -69,19 +65,34 @@ public class GameplayTagHasher : MonoBehaviour {
         }
 
         // Map Tag ancestor hierarchy to GameplayTagHashList
-        GameplayTagCache.TagHash = new int[TagHierarchy.Count];
-        GameplayTagCache.TagParentHash = new int[TagHierarchy.Count];
-        GameplayTagCache.HasValidParent = new bool[TagHierarchy.Count];
+        TagHash.TagHash = new int[TagHierarchy.Count];
+        TagHash.TagParentHash = new int[TagHierarchy.Count];
+        TagHash.HasValidParent = new Bbool[TagHierarchy.Count];
+
         Dictionary<int, GameplayTag> hashTagDict = new Dictionary<int, GameplayTag>();
 
         for (var i = 0; i < TagHierarchy.Count; i++) {
             var tag = TagHierarchy.ElementAt(i);
-            GameplayTagCache.TagHash[i] = tag.Key.GetHashCode();
+            TagHash.TagHash[i] = tag.Key.GetHashCode();
             if (tag.Value != null) {
-                GameplayTagCache.TagParentHash[i] = tag.Value.GetHashCode();
+                TagHash.TagParentHash[i] = tag.Value.GetHashCode();
             }
-            GameplayTagCache.HasValidParent[i] = tag.Value != null;
+            TagHash.HasValidParent[i] = tag.Value != null;
             hashTagDict.Add(tag.Key.GetHashCode(), tag.Key);
+        }
+
+    }
+
+    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
+        BuildHash();
+        for (int i = 0; i < TagHash.TagHash.Length; i++) {
+            var data = new GameplayTagComponent {
+                TagHash = TagHash.TagHash[i],
+                HasValidParent = TagHash.HasValidParent[i],
+                TagParentHash = TagHash.TagParentHash[i]
+            };
+            var newEntity = dstManager.CreateEntity(typeof(GameplayTagComponent));
+            dstManager.SetComponentData(newEntity, data);
         }
     }
 }

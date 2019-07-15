@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Unity.Collections;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,7 +21,7 @@ namespace GameplayAbilitySystem {
 
     /// <inheritdoc />
     [AddComponentMenu("Gameplay Ability System/Ability System")]
-    public class AbilitySystemComponent : MonoBehaviour, IGameplayAbilitySystem {
+    public class AbilitySystemComponent : MonoBehaviour, IGameplayAbilitySystem, IConvertGameObjectToEntity {
         public Transform TargettingLocation;
 
         [SerializeField]
@@ -257,6 +259,10 @@ namespace GameplayAbilitySystem {
             var attributeSet = GetComponent<AttributeSet>();
             var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
             attribute.SetAttributeCurrentValue(attributeSet, ref NewValue);
+        }
+
+        public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
+
         }
     }
 }
