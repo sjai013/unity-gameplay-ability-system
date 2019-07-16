@@ -19,15 +19,13 @@ public struct TagContainer : ITagIdentifier {
     }
 }
 
-public struct GameplayTagCache  {
-    public int[] TagHash;
-    public int[] TagParentHash;
-    public Bbool[] HasValidParent;
-}
-
 public struct GameplayTagComponent : IComponentData {
-    public int TagHash;
-    public int TagParentHash;
-    public Bbool HasValidParent;
+    public int Tag;
+    public int Parent1Tag;
+    public int Parent2Tag;
+    public int Parent3Tag;
+    public int Parent4Tag;
+    public int Parent5Tag;
+    public int Parent6Tag;
 }
     

@@ -9,34 +9,21 @@ namespace GameplayAbilitySystem {
     [CreateAssetMenu(fileName = "Gameplay Tag", menuName = "Ability System/Gameplay Tag")]
     [Serializable]
     public class GameplayTag : ScriptableObject {
-        /// <summary>
-        /// A static container for keeping track of all <see cref="GameplayTag"/> that are used.
-        /// </summary>
-        /// <typeparam name="GameplayTag"></typeparam>
-        /// <returns></returns>
-        public static HashSet<GameplayTag> GameplayTags = new HashSet<GameplayTag>();
 
         /// <summary>
         /// A developer friendly comment
         /// </summary>
         public string Comment;
 
-        void OnEnable() {
-            /// <summary>
-            /// When this <see cref="ScriptableObject"/> is initialised, add the instance to the static container <see cref="GameplayTags"/>
-            /// </summary>
-            /// <returns></returns>
-            if (!GameplayTags.Contains(this)) {
-                GameplayTags.Add(this);
-            }
+        [SerializeField]
+        private int UniqueId;
+
+        public void SetUniqueId(int id) {
+            this.UniqueId = id;
         }
 
-        void OnDisable() {
-            /// <summary>
-            /// When this <see cref="ScriptableObject"/> is destroyed, remove the instance from the static container <see cref="GameplayTags"/>
-            /// </summary>
-            /// <returns></returns>
-            GameplayTags.Remove(this);
+        public override int GetHashCode() {
+            return this.UniqueId;
         }
 
     }
