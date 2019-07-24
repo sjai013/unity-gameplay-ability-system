@@ -67,6 +67,12 @@ namespace GameplayAbilitySystem.Attributes {
             return;
         }
 
+        public void UpdateAttributes() {
+            for (int i = 0; i < Attributes.Count; i++) {
+
+            }
+        }
+
         /// <inheritdoc />
         public void PostGameplayEffectExecute(GameplayEffect Effect, GameplayModifierEvaluatedData EvalData) {
             return;

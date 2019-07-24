@@ -14,8 +14,5 @@ public class ECSBootstrap : MonoBehaviour {
         PlayerLoopHelper.Initialize(ref playerLoop);
 
         var entityManager = World.Active.EntityManager;
-        var entity = entityManager.CreateEntity(typeof(PlayerInputComponent));
-
-        entityManager.SetComponentData(entity, new PlayerInputComponent());
     }
 }

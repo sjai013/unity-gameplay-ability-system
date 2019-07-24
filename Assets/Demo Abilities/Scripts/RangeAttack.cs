@@ -7,6 +7,7 @@ using GameplayAbilitySystem.GameplayEffects;
 using GameplayAbilitySystem.Interfaces;
 using UniRx.Async;
 using UnityEngine;
+using UnityStandardAssets.Cameras;
 
 namespace GameplayAbilitySystem.Abilities.AbilityActivations {
     [CreateAssetMenu(fileName = "Ability", menuName = "Ability System Demo/Ability Logic/Range Attack")]
@@ -27,9 +28,12 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
         public string CompletionAnimatorStateFullHash;
 
         public override async void ActivateAbility(IGameplayAbilitySystem AbilitySystem, IGameplayAbility Ability) {
+
+
             var abilitySystemActor = AbilitySystem.GetActor();
             var animationEventSystemComponent = abilitySystemActor.GetComponent<AnimationEventSystem>();
             var animatorComponent = abilitySystemActor.GetComponent<Animator>();
+
 
             // Make sure we have enough resources.  End ability if we don't
 
@@ -64,6 +68,7 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
 
             Ability.EndAbility(AbilitySystem);
         }
+
 
         private async Task<bool> WaitForComboPress(AnimationEvent StartEvent, AnimationEvent EndEvent) {
             return false;

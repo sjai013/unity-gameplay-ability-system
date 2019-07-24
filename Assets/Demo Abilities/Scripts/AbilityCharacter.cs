@@ -24,13 +24,6 @@ public class AbilityCharacter : MonoBehaviour
     }
 
 
-
-    public void CastAbility1()
-    {
-
-
-    }
-
     public (float CooldownElapsed, float CooldownTotal) GetCooldownOfAbility(int n)
     {
         if (n >= this.Abilities.Count) return (0f, 0f);
@@ -56,6 +49,7 @@ public class AbilityCharacter : MonoBehaviour
         gameplayEventData.EventTag = eventTag;
         gameplayEventData.Target = Target;
 
+        
         // If ability can be activated
         if (SelfAbilitySystem.TryActivateAbility(Ability))
         {

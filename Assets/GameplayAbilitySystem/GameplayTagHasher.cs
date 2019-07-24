@@ -73,12 +73,12 @@ public class GameplayTagHasher : MonoBehaviour, IConvertGameObjectToEntity {
             var parent6 = item.Value.Count > 5 ? item.Value[5].GetHashCode() : -1;
             var data = new GameplayTagComponent {
                 Tag = tag,
-                Parent1Tag = parent1,
-                Parent2Tag = parent2,
-                Parent3Tag = parent3,
-                Parent4Tag = parent4,
-                Parent5Tag = parent5,
-                Parent6Tag = parent6,
+                //Parent1Tag = parent1,
+                //Parent2Tag = parent2,
+                //Parent3Tag = parent3,
+                //Parent4Tag = parent4,
+                //Parent5Tag = parent5,
+                //Parent6Tag = parent6,
             };
             var newEntity = dstManager.CreateEntity(typeof(GameplayTagComponent));
             dstManager.SetComponentData(newEntity, data);

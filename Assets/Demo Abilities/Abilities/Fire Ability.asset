@@ -46,16 +46,17 @@ MonoBehaviour:
   _onGameplayAbilityCommitted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _onGameplayAbilityCancelled:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _onGameplayAbilityEnded:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _abilityLogic: {fileID: 11400000, guid: 4f3e3ff7f3ca608469026940d5c8db6f, type: 2}
+  _targettingLogic: {fileID: 11400000, guid: 604af0617a0031f42bc70904134f577f, type: 2}

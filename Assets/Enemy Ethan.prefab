@@ -1891,6 +1891,9 @@ GameObject:
   - component: {fileID: 5555714685437361603}
   - component: {fileID: 5555714685437361608}
   - component: {fileID: 7899279095716547604}
+  - component: {fileID: 4296990303564377507}
+  - component: {fileID: 7606552053032496123}
+  - component: {fileID: 319760963773948485}
   m_Layer: 0
   m_Name: Enemy Ethan
   m_TagString: Untagged
@@ -2038,11 +2041,11 @@ MonoBehaviour:
     _baseValue: 5
     _currentValue: 5
   - _attributeType: {fileID: 11400000, guid: 124a7a186e5666c4b8fdc11ca51efeb7, type: 2}
-    _baseValue: 5
-    _currentValue: 5
+    _baseValue: 50
+    _currentValue: 50
   - _attributeType: {fileID: 11400000, guid: 9513cbcc3a089f742b9c48ae4201b1db, type: 2}
-    _baseValue: 5
-    _currentValue: 5
+    _baseValue: 50
+    _currentValue: 50
   _preAttributeBaseChangeHandler: {fileID: 0}
   _preAttributeChangeHandler: {fileID: 11400000, guid: d0fb19ee49913db48946ce55707e8938,
     type: 2}
@@ -2059,6 +2062,105 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StatChangeHandler: {fileID: 11400000, guid: 80a161f938c6c674ca02402d6ecd7c52, type: 2}
+--- !u!114 &4296990303564377507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555714685437361602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98537c238586d554397a08703062c104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Abilities:
+  - Ability: {fileID: 11400000, guid: ae33e3a3cccb84e4fb4bfb4c2d5c089e, type: 2}
+    AbilityTarget: {fileID: 0}
+  - Ability: {fileID: 11400000, guid: 2583a21c4bcf5a240a37b1568534e68f, type: 2}
+    AbilityTarget: {fileID: 5555714685437361603}
+  - Ability: {fileID: 11400000, guid: 2ad2b404d2dbabc42ad72e779397634f, type: 2}
+    AbilityTarget: {fileID: 5555714685437361603}
+--- !u!114 &7606552053032496123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555714685437361602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c616ba6d7fe50574a8085de0087bf060, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Inputs:
+  - Button: Ability 1
+    ButtonState: 2
+    Handler:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4296990303564377507}
+          m_MethodName: CastAbility
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Button: Ability 2
+    ButtonState: 2
+    Handler:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4296990303564377507}
+          m_MethodName: CastAbility
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Button: Ability 3
+    ButtonState: 2
+    Handler:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4296990303564377507}
+          m_MethodName: CastAbility
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+--- !u!114 &319760963773948485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555714685437361602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 1
 --- !u!1 &5555714685437361604
 GameObject:
   m_ObjectHideFlags: 0

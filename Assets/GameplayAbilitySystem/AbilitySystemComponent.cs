@@ -253,6 +253,7 @@ namespace GameplayAbilitySystem {
             var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
             var newValue = modifier;
             attribute.SetAttributeBaseValue(attributeSet, ref newValue);
+            
         }
 
         public void SetNumericAttributeCurrent(AttributeType AttributeType, float NewValue) {

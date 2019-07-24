@@ -7,7 +7,8 @@ using UnityEngine.Events;
 public class InputManager : MonoBehaviour {
     public static List<GameObject> ActiveInputComponents = new List<GameObject>();
 
-    public List<InputHandler> Inputs = new List<InputHandler>();
+    [SerializeField]
+    private List<InputHandler> Inputs = new List<InputHandler>();
 
     // Start is called before the first frame update
     private void Awake() {
@@ -16,6 +17,13 @@ public class InputManager : MonoBehaviour {
         }
     }
 
+    public int InputLength() {
+        return Inputs.Count;
+    }
+
+    public InputHandler GetElementAt(int i) {
+        return Inputs[i];
+    }
     //private void Update() {
     //    for (int i = 0; i < Inputs.Count; i++) {
     //        bool triggerEvent = false;

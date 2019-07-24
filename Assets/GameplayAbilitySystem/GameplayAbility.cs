@@ -39,6 +39,9 @@ namespace GameplayAbilitySystem.Abilities {
         [SerializeField]
         private AbstractAbilityActivation _abilityLogic = null;
 
+        [SerializeField]
+        private AbstractTargettingLogic _targettingLogic = null;
+
 
 
         /// <inheritdoc />
@@ -65,6 +68,7 @@ namespace GameplayAbilitySystem.Abilities {
 
         /// <inheritdoc />
         public virtual void ActivateAbility(IGameplayAbilitySystem AbilitySystem) {
+            if (_targettingLogic != null) _targettingLogic.InitiateTargetting(AbilitySystem, this);
             _abilityLogic.ActivateAbility(AbilitySystem, this);
             ApplyCooldown(AbilitySystem);
         }
