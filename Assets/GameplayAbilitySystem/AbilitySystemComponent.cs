@@ -74,6 +74,8 @@ namespace GameplayAbilitySystem {
 
         private Animator _animator;
 
+        public Entity entity { private set; get; }
+
         public Animator Animator => _animator;
 
         public IEnumerable<GameplayTag> ActiveTags {
@@ -263,7 +265,7 @@ namespace GameplayAbilitySystem {
         }
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-
+            this.entity = entity;
         }
     }
 }

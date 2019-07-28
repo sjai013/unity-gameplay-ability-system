@@ -10,7 +10,7 @@ using UniRx.Async;
 using System.Threading.Tasks;
 using UnityEngine;
 using GameplayAbilitySystem.GameplayCues;
-
+using Unity.Entities;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     [Serializable]
@@ -60,7 +60,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
                     break;
             }
 
-
+            CreateGEEntity(EffectData);
             existingStacks = matchingStackedActiveEffects?.Count() ?? -1;
             if (existingStacks < maxStacks) { // We can still add more stacks.
                 AddActiveGameplayEffect(EffectData);
@@ -76,6 +76,53 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
 
             return EffectData;
+        }
+
+        private void CreateGEEntity(ActiveGameplayEffectData effectData) {
+            var entityManager = World.Active.EntityManager;
+            var gameplayEffectData = new GameplayEffectDurationComponent() {
+                WorldStartTime = Time.realtimeSinceStartup,
+                Duration = effectData.Effect.GameplayEffectPolicy.DurationMagnitude,
+            };
+
+            Dictionary<int, (AttributeType attribute, float add, float multiply, float divide)> attributeMods = new Dictionary<int, (AttributeType attribute, float add, float multiply, float divide)>();
+
+            foreach (var modifier in effectData.Effect.GameplayEffectPolicy.Modifiers) {
+                var add = 0f;
+                var multiply = 1f;
+                var divide = 1f;
+                if (modifier.ModifierOperation == Enums.EModifierOperationType.Add) add += modifier.ScaledMagnitude;
+                if (modifier.ModifierOperation == Enums.EModifierOperationType.Multiply) multiply += modifier.ScaledMagnitude;
+                if (modifier.ModifierOperation == Enums.EModifierOperationType.Divide) divide -= modifier.ScaledMagnitude;
+                 
+                if (!attributeMods.TryGetValue(modifier.Attribute.AttributeId, out var attrs)) {
+                    attrs = (null, 1, 1, 1);
+                }
+
+                attrs.add += add;
+                attrs.multiply *= multiply;
+                attrs.divide *= divide;
+
+                attributeMods.Add(modifier.Attribute.AttributeId,attrs);
+            }
+
+            foreach (var item in attributeMods) {
+                var attributeModEntity = entityManager.CreateEntity(typeof(TemporaryAttributeModificationComponent), typeof(GameplayEffectDurationComponent), typeof(AttributeModifyComponent));
+
+                // Get base attribute value
+                var attrValue = effectData.Target.GetNumericAttributeBase(item.Value.attribute);
+                var attributeModData = new TemporaryAttributeModificationComponent() {
+                    Change = (attrValue + item.Value.add) * (item.Value.multiply / item.Value.divide), 
+                    Source = effectData.Instigator.entity,
+                    Target = effectData.Target.entity
+                };
+
+                entityManager.SetComponentData(attributeModEntity, attributeModData);
+                entityManager.SetComponentData(attributeModEntity, gameplayEffectData);
+            }
+
+
+
         }
 
         private void OnActiveGameplayEffectAdded(ActiveGameplayEffectData EffectData) {

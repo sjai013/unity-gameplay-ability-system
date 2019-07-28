@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using GameplayAbilitySystem.Enums;
 using System.Threading.Tasks;
+using Unity.Entities;
 
 namespace GameplayAbilitySystem.Interfaces {
 
@@ -153,6 +154,8 @@ namespace GameplayAbilitySystem.Interfaces {
         IEnumerable <GameplayTag> ActiveTags { get; }
         Animator Animator { get; }
         IEnumerable<(GameplayTag Tag, ActiveGameplayEffectData GrantingEffect)> ActiveTagsByActiveGameplayEffect { get; }
+
+        Entity entity { get; }
     }
 
     public class GenericGameplayEffectEvent : UnityEvent<GameplayEffect> {

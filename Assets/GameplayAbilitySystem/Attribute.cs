@@ -8,6 +8,8 @@ namespace GameplayAbilitySystem {
     [AddComponentMenu("Ability System/Attributes/Attribute")]
     [System.Serializable]
     public class Attribute : IAttribute {
+
+
         [SerializeField]
         AttributeType _attributeType;
 
