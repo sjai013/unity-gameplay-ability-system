@@ -19,7 +19,7 @@ MonoBehaviour:
     - _attributeType: {fileID: 11400000, guid: 124a7a186e5666c4b8fdc11ca51efeb7, type: 2}
       _modifierOperationType: 0
       _magnitudeCalculationType: 0
-      _scaledMagnitude: -5
+      _scaledMagnitude: -1
       _sourceTags:
         RequireTags: []
         IgnoreTags: []

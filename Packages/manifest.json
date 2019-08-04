@@ -2,11 +2,11 @@
   "dependencies": {
     "com.unity.ads": "2.0.8",
     "com.unity.analytics": "3.3.2",
-    "com.unity.burst": "1.0.4",
+    "com.unity.burst": "1.1.1",
     "com.unity.collab-proxy": "1.2.16",
     "com.unity.entities": "0.0.12-preview.33",
     "com.unity.jobs": "0.0.7-preview.13",
-    "com.unity.mathematics": "1.0.1",
+    "com.unity.mathematics": "1.1.0",
     "com.unity.package-manager-ui": "2.1.2",
     "com.unity.purchasing": "2.0.6",
     "com.unity.rendering.hybrid": "0.0.1-preview.13",

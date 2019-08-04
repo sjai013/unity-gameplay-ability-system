@@ -1,25 +1,22 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 
-public struct GameplayEffectDurationComponent : IComponentData {
+public struct GameplayEffectDurationComponent : GameplayEffectComponent, IComponentData {
     public float WorldStartTime;
     public float Duration;
     public float TimeRemaining;
 }
 
 
-public struct TemporaryAttributeModificationComponent : AttributeModificationComponent {
+public struct AttributeModificationComponent : IComponentData {
     public float Change;
     public Entity Source;
     public Entity Target;
-    public Entity GameplayEffectDuration;
 }
 
-public struct PermanentAttributeModificationComponent : AttributeModificationComponent {
-    public float Change;
-    public Entity Source;
-    public Entity Target;
-}
+public struct TemporaryAttributeModification : IComponentData { }
+public struct PermanentAttributeModification : IComponentData { }
+
 
 public struct GameplayEffectExpired : IComponentData { }
 
@@ -28,8 +25,11 @@ public struct PeriodicGameplayEffect : IComponentData {
     public Entity GameplayEffectToExecute;
 }
 
-public interface AttributeModificationComponent : IComponentData {
-
-}
+public interface GameplayEffectComponent  { }
 
 public struct AttributeModificationUndoAppliedComponent : IComponentData { }
+
+public struct HealthAttributeModifier : IComponentData { }
+public struct MaxHealthAttributeModifier : IComponentData { }
+public struct ManaAttributeModifier : IComponentData { }
+public struct MaxManaAttributeModifier : IComponentData { }

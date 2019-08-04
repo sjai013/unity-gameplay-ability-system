@@ -15,9 +15,9 @@ public class GameplayEffectUpdateDurationSystem : JobComponentSystem {
     [ExcludeComponent(typeof(GameplayEffectExpired))]
     struct Job : IJobForEachWithEntity<GameplayEffectDurationComponent> {
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
-        public float realTimeSinceStartup;
+        public float timeElapsed; 
         public void Execute(Entity entity, int index, ref GameplayEffectDurationComponent durationComponent) {
-            durationComponent.TimeRemaining = durationComponent.Duration - (realTimeSinceStartup - durationComponent.WorldStartTime);
+            durationComponent.TimeRemaining = durationComponent.Duration - (timeElapsed - durationComponent.WorldStartTime);
             if (durationComponent.TimeRemaining <= 0) {
                 EntityCommandBuffer.AddComponent(index, entity, new GameplayEffectExpired());
             }
@@ -28,7 +28,7 @@ public class GameplayEffectUpdateDurationSystem : JobComponentSystem {
     protected override JobHandle OnUpdate(JobHandle inputDependencies) {
         var job = new Job() {
             EntityCommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(),
-            realTimeSinceStartup = Time.realtimeSinceStartup
+            timeElapsed = Time.time
         };
 
         var jobHandle = job.Schedule(this, inputDependencies);
@@ -36,4 +36,3 @@ public class GameplayEffectUpdateDurationSystem : JobComponentSystem {
         return jobHandle;
     }
 }
-

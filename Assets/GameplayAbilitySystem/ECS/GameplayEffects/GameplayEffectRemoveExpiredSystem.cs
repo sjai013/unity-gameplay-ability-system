@@ -28,3 +28,4 @@ public class GameplayEffectRemoveExpiredSystem : JobComponentSystem {
         return jobHandle;
     }
 }
+

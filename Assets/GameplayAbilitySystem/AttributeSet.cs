@@ -102,8 +102,6 @@ namespace GameplayAbilitySystem.Attributes {
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             var data = new AttributesComponent {
                 Health = new BaseAttributeComponent {
-                    //BaseValue = Attributes.FirstOrDefault(x => x.AttributeType.name == "Health").BaseValue,
-                    //CurrentValue = Attributes.FirstOrDefault(x => x.AttributeType.name == "Health").CurrentValue
                     BaseValue = 0,
                     CurrentValue = 0,
                 },
@@ -127,5 +125,6 @@ namespace GameplayAbilitySystem.Attributes {
 
             dstManager.AddComponentData(entity, data);
         }
+
     }
 }
