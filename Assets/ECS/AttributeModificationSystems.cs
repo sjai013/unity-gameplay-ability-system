@@ -23,16 +23,33 @@ public class ManaAttributeModificationUndoSystem : GameplayEffectAttributeModifi
 public struct HealthAttributeModifierJob : AttributeModifierJob {
     public EntityCommandBuffer.Concurrent Ecb { get; set; }
     [NativeDisableContainerSafetyRestriction] [WriteOnly] private ComponentDataFromEntity<AttributesComponent> _attrComponents;
-    public ComponentDataFromEntity<AttributesComponent> attrComponents { get => _attrComponents; set => _attrComponents = value; }
+    [ReadOnly] private ComponentDataFromEntity<TemporaryAttributeModification> _tempAttributeModifier;
+    [ReadOnly] private ComponentDataFromEntity<PermanentAttributeModification> _permanentAttributeModifier;
+    public ComponentDataFromEntity<AttributesComponent> AttrComponents { get => _attrComponents; set => _attrComponents = value; }
+    public ComponentDataFromEntity<TemporaryAttributeModification> TempAttributeModifier { get => _tempAttributeModifier; set => _tempAttributeModifier = value; }
+    public ComponentDataFromEntity<PermanentAttributeModification> PermanentAttributeModifier { get => _permanentAttributeModifier; set => _permanentAttributeModifier = value; }
 
-    public void Execute(Entity entity, int index, [ReadOnly] ref AttributeModificationComponent attrMod) {
-        if (attrComponents.Exists(attrMod.Target)) {
+    public void Execute(Entity entity, int index, ref AttributeModificationComponent attrMod) {
+        if (_attrComponents.Exists(attrMod.Target)) {
             var attrs = _attrComponents[attrMod.Target];
-            attrs.Health.CurrentValue += attrMod.Change; ;
+            var attr = attrs.Health;
+            attrMod.Change = attrMod.Add + (attr.BaseValue * attrMod.Multiply) + (attrMod.Divide != 0 ? attr.BaseValue / attrMod.Divide : 0);
+
+            if (_tempAttributeModifier.Exists(entity)) {
+                attr.CurrentValue += attrMod.Change;
+            }
+            if (_permanentAttributeModifier.Exists(entity)) {
+                attr.BaseValue += attrMod.Change;
+            }
+            attrs.Health = attr;
             _attrComponents[attrMod.Target] = attrs;
         }
 
-        Ecb.RemoveComponent<AttributeModifyComponent>(index, entity);
+        if (_permanentAttributeModifier.Exists(entity)) {
+            Ecb.DestroyEntity(index, entity);
+        } else {
+            Ecb.RemoveComponent<AttributeModifyComponent>(index, entity);
+        }
     }
 }
 
@@ -40,7 +57,7 @@ public struct HealthAttributeModifierJob : AttributeModifierJob {
 [RequireComponentTag(typeof(GameplayEffectExpired), typeof(TemporaryAttributeModification), typeof(HealthAttributeModifier))]
 public struct HealthAttributeUndoJob : AttributeModifierUndoJob {
     [NativeDisableContainerSafetyRestriction] [WriteOnly] public ComponentDataFromEntity<AttributesComponent> _attrComponents;
-    public ComponentDataFromEntity<AttributesComponent> attrComponents { get => _attrComponents; set => _attrComponents = value; }
+    public ComponentDataFromEntity<AttributesComponent> AttrComponents { get => _attrComponents; set => _attrComponents = value; }
 
     public void Execute(Entity entity, int index, [ReadOnly] ref AttributeModificationComponent attrMod) {
         if (_attrComponents.Exists(attrMod.Target)) {
@@ -56,16 +73,32 @@ public struct HealthAttributeUndoJob : AttributeModifierUndoJob {
 public struct ManaAttributeModifierJob : AttributeModifierJob {
     public EntityCommandBuffer.Concurrent Ecb { get; set; }
     [NativeDisableContainerSafetyRestriction] [WriteOnly] private ComponentDataFromEntity<AttributesComponent> _attrComponents;
-    public ComponentDataFromEntity<AttributesComponent> attrComponents { get => _attrComponents; set => _attrComponents = value; }
-
+    [ReadOnly] private ComponentDataFromEntity<TemporaryAttributeModification> _tempAttributeModifier;
+    [ReadOnly] private ComponentDataFromEntity<PermanentAttributeModification> _permanentAttributeModifier;
+    public ComponentDataFromEntity<AttributesComponent> AttrComponents { get => _attrComponents; set => _attrComponents = value; }
+    public ComponentDataFromEntity<TemporaryAttributeModification> TempAttributeModifier { get => _tempAttributeModifier; set => _tempAttributeModifier = value; }
+    public ComponentDataFromEntity<PermanentAttributeModification> PermanentAttributeModifier { get => _permanentAttributeModifier; set => _permanentAttributeModifier = value; }
     public void Execute(Entity entity, int index, [ReadOnly] ref AttributeModificationComponent attrMod) {
-        if (attrComponents.Exists(attrMod.Target)) {
+        if (_attrComponents.Exists(attrMod.Target)) {
             var attrs = _attrComponents[attrMod.Target];
-            attrs.Mana.CurrentValue += attrMod.Change; ;
+            var attr = attrs.Mana;
+            attrMod.Change = attrMod.Add + (attr.BaseValue * attrMod.Multiply) + (attrMod.Divide != 0 ? attr.BaseValue / attrMod.Divide : 0);
+
+            if (_tempAttributeModifier.Exists(entity)) {
+                attr.CurrentValue += attrMod.Change;
+            }
+            if (_permanentAttributeModifier.Exists(entity)) {
+                attr.CurrentValue += attrMod.Change;
+                attr.BaseValue += attrMod.Change;
+            }
+            attrs.Mana = attr;
             _attrComponents[attrMod.Target] = attrs;
         }
-
-        Ecb.RemoveComponent<AttributeModifyComponent>(index, entity);
+        if (_permanentAttributeModifier.Exists(entity)) {
+            Ecb.DestroyEntity(index, entity);
+        } else {
+            Ecb.RemoveComponent<AttributeModifyComponent>(index, entity);
+        }
     }
 }
 
@@ -75,7 +108,7 @@ public struct ManaAttributeModifierJob : AttributeModifierJob {
 //[ExcludeComponent(typeof(AttributeModificationUndoAppliedComponent))]
 public struct ManaAttributeUndoJob : AttributeModifierUndoJob {
     [NativeDisableContainerSafetyRestriction] [WriteOnly] public ComponentDataFromEntity<AttributesComponent> _attrComponents;
-    public ComponentDataFromEntity<AttributesComponent> attrComponents { get => _attrComponents; set => _attrComponents = value; }
+    public ComponentDataFromEntity<AttributesComponent> AttrComponents { get => _attrComponents; set => _attrComponents = value; }
 
     public void Execute(Entity entity, int index, [ReadOnly] ref AttributeModificationComponent attrMod) {
         if (_attrComponents.Exists(attrMod.Target)) {

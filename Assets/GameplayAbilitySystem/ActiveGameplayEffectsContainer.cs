@@ -79,75 +79,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
         }
 
         private void CreateGEEntity(ActiveGameplayEffectData effectData) {
-            var entityManager = World.Active.EntityManager;
-            var gameplayEffectData = new GameplayEffectDurationComponent() {
-                WorldStartTime = Time.time,
-                Duration = effectData.Effect.GameplayEffectPolicy.DurationMagnitude,
-            };
-
-            Dictionary<int, (AttributeType attribute, float add, float multiply, float divide)> attributeMods = new Dictionary<int, (AttributeType attribute, float add, float multiply, float divide)>();
-
-            foreach (var modifier in effectData.Effect.GameplayEffectPolicy.Modifiers) {
-                var add = 0f;
-                var multiply = 1f;
-                var divide = 1f;
-                if (modifier.ModifierOperation == Enums.EModifierOperationType.Add) add += modifier.ScaledMagnitude;
-                if (modifier.ModifierOperation == Enums.EModifierOperationType.Multiply) multiply += modifier.ScaledMagnitude;
-                if (modifier.ModifierOperation == Enums.EModifierOperationType.Divide) divide -= modifier.ScaledMagnitude;
-                 
-                if (!attributeMods.TryGetValue(modifier.Attribute.AttributeId, out var attrs)) {
-                    attrs = (null, 0, 1, 1);
-                }
-
-                attrs.add += add;
-                attrs.multiply *= multiply;
-                attrs.divide *= divide;
-
-                attributeMods.Add(modifier.Attribute.AttributeId,attrs);
-            }
-
-            var archetype = new ComponentType[] {
-            typeof(AttributeModificationComponent), typeof(GameplayEffectDurationComponent), typeof(AttributeModifyComponent)
-            };
-
-            foreach (var item in attributeMods) {
-                var attributeModEntity = entityManager.CreateEntity(archetype);
-
-                // Get base attribute value
-                var attrValue = effectData.Target.GetNumericAttributeBase(item.Value.attribute);
-                var attributeModData = new AttributeModificationComponent() {
-                    Change = (attrValue + item.Value.add) * (item.Value.multiply / item.Value.divide), 
-                    Source = effectData.Instigator.entity,
-                    Target = effectData.Target.entity
-                };
-                //entityManager.AddComponent(attributeModEntity, typeof(HealthAttributeModifier));
-
-                // Set appropriate attribute modifier
-                switch (item.Key) {
-                    case 0:
-                        entityManager.AddComponent(attributeModEntity, typeof(HealthAttributeModifier));
-                        break;
-                    case 1:
-                        entityManager.AddComponent(attributeModEntity, typeof(MaxHealthAttributeModifier));
-                        break;
-                    case 2:
-                        entityManager.AddComponent(attributeModEntity, typeof(ManaAttributeModifier));
-                        break;
-                    case 3:
-                        entityManager.AddComponent(attributeModEntity, typeof(MaxManaAttributeModifier));
-                        break;
-
-                }
-
-                if (effectData.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
-                    entityManager.AddComponent(attributeModEntity, typeof(PermanentAttributeModification));
-                } else {
-                    entityManager.AddComponent(attributeModEntity, typeof(TemporaryAttributeModification));
-                }
-                entityManager.SetComponentData(attributeModEntity, attributeModData);
-                entityManager.SetComponentData(attributeModEntity, gameplayEffectData);
-            }
-
+            effectData.Effect.ApplyInstantEffect2(effectData.Instigator, effectData.Target);
         }
 
         private void OnActiveGameplayEffectAdded(ActiveGameplayEffectData EffectData) {
@@ -354,7 +286,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
     }
 
-    
+
     public class ActiveGameplayEffectsEvent : UnityEvent<IGameplayAbilitySystem, ActiveGameplayEffectData> {
 
     }

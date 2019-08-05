@@ -153,6 +153,7 @@ namespace GameplayAbilitySystem.Abilities {
 
         /// <inheritdoc />
         public bool PlayerHasResourceToCast(IGameplayAbilitySystem AbilitySystem) {
+            return true;
             // Check the modifiers on the ability cost GameEffect
             var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();
             var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers, operateOnCurrentValue: true);

@@ -1,12 +1,10 @@
-﻿using GameplayAbilitySystem;
-using GameplayAbilitySystem.Attributes;
+﻿using GameplayAbilitySystem.Attributes;
 using GameplayAbilitySystem.Enums;
 using GameplayAbilitySystem.GameplayCues;
 using GameplayAbilitySystem.Interfaces;
-using GameplayAbilitySystem.Statics;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Entities;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.GameplayEffects {
@@ -68,8 +66,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
             Dictionary<AttributeType, Dictionary<EModifierOperationType, float>> modifierTotals;
             if (Existing == null) {
                 modifierTotals = new Dictionary<AttributeType, Dictionary<EModifierOperationType, float>>();
-            }
-            else {
+            } else {
                 modifierTotals = Existing;
             }
 
@@ -135,8 +132,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
                 var oldAttributeValue = 0f;
                 if (!operateOnCurrentValue) {
                     oldAttributeValue = AbilitySystem.GetNumericAttributeBase(attribute.Key);
-                }
-                else {
+                } else {
                     oldAttributeValue = AbilitySystem.GetNumericAttributeCurrent(attribute.Key);
                 }
 
@@ -155,25 +151,107 @@ namespace GameplayAbilitySystem.GameplayEffects {
         }
 
         public void ApplyInstantEffect(IGameplayAbilitySystem Target) {
-            // Modify base attribute values.  Collect the overall change for each modifier
-            var modifierTotals = CalculateModifierEffect();
-            var attributeModifications = CalculateAttributeModification(Target, modifierTotals);
+            //// Modify base attribute values.  Collect the overall change for each modifier
+            //var modifierTotals = CalculateModifierEffect();
+            //var attributeModifications = CalculateAttributeModification(Target, modifierTotals);
 
-            // Finally, For each attribute, apply the new modified values
-            foreach (var attribute in attributeModifications) {
-                Target.SetNumericAttributeBase(attribute.Key, attribute.Value.NewAttribueValue);
+            //// Finally, For each attribute, apply the new modified values
+            //foreach (var attribute in attributeModifications) {
+            //    Target.SetNumericAttributeBase(attribute.Key, attribute.Value.NewAttribueValue);
 
-                // mark the corresponding aggregator as dirty so we can recalculate the current values
-                var aggregators = Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(attribute.Key);
-                // Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.Select(x => x.Value[attribute.Key]).AttributeAggregatorMap.TryGetValue(attribute.Key, out var aggregator);
-                if (aggregators.Count() != 0) {
-                    Target.ActiveGameplayEffectsContainer.UpdateAttribute(aggregators, attribute.Key);
+            //    // mark the corresponding aggregator as dirty so we can recalculate the current values
+            //    var aggregators = Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(attribute.Key);
+            //    // Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.Select(x => x.Value[attribute.Key]).AttributeAggregatorMap.TryGetValue(attribute.Key, out var aggregator);
+            //    if (aggregators.Count() != 0) {
+            //        Target.ActiveGameplayEffectsContainer.UpdateAttribute(aggregators, attribute.Key);
+            //    } else {
+            //        // No aggregators, so set current value = base value
+            //        Target.SetNumericAttributeCurrent(attribute.Key, Target.GetNumericAttributeBase(attribute.Key));
+            //    }
+            //}
+
+            ApplyInstantEffect2(Target, Target);
+
+        }
+
+        public void ApplyInstantEffect2(IGameplayAbilitySystem Instigator, IGameplayAbilitySystem Target) {
+            var commandBuffer = World.Active.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>().CreateCommandBuffer();
+
+
+            var entityManager = World.Active.EntityManager;
+            var attributeMods = CalculateModifiers();
+
+            foreach (var item in attributeMods) {
+                var attributeModEntity = commandBuffer.CreateEntity();
+                commandBuffer.AddComponent(attributeModEntity, new AttributeModifyComponent());
+
+                // Get base attribute value
+                var attrValue = Target.GetNumericAttributeBase(item.Value.attribute);
+                var attributeModData = new AttributeModificationComponent() {
+                    Add = item.Value.add,
+                    Multiply = item.Value.multiply,
+                    Divide = item.Value.divide,
+                    Change = 0,
+                    Source = Instigator.entity,
+                    Target = Target.entity
+                };
+                //entityManager.AddComponent(attributeModEntity, typeof(HealthAttributeModifier));
+
+                // Set appropriate attribute modifier
+                switch (item.Key) {
+                    case 0:
+                        commandBuffer.AddComponent(attributeModEntity, new HealthAttributeModifier());
+                        break;
+                    case 1:
+                        commandBuffer.AddComponent(attributeModEntity, new MaxHealthAttributeModifier());
+                        break;
+                    case 2:
+                        commandBuffer.AddComponent(attributeModEntity, new ManaAttributeModifier());
+                        break;
+                    case 3:
+                        commandBuffer.AddComponent(attributeModEntity, new MaxManaAttributeModifier());
+                        break;
                 }
-                else {
-                    // No aggregators, so set current value = base value
-                    Target.SetNumericAttributeCurrent(attribute.Key, Target.GetNumericAttributeBase(attribute.Key));
+
+                if (GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
+                    commandBuffer.AddComponent(attributeModEntity, new PermanentAttributeModification());
+                } else {
+                    commandBuffer.AddComponent(attributeModEntity, new TemporaryAttributeModification());
+                    var gameplayEffectData = new GameplayEffectDurationComponent() {
+                        WorldStartTime = Time.time,
+                        Duration = GameplayEffectPolicy.DurationMagnitude,
+                    };
+                    commandBuffer.AddComponent(attributeModEntity, gameplayEffectData);
                 }
+
+                commandBuffer.AddComponent(attributeModEntity, attributeModData);
             }
+        }
+
+        public Dictionary<int, (AttributeType attribute, float add, float multiply, float divide)> CalculateModifiers() {
+
+            Dictionary<int, (AttributeType attribute, float add, float multiply, float divide)> attributeMods = new Dictionary<int, (AttributeType attribute, float add, float multiply, float divide)>();
+
+            foreach (var modifier in GameplayEffectPolicy.Modifiers) {
+                var add = 0f;
+                var multiply = 0f;
+                var divide = 0f;
+                if (modifier.ModifierOperation == Enums.EModifierOperationType.Add) add += modifier.ScaledMagnitude;
+                if (modifier.ModifierOperation == Enums.EModifierOperationType.Multiply) multiply += modifier.ScaledMagnitude;
+                if (modifier.ModifierOperation == Enums.EModifierOperationType.Divide) divide += modifier.ScaledMagnitude;
+
+                if (!attributeMods.TryGetValue(modifier.Attribute.AttributeId, out var attrs)) {
+                    attrs = (null, 0, 0, 0);
+                }
+
+                attrs.add += add;
+                attrs.multiply += multiply;
+                attrs.divide += divide;
+                attrs.attribute = modifier.Attribute;
+                attributeMods.Add(modifier.Attribute.AttributeId, attrs);
+            }
+
+            return attributeMods;
         }
     }
 }

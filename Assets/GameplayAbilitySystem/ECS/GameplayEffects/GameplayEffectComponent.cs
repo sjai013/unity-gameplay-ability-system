@@ -10,6 +10,9 @@ public struct GameplayEffectDurationComponent : GameplayEffectComponent, ICompon
 
 public struct AttributeModificationComponent : IComponentData {
     public float Change;
+    public float Multiply;
+    public float Divide;
+    public float Add;
     public Entity Source;
     public Entity Target;
 }

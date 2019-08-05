@@ -14,7 +14,9 @@ public abstract class GameplayEffectAttributeModificationSystem<T> : JobComponen
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         var job = new T() {
             Ecb = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(),
-            attrComponents = GetComponentDataFromEntity<AttributesComponent>(false)
+            AttrComponents = GetComponentDataFromEntity<AttributesComponent>(false),
+            PermanentAttributeModifier = GetComponentDataFromEntity<PermanentAttributeModification>(true),
+            TempAttributeModifier = GetComponentDataFromEntity<TemporaryAttributeModification>(true),
         };
 
         var jobHandle = job.Schedule(this, inputDeps);
@@ -27,12 +29,15 @@ public abstract class GameplayEffectAttributeModificationSystem<T> : JobComponen
 
 public interface AttributeModifierJob : IJobForEachWithEntity<AttributeModificationComponent> {
     EntityCommandBuffer.Concurrent Ecb { get; set; }
-    ComponentDataFromEntity<AttributesComponent> attrComponents { get; set; }
+    ComponentDataFromEntity<AttributesComponent> AttrComponents { get; set; }
+    ComponentDataFromEntity<TemporaryAttributeModification> TempAttributeModifier { get; set; }
+    ComponentDataFromEntity<PermanentAttributeModification> PermanentAttributeModifier { get; set; }
 }
+
 public class GameplayEffectAttributeModificationUndoSystem<T> : JobComponentSystem where T : struct, AttributeModifierUndoJob {
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         var job = new T() {
-            attrComponents = GetComponentDataFromEntity<AttributesComponent>(false)
+            AttrComponents = GetComponentDataFromEntity<AttributesComponent>(false)
         };
 
         var jobHandle = job.Schedule(this, inputDeps);
@@ -43,6 +48,8 @@ public class GameplayEffectAttributeModificationUndoSystem<T> : JobComponentSyst
 }
 
 public interface AttributeModifierUndoJob : IJobForEachWithEntity<AttributeModificationComponent> {
-    ComponentDataFromEntity<AttributesComponent> attrComponents { get; set; }
+    ComponentDataFromEntity<AttributesComponent> AttrComponents { get; set; }
+
 }
+
 
