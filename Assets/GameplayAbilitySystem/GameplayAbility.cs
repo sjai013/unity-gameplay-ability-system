@@ -115,7 +115,7 @@ namespace GameplayAbilitySystem.Abilities {
         protected void ApplyCost(IGameplayAbilitySystem AbilitySystem) {
             var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();
             var attributeModification = this.GameplayCost.CostGameplayEffect.CalculateAttributeModification(AbilitySystem, modifiers);
-            this.GameplayCost.CostGameplayEffect.ApplyInstantEffect(AbilitySystem);
+            this.GameplayCost.CostGameplayEffect.ApplyInstantEffect_Self(AbilitySystem);
         }
 
 

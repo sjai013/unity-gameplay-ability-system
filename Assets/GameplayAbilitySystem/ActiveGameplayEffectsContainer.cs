@@ -79,7 +79,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
         }
 
         private void CreateGEEntity(ActiveGameplayEffectData effectData) {
-            effectData.Effect.ApplyInstantEffect2(effectData.Instigator, effectData.Target);
+            effectData.Effect.ApplyInstantEffect_Target(effectData.Instigator, effectData.Target);
         }
 
         private void OnActiveGameplayEffectAdded(ActiveGameplayEffectData EffectData) {

@@ -195,7 +195,7 @@ namespace GameplayAbilitySystem {
 
             // Handling Instant effects is different to handling HasDuration and Infinite effects
             if (Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
-                Effect.ApplyInstantEffect(Target);
+                Effect.ApplyInstantEffect_Self(Target);
             }
             else {
                 // Durational effects require attention to many more things than instant effects

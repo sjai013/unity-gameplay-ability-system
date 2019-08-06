@@ -150,31 +150,11 @@ namespace GameplayAbilitySystem.GameplayEffects {
             return attributeModification;
         }
 
-        public void ApplyInstantEffect(IGameplayAbilitySystem Target) {
-            //// Modify base attribute values.  Collect the overall change for each modifier
-            //var modifierTotals = CalculateModifierEffect();
-            //var attributeModifications = CalculateAttributeModification(Target, modifierTotals);
-
-            //// Finally, For each attribute, apply the new modified values
-            //foreach (var attribute in attributeModifications) {
-            //    Target.SetNumericAttributeBase(attribute.Key, attribute.Value.NewAttribueValue);
-
-            //    // mark the corresponding aggregator as dirty so we can recalculate the current values
-            //    var aggregators = Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.GetAggregatorsForAttribute(attribute.Key);
-            //    // Target.ActiveGameplayEffectsContainer.ActiveEffectAttributeAggregator.Select(x => x.Value[attribute.Key]).AttributeAggregatorMap.TryGetValue(attribute.Key, out var aggregator);
-            //    if (aggregators.Count() != 0) {
-            //        Target.ActiveGameplayEffectsContainer.UpdateAttribute(aggregators, attribute.Key);
-            //    } else {
-            //        // No aggregators, so set current value = base value
-            //        Target.SetNumericAttributeCurrent(attribute.Key, Target.GetNumericAttributeBase(attribute.Key));
-            //    }
-            //}
-
-            ApplyInstantEffect2(Target, Target);
-
+        public void ApplyInstantEffect_Self(IGameplayAbilitySystem Target) {
+            ApplyInstantEffect_Target(Target, Target);
         }
 
-        public void ApplyInstantEffect2(IGameplayAbilitySystem Instigator, IGameplayAbilitySystem Target) {
+        public void ApplyInstantEffect_Target(IGameplayAbilitySystem Instigator, IGameplayAbilitySystem Target) {
             var commandBuffer = World.Active.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>().CreateCommandBuffer();
 
 
