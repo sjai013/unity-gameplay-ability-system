@@ -221,14 +221,16 @@ namespace GameplayAbilitySystem.GameplayEffects {
                 if (modifier.ModifierOperation == Enums.EModifierOperationType.Divide) divide += modifier.ScaledMagnitude;
 
                 if (!attributeMods.TryGetValue(modifier.Attribute.AttributeId, out var attrs)) {
-                    attrs = (null, 0, 0, 0);
+                    attrs = (modifier.Attribute, 0, 0, 0);
+                    attributeMods.Add(modifier.Attribute.AttributeId, attrs);
                 }
 
                 attrs.add += add;
                 attrs.multiply += multiply;
                 attrs.divide += divide;
                 attrs.attribute = modifier.Attribute;
-                attributeMods.Add(modifier.Attribute.AttributeId, attrs);
+                attributeMods[modifier.Attribute.AttributeId] = attrs;
+                //attributeMods.Add(modifier.Attribute.AttributeId, attrs);
             }
 
             return attributeMods;
