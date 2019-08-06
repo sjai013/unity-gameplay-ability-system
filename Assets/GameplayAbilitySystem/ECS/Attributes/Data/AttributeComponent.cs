@@ -7,6 +7,7 @@ using UnityEngine;
 public struct BaseAttributeComponent : IComponentData {
     public float BaseValue;
     public float CurrentValue;
+    public float TempDelta;
 
     public void ReduceBy(float value) {
         CurrentValue -= value;

@@ -17,9 +17,8 @@ public struct AttributeModificationComponent : IComponentData {
     public Entity Target;
 }
 
-public struct TemporaryAttributeModification : IComponentData { }
-public struct PermanentAttributeModification : IComponentData { }
 
+public interface AttributeModification : IComponentData { }
 
 public struct GameplayEffectExpired : IComponentData { }
 
