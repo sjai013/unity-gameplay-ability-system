@@ -195,6 +195,9 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
                 if (GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
                     commandBuffer.AddComponent(attributeModEntity, new PermanentAttributeModification());
+                } else if (GameplayEffectPolicy.DurationPolicy  == Enums.EDurationPolicy.Infinite)  {
+                    commandBuffer.AddComponent(attributeModEntity, new TemporaryAttributeModification());
+    
                 } else {
                     commandBuffer.AddComponent(attributeModEntity, new TemporaryAttributeModification());
                     var gameplayEffectData = new GameplayEffectDurationComponent() {

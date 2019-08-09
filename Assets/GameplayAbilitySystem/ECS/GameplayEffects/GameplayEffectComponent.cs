@@ -31,7 +31,5 @@ public interface GameplayEffectComponent  { }
 
 public struct AttributeModificationUndoAppliedComponent : IComponentData { }
 
-public struct HealthAttributeModifier : IComponentData { }
 public struct MaxHealthAttributeModifier : IComponentData { }
-public struct ManaAttributeModifier : IComponentData { }
 public struct MaxManaAttributeModifier : IComponentData { }

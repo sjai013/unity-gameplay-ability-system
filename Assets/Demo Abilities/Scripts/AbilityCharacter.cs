@@ -17,6 +17,8 @@ public class AbilityCharacter : MonoBehaviour
 
     public List<CastingAbilityContainer> Abilities = new List<CastingAbilityContainer>();
 
+    public List<AbilitySystemComponent> TargetPool;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,11 +45,20 @@ public class AbilityCharacter : MonoBehaviour
         if (this.Abilities[n].AbilityTarget == null) return;
 
         var Ability = this.Abilities[n].Ability;
+
         var Target = this.Abilities[n].AbilityTarget;
+
+        //Randomise Target
+        if (this.TargetPool.Count > 0) {
+            var randomIndex = UnityEngine.Random.Range(0, TargetPool.Count);
+            Target = TargetPool[randomIndex];
+        }
+
         var eventTag = Ability.Tags.AbilityTags.Added.Count > 0 ? Ability.Tags.AbilityTags.Added[0] : new GameplayTag();
         var gameplayEventData = new GameplayEventData();
         gameplayEventData.EventTag = eventTag;
         gameplayEventData.Target = Target;
+
 
         
         // If ability can be activated
