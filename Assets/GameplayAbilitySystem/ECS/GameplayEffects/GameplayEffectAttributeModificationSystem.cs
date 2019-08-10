@@ -1,30 +1,71 @@
-﻿using Unity.Collections;
+﻿using Unity.Burst;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
 
-public abstract class GameplayEffectAttributeModificationSystem<PermanentAttributeModificationJob, TemporaryAttributeModificationJob> : JobComponentSystem
-    where PermanentAttributeModificationJob : struct, AttributeModifierJob<PermanentAttributeModification>
-    where TemporaryAttributeModificationJob : struct, AttributeModifierJob<TemporaryAttributeModification> {
+[UpdateAfter(typeof(ResetAttributesDeltaSystem))]
+[UpdateBefore(typeof(ApplyAttributesDeltaSystem))]
+public abstract class GameplayEffectAttributeModificationSystem<AttributeMod> : JobComponentSystem
+    where AttributeMod : struct, IComponentData, AttributeModifier
+    {
     BeginSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
     protected override void OnCreate() {
         m_EntityCommandBufferSystem = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
         base.OnCreate();
     }
 
+    [BurstCompile]
+    [RequireComponentTag(typeof(AttributeModifyComponent), typeof(PermanentAttributeModification))]
+    public struct P_Attribute_ModifierJob<T> : IJobForEach<AttributeModificationComponent, T>
+    where T : struct, IComponentData, AttributeModifier {
+        public EntityCommandBuffer.Concurrent Ecb { get; set; }
+        [NativeDisableContainerSafetyRestriction] [WriteOnly] private ComponentDataFromEntity<AttributesComponent> _attrComponents;
+        [ReadOnly] private ComponentDataFromEntity<PermanentAttributeModification> _attributeModifier;
+        public ComponentDataFromEntity<AttributesComponent> AttrComponents { get => _attrComponents; set => _attrComponents = value; }
+        public ComponentDataFromEntity<PermanentAttributeModification> AttributeModifier { get => _attributeModifier; set => _attributeModifier = value; }
+
+        public void Execute(ref AttributeModificationComponent attrMod, [ReadOnly] ref T _) {
+            if (_attrComponents.Exists(attrMod.Target)) {
+                var attrs = _attrComponents[attrMod.Target];
+                _.PermanentAttributeModification(ref attrMod, ref attrs);
+                _attrComponents[attrMod.Target] = attrs;
+            }
+        }
+    }
+
+    [BurstCompile]
+    [RequireComponentTag(typeof(AttributeModifyComponent), typeof(TemporaryAttributeModification))]
+    public struct T_AttributeModifier_ModifierJob<T> : IJobForEach<AttributeModificationComponent, T>
+        where T : struct, IComponentData, AttributeModifier {
+        public EntityCommandBuffer.Concurrent Ecb { get; set; }
+        [NativeDisableContainerSafetyRestriction] [WriteOnly] private ComponentDataFromEntity<AttributesComponent> _attrComponents;
+        [ReadOnly] private ComponentDataFromEntity<TemporaryAttributeModification> _attributeModifier;
+        public ComponentDataFromEntity<AttributesComponent> AttrComponents { get => _attrComponents; set => _attrComponents = value; }
+        public ComponentDataFromEntity<TemporaryAttributeModification> AttributeModifier { get => _attributeModifier; set => _attributeModifier = value; }
+
+        public void Execute(ref AttributeModificationComponent attrMod, [ReadOnly] ref T _) {
+            if (_attrComponents.Exists(attrMod.Target)) {
+                var attrs = _attrComponents[attrMod.Target];
+                _.TemporaryAttributeModification(ref attrMod, ref attrs);
+                _attrComponents[attrMod.Target] = attrs;
+            }
+        }
+    }
+
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         var AttrComponents = GetComponentDataFromEntity<AttributesComponent>(false);
-        var job1 = new PermanentAttributeModificationJob() {
+        var job1 = new P_Attribute_ModifierJob<AttributeMod>() {
             Ecb = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(),
             AttrComponents = AttrComponents,
             AttributeModifier = GetComponentDataFromEntity<PermanentAttributeModification>(true),
         };
 
-        var job2 = new TemporaryAttributeModificationJob() {
+        var job2 = new T_AttributeModifier_ModifierJob<AttributeMod>() {
             Ecb = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(),
             AttrComponents = AttrComponents,
             AttributeModifier = GetComponentDataFromEntity<TemporaryAttributeModification>(true),
         };
-
 
         var jobHandle1 = job1.Schedule(this, inputDeps);
         var jobHandle2 = job2.Schedule(this, jobHandle1);
@@ -35,11 +76,12 @@ public abstract class GameplayEffectAttributeModificationSystem<PermanentAttribu
     }
 }
 
-public interface AttributeModifierJob<T> : IJobForEachWithEntity<AttributeModificationComponent>
-    where T : struct, IComponentData {
+public interface AttributeModifierJob<T1, T2> : IJobForEach<AttributeModificationComponent, T2>
+    where T1 : struct, IComponentData
+    where T2 : struct, IComponentData, AttributeModifier {
     EntityCommandBuffer.Concurrent Ecb { get; set; }
     ComponentDataFromEntity<AttributesComponent> AttrComponents { get; set; }
-    ComponentDataFromEntity<T> AttributeModifier { get; set; }
+    ComponentDataFromEntity<T1> AttributeModifier { get; set; }
 }
 
 

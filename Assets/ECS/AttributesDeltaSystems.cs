@@ -39,3 +39,30 @@ public class ApplyAttributesDeltaSystem : JobComponentSystem {
         return jobHandle;
     }
 }
+
+public class RemovePermanentAttributeModificationTag : JobComponentSystem {
+
+    BeginSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
+    protected override void OnCreate() {
+        m_EntityCommandBufferSystem = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
+        base.OnCreate();
+    }
+
+    [BurstCompile]
+    public struct Job : IJobForEachWithEntity<PermanentAttributeModification> {
+        public EntityCommandBuffer.Concurrent Ecb { get; set; }
+
+        public void Execute(Entity entity, int index, [ReadOnly] ref PermanentAttributeModification _) {
+            Ecb.DestroyEntity(index, entity);
+        }
+    }
+    protected override JobHandle OnUpdate(JobHandle inputDependencies) {
+        var job = new Job() {
+            Ecb = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent()
+        };
+
+        var jobHandle = job.Schedule(this, inputDependencies);
+        m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
+        return jobHandle;
+    }
+}
