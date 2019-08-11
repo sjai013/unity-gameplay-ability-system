@@ -19,5 +19,3 @@ public interface IAttributeComponentData : IComponentData {
 
 public partial struct AttributesComponent : IAttributeComponentData {
 }
-
-public struct AttributeModifyComponent : IComponentData { }

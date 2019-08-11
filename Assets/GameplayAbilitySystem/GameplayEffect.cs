@@ -163,8 +163,6 @@ namespace GameplayAbilitySystem.GameplayEffects {
 
             foreach (var item in attributeMods) {
                 var attributeModEntity = commandBuffer.CreateEntity();
-                commandBuffer.AddComponent(attributeModEntity, new AttributeModifyComponent());
-
                 // Get base attribute value
                 var attrValue = Target.GetNumericAttributeBase(item.Value.attribute);
                 var attributeModData = new AttributeModificationComponent() {
