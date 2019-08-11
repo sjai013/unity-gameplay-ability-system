@@ -65,7 +65,7 @@ public class AbilityCharacter : MonoBehaviour
         if (SelfAbilitySystem.TryActivateAbility(Ability))
         {
             // Send gameplay event to this player with information on target etc
-            AbilitySystemStatics.SendGameplayEventToComponent(SelfAbilitySystem, eventTag, gameplayEventData);
+            SelfAbilitySystem.HandleGameplayEvent(eventTag, gameplayEventData);
         }
     }
 

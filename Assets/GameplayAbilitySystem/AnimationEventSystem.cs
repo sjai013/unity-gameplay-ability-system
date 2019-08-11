@@ -12,7 +12,7 @@ namespace GameplayAbilitySystem {
     [AddComponentMenu("Gameplay Ability System/Animation Event System")]
     [System.Serializable]
     public class CustomAnimationUnityEvent : UnityEvent<AnimationEvent> {
-
+        
     }
 
     /// <summary>
