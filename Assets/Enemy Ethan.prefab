@@ -1781,6 +1781,7 @@ SkinnedMeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1894,6 +1895,7 @@ GameObject:
   - component: {fileID: 4296990303564377507}
   - component: {fileID: 7606552053032496123}
   - component: {fileID: 319760963773948485}
+  - component: {fileID: 6048140556220432197}
   m_Layer: 0
   m_Name: Enemy Ethan
   m_TagString: Untagged
@@ -2081,6 +2083,7 @@ MonoBehaviour:
     AbilityTarget: {fileID: 5555714685437361603}
   - Ability: {fileID: 11400000, guid: 2ad2b404d2dbabc42ad72e779397634f, type: 2}
     AbilityTarget: {fileID: 5555714685437361603}
+  TargetPool: []
 --- !u!114 &7606552053032496123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2161,6 +2164,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 1
+--- !u!114 &6048140556220432197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555714685437361602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2902537d25492e84d8711b0f90fe9442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiAttributeUpdater: {fileID: 1359308431272715899}
 --- !u!1 &5555714685437361604
 GameObject:
   m_ObjectHideFlags: 0
@@ -3015,7 +3031,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6587082090465148645}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 0
@@ -3037,7 +3053,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6587082090465148645}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
@@ -3187,3 +3203,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1071020996309585044}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1359308431272715899 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2017678857333680879, guid: e05a0ff48b22f914d920b149824050af,
+    type: 3}
+  m_PrefabInstance: {fileID: 1071020996309585044}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9ea719c96c1a34dacdc5689c3ac0e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

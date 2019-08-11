@@ -6,6 +6,8 @@ using Unity.Jobs;
 
 [UpdateAfter(typeof(ResetAttributesDeltaSystem))]
 [UpdateBefore(typeof(ApplyAttributesDeltaSystem))]
+[UpdateBefore(typeof(RemovePermanentAttributeModificationTag))]
+
 public abstract class GameplayEffectAttributeModificationSystem<AttributeMod> : JobComponentSystem
     where AttributeMod : struct, IComponentData, AttributeModifier
     {
