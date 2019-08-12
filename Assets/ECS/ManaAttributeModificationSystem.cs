@@ -19,4 +19,4 @@ public struct ManaAttributeModifier : IComponentData, AttributeModifier {
     }
 }
 
-public class ManaModificationSystem : GameplayEffectAttributeModificationSystem<ManaAttributeModifier> { }
+public class ManaModificationSystem : AttributeModificationSystem<ManaAttributeModifier> { }

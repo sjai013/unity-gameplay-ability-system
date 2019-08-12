@@ -5,6 +5,7 @@ using GameplayAbilitySystem.GameplayEffects;
 using UnityEngine;
 using GameplayAbilitySystem.Abilities.AbilityActivations;
 using System.Linq;
+using Unity.Entities;
 
 namespace GameplayAbilitySystem.Abilities {
     /// <inheritdoc />
@@ -153,6 +154,7 @@ namespace GameplayAbilitySystem.Abilities {
 
         /// <inheritdoc />
         public bool PlayerHasResourceToCast(IGameplayAbilitySystem AbilitySystem) {
+
             return true;
             // Check the modifiers on the ability cost GameEffect
             var modifiers = this.GameplayCost.CostGameplayEffect.CalculateModifierEffect();

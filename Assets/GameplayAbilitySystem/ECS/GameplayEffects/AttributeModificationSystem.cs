@@ -3,12 +3,13 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
+using UnityEngine;
 
 [UpdateAfter(typeof(ResetAttributesDeltaSystem))]
 [UpdateBefore(typeof(ApplyAttributesDeltaSystem))]
 [UpdateBefore(typeof(RemovePermanentAttributeModificationTag))]
 
-public abstract class GameplayEffectAttributeModificationSystem<T> : JobComponentSystem
+public abstract class AttributeModificationSystem<T> : JobComponentSystem
     where T : struct, IComponentData, AttributeModifier {
     BeginSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
     protected override void OnCreate() {
@@ -88,3 +89,4 @@ public interface AttributeModifierJob<T1, T2> : IJobForEach<AttributeModificatio
 
 public struct TemporaryAttributeModification : IComponentData { }
 public struct PermanentAttributeModification : IComponentData { }
+

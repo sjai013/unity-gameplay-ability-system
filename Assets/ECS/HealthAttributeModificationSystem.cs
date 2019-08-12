@@ -2,6 +2,7 @@
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
+using Unity.Jobs;
 
 public struct HealthAttributeModifier : IComponentData, AttributeModifier {
     public void PermanentAttributeModification(ref AttributeModificationComponent attrMod, ref AttributesComponent attrs) {
@@ -19,7 +20,7 @@ public struct HealthAttributeModifier : IComponentData, AttributeModifier {
     }
 }
 
-public class HealthModificationSystem : GameplayEffectAttributeModificationSystem<HealthAttributeModifier> { }
+public class HealthModificationSystem : AttributeModificationSystem<HealthAttributeModifier> { }
 
 public interface AttributeModifier {
     void TemporaryAttributeModification(ref AttributeModificationComponent attrMod, ref AttributesComponent attrs);

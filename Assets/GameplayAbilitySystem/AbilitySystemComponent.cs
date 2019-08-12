@@ -136,6 +136,11 @@ namespace GameplayAbilitySystem {
 
         /// <inheritdoc />
         public bool TryActivateAbility(GameplayAbility Ability) {
+            if (World.Active.EntityManager.HasComponent<CastingAbilityTagComponent>(entity)) return false;
+            World.Active.EntityManager.AddComponent(entity, typeof(CheckAbilityConstraints));
+            World.Active.EntityManager.AddComponent(entity, typeof(CastingAbilityTagComponent));
+            World.Active.EntityManager.AddComponent(entity, typeof(FireAbility));
+            return false;
             if (!CanActivateAbility(Ability)) return false;
             if (!Ability.IsAbilityActivatable(this)) return false;
             _runningAbilities.Add(Ability);
