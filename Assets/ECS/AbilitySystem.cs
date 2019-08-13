@@ -1,8 +1,16 @@
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
+
+internal struct CheckAbilityConstraintsComponent : IComponentData { }
+internal struct CommitJobComponent : IComponentData { }
+internal struct CommitJobSystemComponent : ISystemStateComponentData { }
+internal struct CastingAbilityTagComponent : IComponentData { }
+
+internal struct CancelAbilityComponent : IComponentData { }
 
 /// <summary>
 ///    AbilitySystem is used to manage the entire ability system.
@@ -13,31 +21,57 @@ using UnityEngine;
 ///        4. Spawning meshes/running logic/animating required to cast ability
 ///            (and applying game effects such as costs)
 /// </summary>
-public class AbilitySystem<T> : JobComponentSystem
-where T : struct, IComponentData, Ability {
+public class AbilitySystem<TAbility, TCost> : JobComponentSystem 
+where TAbility : struct, IComponentData, IAbility 
+where TCost : struct, IComponentData, ICost
+
+{
     BeginSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
     protected override void OnCreate() {
         m_EntityCommandBufferSystem = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
         base.OnCreate();
     }
-
-    [RequireComponentTag(typeof(CheckAbilityConstraints), typeof(CastingAbilityTagComponent))]
-    public struct CheckAbilityConstraintsJob : IJobForEachWithEntity<T> {
+    [RequireComponentTag(typeof(CheckAbilityConstraintsComponent))]
+    public struct CheckAbilityConstraintsJob : IJobForEachWithEntity<TAbility, TCost> {
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
         [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
-        public void Execute(Entity entity, int index, [ReadOnly] ref T ability) {
-            if (attributesComponent.Exists(entity) &&
-                ability.EntityHasResource(attributesComponent[entity])) {
-                EntityCommandBuffer.AddComponent<PassedAbilityConstraintsComponent>(index, entity);
+        public void Execute(Entity entity, int index, [ReadOnly] ref TAbility ability, [ReadOnly] ref TCost cost) {
+            var source = ability.Source;
+            if (attributesComponent.Exists(source) &&
+                cost.CheckResourcesAvailable(source, attributesComponent[source])) {
+                EntityCommandBuffer.AddComponent<CommitJobComponent>(index, entity);
+            } else {
+                EntityCommandBuffer.AddComponent<CancelAbilityComponent>(index, entity);
             }
-
-            EntityCommandBuffer.RemoveComponent<CheckAbilityConstraints>(index, entity);
+            EntityCommandBuffer.RemoveComponent<CheckAbilityConstraintsComponent>(index, entity);
         }
     }
-    public struct AbilityJob : IJobForEachWithEntity<T> {
+
+    [RequireComponentTag(typeof(CommitJobComponent))]
+    public struct CommitAbilityJob : IJobForEachWithEntity<TAbility, TCost> {
+        public EntityCommandBuffer.Concurrent EntityCommandBuffer;
+        [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
+        public void Execute(Entity entity, int index, [ReadOnly] ref TAbility ability, [ReadOnly] ref TCost Cost) {
+            var attributes = attributesComponent[ability.Source];
+            Cost.ApplyGameplayEffect(index, EntityCommandBuffer, ability.Source, ability.Source, attributes);
+            EntityCommandBuffer.RemoveComponent<CommitJobComponent>(index, entity);
+            EntityCommandBuffer.RemoveComponent<CastingAbilityTagComponent>(index, ability.Source);
+        }
+
+    }
+
+    [RequireComponentTag(typeof(CancelAbilityComponent))]
+    public struct CancelAbilityJob : IJobForEachWithEntity<TAbility> {
+        public EntityCommandBuffer.Concurrent EntityCommandBuffer;
+        public void Execute(Entity entity, int index, [ReadOnly] ref TAbility _) {
+            EntityCommandBuffer.DestroyEntity(index, entity);
+        }
+    }
+
+    public struct AbilityJob : IJobForEachWithEntity<TAbility> {
         [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
-        public void Execute(Entity entity, int index, [ReadOnly] ref T ability) {
+        public void Execute(Entity entity, int index, [ReadOnly] ref TAbility ability) {
             // if (!attributesComponent.Exists(castingComponent.Owner)) return;
 
             // if (ability.EntityHasResource(attributesComponent[castingComponent.Owner])) {
@@ -46,40 +80,42 @@ where T : struct, IComponentData, Ability {
         }
     }
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
+        var commandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent();
         var job1 = new CheckAbilityConstraintsJob()
         {
             attributesComponent = GetComponentDataFromEntity<AttributesComponent>(true),
-            EntityCommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent()
+            EntityCommandBuffer = commandBuffer
         };
 
-        var job2 = new AbilityJob()
+        var job2 = new CommitAbilityJob()
         {
             attributesComponent = GetComponentDataFromEntity<AttributesComponent>(true),
-            EntityCommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent()
+            EntityCommandBuffer = commandBuffer
+    };
+
+        var jobCancelAbility = new CancelAbilityJob()
+        {
+            EntityCommandBuffer = commandBuffer
         };
-        
+
         var jobHandle = job1.Schedule(this, inputDeps);
         var jobHandle2 = job2.Schedule(this, jobHandle);
-        m_EntityCommandBufferSystem.AddJobHandleForProducer(jobHandle2);
-        return jobHandle2;
-    }
 
-}
-
-public class FireAbilitySystem : AbilitySystem<FireAbility> {
-
-}
-
-public struct CheckAbilityConstraints : IComponentData { }
-public struct PassedAbilityConstraintsComponent : IComponentData { }
-
-public struct CastingAbilityTagComponent : IComponentData { }
-public struct FireAbility : Ability, IComponentData {
-    public bool EntityHasResource(AttributesComponent attributes) {
-        return attributes.Mana.CurrentValue >= 2;
+        var jobCancelAbilityHandle = jobCancelAbility.Schedule(this, jobHandle2);
+        m_EntityCommandBufferSystem.AddJobHandleForProducer(jobCancelAbilityHandle);
+        return jobCancelAbilityHandle;
     }
 }
 
-public interface Ability {
-    bool EntityHasResource(AttributesComponent attributes);
+public interface IAbility {
+    Entity Target { get; set; }
+    Entity Source { get; set; }
+}
+
+public interface IGameplayEffect {
+    void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
+}
+
+public interface ICost: IGameplayEffect {
+    bool CheckResourcesAvailable(Entity Caster, AttributesComponent attributes);
 }
