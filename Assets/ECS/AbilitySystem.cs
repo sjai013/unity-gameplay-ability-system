@@ -48,13 +48,14 @@ where TCost : struct, IComponentData, ICost
     }
 
     [RequireComponentTag(typeof(CommitJobComponent))]
+    [ExcludeComponent(typeof(CommitJobSystemComponent))]
     public struct CommitAbilityJob : IJobForEachWithEntity<TAbility, TCost> {
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
         [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
         public void Execute(Entity entity, int index, [ReadOnly] ref TAbility ability, [ReadOnly] ref TCost Cost) {
             var attributes = attributesComponent[ability.Source];
             Cost.ApplyGameplayEffect(index, EntityCommandBuffer, ability.Source, ability.Source, attributes);
-            EntityCommandBuffer.RemoveComponent<CommitJobComponent>(index, entity);
+            EntityCommandBuffer.AddComponent<CommitJobSystemComponent>(index, entity);
             EntityCommandBuffer.RemoveComponent<CastingAbilityTagComponent>(index, ability.Source);
         }
 
@@ -64,6 +65,7 @@ where TCost : struct, IComponentData, ICost
     public struct CancelAbilityJob : IJobForEachWithEntity<TAbility> {
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
         public void Execute(Entity entity, int index, [ReadOnly] ref TAbility _) {
+            EntityCommandBuffer.RemoveComponent<CastingAbilityTagComponent>(index, _.Source);
             EntityCommandBuffer.DestroyEntity(index, entity);
         }
     }
@@ -100,7 +102,7 @@ where TCost : struct, IComponentData, ICost
 
         var jobHandle = job1.Schedule(this, inputDeps);
         var jobHandle2 = job2.Schedule(this, jobHandle);
-
+        
         var jobCancelAbilityHandle = jobCancelAbility.Schedule(this, jobHandle2);
         m_EntityCommandBufferSystem.AddJobHandleForProducer(jobCancelAbilityHandle);
         return jobCancelAbilityHandle;
