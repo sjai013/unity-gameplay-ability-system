@@ -1,21 +1,28 @@
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
 
-public class FireAbilitySystem : AbilitySystem<FireAbility, FireAbilityCooldownJob> {
+public class FireAbilitySystem : AbilitySystem<FireAbility, FireAbilityCooldownJob> { }
 
-    protected override void OnCreate() {
-        // cooldownQueryDesc = new EntityQueryDesc
-        // {
-        //     Any = new ComponentType[] { ComponentType.ReadOnly<FireCooldownTagComponent>(), ComponentType.ReadOnly<GlobalCooldownTagComponent>() }
-        // };
-        base.OnCreate();
+[BurstCompile]
+public struct FireAbilityCooldownJob : ICooldownJob, IJobForEachWithEntity<FireAbility>, ICooldownSystemComponentDefinition {
+    public NativeArray<CooldownTimeCaster> CooldownArray { get => _cooldownArray; set => _cooldownArray = value; }
 
+    [DeallocateOnJobCompletion] [ReadOnly] private NativeArray<CooldownTimeCaster> _cooldownArray;
+    public void Execute(Entity entity, int index, ref FireAbility ability) {
+        // Get the highest time remaining where the caster == entity
+        var maxTimeRemaining = 0f;
+        for (int i = 0; i < _cooldownArray.Length; i++) {
+            if (ability.Source.Equals(_cooldownArray[i].Caster) &&
+                _cooldownArray[i].TimeRemaining > maxTimeRemaining) {
+                maxTimeRemaining = _cooldownArray[i].TimeRemaining;
+            }
+        }
+        ability.CooldownTimeRemaining = maxTimeRemaining;
     }
-}
 
-public struct FireAbilityCooldown : ICooldownSystemComponentDefinition {
     public EntityQueryDesc CooldownQueryDesc {
         get =>
                 new EntityQueryDesc
@@ -26,15 +33,17 @@ public struct FireAbilityCooldown : ICooldownSystemComponentDefinition {
     }
 }
 
-public class FireAbilityCooldownSystem : AbilityCooldownSystem<FireAbilityCooldown> { }
-public struct FireAbilityCooldownJob : IJobForEachWithEntity<CooldownEffectComponent, GameplayEffectDurationComponent> {
-    public void Execute(Entity entity, int index, ref CooldownEffectComponent c0, ref GameplayEffectDurationComponent c1) {
-    }
+public interface ICooldownJob {
+    NativeArray<CooldownTimeCaster> CooldownArray { get; set; }
 }
 
 public struct FireAbility : IAbility, IComponentData {
-    public Entity Target { get; set; }
-    public Entity Source { get; set; }
+    public Entity Target { get => _target; set => _target = value; }
+    public Entity _target;
+    public Entity Source { get => _source; set => _source = value; }
+    public Entity _source;
+    public float CooldownTimeRemaining { get => _cooldownTimeRemaining; set => _cooldownTimeRemaining = value; }
+    public float _cooldownTimeRemaining;
 
     public void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
         new FireAbilityCost().ApplyGameplayEffect(index, Ecb, Source, Target, attributesComponent);
@@ -54,9 +63,6 @@ public struct FireAbility : IAbility, IComponentData {
         attributes = new FireAbilityCost().ComputeResourceUsage(Caster, attributes);
         attributes = new FireAbilityCost().ComputeResourceUsage(Caster, attributes);
         return attributes.Mana.CurrentValue >= 0;
-    }
-    public void CheckCooldownForCaster(NativeArray<GameplayEffectDurationComponent> CooldownEffects) {
-
     }
 
     public struct FireAbilityCooldownEffect : ICooldown, IComponentData {

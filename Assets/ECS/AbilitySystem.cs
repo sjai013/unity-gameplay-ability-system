@@ -1,3 +1,4 @@
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -14,9 +15,7 @@ using UnityEngine;
 /// </summary>
 public abstract class AbilitySystem<TAbility, TCooldown> : JobComponentSystem
 where TAbility : struct, IComponentData, IAbility
-where TCooldown : struct, IJobForEachWithEntity<CooldownEffectComponent, GameplayEffectDurationComponent>
-// where TCost : struct, IComponentData, ICost 
-{
+where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<TAbility>, ICooldownSystemComponentDefinition {
 
     BeginSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
     protected override void OnCreate() {
@@ -61,14 +60,33 @@ where TCooldown : struct, IJobForEachWithEntity<CooldownEffectComponent, Gamepla
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
         public void Execute(Entity entity, int index, [ReadOnly] ref TAbility _) {
             EntityCommandBuffer.RemoveComponent<CastingAbilityTagComponent>(index, _.Source);
-            EntityCommandBuffer.DestroyEntity(index, entity);
+            // EntityCommandBuffer.DestroyEntity(index, entity);
         }
     }
 
 
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         var commandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent();
+        var cooldownJob = new TCooldown();
 
+        // Initialise cooldown data
+        var cooldownQuery = GetEntityQuery(cooldownJob.CooldownQueryDesc);
+        var cooldownTimes = cooldownQuery.ToComponentDataArray<GameplayEffectDurationComponent>(Allocator.TempJob);
+        var casters = cooldownQuery.ToComponentDataArray<CooldownEffectComponent>(Allocator.TempJob);
+        NativeArray<CooldownTimeCaster> cooldownArray = new NativeArray<CooldownTimeCaster>(cooldownTimes.Length, Allocator.TempJob);
+        for (var i = 0; i < cooldownTimes.Length; i++) {
+            cooldownArray[i] = new CooldownTimeCaster
+            {
+                Caster = casters[i].Caster,
+                TimeRemaining = cooldownTimes[i].TimeRemaining
+            };
+        }
+        cooldownTimes.Dispose();
+        casters.Dispose();
+        cooldownJob.CooldownArray = cooldownArray;
+
+
+        // Ability activation job
         inputDeps = new ActivateAbilityJob()
         {
             attributesComponent = GetComponentDataFromEntity<AttributesComponent>(true),
@@ -76,13 +94,14 @@ where TCooldown : struct, IJobForEachWithEntity<CooldownEffectComponent, Gamepla
             WorldTime = Time.time
         }.Schedule(this, inputDeps);
 
+        // Ability end job
         inputDeps = new EndAbilityJob()
         {
             EntityCommandBuffer = commandBuffer
         }.Schedule(this, inputDeps);
 
-        // inputDeps = new TCooldown().Schedule(cooldownQuery, inputDeps);
-
+        // Cooldown job
+        inputDeps = cooldownJob.Schedule(this, inputDeps);
         m_EntityCommandBufferSystem.AddJobHandleForProducer(inputDeps);
         return inputDeps;
     }
@@ -96,6 +115,7 @@ where TCooldown : struct, IJobForEachWithEntity<CooldownEffectComponent, Gamepla
 public interface IAbility {
     Entity Target { get; set; }
     Entity Source { get; set; }
+    float CooldownTimeRemaining { get; set; }
 
     /// <summary>
     /// Application of costs associated with ability
@@ -135,14 +155,38 @@ public interface IAbility {
     void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime);
 }
 
-public abstract class AbilityCooldownSystem<T> : JobComponentSystem
-    where T : struct, ICooldownSystemComponentDefinition {
-    private EntityQuery cooldownQuery;
+
+
+public abstract class AbilityCooldownSystem<T0, T1> : JobComponentSystem
+    where T0 : struct, IComponentData
+    where T1 : struct, ICooldownJob, IJobForEachWithEntity<T0>, ICooldownSystemComponentDefinition {
     protected override void OnCreate() {
-        cooldownQuery = GetEntityQuery(new T().CooldownQueryDesc);
+        //cooldownQuery = GetEntityQuery((new T1()).CooldownQueryDesc);
     }
+
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
-        inputDeps = new FireAbilityCooldownJob().Schedule(cooldownQuery, inputDeps);
+        //NativeArray<Entity> targetEntityArray = cooldownQuery.ToEntityArray(Allocator.TempJob);
+
+        var job = new T1();
+
+        var cooldownQuery = GetEntityQuery(job.CooldownQueryDesc);
+        var cooldownTimes = cooldownQuery.ToComponentDataArray<GameplayEffectDurationComponent>(Allocator.TempJob);
+        var casters = cooldownQuery.ToComponentDataArray<CooldownEffectComponent>(Allocator.TempJob);
+        NativeArray<CooldownTimeCaster> cooldownArray = new NativeArray<CooldownTimeCaster>(cooldownTimes.Length, Allocator.TempJob);
+
+        for (var i = 0; i < cooldownTimes.Length; i++) {
+            cooldownArray[i] = new CooldownTimeCaster
+            {
+                Caster = casters[i].Caster,
+                TimeRemaining = cooldownTimes[i].TimeRemaining
+            };
+        }
+
+        cooldownTimes.Dispose();
+        casters.Dispose();
+        job.CooldownArray = cooldownArray;
+        inputDeps = job.Schedule(this, inputDeps);
+
         return inputDeps;
     }
 }
@@ -151,6 +195,11 @@ public interface ICooldownSystemComponentDefinition {
     EntityQueryDesc CooldownQueryDesc { get; }
 }
 
+
+public struct CooldownTimeCaster {
+    public Entity Caster;
+    public float TimeRemaining;
+}
 
 // This describes the number of buffer elements that should be reserved
 // in chunk data for each instance of a buffer. In this case, 8 integers
