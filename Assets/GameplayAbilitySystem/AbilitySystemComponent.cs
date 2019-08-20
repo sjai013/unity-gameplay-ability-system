@@ -137,9 +137,13 @@ namespace GameplayAbilitySystem {
         /// <inheritdoc />
         public bool TryActivateAbility(GameplayAbility Ability, AbilitySystemComponent Source, AbilitySystemComponent Target) {
             if (World.Active.EntityManager.HasComponent<CastingAbilityTagComponent>(Source.entity)) return false;
-            World.Active.EntityManager.AddComponent(entity, typeof(CastingAbilityTagComponent));
-            var abilityEntity = World.Active.EntityManager.CreateEntity(typeof(CheckAbilityConstraintsComponent), typeof(FireAbility), typeof(FireAbilityCost));
-            World.Active.EntityManager.SetComponentData(abilityEntity, new FireAbility()
+            // World.Active.EntityManager.AddComponent(entity, typeof(CastingAbilityTagComponent));
+            // var abilityEntity = World.Active.EntityManager.CreateEntity(typeof(CheckAbilityConstraintsComponent), 
+            //                                                             typeof(FireAbility), 
+            //                                                             typeof(FireAbilitySystem.AbilityCost));
+            var tryActiveAbilityEntity = World.Active.EntityManager.CreateEntity(typeof(FireAbility),
+                                                                                    typeof(TryActivatingAbilityComponent));
+            World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, new FireAbility()
             {
                 Source = Source.entity,
                 Target = Target.entity
