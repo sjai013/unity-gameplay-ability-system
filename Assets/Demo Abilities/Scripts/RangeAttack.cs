@@ -6,6 +6,9 @@ using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects;
 using GameplayAbilitySystem.Interfaces;
 using UniRx.Async;
+using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 using UnityStandardAssets.Cameras;
 
@@ -27,45 +30,13 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
         public string ProjectileFireTriggerName;
         public string CompletionAnimatorStateFullHash;
 
-        public override async void ActivateAbility(IGameplayAbilitySystem AbilitySystem, IGameplayAbility Ability) {
+        public GameObject SpawnProjectile(LocalToWorld spawnLocation) {
+            return Instantiate(Projectile);
 
+        }
 
-            var abilitySystemActor = AbilitySystem.GetActor();
-            var animationEventSystemComponent = abilitySystemActor.GetComponent<AnimationEventSystem>();
-            var animatorComponent = abilitySystemActor.GetComponent<Animator>();
-
-
-            // Make sure we have enough resources.  End ability if we don't
-
-            (_, var gameplayEventData) = await AbilitySystem.OnGameplayEvent.WaitForEvent((gameplayTag, eventData) => gameplayTag == WaitForEventTag);
-            animatorComponent.SetTrigger(AnimationTriggerName);
-
-            List<GameObject> objectsSpawned = new List<GameObject>();
-
-            GameObject instantiatedProjectile = null;
-
-            await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == CastingInitiated);
-
-
-
-            if (Projectile != null) {
-                instantiatedProjectile = Instantiate(Projectile);
-                instantiatedProjectile.transform.position = abilitySystemActor.transform.position + this.ProjectilePositionOffset + abilitySystemActor.transform.forward * 1.2f;
-            }
-
-            animatorComponent.SetTrigger(ProjectileFireTriggerName);
-
-            await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == FireProjectile);
-
-            // Animation complete.  Spawn and send projectile at target
-            if (instantiatedProjectile != null) {
-                SeekTargetAndDestroy(AbilitySystem, gameplayEventData, instantiatedProjectile);
-            }
-
-
-            var beh = animatorComponent.GetBehaviour<AnimationBehaviourEventSystem>();
-            await beh.StateEnter.WaitForEvent((animator, stateInfo, layerIndex) => stateInfo.fullPathHash == Animator.StringToHash(CompletionAnimatorStateFullHash));
-
+        public override void ActivateAbility(AbilitySystemComponent AbilitySystem, GameplayAbility Ability) {
+            //ActivateAbility(AbilitySystem, new GameplayEventData());
             Ability.EndAbility(AbilitySystem);
         }
 
@@ -80,5 +51,46 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
             DestroyImmediate(projectile);
         }
 
+        public override async void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, Entity AbilityEntity) {
+            var abilitySystemActor = Source.GetActor();
+            var animationEventSystemComponent = abilitySystemActor.GetComponent<AnimationEventSystem>();
+            var animatorComponent = abilitySystemActor.GetComponent<Animator>();
+            World.Active.EntityManager.RemoveComponent<AbilityActiveComponent>(AbilityEntity);
+            World.Active.EntityManager.AddComponent<AbilityActivatedComponent>(AbilityEntity);
+
+            // Make sure we have enough resources.  End ability if we don't
+
+            animatorComponent.SetTrigger(AnimationTriggerName);
+            //(_, var gameplayEventData) = await AbilitySystem.OnGameplayEvent.WaitForEvent((gameplayTag, eventData) => gameplayTag == WaitForEventTag);
+            var gameplayEventData = new GameplayEventData()
+            {
+                Instigator = Source,
+                Target = Target
+            };
+
+            List<GameObject> objectsSpawned = new List<GameObject>();
+
+            GameObject instantiatedProjectile = null;
+
+            await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == CastingInitiated);
+
+            if (Projectile != null) {
+                instantiatedProjectile = Instantiate(Projectile);
+                instantiatedProjectile.transform.position = abilitySystemActor.transform.position + this.ProjectilePositionOffset + abilitySystemActor.transform.forward * 1.2f;
+            }
+
+            animatorComponent.SetTrigger(ProjectileFireTriggerName);
+
+            await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == FireProjectile);
+
+            // Animation complete.  Spawn and send projectile at target
+            if (instantiatedProjectile != null) {
+                SeekTargetAndDestroy(Source, gameplayEventData, instantiatedProjectile);
+            }
+
+
+            var beh = animatorComponent.GetBehaviour<AnimationBehaviourEventSystem>();
+            await beh.StateEnter.WaitForEvent((animator, stateInfo, layerIndex) => stateInfo.fullPathHash == Animator.StringToHash(CompletionAnimatorStateFullHash));
+        }
     }
 }

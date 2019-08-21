@@ -5,6 +5,7 @@ using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects;
 using GameplayAbilitySystem.Interfaces;
 using UniRx.Async;
+using Unity.Entities;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.AbilityActivations {
@@ -18,7 +19,7 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
         public string AnimationCompleteTriggerName;
         public string CompletionAnimatorStateFullHash;
 
-        public override async void ActivateAbility(IGameplayAbilitySystem AbilitySystem, IGameplayAbility Ability) {
+        public override async void ActivateAbility(AbilitySystemComponent AbilitySystem, GameplayAbility Ability) {
             var abilitySystemActor = AbilitySystem.GetActor();
             var animationEventSystemComponent = abilitySystemActor.GetComponent<AnimationEventSystem>();
             var animatorComponent = abilitySystemActor.GetComponent<Animator>();
@@ -42,5 +43,8 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
             Ability.EndAbility(AbilitySystem);
         }
 
+        public override void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, Entity AbilityEntity) {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,8 +1,17 @@
+﻿using GameplayAbilitySystem;
+using GameplayAbilitySystem.Abilities.AbilityActivations;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
+using Unity.Transforms;
 using UnityEngine;
+
+public class FireAbilityHybridBehaviour : MonoBehaviour, IConvertGameObjectToEntity {
+    public RangeAttack attackBehaviour;
+    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
+
+    }
+}
 
 public class FireAbilitySystem : AbilitySystem<FireAbility, FireAbilityCooldownJob> {
     public struct AbilityCost : ICost, IComponentData {
@@ -28,13 +37,9 @@ public class FireAbilitySystem : AbilitySystem<FireAbility, FireAbilityCooldownJ
             return attributes;
         }
     }
-
-
-
 }
 
-public struct
-FireAbility : IAbility, IComponentData {
+public struct FireAbility : IAbility, IComponentData {
     public Entity Target { get => _target; set => _target = value; }
     public Entity _target;
     public Entity Source { get => _source; set => _source = value; }
@@ -97,7 +102,6 @@ FireAbility : IAbility, IComponentData {
 
 }
 
-
 public struct FireGameplayEffect : IGameplayEffect, IComponentData {
     public Entity Target { get; set; }
     public Entity Source { get; set; }
@@ -149,3 +153,29 @@ public struct FireAbilityCooldownJob : ICooldownJob, IJobForEachWithEntity<FireA
                 };
     }
 }
+
+public class FireAbilityActivationSystem : AbilityActivationSystem<FireAbility, FireAbilityHybridBehaviour> {
+
+    public AbstractAbilityActivation Behaviour;
+    public GameObject Prefab;
+
+    protected override void OnUpdate() {
+        // This is a simple system, where there is only one projectile to worry about.
+        // We could create a new entity to capture the position of the projectile, but to keep it simple
+        // we use the existing entity
+
+        Entities.WithAll<FireAbility, ActivateAbilityComponent>().ForEach((Entity entity, ref FireAbility ability) => {
+            var transforms = GetComponentDataFromEntity<LocalToWorld>(true);
+            var sourceTransform = transforms[ability.Source];
+            var source = EntityManager.GetComponentObject<AbilitySystemComponent>(ability.Source);
+            var target = EntityManager.GetComponentObject<AbilitySystemComponent>(ability.Target);
+            Behaviour.ActivateAbility(source, target, entity);
+            // Behaviour.ActivateAbility
+            World.Active.EntityManager.RemoveComponent<ActivateAbilityComponent>(entity);
+            World.Active.EntityManager.AddComponent<AbilityActiveComponent>(entity);
+        });
+
+    }
+}
+
+public struct FireAbilityTagComponent : IComponentData { }

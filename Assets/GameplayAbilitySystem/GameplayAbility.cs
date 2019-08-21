@@ -68,7 +68,7 @@ namespace GameplayAbilitySystem.Abilities {
 
 
         /// <inheritdoc />
-        public virtual void ActivateAbility(IGameplayAbilitySystem AbilitySystem) {
+        public virtual void ActivateAbility(AbilitySystemComponent AbilitySystem) {
             if (_targettingLogic != null) _targettingLogic.InitiateTargetting(AbilitySystem, this);
             _abilityLogic.ActivateAbility(AbilitySystem, this);
             ApplyCooldown(AbilitySystem);
@@ -167,7 +167,7 @@ namespace GameplayAbilitySystem.Abilities {
         }
 
         /// <inheritdoc />
-        public bool CommitAbility(IGameplayAbilitySystem AbilitySystem) {
+        public bool CommitAbility(AbilitySystemComponent AbilitySystem) {
             ActivateAbility(AbilitySystem);
             AbilitySystem.OnGameplayAbilityActivated.Invoke(this);
             ApplyCost(AbilitySystem);

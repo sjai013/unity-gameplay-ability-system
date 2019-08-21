@@ -246,20 +246,25 @@ public interface ICooldownJob {
     NativeArray<CooldownTimeCaster> CooldownArray { get; set; }
 }
 
+/// <summary>
+/// Tag to check if ability can be activated (resource, cooldown)
+/// </summary>
 public struct TryActivatingAbilityComponent : IComponentData { }
+
+/// <summary>
+/// Tag to activate ability (run using Hybrid ECS - ComponentSystem)
+/// </summary>
 public struct ActivateAbilityComponent : IComponentData { }
+public struct AbilityActiveComponent : IComponentData { }
+
+/// <summary>
+/// Tag to specify ability has been activated, and can be cleaned up 
+/// TODO: What does it mean to clean up an ability here?  Need to better define this process.
+/// </summary>
 public struct AbilityActivatedComponent : IComponentData { }
 
-// This describes the number of buffer elements that should be reserved
-// in chunk data for each instance of a buffer. In this case, 8 integers
-// will be reserved (32 bytes) along with the size of the buffer header
-// (currently 16 bytes on 64-bit targets)
-// [InternalBufferCapacity(4)]
-// public struct CostGameplayEffectBufferElement : IBufferElementData
-// {
-//     // // These implicit conversions are optional, but can help reduce typing.
-//     // public static implicit operator int(CostGameplayEffectBufferElement e) { return e.Value; }
-//     // public static implicit operator CostGameplayEffectBufferElement(int e) { return new CostGameplayEffectBufferElement { Value = e }; }
-//     // Actual value each buffer element will store.
-//     public ICost Value;
-// }
+public abstract class AbilityActivationSystem<T1, T2> : ComponentSystem
+where T1 : struct, IComponentData, IAbility
+where T2 : class {
+
+}

@@ -71,7 +71,7 @@ namespace GameplayAbilitySystem.Interfaces {
         /// Activates this ability on the target <see cref="IGameplayAbilitySystem"/>
         /// </summary>
         /// <param name="AbilitySystem">The target <see cref="IGameplayAbilitySystem"/></param>
-        void ActivateAbility(IGameplayAbilitySystem AbilitySystem);
+        void ActivateAbility(AbilitySystemComponent AbilitySystem);
 
         /// <summary>
         /// Check if this ability can be activated by <see cref="IGameplayAbilitySystem"/>
@@ -98,7 +98,7 @@ namespace GameplayAbilitySystem.Interfaces {
         /// </summary>
         /// <param name="AbilitySystem">The target <see cref="IGameplayAbilitySystem"/></param>
         /// <returns></returns>
-        bool CommitAbility(IGameplayAbilitySystem AbilitySystem);
+        bool CommitAbility(AbilitySystemComponent AbilitySystem);
 
         /// <summary>
         /// The cooldown tags associated with this <see cref="IGameplayAbility"/>
