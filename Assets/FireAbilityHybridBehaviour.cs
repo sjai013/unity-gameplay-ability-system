@@ -1,5 +1,6 @@
 ﻿using GameplayAbilitySystem;
 using GameplayAbilitySystem.Abilities.AbilityActivations;
+using GameplayAbilitySystem.ExtensionMethods;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -32,6 +33,26 @@ public class FireAbilitySystem : AbilitySystem<FireAbility, FireAbilityCooldownJ
             Ecb.AddComponent(index, attributeModEntity, new PermanentAttributeModification());
             Ecb.AddComponent(index, attributeModEntity, attributeModData);
         }
+
+        public void ApplyGameplayEffect(EntityManager EntityManager, Entity Source, Entity Target, AttributesComponent attributesComponent) {
+            var attributeModData = new AttributeModificationComponent()
+            {
+                Add = -ManaCost,
+                Multiply = 0,
+                Divide = 0,
+                Change = 0,
+                Source = Source,
+                Target = Target
+            };
+
+            var attributeModEntity = EntityManager.CreateEntity(
+                                            typeof(ManaAttributeModifier),
+                                            typeof(PermanentAttributeModification),
+                                            typeof(AttributeModificationComponent)
+            );
+            EntityManager.SetComponentData(attributeModEntity, attributeModData);
+        }
+
         public AttributesComponent ComputeResourceUsage(Entity Caster, AttributesComponent attributes) {
             attributes.Mana.CurrentValue -= ManaCost;
             return attributes;
@@ -49,7 +70,6 @@ public struct FireAbility : IAbility, IComponentData {
 
     public void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
         new FireAbilitySystem.AbilityCost().ApplyGameplayEffect(index, Ecb, Source, Target, attributesComponent);
-        new FireAbilitySystem.AbilityCost().ApplyGameplayEffect(index, Ecb, Source, Target, attributesComponent);
     }
 
     public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
@@ -58,7 +78,11 @@ public struct FireAbility : IAbility, IComponentData {
     }
 
     public void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
+        new FireGameplayEffect().ApplyGameplayEffect(index, Ecb, Source, Target, attributesComponent);
+    }
 
+    public void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent) {
+        new FireGameplayEffect().ApplyGameplayEffect(entityManager, Source, Target, attributesComponent);
     }
 
     public bool CheckResourceAvailable(Entity Caster, AttributesComponent attributes) {
@@ -68,7 +92,7 @@ public struct FireAbility : IAbility, IComponentData {
     }
 
     public struct FireAbilityCooldownEffect : ICooldown, IComponentData {
-        const float Duration = 10;
+        const float Duration = 5f;
         public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
             var attributeModData = new AttributeModificationComponent()
             {
@@ -123,6 +147,25 @@ public struct FireGameplayEffect : IGameplayEffect, IComponentData {
         Ecb.AddComponent(index, attributeModEntity, new PermanentAttributeModification());
         Ecb.AddComponent(index, attributeModEntity, attributeModData);
     }
+
+    public void ApplyGameplayEffect(EntityManager EntityManager, Entity Source, Entity Target, AttributesComponent attributesComponent) {
+        var attributeModData = new AttributeModificationComponent()
+        {
+            Add = DamageAdder,
+            Multiply = DamageMultiplier,
+            Divide = 0,
+            Change = 0,
+            Source = Source,
+            Target = Target
+        };
+
+        var attributeModEntity = EntityManager.CreateEntity(
+                                                    typeof(HealthAttributeModifier),
+                                                    typeof(PermanentAttributeModification),
+                                                    typeof(AttributeModificationComponent)
+        );
+        EntityManager.SetComponentData(attributeModEntity, attributeModData);
+    }
 }
 
 public struct FireCooldownTagComponent : IComponentData { }
@@ -155,8 +198,11 @@ public struct FireAbilityCooldownJob : ICooldownJob, IJobForEachWithEntity<FireA
 }
 
 public class FireAbilityActivationSystem : AbilityActivationSystem<FireAbility, FireAbilityHybridBehaviour> {
-
-    public AbstractAbilityActivation Behaviour;
+    private const string ProjectileFireTriggerName = "Execute_Magic";
+    private const string CastAnimationTriggerName = "Do_Magic";
+    private const string CompletionAnimatorStateFull = "Base.Idle";
+    public GameplayAbilitySystem.AnimationEvent CastingStartEvent;
+    public GameplayAbilitySystem.AnimationEvent FireProjectileEvent;
     public GameObject Prefab;
 
     protected override void OnUpdate() {
@@ -169,11 +215,55 @@ public class FireAbilityActivationSystem : AbilityActivationSystem<FireAbility, 
             var sourceTransform = transforms[ability.Source];
             var source = EntityManager.GetComponentObject<AbilitySystemComponent>(ability.Source);
             var target = EntityManager.GetComponentObject<AbilitySystemComponent>(ability.Target);
-            Behaviour.ActivateAbility(source, target, entity);
-            // Behaviour.ActivateAbility
+            ActivateAbility(source, target, entity, ability);
             World.Active.EntityManager.RemoveComponent<ActivateAbilityComponent>(entity);
             World.Active.EntityManager.AddComponent<AbilityActiveComponent>(entity);
         });
+    }
+
+    private async void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, Entity AbilityEntity, FireAbility ability) {
+        var abilitySystemActor = Source.GetActor();
+        var animationEventSystemComponent = abilitySystemActor.GetComponent<AnimationEventSystem>();
+        var animatorComponent = abilitySystemActor.GetComponent<Animator>();
+        World.Active.EntityManager.RemoveComponent<AbilityActiveComponent>(AbilityEntity);
+        World.Active.EntityManager.AddComponent<AbilityActivatedComponent>(AbilityEntity);
+
+        // Make sure we have enough resources.  End ability if we don't
+
+        animatorComponent.SetTrigger(CastAnimationTriggerName);
+        //(_, var gameplayEventData) = await AbilitySystem.OnGameplayEvent.WaitForEvent((gameplayTag, eventData) => gameplayTag == WaitForEventTag);
+        var gameplayEventData = new GameplayAbilitySystem.Events.GameplayEventData()
+        {
+            Instigator = Source,
+            Target = Target
+        };
+
+        GameObject instantiatedProjectile = null;
+
+        await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == CastingStartEvent);
+
+        instantiatedProjectile = MonoBehaviour.Instantiate(Prefab);
+        instantiatedProjectile.transform.position = abilitySystemActor.transform.position + new Vector3(0, 1.5f, 0) + abilitySystemActor.transform.forward * 1.2f;
+
+        animatorComponent.SetTrigger(ProjectileFireTriggerName);
+
+        await animationEventSystemComponent.CustomAnimationEvent.WaitForEvent((x) => x == FireProjectileEvent);
+
+        // Animation complete.  Spawn and send projectile at target
+        if (instantiatedProjectile != null) {
+            SeekTargetAndDestroy(Source, Target, instantiatedProjectile, ability);
+        }
+
+
+        var beh = animatorComponent.GetBehaviour<AnimationBehaviourEventSystem>();
+        await beh.StateEnter.WaitForEvent((animator, stateInfo, layerIndex) => stateInfo.fullPathHash == Animator.StringToHash(CompletionAnimatorStateFull));
+    }
+
+    private async void SeekTargetAndDestroy(AbilitySystemComponent Source, AbilitySystemComponent Target, GameObject projectile, FireAbility Ability) {
+        await projectile.GetComponent<Projectile>().SeekTarget(Target.TargettingLocation.gameObject, Target.gameObject);
+        var attributesComponent = GetComponentDataFromEntity<AttributesComponent>(false);
+        Ability.ApplyGameplayEffects(World.Active.EntityManager, Source.entity, Target.entity, attributesComponent[Target.entity]);
+        MonoBehaviour.DestroyImmediate(projectile);
 
     }
 }

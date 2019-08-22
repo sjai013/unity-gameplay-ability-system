@@ -36,6 +36,7 @@ public struct CooldownEffectComponent : IComponentData {
 /// </summary>
 public interface IGameplayEffect {
     void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
+    void ApplyGameplayEffect(EntityManager EntityManager, Entity Source, Entity Target, AttributesComponent attributesComponent);
 }
 
 /// <summary>

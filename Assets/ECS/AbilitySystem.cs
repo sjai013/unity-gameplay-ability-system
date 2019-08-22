@@ -194,6 +194,7 @@ public interface IAbility {
     /// <param name="Caster"></param>
     /// <param name="WorldTime"></param>
     void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime);
+    void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent);
 }
 
 

@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using GameplayAbilitySystem.Abilities.AbilityActivations;
 using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
 
 [DisallowMultipleComponent]
 [RequiresEntityConversion]
 public class FireballAuthoringComponent : MonoBehaviour, IConvertGameObjectToEntity {
     [SerializeField] GameObject Prefab;
+    [SerializeField] GameplayAbilitySystem.AnimationEvent CastingStartEvent;
+    [SerializeField] GameplayAbilitySystem.AnimationEvent FireProjectileEvent;
     [SerializeField] AbstractAbilityActivation AbilityActivationBehaviour;
     // Add fields to your component here. Remember that:
     //
@@ -25,7 +26,8 @@ public class FireballAuthoringComponent : MonoBehaviour, IConvertGameObjectToEnt
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
         var system = World.Active.GetExistingSystem<FireAbilityActivationSystem>();
         system.Prefab = Prefab;
-        system.Behaviour = AbilityActivationBehaviour;
+        system.CastingStartEvent = CastingStartEvent;
+        system.FireProjectileEvent = FireProjectileEvent;
     }
 
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs) {
