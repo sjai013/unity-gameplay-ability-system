@@ -43,7 +43,7 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
             Ability.EndAbility(AbilitySystem);
         }
 
-        public override void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, Entity AbilityEntity) {
+        public override void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, IAbility Ability) {
             throw new NotImplementedException();
         }
     }

@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Entities;
 
 public class AbilityHotbarManager : MonoBehaviour {
     public AbilityCharacter AbilityCharacter;
@@ -19,19 +20,36 @@ public class AbilityHotbarManager : MonoBehaviour {
             }
         }
 
+        World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityCharacter = AbilityCharacter;
+        World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityButtons = AbilityButtons;
+
     }
 
-    void Update() {
+}
+
+public class AbilityHotbarUpdateSystem : ComponentSystem {
+    public AbilityCharacter AbilityCharacter;
+    public List<AbilityHotbarButton> AbilityButtons;
+    protected override void OnUpdate() {
+        // reset all cooldowns
         for (int i = 0; i < AbilityButtons.Count; i++) {
-            var button = AbilityButtons[i];
-            (var cooldownElapsed, var cooldownTotal) = AbilityCharacter.GetCooldownOfAbility(i);
-            var remainingPercent = 0f;
-            if (cooldownTotal != 0) {
-                remainingPercent = 1 - cooldownElapsed / cooldownTotal;
-            }
-            button.SetCooldownRemainingPercent(1 - remainingPercent);
+            AbilityButtons[i].SetCooldownRemainingPercent(1);
         }
-
+        Entities.ForEach<FireAbility>((Entity entity, ref FireAbility Ability) => {
+            if (Ability.Source == AbilityCharacter.SelfAbilitySystem.entity && Ability.CooldownDuration > 0) {
+                UpdateButton(0, Ability.CooldownDuration, Ability.CooldownTimeRemaining);
+            }
+        });
     }
+
+    private void UpdateButton(int index, float cooldownDuration, float cooldownTimeRemaining) {
+        var button = AbilityButtons[index];
+        var remainingPercent = 0f;
+        if (cooldownDuration != 0) {
+            remainingPercent = 1 - cooldownTimeRemaining / cooldownDuration;
+        }
+        button.SetCooldownRemainingPercent(remainingPercent);
+    }
+
 
 }

@@ -1,3 +1,4 @@
+using Unity.Collections;
 using Unity.Entities;
 /// <summary>
 /// Marks the ability system to check if the ability can be activated
@@ -15,7 +16,7 @@ struct CommitJobComponent : IComponentData { }
 struct CommitJobSystemComponent : ISystemStateComponentData { }
 
 /// <summary>
-/// Tag to indicate the entity is currently casting, and therefore not able to cast
+/// /// Tag to indicate the entity is currently casting, and therefore not able to cast
 /// </summary>
 struct CastingAbilityTagComponent : IComponentData { }
 
@@ -52,3 +53,26 @@ public interface ICooldown {
 public interface ICost : IGameplayEffect {
     AttributesComponent ComputeResourceUsage(Entity Caster, AttributesComponent attributes);
 }
+
+
+public interface ICooldownSystemComponentDefinition {
+    EntityQueryDesc CooldownQueryDesc { get; }
+}
+
+
+public struct CooldownTimeCaster {
+    public Entity Caster;
+    public float TimeRemaining;
+    public float Duration;
+}
+
+public interface ICooldownJob {
+    NativeArray<CooldownTimeCaster> CooldownArray { get; set; }
+}
+
+public struct AbilityStateComponent : IComponentData {
+    public AbilityState State;
+}
+
+
+public enum AbilityState { TryActivate, Activate, Active, Activated, Completed, Failed }

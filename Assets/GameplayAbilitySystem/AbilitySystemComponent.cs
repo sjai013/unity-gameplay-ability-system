@@ -141,8 +141,7 @@ namespace GameplayAbilitySystem {
             // var abilityEntity = World.Active.EntityManager.CreateEntity(typeof(CheckAbilityConstraintsComponent), 
             //                                                             typeof(FireAbility), 
             //                                                             typeof(FireAbilitySystem.AbilityCost));
-            var tryActiveAbilityEntity = World.Active.EntityManager.CreateEntity(typeof(FireAbility),
-                                                                                    typeof(TryActivatingAbilityComponent));
+            var tryActiveAbilityEntity = World.Active.EntityManager.CreateEntity(typeof(FireAbility));
             World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, new FireAbility()
             {
                 Source = Source.entity,

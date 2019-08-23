@@ -51,12 +51,11 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
             DestroyImmediate(projectile);
         }
 
-        public override async void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, Entity AbilityEntity) {
+        public override async void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, IAbility Ability) {
             var abilitySystemActor = Source.GetActor();
             var animationEventSystemComponent = abilitySystemActor.GetComponent<AnimationEventSystem>();
             var animatorComponent = abilitySystemActor.GetComponent<Animator>();
-            World.Active.EntityManager.RemoveComponent<AbilityActiveComponent>(AbilityEntity);
-            World.Active.EntityManager.AddComponent<AbilityActivatedComponent>(AbilityEntity);
+            Ability.State = AbilityState.Activated;
 
             // Make sure we have enough resources.  End ability if we don't
 

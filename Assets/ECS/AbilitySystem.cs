@@ -24,7 +24,6 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<TAbility>, ICooldo
         base.OnCreate();
     }
 
-    [RequireComponentTag(typeof(TryActivatingAbilityComponent))]
     public struct ActivateAbilityJob : IJobForEachWithEntity<TAbility> {
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
         [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
@@ -34,24 +33,25 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<TAbility>, ICooldo
         public float WorldTime;
 
         public void Execute(Entity entity, int index, [ReadOnly] ref TAbility ability) {
+            if (ability.State != AbilityState.TryActivate) return;
             var source = ability.Source;
             var sourceAttrs = attributesComponent[ability.Source];
             if (attributesComponent.Exists(source)) {
                 // Check to make sure we have available resources
                 if (!ResourceAvailable(index, ref entity, ref source, ref sourceAttrs, ref ability)) {
-                    AbilityUnsuccessful(index, entity);
+                    AbilityUnsuccessful(index, ref ability);
                     return;
                 }
                 // Check if ability is on cooldown for player
                 if (!AbilityNotOnCooldown(index, ref entity, ref source)) {
-                    AbilityUnsuccessful(index, entity);
+                    AbilityUnsuccessful(index, ref ability);
                     return;
                 }
 
                 ability.ApplyAbilityCosts(index, EntityCommandBuffer, ability.Source, ability.Source, sourceAttrs);
                 ability.ApplyCooldownEffect(index, EntityCommandBuffer, source, WorldTime);
             }
-            AbilitySuccessful(index, entity);
+            AbilitySuccessful(index, ref ability);
         }
 
         private bool ResourceAvailable(int index, ref Entity entity, ref Entity source, ref AttributesComponent sourceAttrs, ref TAbility ability) {
@@ -73,14 +73,12 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<TAbility>, ICooldo
             return true;
         }
 
-        private void AbilitySuccessful(int index, Entity entity) {
-            EntityCommandBuffer.RemoveComponent<TryActivatingAbilityComponent>(index, entity);
-            EntityCommandBuffer.AddComponent<ActivateAbilityComponent>(index, entity);
-            // EntityCommandBuffer.AddComponent<AbilityActivatedComponent>(index, entity);
+        private void AbilitySuccessful(int index, ref TAbility ability) {
+            ability.State = AbilityState.Activate;
         }
-        private void AbilityUnsuccessful(int index, Entity entity) {
-            EntityCommandBuffer.RemoveComponent<TryActivatingAbilityComponent>(index, entity);
-            EntityCommandBuffer.AddComponent<EndAbilityComponent>(index, entity);
+
+        private void AbilityUnsuccessful(int index, ref TAbility ability) {
+            ability.State = AbilityState.Failed;
         }
     }
 
@@ -90,12 +88,18 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<TAbility>, ICooldo
         public void Execute() {
         }
     }
-    [RequireComponentTag(typeof(EndAbilityComponent))]
+
     public struct EndAbilityJob : IJobForEachWithEntity<TAbility> {
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
-        public void Execute(Entity entity, int index, [ReadOnly] ref TAbility _) {
+        public void Execute(Entity entity, int index, [ReadOnly] ref TAbility ability) {
+            if (ability.State == AbilityState.Failed) {
+                EntityCommandBuffer.DestroyEntity(index, entity);
+            }
+            if (ability.State != AbilityState.Completed) return;
             // EntityCommandBuffer.RemoveComponent<CastingAbilityTagComponent>(index, _.Source);
-            EntityCommandBuffer.DestroyEntity(index, entity);
+            if (ability.CooldownTimeRemaining < 0 && ability.CooldownDuration > 0) {
+                EntityCommandBuffer.DestroyEntity(index, entity);
+            }
         }
     }
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
@@ -111,7 +115,8 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<TAbility>, ICooldo
             var cooldownItem = new CooldownTimeCaster
             {
                 Caster = casters[i].Caster,
-                TimeRemaining = cooldownTimes[i].TimeRemaining
+                TimeRemaining = cooldownTimes[i].TimeRemaining,
+                Duration = cooldownTimes[i].Duration
             };
             cooldownArray[i] = cooldownItem;
         }
@@ -157,6 +162,10 @@ public interface IAbility {
     Entity Target { get; set; }
     Entity Source { get; set; }
     float CooldownTimeRemaining { get; set; }
+    float CooldownDuration { get; set; }
+
+    AbilityState State { get; set; }
+
 
     /// <summary>
     /// Application of costs associated with ability
@@ -198,71 +207,6 @@ public interface IAbility {
 }
 
 
-
-public abstract class AbilityCooldownSystem<T0, T1> : JobComponentSystem
-    where T0 : struct, IComponentData
-    where T1 : struct, ICooldownJob, IJobForEachWithEntity<T0>, ICooldownSystemComponentDefinition {
-    protected override void OnCreate() {
-        //cooldownQuery = GetEntityQuery((new T1()).CooldownQueryDesc);
-    }
-
-    protected override JobHandle OnUpdate(JobHandle inputDeps) {
-        //NativeArray<Entity> targetEntityArray = cooldownQuery.ToEntityArray(Allocator.TempJob);
-
-        var job = new T1();
-
-        var cooldownQuery = GetEntityQuery(job.CooldownQueryDesc);
-        var cooldownTimes = cooldownQuery.ToComponentDataArray<GameplayEffectDurationComponent>(Allocator.TempJob);
-        var casters = cooldownQuery.ToComponentDataArray<CooldownEffectComponent>(Allocator.TempJob);
-        NativeArray<CooldownTimeCaster> cooldownArray = new NativeArray<CooldownTimeCaster>(cooldownTimes.Length, Allocator.TempJob);
-
-        for (var i = 0; i < cooldownTimes.Length; i++) {
-            cooldownArray[i] = new CooldownTimeCaster
-            {
-                Caster = casters[i].Caster,
-                TimeRemaining = cooldownTimes[i].TimeRemaining
-            };
-        }
-
-        cooldownTimes.Dispose();
-        casters.Dispose();
-        job.CooldownArray = cooldownArray;
-        inputDeps = job.Schedule(this, inputDeps);
-
-        return inputDeps;
-    }
-}
-
-public interface ICooldownSystemComponentDefinition {
-    EntityQueryDesc CooldownQueryDesc { get; }
-}
-
-
-public struct CooldownTimeCaster {
-    public Entity Caster;
-    public float TimeRemaining;
-}
-
-public interface ICooldownJob {
-    NativeArray<CooldownTimeCaster> CooldownArray { get; set; }
-}
-
-/// <summary>
-/// Tag to check if ability can be activated (resource, cooldown)
-/// </summary>
-public struct TryActivatingAbilityComponent : IComponentData { }
-
-/// <summary>
-/// Tag to activate ability (run using Hybrid ECS - ComponentSystem)
-/// </summary>
-public struct ActivateAbilityComponent : IComponentData { }
-public struct AbilityActiveComponent : IComponentData { }
-
-/// <summary>
-/// Tag to specify ability has been activated, and can be cleaned up 
-/// TODO: What does it mean to clean up an ability here?  Need to better define this process.
-/// </summary>
-public struct AbilityActivatedComponent : IComponentData { }
 
 public abstract class AbilityActivationSystem<T1, T2> : ComponentSystem
 where T1 : struct, IComponentData, IAbility

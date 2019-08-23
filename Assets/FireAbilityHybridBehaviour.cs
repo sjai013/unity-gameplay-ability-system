@@ -65,8 +65,12 @@ public struct FireAbility : IAbility, IComponentData {
     public Entity _target;
     public Entity Source { get => _source; set => _source = value; }
     public Entity _source;
-    public float CooldownTimeRemaining { get => _cooldownTimeRemaining; set => _cooldownTimeRemaining = value; }
     public float _cooldownTimeRemaining;
+    public float CooldownTimeRemaining { get => _cooldownTimeRemaining; set => _cooldownTimeRemaining = value; }
+    public float _cooldownDuration;
+    public float CooldownDuration { get => _cooldownDuration; set => _cooldownDuration = value; }
+    public AbilityState _state;
+    public AbilityState State { get => _state; set => _state = value; }
 
     public void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
         new FireAbilitySystem.AbilityCost().ApplyGameplayEffect(index, Ecb, Source, Target, attributesComponent);
@@ -92,7 +96,7 @@ public struct FireAbility : IAbility, IComponentData {
     }
 
     public struct FireAbilityCooldownEffect : ICooldown, IComponentData {
-        const float Duration = 5f;
+        const float Duration = 2f;
         public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
             var attributeModData = new AttributeModificationComponent()
             {
@@ -177,14 +181,17 @@ public struct FireAbilityCooldownJob : ICooldownJob, IJobForEachWithEntity<FireA
     [ReadOnly] private NativeArray<CooldownTimeCaster> _cooldownArray;
     public void Execute(Entity entity, int index, [ReadOnly] ref FireAbility ability) {
         // Get the highest time remaining where the caster == entity
-        var maxTimeRemaining = 0f;
+        var maxTimeRemaining = -1f;
+        var duration = 0f;
         for (int i = 0; i < _cooldownArray.Length; i++) {
             if (ability.Source.Equals(_cooldownArray[i].Caster) &&
                 _cooldownArray[i].TimeRemaining > maxTimeRemaining) {
                 maxTimeRemaining = _cooldownArray[i].TimeRemaining;
+                duration = _cooldownArray[i].Duration;
             }
         }
         ability.CooldownTimeRemaining = maxTimeRemaining;
+        ability.CooldownDuration = duration;
     }
 
     public EntityQueryDesc CooldownQueryDesc {
@@ -210,14 +217,14 @@ public class FireAbilityActivationSystem : AbilityActivationSystem<FireAbility, 
         // We could create a new entity to capture the position of the projectile, but to keep it simple
         // we use the existing entity
 
-        Entities.WithAll<FireAbility, ActivateAbilityComponent>().ForEach((Entity entity, ref FireAbility ability) => {
+        Entities.WithAll<FireAbility>().ForEach((Entity entity, ref FireAbility ability) => {
+            if (ability.State != AbilityState.Activate) return;
             var transforms = GetComponentDataFromEntity<LocalToWorld>(true);
             var sourceTransform = transforms[ability.Source];
             var source = EntityManager.GetComponentObject<AbilitySystemComponent>(ability.Source);
             var target = EntityManager.GetComponentObject<AbilitySystemComponent>(ability.Target);
             ActivateAbility(source, target, entity, ability);
-            World.Active.EntityManager.RemoveComponent<ActivateAbilityComponent>(entity);
-            World.Active.EntityManager.AddComponent<AbilityActiveComponent>(entity);
+            ability.State = AbilityState.Completed;
         });
     }
 
@@ -225,8 +232,6 @@ public class FireAbilityActivationSystem : AbilityActivationSystem<FireAbility, 
         var abilitySystemActor = Source.GetActor();
         var animationEventSystemComponent = abilitySystemActor.GetComponent<AnimationEventSystem>();
         var animatorComponent = abilitySystemActor.GetComponent<Animator>();
-        World.Active.EntityManager.RemoveComponent<AbilityActiveComponent>(AbilityEntity);
-        World.Active.EntityManager.AddComponent<AbilityActivatedComponent>(AbilityEntity);
 
         // Make sure we have enough resources.  End ability if we don't
 
@@ -251,7 +256,7 @@ public class FireAbilityActivationSystem : AbilityActivationSystem<FireAbility, 
 
         // Animation complete.  Spawn and send projectile at target
         if (instantiatedProjectile != null) {
-            SeekTargetAndDestroy(Source, Target, instantiatedProjectile, ability);
+            SeekTargetAndDestroy(Source, Target, instantiatedProjectile, ability, AbilityEntity);
         }
 
 
@@ -259,7 +264,7 @@ public class FireAbilityActivationSystem : AbilityActivationSystem<FireAbility, 
         await beh.StateEnter.WaitForEvent((animator, stateInfo, layerIndex) => stateInfo.fullPathHash == Animator.StringToHash(CompletionAnimatorStateFull));
     }
 
-    private async void SeekTargetAndDestroy(AbilitySystemComponent Source, AbilitySystemComponent Target, GameObject projectile, FireAbility Ability) {
+    private async void SeekTargetAndDestroy(AbilitySystemComponent Source, AbilitySystemComponent Target, GameObject projectile, FireAbility Ability, Entity AbilityEntity) {
         await projectile.GetComponent<Projectile>().SeekTarget(Target.TargettingLocation.gameObject, Target.gameObject);
         var attributesComponent = GetComponentDataFromEntity<AttributesComponent>(false);
         Ability.ApplyGameplayEffects(World.Active.EntityManager, Source.entity, Target.entity, attributesComponent[Target.entity]);
