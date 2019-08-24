@@ -17,6 +17,9 @@ namespace GameplayAbilitySystem.Abilities {
         private GameplayAbilityTags _tags = new GameplayAbilityTags();
 
         [SerializeField]
+        public EAbility Ability;
+
+        [SerializeField]
         private GameplayCost _gameplayCost = new GameplayCost();
 
         [SerializeField]

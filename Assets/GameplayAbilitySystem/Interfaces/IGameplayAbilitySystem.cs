@@ -82,7 +82,7 @@ namespace GameplayAbilitySystem.Interfaces {
         /// </summary>
         /// <param name="Ability">The <see cref="GameplayAbility"/> to execute</param>
         /// <returns>True if the ability was activated, false otherwise</returns>
-        bool TryActivateAbility(GameplayAbility Ability, AbilitySystemComponent Source, AbilitySystemComponent Target);
+        bool TryActivateAbility(EAbility Ability, AbilitySystemComponent Source, AbilitySystemComponent Target);
 
         /// <summary>
         /// Applies a <see cref="GameplayEffect"/> to the target <see cref="IGameplayAbilitySystem"/>.

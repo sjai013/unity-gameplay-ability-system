@@ -135,25 +135,37 @@ namespace GameplayAbilitySystem {
         }
 
         /// <inheritdoc />
-        public bool TryActivateAbility(GameplayAbility Ability, AbilitySystemComponent Source, AbilitySystemComponent Target) {
+        public bool TryActivateAbility(EAbility Ability, AbilitySystemComponent Source, AbilitySystemComponent Target) {
             if (World.Active.EntityManager.HasComponent<CastingAbilityTagComponent>(Source.entity)) return false;
+
+            Type abilityType;
+
+            switch (Ability) {
+                case EAbility.FireAbility:
+                    abilityType = typeof(FireAbilityComponent);
+                    break;
+                case EAbility.HealAbility:
+                    abilityType = typeof(HealAbilityComponent);
+                    break;
+                default:
+                    abilityType = typeof(FireAbilityComponent);
+                    break;
+            }
+
+
             // World.Active.EntityManager.AddComponent(entity, typeof(CastingAbilityTagComponent));
             // var abilityEntity = World.Active.EntityManager.CreateEntity(typeof(CheckAbilityConstraintsComponent), 
             //                                                             typeof(FireAbility), 
             //                                                             typeof(FireAbilitySystem.AbilityCost));
-            var tryActiveAbilityEntity = World.Active.EntityManager.CreateEntity(typeof(FireAbility));
-            World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, new FireAbility()
-            {
-                Source = Source.entity,
-                Target = Target.entity
-            });
-            return false;
-            if (!CanActivateAbility(Ability)) return false;
-            if (!Ability.IsAbilityActivatable(this)) return false;
-            _runningAbilities.Add(Ability);
-            Ability.CommitAbility(this);
+            var tryActiveAbilityEntity = World.Active.EntityManager.CreateEntity(abilityType, typeof(AbilitySourceTarget), typeof(AbilityStateComponent), typeof(AbilityComponent));
+            AbilitySourceTarget abilitySourceTarget = new AbilitySourceTarget() { Source = Source.entity, Target = Target.entity };
+            AbilityComponent abilityComponent = Ability;
+            AbilityStateComponent abilityState = EAbilityState.TryActivate;
+            World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, abilitySourceTarget);
+            World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, abilityState);
+            World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, abilityComponent);
 
-            return true;
+            return false;
         }
 
         /// <inheritdoc />
@@ -208,8 +220,7 @@ namespace GameplayAbilitySystem {
             // Handling Instant effects is different to handling HasDuration and Infinite effects
             if (Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
                 Effect.ApplyInstantEffect_Self(Target);
-            }
-            else {
+            } else {
                 // Durational effects require attention to many more things than instant effects
                 // Such as stacking and effect durations
                 var EffectData = new ActiveGameplayEffectData(Effect, this, Target);
@@ -267,7 +278,7 @@ namespace GameplayAbilitySystem {
             var attribute = attributeSet.Attributes.FirstOrDefault(x => x.AttributeType == AttributeType);
             var newValue = modifier;
             attribute.SetAttributeBaseValue(attributeSet, ref newValue);
-            
+
         }
 
         public void SetNumericAttributeCurrent(AttributeType AttributeType, float NewValue) {

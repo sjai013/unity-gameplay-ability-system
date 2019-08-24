@@ -2078,10 +2078,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Abilities:
   - Ability: {fileID: 11400000, guid: ae33e3a3cccb84e4fb4bfb4c2d5c089e, type: 2}
+    AbilityType: 0
     AbilityTarget: {fileID: 0}
   - Ability: {fileID: 11400000, guid: 2583a21c4bcf5a240a37b1568534e68f, type: 2}
+    AbilityType: 0
     AbilityTarget: {fileID: 5555714685437361603}
   - Ability: {fileID: 11400000, guid: 2ad2b404d2dbabc42ad72e779397634f, type: 2}
+    AbilityType: 0
     AbilityTarget: {fileID: 5555714685437361603}
   TargetPool: []
 --- !u!114 &7606552053032496123

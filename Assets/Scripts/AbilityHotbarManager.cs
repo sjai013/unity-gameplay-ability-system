@@ -2,13 +2,14 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
+using Unity.Collections;
 
 public class AbilityHotbarManager : MonoBehaviour {
     public AbilityCharacter AbilityCharacter;
     public List<AbilityHotbarButton> AbilityButtons;
     public List<AbilityIconMap> AbilityIconMaps;
 
-    void Awake() {
+    void Start() {
         for (int i = 0; i < AbilityCharacter.Abilities.Count; i++) {
             if (AbilityButtons.Count > i) {
                 var abilityGraphic = AbilityIconMaps.FirstOrDefault(x => x.Ability == AbilityCharacter.Abilities[i].Ability);
@@ -20,7 +21,7 @@ public class AbilityHotbarManager : MonoBehaviour {
             }
         }
 
-        World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityCharacter = AbilityCharacter;
+        World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().CharacterEntity = AbilityCharacter.SelfAbilitySystem.entity;
         World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityButtons = AbilityButtons;
 
     }
@@ -28,16 +29,33 @@ public class AbilityHotbarManager : MonoBehaviour {
 }
 
 public class AbilityHotbarUpdateSystem : ComponentSystem {
-    public AbilityCharacter AbilityCharacter;
+    public Entity CharacterEntity;
     public List<AbilityHotbarButton> AbilityButtons;
+    NativeArray<EAbility> AbilityMapping;
+
+    protected override void OnCreate() {
+        EAbility[] abilities = new[] {
+            EAbility.FireAbility,
+            EAbility.HealAbility
+        };
+
+        AbilityMapping = new NativeArray<EAbility>(abilities, Allocator.Persistent);
+    }
+
+
     protected override void OnUpdate() {
         // reset all cooldowns
         for (int i = 0; i < AbilityButtons.Count; i++) {
             AbilityButtons[i].SetCooldownRemainingPercent(1);
         }
-        Entities.ForEach<FireAbility>((Entity entity, ref FireAbility Ability) => {
-            if (Ability.Source == AbilityCharacter.SelfAbilitySystem.entity && Ability.CooldownDuration > 0) {
-                UpdateButton(0, Ability.CooldownDuration, Ability.CooldownTimeRemaining);
+
+
+        Entities.ForEach<AbilityComponent, AbilityCooldownComponent, AbilitySourceTarget>((Entity entity, ref AbilityComponent Ability, ref AbilityCooldownComponent cooldown, ref AbilitySourceTarget abilitySourceTarget) => {
+            // UpdateButton(0, cooldown.Duration, cooldown.TimeRemaining);
+            for (var i = 0; i < AbilityMapping.Length; i++) {
+                if (Ability.Ability == AbilityMapping[0] && abilitySourceTarget.Source == CharacterEntity) {
+                    UpdateButton(i, cooldown.Duration, cooldown.TimeRemaining);
+                }
             }
         });
     }

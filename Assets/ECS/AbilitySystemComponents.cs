@@ -66,13 +66,97 @@ public struct CooldownTimeCaster {
     public float Duration;
 }
 
+public struct AbilityCooldownComponent : IComponentData {
+    public float TimeRemaining;
+    public float Duration;
+}
 public interface ICooldownJob {
     NativeArray<CooldownTimeCaster> CooldownArray { get; set; }
 }
 
 public struct AbilityStateComponent : IComponentData {
-    public AbilityState State;
+    public EAbilityState State;
+
+    public static implicit operator EAbilityState(AbilityStateComponent AbilityState) {
+        return AbilityState;
+    }
+
+    public static implicit operator AbilityStateComponent(EAbilityState e) {
+        return new AbilityStateComponent
+        {
+            State = e
+        };
+    }
 }
 
+/// <summary>
+/// Provides collection of functionality all abilities need to have
+/// </summary>
+public interface IAbility {
 
-public enum AbilityState { TryActivate, Activate, Active, Activated, Completed, Failed }
+    /// <summary>
+    /// Application of costs associated with ability
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="Ecb"></param>
+    /// <param name="Source"></param>
+    /// <param name="Target"></param>
+    /// <param name="attributesComponent"></param>
+    void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
+
+    /// <summary>
+    /// Application of gameplay effects associated with ability
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="Ecb"></param>
+    /// <param name="Source"></param>
+    /// <param name="Target"></param>
+    /// <param name="attributesComponent"></param>
+    void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
+
+    /// <summary>
+    /// Check for resource availability associated with ability
+    /// </summary>
+    /// <param name="Caster"></param>
+    /// <param name="attributes"></param>
+    /// <returns></returns>
+    bool CheckResourceAvailable(Entity Caster, AttributesComponent attributes);
+
+    /// <summary>
+    /// Application of cooldown effects associated with ability
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="Ecb"></param>
+    /// <param name="Caster"></param>
+    /// <param name="WorldTime"></param>
+    void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime);
+    void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent);
+}
+
+public struct AbilityComponent : IComponentData {
+    public EAbility Ability;
+    public static implicit operator EAbility(AbilityComponent e) {
+        return e;
+    }
+
+    public static implicit operator AbilityComponent(EAbility e) {
+        return new AbilityComponent
+        {
+            Ability = e
+        };
+    }
+}
+
+public enum EAbilityState { TryActivate, Activate, Active, Activated, Completed, Failed }
+
+public enum EAbility {
+    FireAbility,
+    HealAbility
+
+}
+
+public struct AbilitySourceTarget : IComponentData {
+    public Entity Source;
+    public Entity Target;
+
+}

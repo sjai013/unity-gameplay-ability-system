@@ -11,8 +11,7 @@ using UniRx.Async;
 using UnityEngine;
 using System;
 
-public class AbilityCharacter : MonoBehaviour
-{
+public class AbilityCharacter : MonoBehaviour {
     public GameplayAbilitySystem.AbilitySystemComponent SelfAbilitySystem { get; private set; }
 
     public List<CastingAbilityContainer> Abilities = new List<CastingAbilityContainer>();
@@ -20,61 +19,32 @@ public class AbilityCharacter : MonoBehaviour
     public List<AbilitySystemComponent> TargetPool;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         SelfAbilitySystem = GetComponent<GameplayAbilitySystem.AbilitySystemComponent>();
     }
 
-
-    public (float CooldownElapsed, float CooldownTotal) GetCooldownOfAbility(int n)
-    {
-        if (n >= this.Abilities.Count) return (0f, 0f);
-        var ability = this.Abilities[n].Ability;
-        return ability.CalculateCooldown(SelfAbilitySystem);
-        // foreach (var item in SelfAbilitySystem.ActiveGameplayEffectsContainer.ActiveCooldowns)
-        // {
-        //     Debug.Log(item.Effect.GameplayEffectPolicy.DurationMagnitude - item.CooldownTimeElapsed);
-        // }
-    }
-
-    public void CastAbility(int n)
-    {
+    public void CastAbility(int n) {
         if (n >= this.Abilities.Count) return;
         if (this.Abilities[n] == null) return;
         if (this.Abilities[n].Ability == null) return;
-        if (this.Abilities[n].AbilityTarget == null) return;
-
-        var Ability = this.Abilities[n].Ability;
 
         var Target = this.Abilities[n].AbilityTarget;
 
         //Randomise Target
-        if (this.TargetPool.Count > 0) {
+        if (Target == null) {
             var randomIndex = UnityEngine.Random.Range(0, TargetPool.Count);
             Target = TargetPool[randomIndex];
         }
 
-        var eventTag = Ability.Tags.AbilityTags.Added.Count > 0 ? Ability.Tags.AbilityTags.Added[0] : new GameplayTag();
-        var gameplayEventData = new GameplayEventData();
-        gameplayEventData.EventTag = eventTag;
-        gameplayEventData.Target = Target;
-
-
-        
         // If ability can be activated
-        if (SelfAbilitySystem.TryActivateAbility(Ability, this.SelfAbilitySystem, Target))
-        {
-            // Send gameplay event to this player with information on target etc
-            SelfAbilitySystem.HandleGameplayEvent(eventTag, gameplayEventData);
-        }
+        SelfAbilitySystem.TryActivateAbility(this.Abilities[n].AbilityType, this.SelfAbilitySystem, Target);
     }
 
 }
 
 [Serializable]
-public class CastingAbilityContainer
-{
+public class CastingAbilityContainer {
     public GameplayAbility Ability;
-
+    public EAbility AbilityType;
     public GameplayAbilitySystem.AbilitySystemComponent AbilityTarget;
 }

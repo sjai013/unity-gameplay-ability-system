@@ -55,7 +55,7 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
             var abilitySystemActor = Source.GetActor();
             var animationEventSystemComponent = abilitySystemActor.GetComponent<AnimationEventSystem>();
             var animatorComponent = abilitySystemActor.GetComponent<Animator>();
-            Ability.State = AbilityState.Activated;
+            // Ability.State = AbilityState.Activated;
 
             // Make sure we have enough resources.  End ability if we don't
 
