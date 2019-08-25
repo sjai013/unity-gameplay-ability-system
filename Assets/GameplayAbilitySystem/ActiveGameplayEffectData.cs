@@ -42,13 +42,13 @@ namespace GameplayAbilitySystem.GameplayEffects {
         /// The total cooldown time for this gameplay effect
         /// </summary>
         /// <value>Cooldown time total</value>
-        public float CooldownTimeTotal { get => Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration ? Effect.GameplayEffectPolicy.DurationMagnitude : 0; }
+        public float CooldownTimeTotal { get => Effect.GameplayEffectPolicy.DurationPolicy == EDurationPolicy.HasDuration ? Effect.GameplayEffectPolicy.DurationMagnitude : 0; }
 
         /// <summary>
         /// The cooldown time that is remaining for this gameplay effect
         /// </summary>
         /// <value>Cooldown time remaining</value>
-        public float CooldownTimeRemaining { get => Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration ? CooldownTimeTotal - CooldownTimeElapsed : 0; }
+        public float CooldownTimeRemaining { get => Effect.GameplayEffectPolicy.DurationPolicy == EDurationPolicy.HasDuration ? CooldownTimeTotal - CooldownTimeElapsed : 0; }
 
         private float _timeOfLastPeriodicApplication = 0;
 

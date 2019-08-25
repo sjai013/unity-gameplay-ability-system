@@ -1,21 +1,15 @@
 ﻿using GameplayAbilitySystem.Abilities;
 using GameplayAbilitySystem.Attributes;
-using GameplayAbilitySystem.Enums;
 using GameplayAbilitySystem.Events;
-using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayCues;
 using GameplayAbilitySystem.GameplayEffects;
 using GameplayAbilitySystem.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace GameplayAbilitySystem {
 
@@ -142,13 +136,13 @@ namespace GameplayAbilitySystem {
 
             switch (Ability) {
                 case EAbility.FireAbility:
-                    abilityType = typeof(FireAbilityComponent);
+                    abilityType = typeof(Abilities.Fire.FireAbilityComponent);
                     break;
                 case EAbility.HealAbility:
-                    abilityType = typeof(HealAbilityComponent);
+                    abilityType = typeof(Abilities.Heal.HealAbilityComponent);
                     break;
                 default:
-                    abilityType = typeof(FireAbilityComponent);
+                    abilityType = typeof(Abilities.Fire.FireAbilityComponent);
                     break;
             }
 
@@ -179,11 +173,11 @@ namespace GameplayAbilitySystem {
         }
 
         public async void ApplyBatchGameplayEffects(IEnumerable<(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level)> BatchedGameplayEffects) {
-            var instantEffects = BatchedGameplayEffects.Where(x => x.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant);
+            var instantEffects = BatchedGameplayEffects.Where(x => x.Effect.GameplayEffectPolicy.DurationPolicy == EDurationPolicy.Instant);
             var durationalEffects = BatchedGameplayEffects.Where(
                 x =>
-                    x.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.HasDuration ||
-                    x.Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Infinite
+                    x.Effect.GameplayEffectPolicy.DurationPolicy == EDurationPolicy.HasDuration ||
+                    x.Effect.GameplayEffectPolicy.DurationPolicy == EDurationPolicy.Infinite
                     );
 
             // Apply instant effects
@@ -202,13 +196,9 @@ namespace GameplayAbilitySystem {
 
         /// <inheritdoc />
         public Task<GameplayEffect> ApplyGameEffectToTarget(GameplayEffect Effect, IGameplayAbilitySystem Target, float Level = 0) {
-            // TODO: Check to make sure all the attributes being modified by this gameplay effect exist on the target
 
-            // TODO: Get list of tags owned by target
 
-            // TODO: Check for immunity tags, and don't apply gameplay effect if target is immune (and also add Immunity Tags container to IGameplayEffect)
 
-            // TODO: Check to make sure Application Tag Requirements are met (i.e. target has all the required tags, and does not contain any prohibited tags )
             if (!Effect.ApplicationTagRequirementMet(Target)) {
                 return null;
             }
@@ -218,7 +208,7 @@ namespace GameplayAbilitySystem {
             // If this is an instant gameplay effect (i.e. it will modify the base value)
 
             // Handling Instant effects is different to handling HasDuration and Infinite effects
-            if (Effect.GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
+            if (Effect.GameplayEffectPolicy.DurationPolicy == EDurationPolicy.Instant) {
                 Effect.ApplyInstantEffect_Self(Target);
             } else {
                 // Durational effects require attention to many more things than instant effects

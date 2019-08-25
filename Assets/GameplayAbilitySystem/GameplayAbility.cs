@@ -140,15 +140,10 @@ namespace GameplayAbilitySystem.Abilities {
             // Ability finished.  Remove all listeners.
             _onGameplayAbilityEnded.RemoveAllListeners();
 
-            // TODO: Remove tags added by this ability
 
-            // TODO: Cancel all tasks?
 
-            // TODO: Remove gameplay cues
 
-            // TODO: Cancel ability
 
-            // TODO: Remove blocking/cancelling Gameplay Tags
 
             // Tell ability system ability has ended
             AbilitySystem.NotifyAbilityEnded(this);

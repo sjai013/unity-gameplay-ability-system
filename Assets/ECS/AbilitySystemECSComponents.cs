@@ -1,5 +1,6 @@
 using Unity.Collections;
 using Unity.Entities;
+
 /// <summary>
 /// Marks the ability system to check if the ability can be activated
 /// </summary>
@@ -32,12 +33,33 @@ public struct CooldownEffectComponent : IComponentData {
     public Entity Caster;
 }
 
+
 /// <summary>
 /// Provides collection of functionality all game effects need to have
 /// </summary>
 public interface IGameplayEffect {
     void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
     void ApplyGameplayEffect(EntityManager EntityManager, Entity Source, Entity Target, AttributesComponent attributesComponent);
+
+    DurationPolicyComponent DurationPolicy { get; set; }
+}
+
+public struct DurationPolicyComponent {
+    public EDurationPolicy DurationPolicy;
+    public float Duration;
+}
+/// <summary>
+/// Used for implementing periodic gameplay effects
+/// TODO: Create sample periodic gameplay effect component as a prototype 
+/// TODO:   -> decrement PeriodRemaining.  
+/// TODO:   -> Apply GE when PeriodRemaining 0.  
+/// TODO:   -> Destroy Entity when ParentGameplayEffect cooldown = 0;
+/// </summary>
+public struct PeriodicGameplayEffectComponent : IComponentData {
+    public Entity ParentGameplayEffect;
+    public float Period;
+    public float PeriodRemaining;
+    public bool ExecuteOnApplication;
 }
 
 /// <summary>
@@ -153,6 +175,10 @@ public enum EAbility {
     FireAbility,
     HealAbility
 
+}
+
+public enum EDurationPolicy {
+    Instant, Infinite, HasDuration
 }
 
 public struct AbilitySourceTarget : IComponentData {

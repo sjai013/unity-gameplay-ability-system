@@ -191,9 +191,9 @@ namespace GameplayAbilitySystem.GameplayEffects {
                         break;
                 }
 
-                if (GameplayEffectPolicy.DurationPolicy == Enums.EDurationPolicy.Instant) {
+                if (GameplayEffectPolicy.DurationPolicy == EDurationPolicy.Instant) {
                     commandBuffer.AddComponent(attributeModEntity, new PermanentAttributeModification());
-                } else if (GameplayEffectPolicy.DurationPolicy  == Enums.EDurationPolicy.Infinite)  {
+                } else if (GameplayEffectPolicy.DurationPolicy  == EDurationPolicy.Infinite)  {
                     commandBuffer.AddComponent(attributeModEntity, new TemporaryAttributeModification());
     
                 } else {
