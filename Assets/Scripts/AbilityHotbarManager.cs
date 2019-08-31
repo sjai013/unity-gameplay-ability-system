@@ -31,15 +31,14 @@ public class AbilityHotbarManager : MonoBehaviour {
 public class AbilityHotbarUpdateSystem : ComponentSystem {
     public Entity CharacterEntity;
     public List<AbilityHotbarButton> AbilityButtons;
-    NativeArray<EAbility> AbilityMapping;
+    EAbility[] AbilityMapping;
 
     protected override void OnCreate() {
-        EAbility[] abilities = new[] {
+        AbilityMapping = new[] {
+            EAbility.FireAbility,
             EAbility.FireAbility,
             EAbility.HealAbility
         };
-
-        AbilityMapping = new NativeArray<EAbility>(abilities, Allocator.Persistent);
     }
 
 
@@ -48,18 +47,15 @@ public class AbilityHotbarUpdateSystem : ComponentSystem {
         for (int i = 0; i < AbilityButtons.Count; i++) {
             AbilityButtons[i].SetCooldownRemainingPercent(1);
         }
-
-
         Entities.ForEach<AbilityComponent, AbilityCooldownComponent, AbilitySourceTarget>((Entity entity, ref AbilityComponent Ability, ref AbilityCooldownComponent cooldown, ref AbilitySourceTarget abilitySourceTarget) => {
             // UpdateButton(0, cooldown.Duration, cooldown.TimeRemaining);
             for (var i = 0; i < AbilityMapping.Length; i++) {
-                if (Ability.Ability == AbilityMapping[0] && abilitySourceTarget.Source == CharacterEntity) {
+                if (Ability.Ability == AbilityMapping[i] && abilitySourceTarget.Source == CharacterEntity) {
                     UpdateButton(i, cooldown.Duration, cooldown.TimeRemaining);
                 }
             }
         });
     }
-
     private void UpdateButton(int index, float cooldownDuration, float cooldownTimeRemaining) {
         var button = AbilityButtons[index];
         var remainingPercent = 0f;

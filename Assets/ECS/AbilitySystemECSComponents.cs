@@ -1,3 +1,6 @@
+using System;
+using GameplayAbilitySystem.Abilities.Fire;
+using GameplayAbilitySystem.Abilities.Heal;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -67,6 +70,7 @@ public struct PeriodicGameplayEffectComponent : IComponentData {
 /// </summary>
 public interface ICooldown {
     void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime);
+    EGameplayEffect GameplayEffect { get; }
 }
 
 /// <summary>
@@ -153,10 +157,20 @@ public interface IAbility {
     /// <param name="WorldTime"></param>
     void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime);
     void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent);
+    EAbility AbilityType { get; }
+
+    EGameplayEffect[] CooldownEffects { get; }
+
 }
 
-public struct AbilityComponent : IComponentData {
+public struct AbilityComponent : IComponentData, IEquatable<AbilityComponent> {
     public EAbility Ability;
+
+    public bool Equals(AbilityComponent other) {
+        if (Ability == other.Ability) return true;
+        return false;
+    }
+
     public static implicit operator EAbility(AbilityComponent e) {
         return e;
     }
@@ -167,6 +181,14 @@ public struct AbilityComponent : IComponentData {
             Ability = e
         };
     }
+
+    public override int GetHashCode() {
+        unchecked {
+            int hash = 17;
+            hash = hash * 31 + (int)Ability.GetHashCode();
+            return hash;
+        }
+    }
 }
 
 public enum EAbilityState { TryActivate, Activate, Active, Activated, Completed, Failed }
@@ -175,6 +197,17 @@ public enum EAbility {
     FireAbility,
     HealAbility
 
+}
+
+public enum EGameplayEffect {
+    NullCooldown,
+    GlobalCooldown,
+    FireAbilityCooldown,
+    HealAbilityCooldown
+}
+
+public struct GameplayeffectComponent : IComponentData {
+    public EGameplayEffect Effect;
 }
 
 public enum EDurationPolicy {

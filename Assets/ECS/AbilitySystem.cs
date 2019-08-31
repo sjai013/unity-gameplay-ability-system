@@ -110,54 +110,66 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<AbilityCooldownCom
         }
     }
 
+    [BurstCompile]
+    public struct SetupAbilityDurationWorldTime : IJobForEach<GameplayEffectDurationComponent> {
+        public float WorldTime;
+        public void Execute(ref GameplayEffectDurationComponent c0) {
+            if (c0.WorldStartTime <= 0) c0.WorldStartTime = WorldTime;
+        }
+    }
+
     public EntityQuery cooldownQuery;
 
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
-        var commandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent();
-        // Initialise cooldown data
-        var cooldownJob = new TCooldown();
-        var cooldownQuery = GetEntityQuery(cooldownJob.CooldownQueryDesc);
-        var cooldownTimes = cooldownQuery.ToComponentDataArray<GameplayEffectDurationComponent>(Allocator.TempJob);
-        var casters = cooldownQuery.ToComponentDataArray<CooldownEffectComponent>(Allocator.TempJob);
-        NativeArray<CooldownTimeCaster> cooldownArray = new NativeArray<CooldownTimeCaster>(cooldownTimes.Length, Allocator.TempJob);
-        for (var i = 0; i < cooldownTimes.Length; i++) {
-            var cooldownItem = new CooldownTimeCaster
-            {
-                Caster = casters[i].Caster,
-                TimeRemaining = cooldownTimes[i].TimeRemaining,
-                Duration = cooldownTimes[i].Duration
-            };
-            cooldownArray[i] = cooldownItem;
-        }
-        cooldownTimes.Dispose();
-        casters.Dispose();
-        cooldownJob.CooldownArray = cooldownArray;
+        // var commandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent();
+        // // Initialise cooldown data
+        // var cooldownJob = new TCooldown();
+        // var cooldownQuery = GetEntityQuery(cooldownJob.CooldownQueryDesc);
+        // var cooldownTimes = cooldownQuery.ToComponentDataArray<GameplayEffectDurationComponent>(Allocator.TempJob);
+        // var casters = cooldownQuery.ToComponentDataArray<CooldownEffectComponent>(Allocator.TempJob);
+        // NativeArray<CooldownTimeCaster> cooldownArray = new NativeArray<CooldownTimeCaster>(cooldownTimes.Length, Allocator.TempJob);
+        // for (var i = 0; i < cooldownTimes.Length; i++) {
+        //     var cooldownItem = new CooldownTimeCaster
+        //     {
+        //         Caster = casters[i].Caster,
+        //         TimeRemaining = cooldownTimes[i].TimeRemaining,
+        //         Duration = cooldownTimes[i].Duration
+        //     };
+        //     cooldownArray[i] = cooldownItem;
+        // }
+        // cooldownTimes.Dispose();
+        // casters.Dispose();
+        // cooldownJob.CooldownArray = cooldownArray;
 
+        // inputDeps = new SetupAbilityDurationWorldTime()
+        // {
+        //     WorldTime = Time.time
+        // }.Schedule(this, inputDeps);
 
-        // Ability activation job
-        inputDeps = new ActivateAbilityJob()
-        {
-            attributesComponent = GetComponentDataFromEntity<AttributesComponent>(true),
-            EntityCommandBuffer = commandBuffer,
-            WorldTime = Time.time,
-            CooldownArray = cooldownArray
-        }.Schedule(this, inputDeps);
+        // // Ability activation job
+        // inputDeps = new ActivateAbilityJob()
+        // {
+        //     attributesComponent = GetComponentDataFromEntity<AttributesComponent>(true),
+        //     EntityCommandBuffer = commandBuffer,
+        //     WorldTime = Time.time,
+        //     CooldownArray = cooldownArray
+        // }.Schedule(this, inputDeps);
 
-        inputDeps = cooldownJob.Schedule(this, inputDeps);
+        // inputDeps = cooldownJob.Schedule(this, inputDeps);
 
-        // Ability end job
-        inputDeps = new EndAbilityJob()
-        {
-            EntityCommandBuffer = commandBuffer
-        }.Schedule(this, inputDeps);
+        // // Ability end job
+        // inputDeps = new EndAbilityJob()
+        // {
+        //     EntityCommandBuffer = commandBuffer
+        // }.Schedule(this, inputDeps);
 
-        inputDeps = new DeallocateNativeArraysJob()
-        {
-            CooldownArray = cooldownArray
-        }.Schedule(inputDeps);
+        // inputDeps = new DeallocateNativeArraysJob()
+        // {
+        //     CooldownArray = cooldownArray
+        // }.Schedule(inputDeps);
 
-        // Cooldown job
-        m_EntityCommandBufferSystem.AddJobHandleForProducer(inputDeps);
+        // // Cooldown job
+        // m_EntityCommandBufferSystem.AddJobHandleForProducer(inputDeps);
         return inputDeps;
     }
 

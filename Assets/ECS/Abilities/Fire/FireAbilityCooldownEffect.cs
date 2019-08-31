@@ -3,6 +3,9 @@ using Unity.Entities;
 namespace GameplayAbilitySystem.Abilities.Fire {
     public struct FireAbilityCooldownEffect : ICooldown, IComponentData {
         const float Duration = 5f;
+
+        public EGameplayEffect GameplayEffect => EGameplayEffect.FireAbilityCooldown;
+
         public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
             var attributeModData = new AttributeModificationComponent()
             {
@@ -19,6 +22,7 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             {
                 WorldStartTime = WorldTime,
                 Duration = Duration,
+                Effect = EGameplayEffect.FireAbilityCooldown
             };
             var cooldownEffectComponent = new CooldownEffectComponent()
             {

@@ -5,21 +5,23 @@ namespace GameplayAbilitySystem.Abilities.Fire {
         const int ManaCost = 2;
         public DurationPolicyComponent DurationPolicy { get; set; }
         public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
-            var attributeModData = AttributeModData(ref Source, ref Target);
 
+            var attributeModData = AttributeModData(ref Source, ref Source);
             var attributeModEntity = Ecb.CreateEntity(index);
             Ecb.AddComponent(index, attributeModEntity, new ManaAttributeModifier());
             Ecb.AddComponent(index, attributeModEntity, new PermanentAttributeModification());
             Ecb.AddComponent(index, attributeModEntity, attributeModData);
         }
+        
         public void ApplyGameplayEffect(EntityManager EntityManager, Entity Source, Entity Target, AttributesComponent attributesComponent) {
-            var attributeModData = AttributeModData(ref Source, ref Target);
-
+            var attributeModData = AttributeModData(ref Source, ref Source);
             var attributeModEntity = EntityManager.CreateEntity(
                                             typeof(ManaAttributeModifier),
                                             typeof(PermanentAttributeModification),
-                                            typeof(AttributeModificationComponent)
+                                            typeof(AttributeModificationComponent),
+                                            typeof(GameplayEffectDurationComponent)
             );
+
             EntityManager.SetComponentData(attributeModEntity, attributeModData);
         }
         public AttributesComponent ComputeResourceUsage(Entity Caster, AttributesComponent attributes) {

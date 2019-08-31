@@ -2,6 +2,7 @@ using Unity.Entities;
 
 struct GlobalCooldownEffect : ICooldown, IComponentData {
     const float Duration = 2;
+    public EGameplayEffect GameplayEffect => EGameplayEffect.GlobalCooldown;
     public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
         var attributeModData = new AttributeModificationComponent()
         {
@@ -18,6 +19,7 @@ struct GlobalCooldownEffect : ICooldown, IComponentData {
         {
             WorldStartTime = WorldTime,
             Duration = Duration,
+            Effect = EGameplayEffect.GlobalCooldown
         };
         var cooldownEffectComponent = new CooldownEffectComponent()
         {

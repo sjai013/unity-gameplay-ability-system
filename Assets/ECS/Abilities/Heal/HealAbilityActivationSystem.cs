@@ -39,19 +39,12 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             instantiatedProjectile.transform.position = abilitySystemActor.transform.position + new Vector3(0, 1.5f, 0) + abilitySystemActor.transform.forward * 1.2f;
 
             // Animation complete.  Spawn and send projectile at target
-            if (instantiatedProjectile != null) {
-                SeekTargetAndDestroy(Source, Target, instantiatedProjectile, ability, AbilityEntity);
-            }
+            // if (instantiatedProjectile != null) {
+            //     SeekTargetAndDestroy(Source, Target, instantiatedProjectile, ability, AbilityEntity);
+            // }
 
 
         }
 
-        private async void SeekTargetAndDestroy(AbilitySystemComponent Source, AbilitySystemComponent Target, GameObject projectile, HealAbilityComponent Ability, Entity AbilityEntity) {
-            await projectile.GetComponent<Projectile>().SeekTarget(Target.TargettingLocation.gameObject, Target.gameObject);
-            var attributesComponent = GetComponentDataFromEntity<AttributesComponent>(false);
-            Ability.ApplyGameplayEffects(World.Active.EntityManager, Source.entity, Target.entity, attributesComponent[Target.entity]);
-            Object.DestroyImmediate(projectile);
-
-        }
     }
 }

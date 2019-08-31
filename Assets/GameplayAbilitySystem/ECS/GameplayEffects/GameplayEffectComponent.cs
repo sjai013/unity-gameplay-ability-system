@@ -1,10 +1,12 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 
-public struct GameplayEffectDurationComponent : GameplayEffectComponent, IComponentData {
+public struct GameplayEffectDurationComponent : IGameplayEffectComponent, IComponentData {
     public float WorldStartTime;
     public float Duration;
     public float TimeRemaining;
+
+    public EGameplayEffect Effect;
 }
 
 
@@ -27,7 +29,7 @@ public struct PeriodicGameplayEffect : IComponentData {
     public Entity GameplayEffectToExecute;
 }
 
-public interface GameplayEffectComponent  { }
+public interface IGameplayEffectComponent  { }
 
 public struct AttributeModificationUndoAppliedComponent : IComponentData { }
 
