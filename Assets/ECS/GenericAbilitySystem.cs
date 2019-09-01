@@ -41,12 +41,12 @@ public class GenericAbilitySystem : JobComponentSystem {
 
         // Collect list of all types that implement IAbility and store reference to methods 
         var abilityTypes = World.Active.EntityManager.GetAssignableComponentTypes(typeof(IAbility)).ToArray();
-        gameplayEffectHashMap = new NativeHashMap<int, FunctionPointer<ApplyGameplayEffectsDelegate>>(abilityTypes.Length * 4, Allocator.Persistent);
-        checkResourceAvailableHashMap = new NativeHashMap<int, FunctionPointer<CheckResourceAvailableDelegate>>(abilityTypes.Length * 4, Allocator.Persistent);
-        applyAbilityCostsHashMap = new NativeHashMap<int, FunctionPointer<ApplyAbilityCostsDelegate>>(abilityTypes.Length * 4, Allocator.Persistent);
-        applyCooldownEffectHashMap = new NativeHashMap<int, FunctionPointer<ApplyCooldownEffectDelegate>>(abilityTypes.Length * 4, Allocator.Persistent);
-        allAbilitiesList = new NativeList<int>(abilityTypes.Length, Allocator.Persistent);
-        abilityCooldownEffectsMap = new NativeMultiHashMap<int, EGameplayEffect>(abilityTypes.Length * 2, Allocator.Persistent);
+        gameplayEffectHashMap = new NativeHashMap<int, FunctionPointer<ApplyGameplayEffectsDelegate>>(abilityTypes.Length * 8, Allocator.Persistent);
+        checkResourceAvailableHashMap = new NativeHashMap<int, FunctionPointer<CheckResourceAvailableDelegate>>(abilityTypes.Length * 8, Allocator.Persistent);
+        applyAbilityCostsHashMap = new NativeHashMap<int, FunctionPointer<ApplyAbilityCostsDelegate>>(abilityTypes.Length * 8, Allocator.Persistent);
+        applyCooldownEffectHashMap = new NativeHashMap<int, FunctionPointer<ApplyCooldownEffectDelegate>>(abilityTypes.Length * 8, Allocator.Persistent);
+        allAbilitiesList = new NativeList<int>(abilityTypes.Length * 4, Allocator.Persistent);
+        abilityCooldownEffectsMap = new NativeMultiHashMap<int, EGameplayEffect>(abilityTypes.Length * 4, Allocator.Persistent);
         IAbilitiesList = new System.Collections.Generic.List<IAbility>(abilityTypes.Length);
 
         for (var i = 0; i < abilityTypes.Length; i++) {
