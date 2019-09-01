@@ -1,13 +1,6 @@
-﻿using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using GameplayAbilitySystem.ExtensionMethods;
-using GameplayAbilitySystem.Statics;
+﻿using System.Collections.Generic;
 using GameplayAbilitySystem;
 using GameplayAbilitySystem.Abilities;
-using GameplayAbilitySystem.Events;
-using UniRx.Async;
 using UnityEngine;
 using System;
 

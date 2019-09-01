@@ -61,7 +61,7 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<AbilityCooldownCom
         }
 
         private bool ResourceAvailable(int index, Entity entity, Entity source, AttributesComponent sourceAttrs, TAbility ability) {
-            var resourcesAvailable = ability.CheckResourceAvailable(source, sourceAttrs);
+            var resourcesAvailable = ability.CheckResourceAvailable(ref source, ref sourceAttrs);
             if (!resourcesAvailable) {
                 return false;
             }

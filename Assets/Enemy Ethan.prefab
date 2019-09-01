@@ -2084,7 +2084,7 @@ MonoBehaviour:
     AbilityType: 0
     AbilityTarget: {fileID: 5555714685437361603}
   - Ability: {fileID: 11400000, guid: 2ad2b404d2dbabc42ad72e779397634f, type: 2}
-    AbilityType: 0
+    AbilityType: 1
     AbilityTarget: {fileID: 5555714685437361603}
   TargetPool: []
 --- !u!114 &7606552053032496123

@@ -147,7 +147,7 @@ public interface IAbility {
     /// <param name="Caster"></param>
     /// <param name="attributes"></param>
     /// <returns></returns>
-    bool CheckResourceAvailable(Entity Caster, AttributesComponent attributes);
+    bool CheckResourceAvailable(ref Entity Caster, ref AttributesComponent attributes);
 
     /// <summary>
     /// Application of cooldown effects associated with ability

@@ -166,7 +166,7 @@ namespace GameplayAbilitySystem {
             World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, abilityState);
             World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, abilityComponent);
 
-            return false;
+            return true;
         }
 
         /// <inheritdoc />

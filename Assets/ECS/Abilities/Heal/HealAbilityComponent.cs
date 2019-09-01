@@ -26,7 +26,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             new HealGameplayEffect().ApplyGameplayEffect(entityManager, Source, Target, attributesComponent);
         }
 
-        public bool CheckResourceAvailable(Entity Caster, AttributesComponent attributes) {
+        public bool CheckResourceAvailable(ref Entity Caster, ref AttributesComponent attributes) {
             attributes = new HealAbilityCost().ComputeResourceUsage(Caster, attributes);
             return attributes.Mana.CurrentValue >= 0;
         }

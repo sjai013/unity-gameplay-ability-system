@@ -21,7 +21,7 @@ namespace GameplayAbilitySystem.Abilities.Fire {
         public void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent) {
             new FireGameplayEffect().ApplyGameplayEffect(entityManager, Source, Target, attributesComponent);
         }
-        public bool CheckResourceAvailable(Entity Caster, AttributesComponent attributes) {
+        public bool CheckResourceAvailable(ref Entity Caster, ref AttributesComponent attributes) {
             attributes = new FireAbilityCost().ComputeResourceUsage(Caster, attributes);
             return attributes.Mana.CurrentValue >= 0;
         }

@@ -12,7 +12,7 @@ public class GenericAbilitySystem : JobComponentSystem {
 
     public delegate void ApplyGameplayEffectsDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
     public delegate void ApplyAbilityCostsDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
-    public delegate bool CheckResourceAvailableDelegate(Entity Caster, AttributesComponent attributesComponent);
+    public delegate bool CheckResourceAvailableDelegate(ref Entity Caster, ref AttributesComponent attributesComponent);
     public delegate void ApplyCooldownEffectDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime);
 
     // void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent)
@@ -25,6 +25,9 @@ public class GenericAbilitySystem : JobComponentSystem {
     NativeHashMap<EntityGameplayEffect, GrantedAbilityCooldownComponent> effectRemainingForCasterMap;
     NativeHashMap<CasterAbilityTuple, GrantedAbilityCooldownComponent> casterAbilityDurationMap;
 
+    FunctionPointer<CheckResourceAvailableDelegate> a;
+    System.Collections.Generic.List<IAbility> IAbilitiesList;
+
     NativeList<int> allAbilitiesList;
 
     private EntityQuery m_Cooldowns;
@@ -32,22 +35,27 @@ public class GenericAbilitySystem : JobComponentSystem {
 
     protected override void OnCreate() {
 
+        base.OnCreate();
         m_EntityCommandBufferSystem = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
         // cooldownQuery = GetEntityQuery(cooldownQueryDesc);
-        base.OnCreate();
 
         // Collect list of all types that implement IAbility and store reference to methods 
         var abilityTypes = World.Active.EntityManager.GetAssignableComponentTypes(typeof(IAbility)).ToArray();
-        gameplayEffectHashMap = new NativeHashMap<int, FunctionPointer<ApplyGameplayEffectsDelegate>>(abilityTypes.Length, Allocator.Persistent);
-        checkResourceAvailableHashMap = new NativeHashMap<int, FunctionPointer<CheckResourceAvailableDelegate>>(abilityTypes.Length, Allocator.Persistent);
-        applyAbilityCostsHashMap = new NativeHashMap<int, FunctionPointer<ApplyAbilityCostsDelegate>>(abilityTypes.Length, Allocator.Persistent);
-        applyCooldownEffectHashMap = new NativeHashMap<int, FunctionPointer<ApplyCooldownEffectDelegate>>(abilityTypes.Length, Allocator.Persistent);
+        gameplayEffectHashMap = new NativeHashMap<int, FunctionPointer<ApplyGameplayEffectsDelegate>>(abilityTypes.Length * 4, Allocator.Persistent);
+        checkResourceAvailableHashMap = new NativeHashMap<int, FunctionPointer<CheckResourceAvailableDelegate>>(abilityTypes.Length * 4, Allocator.Persistent);
+        applyAbilityCostsHashMap = new NativeHashMap<int, FunctionPointer<ApplyAbilityCostsDelegate>>(abilityTypes.Length * 4, Allocator.Persistent);
+        applyCooldownEffectHashMap = new NativeHashMap<int, FunctionPointer<ApplyCooldownEffectDelegate>>(abilityTypes.Length * 4, Allocator.Persistent);
         allAbilitiesList = new NativeList<int>(abilityTypes.Length, Allocator.Persistent);
         abilityCooldownEffectsMap = new NativeMultiHashMap<int, EGameplayEffect>(abilityTypes.Length * 2, Allocator.Persistent);
-
+        IAbilitiesList = new System.Collections.Generic.List<IAbility>(abilityTypes.Length);
 
         for (var i = 0; i < abilityTypes.Length; i++) {
             IAbility ability = (IAbility)Activator.CreateInstance(abilityTypes[i]);
+            IAbilitiesList.Add(ability);
+
+            if (ability.AbilityType == EAbility.FireAbility) {
+                a = new FunctionPointer<CheckResourceAvailableDelegate>(Marshal.GetFunctionPointerForDelegate((CheckResourceAvailableDelegate)(new FireAbilityComponent().CheckResourceAvailable)));
+            }
             gameplayEffectHashMap.TryAdd((int)ability.AbilityType, new FunctionPointer<ApplyGameplayEffectsDelegate>(Marshal.GetFunctionPointerForDelegate((ApplyGameplayEffectsDelegate)(ability.ApplyGameplayEffects))));
             checkResourceAvailableHashMap.TryAdd((int)ability.AbilityType, new FunctionPointer<CheckResourceAvailableDelegate>(Marshal.GetFunctionPointerForDelegate((CheckResourceAvailableDelegate)(ability.CheckResourceAvailable))));
             applyAbilityCostsHashMap.TryAdd((int)ability.AbilityType, new FunctionPointer<ApplyAbilityCostsDelegate>(Marshal.GetFunctionPointerForDelegate((ApplyAbilityCostsDelegate)(ability.ApplyAbilityCosts))));
@@ -69,6 +77,7 @@ public class GenericAbilitySystem : JobComponentSystem {
             All = new[] { ComponentType.ReadOnly<AbilityComponent>(), ComponentType.ReadOnly<AbilityStateComponent>(), ComponentType.ReadOnly<AbilitySourceTarget>(), ComponentType.ReadWrite<AbilityCooldownComponent>() },
         });
 
+
     }
 
 
@@ -79,8 +88,6 @@ public class GenericAbilitySystem : JobComponentSystem {
         [ReadOnly] public NativeHashMap<int, FunctionPointer<CheckResourceAvailableDelegate>> checkResourceAvailableHashMap;
         [ReadOnly] public NativeHashMap<int, FunctionPointer<ApplyAbilityCostsDelegate>> applyAbilityCostsHashMap;
         [ReadOnly] public NativeHashMap<int, FunctionPointer<ApplyCooldownEffectDelegate>> applyCooldownEffectHashMap;
-
-        // [ReadOnly] public NativeArray<CooldownTimeCaster> CooldownArray;
 
         public float WorldTime;
         public void Execute(Entity entity,
@@ -93,21 +100,14 @@ public class GenericAbilitySystem : JobComponentSystem {
 
             if (abilityState.State != EAbilityState.TryActivate) return;
 
-            // // Get ability cooldown
-            // var casterAbilityCooldownKey = new CasterAbilityTuple
-            // {
-            //     Ability = abilityComponent.Ability,
-            //     Host = abilitySourceTarget.Source
-            // };
-
-            // casterAbilityDurationMap.TryGetValue(casterAbilityCooldownKey, out var duration);
-            // cooldown.Duration = duration;
             var sourceAttrs = attributesComponent[abilitySourceTarget.Source];
             if (attributesComponent.Exists(abilitySourceTarget.Source)) {
-                var resourceAvailableFP = checkResourceAvailableHashMap[(int)abilityComponent.Ability];
-                var resourcesAvailable = resourceAvailableFP.Invoke(abilitySourceTarget.Source, sourceAttrs);
+                var resourceAvailable = false;
+                if (checkResourceAvailableHashMap.TryGetValue((int)abilityComponent.Ability, out var resourceAvailableFP)) {
+                    resourceAvailable = resourceAvailableFP.Invoke(ref abilitySourceTarget.Source, ref sourceAttrs);
+                }
 
-                if (!resourcesAvailable) {
+                if (!resourceAvailable) {
                     AbilityUnsuccessful(index, ref abilityState);
                     return;
                 }
@@ -122,18 +122,8 @@ public class GenericAbilitySystem : JobComponentSystem {
 
                 var applyCooldownEffectFP = applyCooldownEffectHashMap[(int)abilityComponent.Ability];
                 applyCooldownEffectFP.Invoke(index, EntityCommandBuffer, abilitySourceTarget.Source, WorldTime);
-
             }
-
             AbilitySuccessful(index, ref abilityState, ref abilityCooldown);
-        }
-
-        private bool ResourceAvailable(int index, Entity entity, Entity source, AttributesComponent sourceAttrs, IAbility ability) {
-            var resourcesAvailable = ability.CheckResourceAvailable(source, sourceAttrs);
-            if (!resourcesAvailable) {
-                return false;
-            }
-            return true;
         }
 
         private bool AbilityNotOnCooldown(int index, Entity entity, Entity source, AbilityCooldownComponent cooldownComponent) {
@@ -144,15 +134,11 @@ public class GenericAbilitySystem : JobComponentSystem {
             abilityState.State = EAbilityState.Activate;
             abilityCooldown.CooldownActivated = true;
         }
-
         private void AbilityUnsuccessful(int index, ref AbilityStateComponent abilityState) {
             abilityState.State = EAbilityState.Failed;
         }
-
-
     }
 
-    [BurstCompile]
     public struct EffectAggregatorJob : IJobForEach<CooldownEffectComponent, GameplayEffectDurationComponent, AttributeModificationComponent> {
         // /// <summary>
         // /// <Entity, NativeHashMap<int,float>> -> <Caster, <EGameplayAbility, CooldownRemaining>>
@@ -189,7 +175,6 @@ public class GenericAbilitySystem : JobComponentSystem {
         }
     }
 
-    [BurstCompile]
     public struct AbilityCooldownAggregatorJob : IJobForEach<AbilitySourceTarget, AbilityComponent, AbilityStateComponent> {
         [ReadOnly] public NativeHashMap<EntityGameplayEffect, GrantedAbilityCooldownComponent> effectRemainingForCasterMap;
         [ReadOnly] public NativeMultiHashMap<int, EGameplayEffect> abilityCooldownEffectsMap;
@@ -231,7 +216,6 @@ public class GenericAbilitySystem : JobComponentSystem {
     }
 
 
-    [BurstCompile]
     public struct AbilityCooldownUpdateJob : IJobForEach<AbilityComponent, AbilityStateComponent, AbilitySourceTarget, AbilityCooldownComponent> {
 
         [ReadOnly] public NativeHashMap<CasterAbilityTuple, GrantedAbilityCooldownComponent> casterAbilityDurationMap;
@@ -316,11 +300,14 @@ public class GenericAbilitySystem : JobComponentSystem {
             EntityCommandBuffer = commandBuffer,
             WorldTime = Time.time,
         }.Schedule(m_ActiveAbilities, inputDeps);
+        inputDeps.Complete();
 
         inputDeps = new AbilityCleanup
         {
             EntityCommandBuffer = commandBuffer
         }.Schedule(m_ActiveAbilities, inputDeps);
+
+        inputDeps.Complete();
 
         // Initialise cooldown data
         effectRemainingForCasterMap.Dispose(inputDeps);
@@ -329,6 +316,7 @@ public class GenericAbilitySystem : JobComponentSystem {
     }
 
     protected override void OnStopRunning() {
+        base.OnStopRunning();
         if (effectRemainingForCasterMap.IsCreated) effectRemainingForCasterMap.Dispose();
         if (casterAbilityDurationMap.IsCreated) casterAbilityDurationMap.Dispose();
     }
@@ -390,7 +378,7 @@ public struct EntityGameplayEffect : IComponentData, IEquatable<EntityGameplayEf
     public override int GetHashCode() {
         unchecked {
             int hash = 17;
-            hash = hash * 31 + Caster.GetHashCode();
+            hash = hash * 31 + Caster.Index.GetHashCode();
             hash = hash * 31 + (int)Effect.GetHashCode();
             return hash;
         }
