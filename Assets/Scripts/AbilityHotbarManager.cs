@@ -51,14 +51,14 @@ public class AbilityHotbarUpdateSystem : ComponentSystem {
             // UpdateButton(0, cooldown.Duration, cooldown.TimeRemaining);
             for (var i = 0; i < AbilityMapping.Length; i++) {
                 if (Ability.Ability == AbilityMapping[i] && abilitySourceTarget.Source == CharacterEntity) {
-                    UpdateButton(i, cooldown.Duration, cooldown.TimeRemaining);
+                    UpdateButton(i, cooldown.Duration, cooldown.TimeRemaining, cooldown.CooldownActivated);
                 }
             }
         });
     }
-    private void UpdateButton(int index, float cooldownDuration, float cooldownTimeRemaining) {
+    private void UpdateButton(int index, float cooldownDuration, float cooldownTimeRemaining, bool cooldownActive) {
         var button = AbilityButtons[index];
-        var remainingPercent = 0f;
+        var remainingPercent = 1f;
         if (cooldownDuration != 0) {
             remainingPercent = 1 - cooldownTimeRemaining / cooldownDuration;
         }

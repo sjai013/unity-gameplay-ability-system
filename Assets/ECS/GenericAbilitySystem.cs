@@ -28,7 +28,6 @@ public class GenericAbilitySystem : JobComponentSystem {
     NativeList<int> allAbilitiesList;
 
     private EntityQuery m_Cooldowns;
-    private EntityQuery m_AbilityCooldown;
     private EntityQuery m_ActiveAbilities;
 
     protected override void OnCreate() {
@@ -67,26 +66,19 @@ public class GenericAbilitySystem : JobComponentSystem {
 
         m_ActiveAbilities = GetEntityQuery(new EntityQueryDesc
         {
-            All = new[] { ComponentType.ReadOnly<AbilityComponent>(), ComponentType.ReadOnly<AbilityStateComponent>(), ComponentType.ReadOnly<AbilitySourceTarget>() },
-        });
-
-        m_AbilityCooldown = GetEntityQuery(new EntityQueryDesc
-        {
             All = new[] { ComponentType.ReadOnly<AbilityComponent>(), ComponentType.ReadOnly<AbilityStateComponent>(), ComponentType.ReadOnly<AbilitySourceTarget>(), ComponentType.ReadWrite<AbilityCooldownComponent>() },
         });
-        
 
     }
 
 
-    public struct AbilityJob : IJobForEachWithEntity<AbilityComponent, AbilityStateComponent, AbilitySourceTarget> {
+    public struct AbilityJob : IJobForEachWithEntity<AbilityComponent, AbilityStateComponent, AbilitySourceTarget, AbilityCooldownComponent> {
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
         [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
         [ReadOnly] public NativeHashMap<int, FunctionPointer<ApplyGameplayEffectsDelegate>> gameplayEffectHashMap;
         [ReadOnly] public NativeHashMap<int, FunctionPointer<CheckResourceAvailableDelegate>> checkResourceAvailableHashMap;
         [ReadOnly] public NativeHashMap<int, FunctionPointer<ApplyAbilityCostsDelegate>> applyAbilityCostsHashMap;
         [ReadOnly] public NativeHashMap<int, FunctionPointer<ApplyCooldownEffectDelegate>> applyCooldownEffectHashMap;
-        [ReadOnly] public NativeHashMap<CasterAbilityTuple, GrantedAbilityCooldownComponent> casterAbilityDurationMap;
 
         // [ReadOnly] public NativeArray<CooldownTimeCaster> CooldownArray;
 
@@ -95,7 +87,8 @@ public class GenericAbilitySystem : JobComponentSystem {
                             int index,
                             ref AbilityComponent abilityComponent,
                             ref AbilityStateComponent abilityState,
-                            ref AbilitySourceTarget abilitySourceTarget
+                            ref AbilitySourceTarget abilitySourceTarget,
+                            ref AbilityCooldownComponent abilityCooldown
                             ) {
 
             if (abilityState.State != EAbilityState.TryActivate) return;
@@ -111,12 +104,6 @@ public class GenericAbilitySystem : JobComponentSystem {
             // cooldown.Duration = duration;
             var sourceAttrs = attributesComponent[abilitySourceTarget.Source];
             if (attributesComponent.Exists(abilitySourceTarget.Source)) {
-                EntityCommandBuffer.AddComponent<AbilityCooldownComponent>(index, entity, new AbilityCooldownComponent
-                {
-                    Duration = 0,
-                    TimeRemaining = 0
-                });
-
                 var resourceAvailableFP = checkResourceAvailableHashMap[(int)abilityComponent.Ability];
                 var resourcesAvailable = resourceAvailableFP.Invoke(abilitySourceTarget.Source, sourceAttrs);
 
@@ -125,7 +112,7 @@ public class GenericAbilitySystem : JobComponentSystem {
                     return;
                 }
 
-                if (!AbilityNotOnCooldown(index, entity, abilitySourceTarget.Source, abilityComponent.Ability)) {
+                if (!AbilityNotOnCooldown(index, entity, abilitySourceTarget.Source, abilityCooldown)) {
                     AbilityUnsuccessful(index, ref abilityState);
                     return;
                 }
@@ -138,30 +125,8 @@ public class GenericAbilitySystem : JobComponentSystem {
 
             }
 
-            AbilitySuccessful(index, ref abilityState);
+            AbilitySuccessful(index, ref abilityState, ref abilityCooldown);
         }
-
-
-        //     private bool AbilityNotOnCooldown(int index, Entity entity, Entity source) {
-        //         // Find entity in CooldownArray
-        //         for (var i = 0; i < CooldownArray.Length; i++) {
-        //             if (CooldownArray[i].Caster.Equals(source)
-        //                 && CooldownArray[i].TimeRemaining > 0f) {
-        //                 return false;
-        //             }
-        //         }
-        //         return true;
-        //     }
-
-        // if (attributesComponent.Exists(abilitySourceTarget.Source)) {
-        //     // Check if ability is on cooldown for player
-        //     if (!AbilityNotOnCooldown(index, entity, abilitySourceTarget.Source)) {
-        //         AbilityUnsuccessful(index, ability, ref abilityState);
-        //         return;
-        //     }
-        // }
-        // AbilitySuccessful(index, ability, ref abilityState);
-
 
         private bool ResourceAvailable(int index, Entity entity, Entity source, AttributesComponent sourceAttrs, IAbility ability) {
             var resourcesAvailable = ability.CheckResourceAvailable(source, sourceAttrs);
@@ -171,22 +136,13 @@ public class GenericAbilitySystem : JobComponentSystem {
             return true;
         }
 
-        private bool AbilityNotOnCooldown(int index, Entity entity, Entity source, EAbility Ability) {
-            var casterAbilityKey = new CasterAbilityTuple
-            {
-                Ability = Ability,
-                Host = source
-            };
-
-            if (casterAbilityDurationMap.TryGetValue(casterAbilityKey, out var cooldown)) {
-                return !(cooldown.Duration > 0 && cooldown.TimeRemaining > 0);
-            }
-
-            return false;
+        private bool AbilityNotOnCooldown(int index, Entity entity, Entity source, AbilityCooldownComponent cooldownComponent) {
+            return !(cooldownComponent.CooldownActivated == true);
         }
 
-        private void AbilitySuccessful(int index, ref AbilityStateComponent abilityState) {
+        private void AbilitySuccessful(int index, ref AbilityStateComponent abilityState, ref AbilityCooldownComponent abilityCooldown) {
             abilityState.State = EAbilityState.Activate;
+            abilityCooldown.CooldownActivated = true;
         }
 
         private void AbilityUnsuccessful(int index, ref AbilityStateComponent abilityState) {
@@ -196,7 +152,7 @@ public class GenericAbilitySystem : JobComponentSystem {
 
     }
 
-
+    [BurstCompile]
     public struct EffectAggregatorJob : IJobForEach<CooldownEffectComponent, GameplayEffectDurationComponent, AttributeModificationComponent> {
         // /// <summary>
         // /// <Entity, NativeHashMap<int,float>> -> <Caster, <EGameplayAbility, CooldownRemaining>>
@@ -275,6 +231,7 @@ public class GenericAbilitySystem : JobComponentSystem {
     }
 
 
+    [BurstCompile]
     public struct AbilityCooldownUpdateJob : IJobForEach<AbilityComponent, AbilityStateComponent, AbilitySourceTarget, AbilityCooldownComponent> {
 
         [ReadOnly] public NativeHashMap<CasterAbilityTuple, GrantedAbilityCooldownComponent> casterAbilityDurationMap;
@@ -282,7 +239,7 @@ public class GenericAbilitySystem : JobComponentSystem {
         public void Execute([ReadOnly] ref AbilityComponent abilityComponent,
                             [ReadOnly] ref AbilityStateComponent abilityState,
                             [ReadOnly] ref AbilitySourceTarget abilitySourceTarget,
-                            [WriteOnly] ref AbilityCooldownComponent cooldown
+                            ref AbilityCooldownComponent cooldown
                             ) {
 
             // Get ability cooldown
@@ -295,6 +252,7 @@ public class GenericAbilitySystem : JobComponentSystem {
             casterAbilityDurationMap.TryGetValue(casterAbilityCooldownKey, out var duration);
             cooldown.Duration = duration.Duration;
             cooldown.TimeRemaining = duration.TimeRemaining;
+            cooldown.CooldownActivated = cooldown.Duration > 0;
         }
     }
 
@@ -330,10 +288,6 @@ public class GenericAbilitySystem : JobComponentSystem {
 
         // NativeMultiHashMap<Entity, NativeHashMap<int, Entity>> grantedAbilities = new NativeMultiHashMap<Entity, NativeHashMap<int, Entity>>();
 
-        // inputDeps = new ActiveAbilityAggregatorJob
-        // {
-
-        // }.Schedule(m_Abilities, inputDeps);
 
         inputDeps = new EffectAggregatorJob
         {
@@ -350,7 +304,7 @@ public class GenericAbilitySystem : JobComponentSystem {
         inputDeps = new AbilityCooldownUpdateJob
         {
             casterAbilityDurationMap = casterAbilityDurationMap
-        }.Schedule(m_AbilityCooldown, inputDeps);
+        }.Schedule(m_ActiveAbilities, inputDeps);
 
         inputDeps = new AbilityJob
         {
@@ -361,14 +315,13 @@ public class GenericAbilitySystem : JobComponentSystem {
             attributesComponent = GetComponentDataFromEntity<AttributesComponent>(true),
             EntityCommandBuffer = commandBuffer,
             WorldTime = Time.time,
-            casterAbilityDurationMap = casterAbilityDurationMap
         }.Schedule(m_ActiveAbilities, inputDeps);
 
         inputDeps = new AbilityCleanup
         {
-            EntityCommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent()
-        }.Schedule(m_AbilityCooldown, inputDeps);
-        
+            EntityCommandBuffer = commandBuffer
+        }.Schedule(m_ActiveAbilities, inputDeps);
+
         // Initialise cooldown data
         effectRemainingForCasterMap.Dispose(inputDeps);
         casterAbilityDurationMap.Dispose(inputDeps);

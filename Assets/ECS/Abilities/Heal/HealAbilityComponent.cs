@@ -62,7 +62,6 @@ namespace GameplayAbilitySystem.Abilities.Heal {
                 Ecb.AddComponent(index, attributeModEntity, gameplayEffectData);
                 Ecb.AddComponent(index, attributeModEntity, attributeModData);
                 Ecb.AddComponent(index, attributeModEntity, cooldownEffectComponent);
-                Ecb.AddComponent(index, attributeModEntity, new HealCooldownTagComponent());
             }
         }
     }

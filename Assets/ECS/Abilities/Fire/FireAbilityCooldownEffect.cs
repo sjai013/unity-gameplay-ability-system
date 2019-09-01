@@ -34,7 +34,6 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             Ecb.AddComponent(index, attributeModEntity, gameplayEffectData);
             Ecb.AddComponent(index, attributeModEntity, attributeModData);
             Ecb.AddComponent(index, attributeModEntity, cooldownEffectComponent);
-            Ecb.AddComponent(index, attributeModEntity, new FireCooldownTagComponent());
         }
     }
 }

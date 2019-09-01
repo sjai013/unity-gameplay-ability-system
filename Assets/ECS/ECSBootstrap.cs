@@ -13,6 +13,5 @@ public class ECSBootstrap : MonoBehaviour {
         // set to UniRx.Async PlayerLoop
         PlayerLoopHelper.Initialize(ref playerLoop);
 
-        var entityManager = World.Active.EntityManager;
     }
 }
