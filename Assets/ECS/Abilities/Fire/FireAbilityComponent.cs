@@ -15,7 +15,6 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             new GlobalCooldownEffect().ApplyCooldownEffect(index, Ecb, Caster, WorldTime);
         }
         public void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
-            Debug.Log("Fire Ability");
             new FireGameplayEffect().ApplyGameplayEffect(index, Ecb, Source, Target, attributesComponent);
         }
         public void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent) {
@@ -26,4 +25,6 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             return attributes.Mana.CurrentValue >= 0;
         }
     }
+
 }
+

@@ -49,7 +49,7 @@ namespace GameplayAbilitySystem.Abilities.Fire {
         private async void SeekTargetAndDestroy(AbilitySystemComponent Source, AbilitySystemComponent Target, GameObject projectile, FireAbilityComponent Ability, Entity AbilityEntity) {
             await projectile.GetComponent<Projectile>().SeekTarget(Target.TargettingLocation.gameObject, Target.gameObject);
             var attributesComponent = GetComponentDataFromEntity<AttributesComponent>(false);
-            Ability.ApplyGameplayEffects(World.Active.EntityManager, Source.entity, Target.entity, attributesComponent[Target.entity]);
+            // Ability.ApplyGameplayEffects(World.Active.EntityManager, Source.entity, Target.entity, attributesComponent[Target.entity]);
             Object.DestroyImmediate(projectile);
 
         }

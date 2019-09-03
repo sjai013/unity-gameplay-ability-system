@@ -113,8 +113,8 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<AbilityCooldownCom
     [BurstCompile]
     public struct SetupAbilityDurationWorldTime : IJobForEach<GameplayEffectDurationComponent> {
         public float WorldTime;
-        public void Execute(ref GameplayEffectDurationComponent c0) {
-            if (c0.WorldStartTime <= 0) c0.WorldStartTime = WorldTime;
+        public void Execute(ref GameplayEffectDurationComponent gameplayEffectDuration) {
+            if (gameplayEffectDuration.WorldStartTime <= 0) gameplayEffectDuration.WorldStartTime = WorldTime;
         }
     }
 
@@ -177,6 +177,6 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<AbilityCooldownCom
 
 
 public abstract class AbilityActivationSystem<T1> : ComponentSystem
-where T1 : struct, IComponentData, IAbility {
+where T1 : struct, IComponentData {
 
 }
