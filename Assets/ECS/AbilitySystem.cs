@@ -14,7 +14,7 @@ using UnityEngine;
 ///            (and applying game effects such as costs)
 /// </summary>
 public abstract class AbilitySystem<TAbility, TCooldown> : JobComponentSystem
-where TAbility : struct, IComponentData, IAbility
+where TAbility : struct, IComponentData, IAbilityBehaviour
 where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<AbilityCooldownComponent, AbilitySourceTarget>, ICooldownSystemComponentDefinition {
 
     BeginSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;

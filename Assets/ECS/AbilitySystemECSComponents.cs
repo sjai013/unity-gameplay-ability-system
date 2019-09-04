@@ -3,6 +3,8 @@ using GameplayAbilitySystem.Abilities.Fire;
 using GameplayAbilitySystem.Abilities.Heal;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
+using UnityEngine;
 
 /// <summary>
 /// Marks the ability system to check if the ability can be activated
@@ -119,7 +121,7 @@ public struct AbilityStateComponent : IComponentData {
 /// <summary>
 /// Provides collection of functionality all abilities need to have
 /// </summary>
-public interface IAbility {
+public interface IAbilityBehaviour {
 
     /// <summary>
     /// Application of costs associated with ability
@@ -162,7 +164,34 @@ public interface IAbility {
 
     EGameplayEffect[] CooldownEffects { get; }
 
+    JobHandle CooldownJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, float WorldTime);
+    JobHandle CostJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, ComponentDataFromEntity<AttributesComponent> attributesComponent);
 }
+
+public interface IAbilityJobs<T1> where T1 : struct, IComponentData, IAbilityBehaviour {
+    GenericGatherCooldownsJob<T1> GatherCooldownsJob { get; }
+}
+
+public struct GenericGatherCooldownsJob<T1> : IJobForEachWithEntity<AbilitySourceTarget, AbilityComponent, AbilityStateComponent, T1>
+where T1 : struct, IComponentData, IAbilityBehaviour {
+    public EntityCommandBuffer.Concurrent Ecb;
+    public float WorldTime;
+    public void Execute(Entity entity, int index, [ReadOnly] ref AbilitySourceTarget abilitySourceTarget, [ReadOnly] ref AbilityComponent abilityComponent, [ReadOnly] ref AbilityStateComponent abilityState, [ReadOnly] ref T1 ability) {
+        if (abilityState.State != EAbilityState.TryActivate) return;
+        ability.ApplyCooldownEffect(index, Ecb, abilitySourceTarget.Source, WorldTime);
+    }
+}
+
+public struct GenericAbilityCostJob<T1> : IJobForEachWithEntity<AbilityComponent, AbilityStateComponent, AbilitySourceTarget, T1>
+where T1 : struct, IComponentData, IAbilityBehaviour {
+    public EntityCommandBuffer.Concurrent Ecb;
+    [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
+    public void Execute(Entity entity, int index, [ReadOnly] ref AbilityComponent abilityComponent, [ReadOnly] ref AbilityStateComponent abilityStateComponent, [ReadOnly] ref AbilitySourceTarget abilitySourceTarget, [ReadOnly] ref T1 ability) {
+        if (abilityStateComponent.State != EAbilityState.TryActivate) return;
+        ability.ApplyAbilityCosts(index, Ecb, abilitySourceTarget.Source, abilitySourceTarget.Target, attributesComponent[abilitySourceTarget.Source]);
+    }
+}
+
 
 public struct AbilityComponent : IComponentData, IEquatable<AbilityComponent> {
     public EAbility Ability;

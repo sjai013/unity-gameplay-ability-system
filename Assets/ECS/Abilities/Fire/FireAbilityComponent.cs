@@ -1,8 +1,9 @@
 using Unity.Entities;
+using Unity.Jobs;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.Fire {
-    public struct FireAbilityComponent : IAbility, IComponentData {
+    public struct FireAbilityComponent : IAbilityBehaviour, IComponentData{
         public EAbility AbilityType { get => EAbility.FireAbility; }
 
         public EGameplayEffect[] CooldownEffects => new EGameplayEffect[] { EGameplayEffect.GlobalCooldown, EGameplayEffect.FireAbilityCooldown };
@@ -24,6 +25,28 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             attributes = new FireAbilityCost().ComputeResourceUsage(Caster, attributes);
             return attributes.Mana.CurrentValue >= 0;
         }
+
+        public JobHandle CooldownJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, float WorldTime) {
+            var job = new GenericGatherCooldownsJob<FireAbilityComponent>()
+            {
+                Ecb = Ecb,
+                WorldTime = WorldTime
+            };
+            return job.Schedule(system, inputDeps);
+        }
+
+        public JobHandle CostJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, ComponentDataFromEntity<AttributesComponent> attributesComponent) {
+
+            var job = new GenericAbilityCostJob<FireAbilityComponent>()
+            {
+                Ecb = Ecb,
+                attributesComponent = attributesComponent
+            };
+
+            return job.Schedule(system, inputDeps);
+
+        }
+
     }
 
 }

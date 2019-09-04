@@ -1,8 +1,9 @@
 using Unity.Entities;
+using Unity.Jobs;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.Heal {
-    public struct HealAbilityComponent : IAbility, IComponentData {
+    public partial struct HealAbilityComponent : IAbilityBehaviour, IComponentData {
 
         public EAbility AbilityType { get => EAbility.HealAbility; }
         public EGameplayEffect[] CooldownEffects => new EGameplayEffect[] { EGameplayEffect.GlobalCooldown, EGameplayEffect.HealAbilityCooldown };
@@ -12,7 +13,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
         }
 
         public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
-            new AbilityCooldownEffect().ApplyCooldownEffect(index, Ecb, Caster, WorldTime);
+            new HealAbilityCooldownEffect().ApplyCooldownEffect(index, Ecb, Caster, WorldTime);
             new GlobalCooldownEffect().ApplyCooldownEffect(index, Ecb, Caster, WorldTime);
         }
 
@@ -31,38 +32,12 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             return attributes.Mana.CurrentValue >= 0;
         }
 
-        public struct AbilityCooldownEffect : ICooldown, IComponentData {
-            const float Duration = 3f;
-            public EGameplayEffect GameplayEffect => EGameplayEffect.HealAbilityCooldown;
-            public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
-                var attributeModData = new AttributeModificationComponent()
-                {
-                    Add = 0,
-                    Multiply = 0,
-                    Divide = 0,
-                    Change = 0,
-                    Source = Caster,
-                    Target = Caster
-                };
+        public JobHandle CooldownJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, float WorldTime) {
+            return inputDeps;
+        }
 
-                var attributeModEntity = Ecb.CreateEntity(index);
-                var gameplayEffectData = new GameplayEffectDurationComponent()
-                {
-                    WorldStartTime = WorldTime,
-                    Duration = Duration,
-                    Effect = EGameplayEffect.HealAbilityCooldown
-                };
-                var cooldownEffectComponent = new CooldownEffectComponent()
-                {
-                    Caster = Caster
-                };
-
-                Ecb.AddComponent(index, attributeModEntity, new NullAttributeModifier());
-                Ecb.AddComponent(index, attributeModEntity, new TemporaryAttributeModification());
-                Ecb.AddComponent(index, attributeModEntity, gameplayEffectData);
-                Ecb.AddComponent(index, attributeModEntity, attributeModData);
-                Ecb.AddComponent(index, attributeModEntity, cooldownEffectComponent);
-            }
+        public JobHandle CostJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, ComponentDataFromEntity<AttributesComponent> attributesComponent) {
+            return inputDeps;
         }
     }
 }
