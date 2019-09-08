@@ -10,7 +10,6 @@ using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
 
-[DisableAutoCreation]
 public class GenericAbilitySystem : JobComponentSystem {
     public delegate void ApplyGameplayEffectsDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
     public delegate void ApplyAbilityCostsDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
@@ -213,7 +212,7 @@ public class GenericAbilitySystem : JobComponentSystem {
         }
     }
 
-    public struct UpdateCooldownJob : IJobForEach<AbilityComponent, AbilityStateComponent, AbilitySourceTarget, AbilityCooldownComponent> {
+    public struct UpdateCooldownsJob : IJobForEach<AbilityComponent, AbilityStateComponent, AbilitySourceTarget, AbilityCooldownComponent> {
 
         [ReadOnly] public NativeHashMap<CasterAbilityTuple, GrantedAbilityCooldownComponent> casterAbilityDurationMap;
 
@@ -260,17 +259,10 @@ public class GenericAbilitySystem : JobComponentSystem {
         var attributesComponentArray = new NativeArray<AttributesComponent>(m_ActiveAbilitiesCount, Allocator.TempJob);
         var abilityAvailableArray = new NativeArray<bool>(m_ActiveAbilitiesCount, Allocator.TempJob);
 
-        ComponentDataFromEntity<AttributesComponent> attributeComponents = GetComponentDataFromEntity<AttributesComponent>();
-
-        for (var i = 0; i < abilities.Count; i++) {
-            inputDeps = abilities[i].CooldownJob(this, inputDeps, commandBuffer, Time.time);
-            inputDeps = abilities[i].CostJob(this, inputDeps, commandBuffer, attributeComponents);
-        }
-
-        inputDeps = new GatherGameplayEffectsJob
-        {
-            effectRemainingForCasterMap = effectRemainingForCasterMap
-        }.Schedule(m_Cooldowns, inputDeps);
+        // inputDeps = new GatherGameplayEffectsJob
+        // {
+        //     effectRemainingForCasterMap = effectRemainingForCasterMap
+        // }.Schedule(m_Cooldowns, inputDeps);
 
         // inputDeps = new GatherCooldownsJob
         // {

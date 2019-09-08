@@ -1,9 +1,10 @@
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.Fire {
-    public struct FireAbilityComponent : IAbilityBehaviour, IComponentData{
+    public struct FireAbilityComponent : IAbilityBehaviour, IComponentData {
         public EAbility AbilityType { get => EAbility.FireAbility; }
 
         public EGameplayEffect[] CooldownEffects => new EGameplayEffect[] { EGameplayEffect.GlobalCooldown, EGameplayEffect.FireAbilityCooldown };
@@ -26,28 +27,40 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             return attributes.Mana.CurrentValue >= 0;
         }
 
-        public JobHandle CooldownJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, float WorldTime) {
-            var job = new GenericGatherCooldownsJob<FireAbilityComponent>()
+        public JobHandle BeginAbilityCastJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, ComponentDataFromEntity<AttributesComponent> attributesComponent, float WorldTime) {
+            var job = new GenericBeginAbilityCast<FireAbilityComponent>()
             {
                 Ecb = Ecb,
+                attributesComponent = attributesComponent,
                 WorldTime = WorldTime
             };
             return job.Schedule(system, inputDeps);
         }
 
-        public JobHandle CostJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, ComponentDataFromEntity<AttributesComponent> attributesComponent) {
-
-            var job = new GenericAbilityCostJob<FireAbilityComponent>()
+        public JobHandle UpdateCooldownsJob(JobComponentSystem system, JobHandle inputDeps, NativeHashMap<Entity, GrantedAbilityCooldownComponent> cooldownsRemainingForAbility) {
+            var job = new GenericUpdateAbilityCooldownJob<FireAbilityComponent>()
             {
-                Ecb = Ecb,
-                attributesComponent = attributesComponent
-            };
+                cooldownsRemainingForAbility = cooldownsRemainingForAbility
+            }.Schedule(system, inputDeps);
 
-            return job.Schedule(system, inputDeps);
-
+            return job;
         }
 
+        public JobHandle CheckAbilityAvailableJob(JobComponentSystem system, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent) {
+            var job = new GenericCheckResourceForAbilityJob<FireAbilityComponent>
+            {
+                attributesComponent = attributesComponent,
+            };
+            return job.Schedule(system, inputDeps);
+        }
+
+        public JobHandle CheckAbilityGrantedJob(JobComponentSystem system, JobHandle inputDeps, NativeHashMap<Entity, bool> AbilityGranted) {
+            var job = new GenericCheckAbilityGrantedJob<FireAbilityComponent>
+            {
+                AbilityGranted = AbilityGranted.AsParallelWriter()
+            };
+            return job.Schedule(system, inputDeps);
+        }
     }
 
 }
-

@@ -3,6 +3,7 @@ using GameplayAbilitySystem;
 using GameplayAbilitySystem.Abilities;
 using UnityEngine;
 using System;
+using Unity.Entities;
 
 public class AbilityCharacter : MonoBehaviour {
     public GameplayAbilitySystem.AbilitySystemComponent SelfAbilitySystem { get; private set; }
@@ -14,6 +15,21 @@ public class AbilityCharacter : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         SelfAbilitySystem = GetComponent<GameplayAbilitySystem.AbilitySystemComponent>();
+
+        // Grant all abilities to character, for now
+        var em = World.Active.EntityManager;
+        foreach (KeyValuePair<EAbility, Type> entry in AbilitySystemComponent.Abilities) {
+            var entity = em.CreateEntity();
+            em.AddComponent(entity, entry.Value);
+            em.AddComponent(entity, typeof(GrantedAbilityComponent));
+            em.AddComponent(entity, typeof(GrantedAbilityCooldownComponent));
+            em.SetComponentData(entity, new GrantedAbilityComponent()
+            {
+                GrantedTo = SelfAbilitySystem.entity
+            });
+        }
+
+
     }
 
     public void CastAbility(int n) {

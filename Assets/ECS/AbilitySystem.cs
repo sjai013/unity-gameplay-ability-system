@@ -84,7 +84,7 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<AbilityCooldownCom
         }
 
         private void AbilityUnsuccessful(int index, TAbility ability, ref AbilityStateComponent abilityState) {
-            abilityState.State = EAbilityState.Failed;
+            // abilityState.State = EAbilityState.Failed;
         }
     }
 

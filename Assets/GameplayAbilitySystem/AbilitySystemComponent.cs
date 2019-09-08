@@ -11,11 +11,19 @@ using System.Threading.Tasks;
 using Unity.Entities;
 using UnityEngine;
 
+
 namespace GameplayAbilitySystem {
+
 
     /// <inheritdoc />
     [AddComponentMenu("Gameplay Ability System/Ability System")]
     public class AbilitySystemComponent : MonoBehaviour, IGameplayAbilitySystem, IConvertGameObjectToEntity {
+
+        static public Dictionary<EAbility, Type> Abilities = new Dictionary<EAbility, Type>()
+    {
+        { EAbility.FireAbility, typeof(Abilities.Fire.FireAbilityComponent) },
+        { EAbility.HealAbility, typeof(Abilities.Heal.HealAbilityComponent) },
+    };
         public Transform TargettingLocation;
 
         [SerializeField]
@@ -132,20 +140,7 @@ namespace GameplayAbilitySystem {
         public bool TryActivateAbility(EAbility Ability, AbilitySystemComponent Source, AbilitySystemComponent Target) {
             if (World.Active.EntityManager.HasComponent<CastingAbilityTagComponent>(Source.entity)) return false;
 
-            Type abilityType;
-
-            switch (Ability) {
-                case EAbility.FireAbility:
-                    abilityType = typeof(Abilities.Fire.FireAbilityComponent);
-                    break;
-                case EAbility.HealAbility:
-                    abilityType = typeof(Abilities.Heal.HealAbilityComponent);
-                    break;
-                default:
-                    abilityType = typeof(Abilities.Fire.FireAbilityComponent);
-                    break;
-            }
-
+            Type abilityType = Abilities[Ability];
 
             // World.Active.EntityManager.AddComponent(entity, typeof(CastingAbilityTagComponent));
             // var abilityEntity = World.Active.EntityManager.CreateEntity(typeof(CheckAbilityConstraintsComponent), 
@@ -154,14 +149,17 @@ namespace GameplayAbilitySystem {
             var tryActiveAbilityEntity = World.Active.EntityManager.CreateEntity(abilityType, typeof(AbilitySourceTarget), typeof(AbilityStateComponent), typeof(AbilityComponent), typeof(AbilityCooldownComponent));
             AbilitySourceTarget abilitySourceTarget = new AbilitySourceTarget() { Source = Source.entity, Target = Target.entity };
             AbilityComponent abilityComponent = Ability;
-            AbilityStateComponent abilityState = EAbilityState.TryActivate;
+            AbilityStateComponent abilityState = new AbilityStateComponent
+            {
+                State = EAbilityState.TryActivate
+            };
             AbilityCooldownComponent cooldownComponent = new AbilityCooldownComponent
             {
                 CooldownActivated = false,
                 Duration = 0,
                 TimeRemaining = 0
             };
-            
+
             World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, abilitySourceTarget);
             World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, abilityState);
             World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, abilityComponent);

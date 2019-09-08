@@ -1,9 +1,11 @@
 using System;
 using GameplayAbilitySystem.Abilities.Fire;
 using GameplayAbilitySystem.Abilities.Heal;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 
 /// <summary>
@@ -105,17 +107,6 @@ public interface ICooldownJob {
 
 public struct AbilityStateComponent : IComponentData {
     public EAbilityState State;
-
-    public static implicit operator EAbilityState(AbilityStateComponent AbilityState) {
-        return AbilityState;
-    }
-
-    public static implicit operator AbilityStateComponent(EAbilityState e) {
-        return new AbilityStateComponent
-        {
-            State = e
-        };
-    }
 }
 
 /// <summary>
@@ -142,6 +133,7 @@ public interface IAbilityBehaviour {
     /// <param name="Target"></param>
     /// <param name="attributesComponent"></param>
     void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
+    void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent);
 
     /// <summary>
     /// Check for resource availability associated with ability
@@ -159,39 +151,82 @@ public interface IAbilityBehaviour {
     /// <param name="Caster"></param>
     /// <param name="WorldTime"></param>
     void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime);
-    void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent);
     EAbility AbilityType { get; }
 
     EGameplayEffect[] CooldownEffects { get; }
 
-    JobHandle CooldownJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, float WorldTime);
-    JobHandle CostJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, ComponentDataFromEntity<AttributesComponent> attributesComponent);
+    JobHandle BeginAbilityCastJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, ComponentDataFromEntity<AttributesComponent> attributesComponent, float WorldTime);
+    JobHandle UpdateCooldownsJob(JobComponentSystem system, JobHandle inputDeps, NativeHashMap<Entity, GrantedAbilityCooldownComponent> cooldownsRemainingForAbility);
+    JobHandle CheckAbilityAvailableJob(JobComponentSystem system, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent);
+    JobHandle CheckAbilityGrantedJob(JobComponentSystem system, JobHandle inputDeps, NativeHashMap<Entity, bool> AbilityGranted);
 }
 
-public interface IAbilityJobs<T1> where T1 : struct, IComponentData, IAbilityBehaviour {
-    GenericGatherCooldownsJob<T1> GatherCooldownsJob { get; }
-}
-
-public struct GenericGatherCooldownsJob<T1> : IJobForEachWithEntity<AbilitySourceTarget, AbilityComponent, AbilityStateComponent, T1>
+[RequireComponentTag(typeof(AbilityComponent))]
+public struct GenericBeginAbilityCast<T1> : IJobForEachWithEntity<AbilityStateComponent, AbilitySourceTarget, T1>
 where T1 : struct, IComponentData, IAbilityBehaviour {
     public EntityCommandBuffer.Concurrent Ecb;
     public float WorldTime;
-    public void Execute(Entity entity, int index, [ReadOnly] ref AbilitySourceTarget abilitySourceTarget, [ReadOnly] ref AbilityComponent abilityComponent, [ReadOnly] ref AbilityStateComponent abilityState, [ReadOnly] ref T1 ability) {
-        if (abilityState.State != EAbilityState.TryActivate) return;
-        ability.ApplyCooldownEffect(index, Ecb, abilitySourceTarget.Source, WorldTime);
-    }
-}
-
-public struct GenericAbilityCostJob<T1> : IJobForEachWithEntity<AbilityComponent, AbilityStateComponent, AbilitySourceTarget, T1>
-where T1 : struct, IComponentData, IAbilityBehaviour {
-    public EntityCommandBuffer.Concurrent Ecb;
     [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
-    public void Execute(Entity entity, int index, [ReadOnly] ref AbilityComponent abilityComponent, [ReadOnly] ref AbilityStateComponent abilityStateComponent, [ReadOnly] ref AbilitySourceTarget abilitySourceTarget, [ReadOnly] ref T1 ability) {
-        if (abilityStateComponent.State != EAbilityState.TryActivate) return;
+    public void Execute(Entity entity, int index, [ReadOnly] ref AbilityStateComponent abilityStateComponent, [ReadOnly] ref AbilitySourceTarget abilitySourceTarget, [ReadOnly] ref T1 ability) {
+        if (abilityStateComponent.State != EAbilityState.PreActivate) return;
+        ability.ApplyCooldownEffect(index, Ecb, abilitySourceTarget.Source, WorldTime);
         ability.ApplyAbilityCosts(index, Ecb, abilitySourceTarget.Source, abilitySourceTarget.Target, attributesComponent[abilitySourceTarget.Source]);
+        abilityStateComponent.State = EAbilityState.Activate;
     }
 }
 
+[RequireComponentTag(typeof(AbilityStateComponent))]
+public struct _GenericUpdateAbilityCooldownJob<T1> : IJobForEach<AbilitySourceTarget, AbilityCooldownComponent>
+where T1 : struct, IComponentData, IAbilityBehaviour {
+    [ReadOnly] public NativeHashMap<Entity, GrantedAbilityCooldownComponent> cooldownsRemainingForAbility;
+    public void Execute([ReadOnly] ref AbilitySourceTarget abilitySourceTarget, ref AbilityCooldownComponent cooldown) {
+        cooldownsRemainingForAbility.TryGetValue(abilitySourceTarget.Source, out var duration);
+        cooldown.Duration = duration.Duration;
+        cooldown.TimeRemaining = duration.TimeRemaining;
+        cooldown.CooldownActivated = cooldown.Duration > 0 || cooldown.CooldownActivated;
+
+    }
+}
+
+public struct GenericUpdateAbilityCooldownJob<T1> : IJobForEach<GrantedAbilityComponent, GrantedAbilityCooldownComponent, T1>
+where T1 : struct, IComponentData, IAbilityBehaviour {
+    [ReadOnly] public NativeHashMap<Entity, GrantedAbilityCooldownComponent> cooldownsRemainingForAbility;
+    public void Execute([ReadOnly] ref GrantedAbilityComponent grantedAbility, ref GrantedAbilityCooldownComponent cooldown, [ReadOnly] ref T1 ability) {
+        cooldownsRemainingForAbility.TryGetValue(grantedAbility.GrantedTo, out var duration);
+        cooldown.Duration = duration.Duration;
+        cooldown.TimeRemaining = duration.TimeRemaining;
+    }
+}
+
+[BurstCompile]
+[RequireComponentTag(typeof(AbilityComponent))]
+public struct GenericCheckResourceForAbilityJob<T1> : IJobForEach<AbilitySourceTarget, AbilityCooldownComponent, AbilityStateComponent, T1>
+where T1 : struct, IComponentData, IAbilityBehaviour {
+    [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
+    public void Execute(ref AbilitySourceTarget abilitySourceTarget, ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state, [ReadOnly] ref T1 ability) {
+        if (state.State != EAbilityState.CheckResource) return;
+        var resourceAvailable = false;
+        var sourceAttrs = attributesComponent[abilitySourceTarget.Source];
+        resourceAvailable = ability.CheckResourceAvailable(ref abilitySourceTarget.Source, ref sourceAttrs);
+        if (resourceAvailable) {
+            state.State = EAbilityState.PreActivate;
+        } else {
+            state.State = EAbilityState.Failed;
+        }
+    }
+}
+
+[BurstCompile]
+[RequireComponentTag(typeof(GrantedAbilityComponent), typeof(GrantedAbilityCooldownComponent))]
+public struct GenericCheckAbilityGrantedJob<T1> : IJobForEachWithEntity<T1>
+where T1 : struct, IComponentData, IAbilityBehaviour {
+
+    [WriteOnly] public NativeHashMap<Entity, bool>.ParallelWriter AbilityGranted;
+
+    public void Execute(Entity entity, int index, [ReadOnly] ref T1 Ability) {
+        AbilityGranted.TryAdd(entity, true);
+    }
+}
 
 public struct AbilityComponent : IComponentData, IEquatable<AbilityComponent> {
     public EAbility Ability;
@@ -221,7 +256,7 @@ public struct AbilityComponent : IComponentData, IEquatable<AbilityComponent> {
     }
 }
 
-public enum EAbilityState { TryActivate, Activate, Active, Activated, Completed, Failed }
+public enum EAbilityState { TryActivate, CheckCooldown, CheckResource, PreActivate, Activate, Active, Activated, Completed, Failed }
 
 public enum EAbility {
     FireAbility,
@@ -248,4 +283,9 @@ public struct AbilitySourceTarget : IComponentData {
     public Entity Source;
     public Entity Target;
 
+}
+
+
+public struct GrantedAbilityComponent : IComponentData {
+    public Entity GrantedTo;
 }
