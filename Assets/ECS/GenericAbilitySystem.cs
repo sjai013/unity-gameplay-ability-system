@@ -58,7 +58,7 @@ public class GenericAbilitySystem : JobComponentSystem {
 
         m_ActiveAbilities = GetEntityQuery(new EntityQueryDesc
         {
-            All = new[] { ComponentType.ReadOnly<AbilityComponent>(), ComponentType.ReadOnly<AbilityStateComponent>(), ComponentType.ReadOnly<AbilitySourceTarget>(), ComponentType.ReadWrite<AbilityCooldownComponent>() },
+            All = new[] { ComponentType.ReadOnly<AbilityComponent>(), ComponentType.ReadOnly<AbilityStateComponent>(), ComponentType.ReadOnly<AbilitySourceTarget>() },
         });
     }
 
@@ -112,24 +112,12 @@ public class GenericAbilitySystem : JobComponentSystem {
         }
     }
 
-    [BurstCompile]
-    [RequireComponentTag(typeof(AbilityComponent), typeof(AbilitySourceTarget))]
-    public struct UpdateAbilityAvailableJob : IJobForEach<AbilityStateComponent, AbilityCooldownComponent> {
-        public void Execute(ref AbilityStateComponent state, ref AbilityCooldownComponent cooldown) {
-            if (state.State != EAbilityState.CheckCooldown) return;
-            if (cooldown.TimeRemaining > 0 && cooldown.CooldownActivated) {
-                state.State = EAbilityState.Failed;
-            } else {
-                state.State = EAbilityState.CheckResource;
-            }
-        }
-    }
 
     [RequireComponentTag(typeof(AbilityComponent), typeof(AbilitySourceTarget))]
 
-    public struct UpdateAbilitiesStatusJob : IJobForEachWithEntity<AbilityStateComponent, AbilityCooldownComponent> {
+    public struct UpdateAbilitiesStatusJob : IJobForEachWithEntity<AbilityStateComponent> {
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
-        public void Execute(Entity entity, int index, ref AbilityStateComponent state, [ReadOnly] ref AbilityCooldownComponent cooldown) {
+        public void Execute(Entity entity, int index, ref AbilityStateComponent state) {
             if (state.State == EAbilityState.TryActivate) {
                 state.State = EAbilityState.CheckCooldown;
             }
@@ -138,7 +126,7 @@ public class GenericAbilitySystem : JobComponentSystem {
                 EntityCommandBuffer.DestroyEntity(index, entity);
             }
 
-            if (state.State == EAbilityState.Completed && cooldown.CooldownActivated && cooldown.TimeRemaining <= 0) {
+            if (state.State == EAbilityState.Completed) {
                 EntityCommandBuffer.DestroyEntity(index, entity);
             }
 
@@ -167,10 +155,6 @@ public class GenericAbilitySystem : JobComponentSystem {
             activeCooldownEffects = activeCooldownEffects.AsParallelWriter()
         }.Schedule(this, inputDeps);
 
-        inputDeps = new UpdateAbilityAvailableJob
-        {
-
-        }.Schedule(m_ActiveAbilities, inputDeps);
 
         inputDeps = new UpdateAbilitiesStatusJob
         {

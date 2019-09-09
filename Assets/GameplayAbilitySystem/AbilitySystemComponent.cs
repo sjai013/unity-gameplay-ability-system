@@ -146,18 +146,12 @@ namespace GameplayAbilitySystem {
             // var abilityEntity = World.Active.EntityManager.CreateEntity(typeof(CheckAbilityConstraintsComponent), 
             //                                                             typeof(FireAbility), 
             //                                                             typeof(FireAbilitySystem.AbilityCost));
-            var tryActiveAbilityEntity = World.Active.EntityManager.CreateEntity(abilityType, typeof(AbilitySourceTarget), typeof(AbilityStateComponent), typeof(AbilityComponent), typeof(AbilityCooldownComponent));
+            var tryActiveAbilityEntity = World.Active.EntityManager.CreateEntity(abilityType, typeof(AbilitySourceTarget), typeof(AbilityStateComponent), typeof(AbilityComponent));
             AbilitySourceTarget abilitySourceTarget = new AbilitySourceTarget() { Source = Source.entity, Target = Target.entity };
             AbilityComponent abilityComponent = Ability;
             AbilityStateComponent abilityState = new AbilityStateComponent
             {
                 State = EAbilityState.TryActivate
-            };
-            AbilityCooldownComponent cooldownComponent = new AbilityCooldownComponent
-            {
-                CooldownActivated = false,
-                Duration = 0,
-                TimeRemaining = 0
             };
 
             World.Active.EntityManager.SetComponentData(tryActiveAbilityEntity, abilitySourceTarget);

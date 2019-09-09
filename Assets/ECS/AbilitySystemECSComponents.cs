@@ -96,11 +96,6 @@ public struct CooldownTimeCaster {
     public float Duration;
 }
 
-public struct AbilityCooldownComponent : IComponentData {
-    public float TimeRemaining;
-    public float Duration;
-    public bool CooldownActivated;
-}
 public interface ICooldownJob {
     NativeArray<CooldownTimeCaster> CooldownArray { get; set; }
 }
