@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -10,44 +8,27 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public class GenericAbilitySystem : JobComponentSystem {
-    public delegate void ApplyGameplayEffectsDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
-    public delegate void ApplyAbilityCostsDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
-    public delegate bool CheckResourceAvailableDelegate(ref Entity Caster, ref AttributesComponent attributesComponent);
-    public delegate void ApplyCooldownEffectDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime);
 
     // void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent)
     BeginSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
-    NativeHashMap<int, FunctionPointer<CheckResourceAvailableDelegate>> checkResourceFunctionArray;
-    NativeMultiHashMap<int, EGameplayEffect> abilityCooldownEffectsMap;
     List<NativeArray<EGameplayEffect>> abilityCooldownEffects = new List<NativeArray<EGameplayEffect>>();
     EntityQuery m_CooldownEffects;
     EntityQuery m_ActiveAbilities;
     List<IAbilityBehaviour> abilities = new List<IAbilityBehaviour>();
-
-    NativeArray<JobHandle> abilityJobHandles;
     protected override void OnCreate() {
-
         base.OnCreate();
         m_EntityCommandBufferSystem = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
 
         // Collect list of all types that implement IAbility and store reference to methods 
         var abilityTypes = World.Active.EntityManager.GetAssignableComponentTypes(typeof(IAbilityBehaviour)).ToArray();
-        checkResourceFunctionArray = new NativeHashMap<int, FunctionPointer<CheckResourceAvailableDelegate>>(abilityTypes.Length, Allocator.Persistent);
-        abilityCooldownEffectsMap = new NativeMultiHashMap<int, EGameplayEffect>(abilityTypes.Length, Allocator.Persistent);
-        abilityJobHandles = new NativeArray<JobHandle>(abilityTypes.Length, Allocator.Persistent);
         // Iterate over all objects that implement the IAbility interface
         for (var i = 0; i < abilityTypes.Length; i++) {
             IAbilityBehaviour ability = (IAbilityBehaviour)Activator.CreateInstance(abilityTypes[i]);
             abilities.Add(ability);
             // Create the FunctionPointer hashmaps
-            checkResourceFunctionArray.TryAdd((int)ability.AbilityType, new FunctionPointer<CheckResourceAvailableDelegate>(Marshal.GetFunctionPointerForDelegate((CheckResourceAvailableDelegate)(ability.CheckResourceAvailable))));
             var cooldownEffects = ability.CooldownEffects;
             var nativeArray = new NativeArray<EGameplayEffect>(cooldownEffects, Allocator.Persistent);
             abilityCooldownEffects.Add(nativeArray);
-
-            for (var j = 0; j < cooldownEffects.Length; j++) {
-                abilityCooldownEffectsMap.Add((int)ability.AbilityType, cooldownEffects[j]);
-            }
         }
 
         // Create EntityQueries for jobs
@@ -58,7 +39,7 @@ public class GenericAbilitySystem : JobComponentSystem {
 
         m_ActiveAbilities = GetEntityQuery(new EntityQueryDesc
         {
-            All = new[] { ComponentType.ReadOnly<AbilityComponent>(), ComponentType.ReadOnly<AbilityStateComponent>(), ComponentType.ReadOnly<AbilitySourceTarget>() },
+            All = new[] { ComponentType.ReadOnly<AbilityComponent>(), ComponentType.ReadOnly<AbilityStateComponent>(), ComponentType.ReadOnly<AbilitySourceTargetComponent>() },
         });
     }
 
@@ -80,7 +61,6 @@ public class GenericAbilitySystem : JobComponentSystem {
             activeCooldownEffects.Add((int)effect, remaining);
         }
     }
-
     public struct FilterCooldownEffectsForAbilityJob : IJob {
         [ReadOnly] public NativeMultiHashMap<int, CooldownForCasterComponent> activeCooldownEffects;
         [ReadOnly] public NativeArray<EGameplayEffect> validCooldownEffects;
@@ -111,10 +91,8 @@ public class GenericAbilitySystem : JobComponentSystem {
             }
         }
     }
-
-
-    [RequireComponentTag(typeof(AbilityComponent), typeof(AbilitySourceTarget))]
-
+    [RequireComponentTag(typeof(AbilityComponent), typeof(AbilitySourceTargetComponent))]
+    [BurstCompile]
     public struct UpdateAbilitiesStatusJob : IJobForEachWithEntity<AbilityStateComponent> {
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
         public void Execute(Entity entity, int index, ref AbilityStateComponent state) {
@@ -132,40 +110,38 @@ public class GenericAbilitySystem : JobComponentSystem {
 
         }
     }
-
-
     [BurstCompile]
     public struct CooldownGameplayEffects : IJobForEach<CooldownEffectComponent, GameplayEffectDurationComponent> {
         public void Execute(ref CooldownEffectComponent cooldown, ref GameplayEffectDurationComponent duration) {
             throw new NotImplementedException();
         }
     }
-
     [BurstCompile]
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         var commandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent();
         var m_CooldownEffectsCount = m_CooldownEffects.CalculateEntityCount();
-        var m_ActiveAbilitiesCount = m_ActiveAbilities.CalculateEntityCount();
         var activeCooldownEffects = new NativeMultiHashMap<int, CooldownForCasterComponent>(m_CooldownEffectsCount, Allocator.TempJob);
 
         ComponentDataFromEntity<AttributesComponent> attributeComponents = GetComponentDataFromEntity<AttributesComponent>();
 
-        inputDeps = new GatherCooldownEffectsJob
+        var GCE = new GatherCooldownEffectsJob
         {
             activeCooldownEffects = activeCooldownEffects.AsParallelWriter()
         }.Schedule(this, inputDeps);
 
-
-        inputDeps = new UpdateAbilitiesStatusJob
+        var UAS = new UpdateAbilitiesStatusJob
         {
             EntityCommandBuffer = commandBuffer
         }.Schedule(m_ActiveAbilities, inputDeps);
+
+        inputDeps = JobHandle.CombineDependencies(GCE, UAS);
 
         // The rest of the functionality is defined by the individual abilities
         for (var i = 0; i < abilities.Count; i++) {
             // Get all cooldown effects applicable to this ability
             var effectRemainingForAbility = new NativeHashMap<Entity, GrantedAbilityCooldownComponent>(m_CooldownEffectsCount, Allocator.TempJob);
             var abilityAvailable = new NativeHashMap<Entity, bool>(m_CooldownEffectsCount, Allocator.TempJob);
+            abilityAvailable.Dispose(inputDeps);
             inputDeps = new FilterCooldownEffectsForAbilityJob
             {
                 activeCooldownEffects = activeCooldownEffects,
@@ -184,13 +160,8 @@ public class GenericAbilitySystem : JobComponentSystem {
         activeCooldownEffects.Dispose(inputDeps);
         return inputDeps;
     }
-
     protected override void OnDestroy() {
         base.OnDestroy();
-        checkResourceFunctionArray.Dispose();
-        abilityCooldownEffectsMap.Dispose();
-        // if (effectRemainingForCasterMap.IsCreated) effectRemainingForCasterMap.Dispose();
-        // if (casterAbilityDurationMap.IsCreated) casterAbilityDurationMap.Dispose();
     }
 
 }

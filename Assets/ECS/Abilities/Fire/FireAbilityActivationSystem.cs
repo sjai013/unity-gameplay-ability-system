@@ -11,7 +11,7 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             // We could create a new entity to capture the position of the projectile, but to keep it simple
             // we use the existing entity
 
-            Entities.WithAll<FireAbilityComponent, AbilityStateComponent, AbilitySourceTarget>().ForEach((Entity entity, ref FireAbilityComponent ability, ref AbilityStateComponent abilityState, ref AbilitySourceTarget sourceTarget) => {
+            Entities.WithAll<FireAbilityComponent, AbilityStateComponent, AbilitySourceTargetComponent>().ForEach((Entity entity, ref FireAbilityComponent ability, ref AbilityStateComponent abilityState, ref AbilitySourceTargetComponent sourceTarget) => {
                 if (abilityState.State != EAbilityState.Activate) return;
                 var transforms = GetComponentDataFromEntity<LocalToWorld>(true);
                 var sourceTransform = transforms[sourceTarget.Source];

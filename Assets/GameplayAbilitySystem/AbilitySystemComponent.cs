@@ -146,9 +146,11 @@ namespace GameplayAbilitySystem {
             // var abilityEntity = World.Active.EntityManager.CreateEntity(typeof(CheckAbilityConstraintsComponent), 
             //                                                             typeof(FireAbility), 
             //                                                             typeof(FireAbilitySystem.AbilityCost));
-            var tryActiveAbilityEntity = World.Active.EntityManager.CreateEntity(abilityType, typeof(AbilitySourceTarget), typeof(AbilityStateComponent), typeof(AbilityComponent));
-            AbilitySourceTarget abilitySourceTarget = new AbilitySourceTarget() { Source = Source.entity, Target = Target.entity };
-            AbilityComponent abilityComponent = Ability;
+            var tryActiveAbilityEntity = World.Active.EntityManager.CreateEntity(abilityType, typeof(AbilitySourceTargetComponent), typeof(AbilityStateComponent), typeof(AbilityComponent));
+            AbilitySourceTargetComponent abilitySourceTarget = new AbilitySourceTargetComponent() { Source = Source.entity, Target = Target.entity };
+            AbilityComponent abilityComponent = new AbilityComponent {
+                Ability = Ability
+            };
             AbilityStateComponent abilityState = new AbilityStateComponent
             {
                 State = EAbilityState.TryActivate
