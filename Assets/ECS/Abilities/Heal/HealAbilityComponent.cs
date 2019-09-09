@@ -4,7 +4,7 @@ using Unity.Jobs;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.Heal {
-    public partial struct HealAbilityComponent : IAbilityBehaviour, IComponentData {
+    public struct HealAbilityComponent : IAbilityBehaviour, IComponentData {
 
         public EAbility AbilityType { get => EAbility.HealAbility; }
         public EGameplayEffect[] CooldownEffects => new EGameplayEffect[] { EGameplayEffect.GlobalCooldown, EGameplayEffect.HealAbilityCooldown };
@@ -26,12 +26,17 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             new HealGameplayEffect().ApplyGameplayEffect(entityManager, Source, Target, attributesComponent);
         }
 
-        public JobHandle CheckAbilityAvailableJob(JobComponentSystem system, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent) {
-            var job = new GenericCheckResourceForAbilityJob<HealAbilityComponent>
+        public JobHandle CheckAbilityAvailableJob(JobComponentSystem system, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent, NativeHashMap<Entity, GrantedAbilityCooldownComponent> abilityCooldowns) {
+            var job1 = new GenericUpdateAbilityAvailableJob<HealAbilityComponent>
+            {
+                cooldownsRemainingForAbility = abilityCooldowns
+            }.Schedule(system, inputDeps);
+            
+            var job2 = new GenericCheckResourceForAbilityJob<HealAbilityComponent>
             {
                 attributesComponent = attributesComponent,
-            };
-            return job.Schedule(system, inputDeps);
+            }.Schedule(system, job1);
+            return job2;
         }
 
         public bool CheckResourceAvailable(ref Entity Caster, ref AttributesComponent attributes) {

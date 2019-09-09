@@ -46,12 +46,17 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             return job;
         }
 
-        public JobHandle CheckAbilityAvailableJob(JobComponentSystem system, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent) {
-            var job = new GenericCheckResourceForAbilityJob<FireAbilityComponent>
+        public JobHandle CheckAbilityAvailableJob(JobComponentSystem system, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent, NativeHashMap<Entity, GrantedAbilityCooldownComponent> abilityCooldowns) {
+            var job1 = new GenericUpdateAbilityAvailableJob<FireAbilityComponent>
+            {
+                cooldownsRemainingForAbility = abilityCooldowns
+            }.Schedule(system, inputDeps);
+
+            var job2 = new GenericCheckResourceForAbilityJob<FireAbilityComponent>
             {
                 attributesComponent = attributesComponent,
-            };
-            return job.Schedule(system, inputDeps);
+            }.Schedule(system, job1);
+            return job2;
         }
 
         public JobHandle CheckAbilityGrantedJob(JobComponentSystem system, JobHandle inputDeps, NativeHashMap<Entity, bool> AbilityGranted) {

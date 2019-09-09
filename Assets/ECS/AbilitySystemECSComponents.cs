@@ -157,7 +157,7 @@ public interface IAbilityBehaviour {
 
     JobHandle BeginAbilityCastJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, ComponentDataFromEntity<AttributesComponent> attributesComponent, float WorldTime);
     JobHandle UpdateCooldownsJob(JobComponentSystem system, JobHandle inputDeps, NativeHashMap<Entity, GrantedAbilityCooldownComponent> cooldownsRemainingForAbility);
-    JobHandle CheckAbilityAvailableJob(JobComponentSystem system, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent);
+    JobHandle CheckAbilityAvailableJob(JobComponentSystem system, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent, NativeHashMap<Entity, GrantedAbilityCooldownComponent> abilityCooldowns);
     JobHandle CheckAbilityGrantedJob(JobComponentSystem system, JobHandle inputDeps, NativeHashMap<Entity, bool> AbilityGranted);
 }
 
@@ -175,16 +175,23 @@ where T1 : struct, IComponentData, IAbilityBehaviour {
     }
 }
 
-[RequireComponentTag(typeof(AbilityStateComponent))]
-public struct _GenericUpdateAbilityCooldownJob<T1> : IJobForEach<AbilitySourceTarget, AbilityCooldownComponent>
+[BurstCompile]
+[RequireComponentTag(typeof(AbilityComponent))]
+public struct GenericUpdateAbilityAvailableJob<T1> : IJobForEach<AbilityStateComponent, AbilitySourceTarget, T1>
 where T1 : struct, IComponentData, IAbilityBehaviour {
     [ReadOnly] public NativeHashMap<Entity, GrantedAbilityCooldownComponent> cooldownsRemainingForAbility;
-    public void Execute([ReadOnly] ref AbilitySourceTarget abilitySourceTarget, ref AbilityCooldownComponent cooldown) {
-        cooldownsRemainingForAbility.TryGetValue(abilitySourceTarget.Source, out var duration);
-        cooldown.Duration = duration.Duration;
-        cooldown.TimeRemaining = duration.TimeRemaining;
-        cooldown.CooldownActivated = cooldown.Duration > 0 || cooldown.CooldownActivated;
-
+    public void Execute(ref AbilityStateComponent state, [ReadOnly] ref AbilitySourceTarget sourceTarget, [ReadOnly] ref T1 ability) {
+        if (state.State != EAbilityState.CheckCooldown) return;
+        cooldownsRemainingForAbility.TryGetValue(sourceTarget.Source, out var cooldownRemaining);
+        if (cooldownRemaining.TimeRemaining > 0) {
+            state.State = EAbilityState.Failed;
+        } else {
+            state.State = EAbilityState.CheckResource;
+        }
+        // if (cooldown.TimeRemaining > 0 && cooldown.CooldownActivated) {
+        // } else {
+        //     state.State = EAbilityState.CheckResource;
+        // }
     }
 }
 
@@ -200,10 +207,10 @@ where T1 : struct, IComponentData, IAbilityBehaviour {
 
 [BurstCompile]
 [RequireComponentTag(typeof(AbilityComponent))]
-public struct GenericCheckResourceForAbilityJob<T1> : IJobForEach<AbilitySourceTarget, AbilityCooldownComponent, AbilityStateComponent, T1>
+public struct GenericCheckResourceForAbilityJob<T1> : IJobForEach<AbilitySourceTarget, AbilityStateComponent, T1>
 where T1 : struct, IComponentData, IAbilityBehaviour {
     [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
-    public void Execute(ref AbilitySourceTarget abilitySourceTarget, ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state, [ReadOnly] ref T1 ability) {
+    public void Execute([ReadOnly] ref AbilitySourceTarget abilitySourceTarget, ref AbilityStateComponent state, [ReadOnly] ref T1 ability) {
         if (state.State != EAbilityState.CheckResource) return;
         var resourceAvailable = false;
         var sourceAttrs = attributesComponent[abilitySourceTarget.Source];

@@ -47,11 +47,11 @@ public class AbilityHotbarUpdateSystem : ComponentSystem {
         for (int i = 0; i < AbilityButtons.Count; i++) {
             AbilityButtons[i].SetCooldownRemainingPercent(1);
         }
-        Entities.ForEach<AbilityComponent, AbilityCooldownComponent, AbilitySourceTarget>((Entity entity, ref AbilityComponent Ability, ref AbilityCooldownComponent cooldown, ref AbilitySourceTarget abilitySourceTarget) => {
+        Entities.ForEach<AbilityComponent, GrantedAbilityComponent, GrantedAbilityCooldownComponent>((Entity entity, ref AbilityComponent Ability, ref GrantedAbilityComponent grantedAbility, ref GrantedAbilityCooldownComponent cooldown) => {
             // UpdateButton(0, cooldown.Duration, cooldown.TimeRemaining);
             for (var i = 0; i < AbilityMapping.Length; i++) {
-                if (Ability.Ability == AbilityMapping[i] && abilitySourceTarget.Source == CharacterEntity) {
-                    UpdateButton(i, cooldown.Duration, cooldown.TimeRemaining, cooldown.CooldownActivated);
+                if (Ability.Ability == AbilityMapping[i] && grantedAbility.GrantedTo == CharacterEntity) {
+                    UpdateButton(i, cooldown.Duration, cooldown.TimeRemaining, cooldown.Duration > 0);
                 }
             }
         });

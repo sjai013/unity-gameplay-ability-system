@@ -15,7 +15,7 @@ using UnityEngine;
 /// </summary>
 public abstract class AbilitySystem<TAbility, TCooldown> : JobComponentSystem
 where TAbility : struct, IComponentData, IAbilityBehaviour
-where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<AbilityCooldownComponent, AbilitySourceTarget>, ICooldownSystemComponentDefinition {
+where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<AbilitySourceTarget>, ICooldownSystemComponentDefinition {
 
     BeginSimulationEntityCommandBufferSystem m_EntityCommandBufferSystem;
     protected override void OnCreate() {
@@ -96,17 +96,15 @@ where TCooldown : struct, ICooldownJob, IJobForEachWithEntity<AbilityCooldownCom
     }
 
     [BurstCompile]
-    public struct EndAbilityJob : IJobForEachWithEntity<TAbility, AbilityCooldownComponent, AbilityStateComponent> {
+    public struct EndAbilityJob : IJobForEachWithEntity<TAbility, AbilityStateComponent> {
         public EntityCommandBuffer.Concurrent EntityCommandBuffer;
-        public void Execute(Entity entity, int index, [ReadOnly] ref TAbility ability, ref AbilityCooldownComponent cooldown, ref AbilityStateComponent abilityState) {
+        public void Execute(Entity entity, int index, [ReadOnly] ref TAbility ability, ref AbilityStateComponent abilityState) {
             if (abilityState.State == EAbilityState.Failed) {
                 EntityCommandBuffer.DestroyEntity(index, entity);
             }
             if (abilityState.State != EAbilityState.Completed) return;
             // EntityCommandBuffer.RemoveComponent<CastingAbilityTagComponent>(index, _.Source);
-            if (cooldown.TimeRemaining < 0) {
-                EntityCommandBuffer.DestroyEntity(index, entity);
-            }
+            EntityCommandBuffer.DestroyEntity(index, entity);
         }
     }
 
