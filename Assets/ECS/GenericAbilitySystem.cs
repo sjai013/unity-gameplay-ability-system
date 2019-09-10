@@ -148,9 +148,9 @@ public class GenericAbilitySystem : JobComponentSystem {
                 validCooldownEffects = abilityCooldownEffects[i],
                 cooldownRemainingForAbility = effectRemainingForAbility
             }.Schedule(inputDeps);
-            inputDeps = abilities[i].CheckAbilityAvailableJob(this, inputDeps, attributeComponents, effectRemainingForAbility);
-            inputDeps = abilities[i].UpdateCooldownsJob(this, inputDeps, effectRemainingForAbility);
-            inputDeps = abilities[i].BeginAbilityCastJob(this, inputDeps, commandBuffer, attributeComponents, Time.time);
+            inputDeps = abilities[i].AbilityJobs.CheckAbilityAvailableJob(this, inputDeps, attributeComponents, effectRemainingForAbility);
+            inputDeps = abilities[i].AbilityJobs.UpdateCooldownsJob(this, inputDeps, effectRemainingForAbility);
+            inputDeps = abilities[i].AbilityJobs.BeginAbilityCastJob(this, inputDeps, commandBuffer, attributeComponents, Time.time);
             effectRemainingForAbility.Dispose(inputDeps);
         }
 

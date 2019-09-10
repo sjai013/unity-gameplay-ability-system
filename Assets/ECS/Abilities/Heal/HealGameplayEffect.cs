@@ -21,7 +21,10 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             // Ecb.AddComponent(index, attributeModEntity, new TemporaryAttributeModification());
             Ecb.AddComponent(index, attributeModEntity, new PermanentAttributeModification());
             // Ecb.AddComponent(index, attributeModEntity, gameplayEffectData);
+
             Ecb.AddComponent(index, attributeModEntity, attributeModData);
+
+    
         }
 
         public void ApplyGameplayEffect(EntityManager EntityManager, AttributesComponent attributesComponent, float WorldTime) {
@@ -33,6 +36,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
                                                         typeof(AttributeModificationComponent),
                                                         typeof(GameplayEffectDurationComponent)
             );
+
 
             // var gameplayEffectData = new GameplayEffectDurationComponent()
             // {
@@ -59,3 +63,4 @@ namespace GameplayAbilitySystem.Abilities.Heal {
 
     }
 }
+
