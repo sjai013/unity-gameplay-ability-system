@@ -44,3 +44,4 @@ namespace GameplayAbilitySystem.Abilities.Fire {
         }
     }
 }
+
