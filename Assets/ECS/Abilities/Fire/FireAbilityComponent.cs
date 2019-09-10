@@ -11,11 +11,11 @@ namespace GameplayAbilitySystem.Abilities.Fire {
         public EGameplayEffect[] CooldownEffects => new EGameplayEffect[] { EGameplayEffect.GlobalCooldown, EGameplayEffect.FireAbilityCooldown };
 
         public void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {
-            new FireAbilityCost() {Source = Source, Target = Target }.ApplyGameplayEffect(index, Ecb, attributesComponent, WorldTime);
+            new FireAbilityCost() { Source = Source, Target = Target }.ApplyGameplayEffect(index, Ecb, attributesComponent, WorldTime);
         }
         public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
-            new FireAbilityCooldownEffect(){Caster = Caster}.ApplyCooldownEffect(index, Ecb, WorldTime);
-            new GlobalCooldownEffect(){Caster = Caster}.ApplyCooldownEffect(index, Ecb, WorldTime);
+            new FireAbilityCooldownEffect() { Source = Caster }.ApplyGameplayEffect(index, Ecb, new AttributesComponent(), WorldTime);
+            new GlobalCooldownEffect() { Source = Caster }.ApplyGameplayEffect(index, Ecb, new AttributesComponent(), WorldTime);
         }
         public void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {
             new FireGameplayEffect() { Source = Source, Target = Target }.ApplyGameplayEffect(index, Ecb, attributesComponent, WorldTime);

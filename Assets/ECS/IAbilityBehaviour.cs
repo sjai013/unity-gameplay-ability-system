@@ -17,7 +17,7 @@ public interface IAbilityBehaviour {
     void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime);
 
     /// <summary>
-    /// Application of gameplay effects associated with ability
+    /// Application of gameplay effects associated with ability (use in Job)
     /// </summary>
     /// <param name="index"></param>
     /// <param name="Ecb"></param>
@@ -25,6 +25,15 @@ public interface IAbilityBehaviour {
     /// <param name="Target"></param>
     /// <param name="attributesComponent"></param>
     void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime);
+    
+    /// <summary>
+    /// Application of gameplay effects associated with ability (use outside Job)
+    /// </summary>
+    /// <param name="entityManager"></param>
+    /// <param name="Source"></param>
+    /// <param name="Target"></param>
+    /// <param name="attributesComponent"></param>
+    /// <param name="WorldTime"></param>
     void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime);
 
     /// <summary>

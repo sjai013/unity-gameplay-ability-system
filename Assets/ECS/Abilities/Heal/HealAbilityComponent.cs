@@ -14,8 +14,8 @@ namespace GameplayAbilitySystem.Abilities.Heal {
         }
 
         public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
-            new HealAbilityCooldownEffect() { Caster = Caster }.ApplyCooldownEffect(index, Ecb, WorldTime);
-            new GlobalCooldownEffect() { Caster = Caster }.ApplyCooldownEffect(index, Ecb, WorldTime);
+            new HealAbilityCooldownEffect() { Source = Caster }.ApplyGameplayEffect(index, Ecb, new AttributesComponent(), WorldTime);
+            new GlobalCooldownEffect() { Source = Caster }.ApplyGameplayEffect(index, Ecb, new AttributesComponent(), WorldTime);
         }
 
         public void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {

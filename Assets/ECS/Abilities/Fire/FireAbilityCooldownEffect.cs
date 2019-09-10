@@ -3,19 +3,20 @@ using Unity.Entities;
 namespace GameplayAbilitySystem.Abilities.Fire {
     public struct FireAbilityCooldownEffect : ICooldown, IComponentData {
         const float Duration = 5f;
-        public Entity Caster { get; set; }
 
-        public EGameplayEffect GameplayEffect => EGameplayEffect.FireAbilityCooldown;
+        public Entity Target { get; set; }
+        public Entity Source { get; set; }
+        public DurationPolicyComponent DurationPolicy { get; set; }
 
-        public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, float WorldTime) {
+        public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, AttributesComponent attributesComponent, float WorldTime) {
             var attributeModData = new AttributeModificationComponent()
             {
                 Add = 0,
                 Multiply = 0,
                 Divide = 0,
                 Change = 0,
-                Source = Caster,
-                Target = Caster
+                Source = Source,
+                Target = Target
             };
 
             var attributeModEntity = Ecb.CreateEntity(index);
@@ -27,7 +28,7 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             };
             var cooldownEffectComponent = new CooldownEffectComponent()
             {
-                Caster = Caster
+                Caster = Source
             };
 
             Ecb.AddComponent(index, attributeModEntity, new NullAttributeModifier());
@@ -35,6 +36,10 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             Ecb.AddComponent(index, attributeModEntity, gameplayEffectData);
             Ecb.AddComponent(index, attributeModEntity, attributeModData);
             Ecb.AddComponent(index, attributeModEntity, cooldownEffectComponent);
+        }
+
+        public void ApplyGameplayEffect(EntityManager EntityManager, AttributesComponent attributesComponent, float WorldTime) {
+            throw new System.NotImplementedException();
         }
     }
 }

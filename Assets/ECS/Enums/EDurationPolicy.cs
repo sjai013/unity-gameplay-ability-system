@@ -1,3 +1,3 @@
 public enum EDurationPolicy {
-    Instant, Infinite, HasDuration
+    Invalid, Instant, Infinite, HasDuration
 }
