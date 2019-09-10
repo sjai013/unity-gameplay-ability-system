@@ -3,6 +3,7 @@ using Unity.Entities;
 /// Provides collection of functionality that cooldowns need to have
 /// </summary>
 public interface ICooldown {
-    void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime);
+    Entity Caster { get; set; }
+    void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, float WorldTime);
     EGameplayEffect GameplayEffect { get; }
 }

@@ -5,22 +5,23 @@ using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.Fire {
     public struct FireAbilityComponent : IAbilityBehaviour, IComponentData {
+
         public EAbility AbilityType { get => EAbility.FireAbility; }
 
         public EGameplayEffect[] CooldownEffects => new EGameplayEffect[] { EGameplayEffect.GlobalCooldown, EGameplayEffect.FireAbilityCooldown };
 
-        public void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
-            new FireAbilityCost().ApplyGameplayEffect(index, Ecb, Source, Target, attributesComponent);
+        public void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {
+            new FireAbilityCost() {Source = Source, Target = Target }.ApplyGameplayEffect(index, Ecb, attributesComponent, WorldTime);
         }
         public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
-            new FireAbilityCooldownEffect().ApplyCooldownEffect(index, Ecb, Caster, WorldTime);
-            new GlobalCooldownEffect().ApplyCooldownEffect(index, Ecb, Caster, WorldTime);
+            new FireAbilityCooldownEffect(){Caster = Caster}.ApplyCooldownEffect(index, Ecb, WorldTime);
+            new GlobalCooldownEffect(){Caster = Caster}.ApplyCooldownEffect(index, Ecb, WorldTime);
         }
-        public void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
-            new FireGameplayEffect().ApplyGameplayEffect(index, Ecb, Source, Target, attributesComponent);
+        public void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {
+            new FireGameplayEffect() { Source = Source, Target = Target }.ApplyGameplayEffect(index, Ecb, attributesComponent, WorldTime);
         }
-        public void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent) {
-            new FireGameplayEffect().ApplyGameplayEffect(entityManager, Source, Target, attributesComponent);
+        public void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {
+            new FireGameplayEffect() { Source = Source, Target = Target }.ApplyGameplayEffect(entityManager, attributesComponent, WorldTime);
         }
         public bool CheckResourceAvailable(ref Entity Caster, ref AttributesComponent attributes) {
             attributes = new FireAbilityCost().ComputeResourceUsage(Caster, attributes);

@@ -3,8 +3,9 @@ using Unity.Entities;
 namespace GameplayAbilitySystem.Abilities.Heal {
     public struct HealAbilityCooldownEffect : ICooldown, IComponentData {
         const float Duration = 3f;
+        public Entity Caster { get; set; }
         public EGameplayEffect GameplayEffect => EGameplayEffect.HealAbilityCooldown;
-        public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
+        public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, float WorldTime) {
             var attributeModData = new AttributeModificationComponent()
             {
                 Add = 0,

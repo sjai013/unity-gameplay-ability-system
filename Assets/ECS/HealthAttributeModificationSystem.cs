@@ -3,6 +3,7 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
+using UnityEngine;
 
 public struct HealthAttributeModifier : IComponentData, AttributeModifier {
     public void PermanentAttributeModification(ref AttributeModificationComponent attrMod, ref AttributesComponent attrs) {

@@ -161,6 +161,9 @@ public class GenericAbilitySystem : JobComponentSystem {
         return inputDeps;
     }
     protected override void OnDestroy() {
+        for (var i = 0; i < abilityCooldownEffects.Count; i++) {
+            abilityCooldownEffects[i].Dispose();
+        }
         base.OnDestroy();
     }
 

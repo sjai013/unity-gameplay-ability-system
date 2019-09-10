@@ -9,29 +9,32 @@ namespace GameplayAbilitySystem.Abilities.Heal {
         public EAbility AbilityType { get => EAbility.HealAbility; }
         public EGameplayEffect[] CooldownEffects => new EGameplayEffect[] { EGameplayEffect.GlobalCooldown, EGameplayEffect.HealAbilityCooldown };
 
-        public void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
-            new HealAbilityCost().ApplyGameplayEffect(index, Ecb, Source, Target, attributesComponent);
+        public void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {
+            new HealAbilityCost().ApplyGameplayEffect(index, Ecb, attributesComponent, WorldTime);
         }
 
         public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Caster, float WorldTime) {
-            new HealAbilityCooldownEffect().ApplyCooldownEffect(index, Ecb, Caster, WorldTime);
-            new GlobalCooldownEffect().ApplyCooldownEffect(index, Ecb, Caster, WorldTime);
+            new HealAbilityCooldownEffect() { Caster = Caster }.ApplyCooldownEffect(index, Ecb, WorldTime);
+            new GlobalCooldownEffect() { Caster = Caster }.ApplyCooldownEffect(index, Ecb, WorldTime);
         }
 
-        public void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
-            new HealGameplayEffect().ApplyGameplayEffect(index, Ecb, Source, Target, attributesComponent);
+        public void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {
+            new HealGameplayEffect() { Source = Source, Target = Target }.ApplyGameplayEffect(index, Ecb, attributesComponent, WorldTime);
         }
 
-        public void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent) {
-            new HealGameplayEffect().ApplyGameplayEffect(entityManager, Source, Target, attributesComponent);
+        public void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {
+            new HealGameplayEffect() { Source = Source, Target = Target }.ApplyGameplayEffect(entityManager, attributesComponent, WorldTime);
         }
-
+        public bool CheckResourceAvailable(ref Entity Caster, ref AttributesComponent attributes) {
+            attributes = new HealAbilityCost().ComputeResourceUsage(Caster, attributes);
+            return attributes.Mana.CurrentValue >= 0;
+        }
         public JobHandle CheckAbilityAvailableJob(JobComponentSystem system, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent, NativeHashMap<Entity, GrantedAbilityCooldownComponent> abilityCooldowns) {
             var job1 = new GenericUpdateAbilityAvailableJob<HealAbilityComponent>
             {
                 cooldownsRemainingForAbility = abilityCooldowns
             }.Schedule(system, inputDeps);
-            
+
             var job2 = new GenericCheckResourceForAbilityJob<HealAbilityComponent>
             {
                 attributesComponent = attributesComponent,
@@ -39,10 +42,6 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             return job2;
         }
 
-        public bool CheckResourceAvailable(ref Entity Caster, ref AttributesComponent attributes) {
-            attributes = new HealAbilityCost().ComputeResourceUsage(Caster, attributes);
-            return attributes.Mana.CurrentValue >= 0;
-        }
 
         public JobHandle BeginAbilityCastJob(JobComponentSystem system, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, ComponentDataFromEntity<AttributesComponent> attributesComponent, float WorldTime) {
             var job = new GenericBeginAbilityCast<HealAbilityComponent>()

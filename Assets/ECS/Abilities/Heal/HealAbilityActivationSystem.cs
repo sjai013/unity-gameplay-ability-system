@@ -22,7 +22,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             });
         }
 
-        private void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, Entity AbilityEntity, HealAbilityComponent ability) {
+        private void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, Entity AbilityEntity, HealAbilityComponent Ability) {
             var abilitySystemActor = Source.GetActor();
 
 
@@ -37,6 +37,8 @@ namespace GameplayAbilitySystem.Abilities.Heal {
 
             instantiatedProjectile = Object.Instantiate(Prefab);
             instantiatedProjectile.transform.position = abilitySystemActor.transform.position + new Vector3(0, 1.5f, 0) + abilitySystemActor.transform.forward * 1.2f;
+            var attributesComponent = GetComponentDataFromEntity<AttributesComponent>(false);
+            Ability.ApplyGameplayEffects(World.Active.EntityManager, Source.entity, Target.entity, attributesComponent[Target.entity], Time.time);
 
             // Animation complete.  Spawn and send projectile at target
             // if (instantiatedProjectile != null) {

@@ -7,7 +7,7 @@ namespace GameplayAbilitySystem.Abilities.Fire {
         public DurationPolicyComponent DurationPolicy { get; set; }
         const float DamageMultiplier = -0.1f;
         const float DamageAdder = -5;
-        public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
+        public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, AttributesComponent attributesComponent, float WorldTime) {
             var attributeModData = new AttributeModificationComponent()
             {
                 Add = DamageAdder,
@@ -24,7 +24,7 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             Ecb.AddComponent(index, attributeModEntity, attributeModData);
         }
 
-        public void ApplyGameplayEffect(EntityManager EntityManager, Entity Source, Entity Target, AttributesComponent attributesComponent) {
+        public void ApplyGameplayEffect(EntityManager EntityManager, AttributesComponent attributesComponent, float WorldTime) {
             var attributeModData = new AttributeModificationComponent()
             {
                 Add = DamageAdder,

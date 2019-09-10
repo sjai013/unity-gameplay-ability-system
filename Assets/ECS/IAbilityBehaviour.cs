@@ -14,7 +14,7 @@ public interface IAbilityBehaviour {
     /// <param name="Source"></param>
     /// <param name="Target"></param>
     /// <param name="attributesComponent"></param>
-    void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
+    void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime);
 
     /// <summary>
     /// Application of gameplay effects associated with ability
@@ -24,8 +24,8 @@ public interface IAbilityBehaviour {
     /// <param name="Source"></param>
     /// <param name="Target"></param>
     /// <param name="attributesComponent"></param>
-    void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent);
-    void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent);
+    void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime);
+    void ApplyGameplayEffects(EntityManager entityManager, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime);
 
     /// <summary>
     /// Check for resource availability associated with ability

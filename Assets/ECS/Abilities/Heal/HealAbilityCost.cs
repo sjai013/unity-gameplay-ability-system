@@ -2,9 +2,12 @@ using Unity.Entities;
 
 namespace GameplayAbilitySystem.Abilities.Heal {
     public struct HealAbilityCost : ICost, IComponentData {
+
+        public Entity Target { get; set; }
+        public Entity Source { get; set; }
         public DurationPolicyComponent DurationPolicy { get; set; }
         const int ManaCost = 2;
-        public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent) {
+        public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, AttributesComponent attributesComponent, float WorldTime) {
             var attributeModData = new AttributeModificationComponent()
             {
                 Add = -ManaCost,
@@ -21,7 +24,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             Ecb.AddComponent(index, attributeModEntity, attributeModData);
         }
 
-        public void ApplyGameplayEffect(EntityManager EntityManager, Entity Source, Entity Target, AttributesComponent attributesComponent) {
+        public void ApplyGameplayEffect(EntityManager EntityManager, AttributesComponent attributesComponent, float WorldTime) {
             var attributeModData = new AttributeModificationComponent()
             {
                 Add = -ManaCost,
