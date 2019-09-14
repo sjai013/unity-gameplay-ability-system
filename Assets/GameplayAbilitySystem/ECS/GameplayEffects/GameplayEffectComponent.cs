@@ -24,11 +24,6 @@ public interface AttributeModification : IComponentData { }
 
 public struct GameplayEffectExpired : IComponentData { }
 
-public struct PeriodicGameplayEffect : IComponentData {
-    public float Period;
-    public Entity GameplayEffectToExecute;
-}
-
 public interface IGameplayEffectComponent  { }
 
 public struct AttributeModificationUndoAppliedComponent : IComponentData { }

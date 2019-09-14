@@ -19,7 +19,7 @@ public abstract class AttributeModificationSystem<T> : JobComponentSystem
 
     [BurstCompile]
     [RequireComponentTag(typeof(PermanentAttributeModification))]
-    public struct P_Attribute_ModifierJob : IJobForEach<AttributeModificationComponent, T> {
+    public struct Permanent_Attribute_ModifierJob : IJobForEach<AttributeModificationComponent, T> {
         public EntityCommandBuffer.Concurrent Ecb { get; set; }
         [NativeDisableContainerSafetyRestriction] [WriteOnly] private ComponentDataFromEntity<AttributesComponent> _attrComponents;
         [ReadOnly] private ComponentDataFromEntity<PermanentAttributeModification> _attributeModifier;
@@ -37,7 +37,7 @@ public abstract class AttributeModificationSystem<T> : JobComponentSystem
 
     [BurstCompile]
     [RequireComponentTag(typeof(TemporaryAttributeModification))]
-    public struct T_AttributeModifier_ModifierJob : IJobForEach<AttributeModificationComponent, T> {
+    public struct Temporary_AttributeModifier_ModifierJob : IJobForEach<AttributeModificationComponent, T> {
         public EntityCommandBuffer.Concurrent Ecb { get; set; }
         [NativeDisableContainerSafetyRestriction] [WriteOnly] private ComponentDataFromEntity<AttributesComponent> _attrComponents;
         [ReadOnly] private ComponentDataFromEntity<TemporaryAttributeModification> _attributeModifier;
@@ -53,16 +53,17 @@ public abstract class AttributeModificationSystem<T> : JobComponentSystem
         }
     }
 
+
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         var AttrComponents = GetComponentDataFromEntity<AttributesComponent>(false);
-        var job1 = new P_Attribute_ModifierJob()
+        var job1 = new Permanent_Attribute_ModifierJob()
         {
             Ecb = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(),
             AttrComponents = AttrComponents,
             AttributeModifier = GetComponentDataFromEntity<PermanentAttributeModification>(true),
         };
 
-        var job2 = new T_AttributeModifier_ModifierJob()
+        var job2 = new Temporary_AttributeModifier_ModifierJob()
         {
             Ecb = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent(),
             AttrComponents = AttrComponents,

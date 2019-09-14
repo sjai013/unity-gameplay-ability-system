@@ -10,7 +10,7 @@ using UnityEngine;
 /// TODO: Create sample periodic gameplay effect component as a prototype 
 /// TODO:   -> decrement PeriodRemaining.  
 /// TODO:   -> Apply GE when PeriodRemaining 0.  
-/// TODO:   -> Destroy Entity when ParentGameplayEffect cooldown = 0;
+/// TODO:   -> Destroy Entity when ParentGameplayEffect is destroyed
 /// </summary>
 public struct PeriodicGameplayEffectComponent : IComponentData {
     public Entity ParentGameplayEffect;

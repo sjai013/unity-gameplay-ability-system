@@ -9,3 +9,7 @@ public interface IGameplayEffect {
     void ApplyGameplayEffect(EntityManager EntityManager, AttributesComponent attributesComponent, float WorldTime);
     DurationPolicyComponent DurationPolicy { get; set; }
 }
+
+public interface IPeriodicEffect : IGameplayEffect {
+    void CreatePeriodicEffectEntity(int index, EntityCommandBuffer.Concurrent Ecb, AttributesComponent attributesComponent, float WorldTime);
+}

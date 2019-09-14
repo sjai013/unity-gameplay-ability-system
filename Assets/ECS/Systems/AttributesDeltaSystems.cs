@@ -22,6 +22,7 @@ public class ResetAttributesDeltaSystem : JobComponentSystem {
 }
 
 
+[UpdateAfter(typeof(ResetAttributesDeltaSystem))]
 public class ApplyAttributesDeltaSystem : JobComponentSystem {
 
     [BurstCompile]
@@ -57,7 +58,8 @@ public class RemovePermanentAttributeModificationTag : JobComponentSystem {
         }
     }
     protected override JobHandle OnUpdate(JobHandle inputDependencies) {
-        var job = new Job() {
+        var job = new Job()
+        {
             Ecb = m_EntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent()
         };
 
