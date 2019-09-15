@@ -25,7 +25,7 @@ public interface IAbilityBehaviour {
     /// <param name="Target"></param>
     /// <param name="attributesComponent"></param>
     void ApplyGameplayEffects(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime);
-    
+
     /// <summary>
     /// Application of gameplay effects associated with ability (use outside Job)
     /// </summary>
@@ -57,5 +57,16 @@ public interface IAbilityBehaviour {
     EGameplayEffect[] CooldownEffects { get; }
 
     IAbilityJobs AbilityJobs { get; }
+
+    IEntityQueryDescContainer EntityQueries { get; }
+
+}
+
+public interface IEntityQueryDescContainer {
+    EntityQueryDesc BeginAbilityCastJobQueryDesc { get; }
+    EntityQueryDesc UpdateCooldownsJobQueryDesc { get; }
+    EntityQueryDesc CheckAbilityAvailableJobQueryDesc_UpdateAvailability { get; }
+    EntityQueryDesc CheckAbilityAvailableJobQueryDesc_CheckResources { get; }
+    EntityQueryDesc CheckAbilityGrantedJobQueryDesc { get; }
 
 }

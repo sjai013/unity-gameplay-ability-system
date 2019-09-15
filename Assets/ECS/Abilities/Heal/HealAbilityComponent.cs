@@ -8,6 +8,9 @@ namespace GameplayAbilitySystem.Abilities.Heal {
         public EAbility AbilityType { get => EAbility.HealAbility; }
         public EGameplayEffect[] CooldownEffects => new EGameplayEffect[] { EGameplayEffect.GlobalCooldown, EGameplayEffect.HealAbilityCooldown };
         public IAbilityJobs AbilityJobs => new DefaultAbilityJobs<HealAbilityComponent>();
+
+        public IEntityQueryDescContainer EntityQueries => new EntityQueryDescContainerBasic<HealAbilityComponent>();
+
         public void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {
             new DefaultGameplayEffect().ApplyGameplayEffect<HealAbilityCost>(index, Ecb, Source, Target, attributesComponent, WorldTime);
         }

@@ -15,6 +15,11 @@ public class GenericAbilitySystem : JobComponentSystem {
     EntityQuery m_CooldownEffects;
     EntityQuery m_ActiveAbilities;
     List<IAbilityBehaviour> abilities = new List<IAbilityBehaviour>();
+    List<EntityQuery> m_AbilityBeginCastQuery = new List<EntityQuery>();
+    List<EntityQuery> m_UpdateCooldownsJobQuery = new List<EntityQuery>();
+    List<EntityQuery> m_UpdateAbilityAvailableQuery = new List<EntityQuery>();
+    List<EntityQuery> m_GenericCheckResourceForAbilityJobQuery = new List<EntityQuery>();
+    List<EntityQuery> m_GenericCheckAbilityGrantedJobQuery = new List<EntityQuery>();
     protected override void OnCreate() {
         base.OnCreate();
         m_EntityCommandBufferSystem = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
@@ -28,6 +33,14 @@ public class GenericAbilitySystem : JobComponentSystem {
             // Create the FunctionPointer hashmaps
             var cooldownEffects = ability.CooldownEffects;
             var nativeArray = new NativeArray<EGameplayEffect>(cooldownEffects, Allocator.Persistent);
+            var entityQueryDescContainer = ability.EntityQueries;
+            m_AbilityBeginCastQuery.Add(GetEntityQuery(entityQueryDescContainer.BeginAbilityCastJobQueryDesc));
+            m_UpdateCooldownsJobQuery.Add(GetEntityQuery(entityQueryDescContainer.UpdateCooldownsJobQueryDesc));
+            m_UpdateAbilityAvailableQuery.Add(GetEntityQuery(entityQueryDescContainer.CheckAbilityAvailableJobQueryDesc_UpdateAvailability));
+            m_GenericCheckResourceForAbilityJobQuery.Add(GetEntityQuery(entityQueryDescContainer.CheckAbilityAvailableJobQueryDesc_CheckResources));
+            m_GenericCheckAbilityGrantedJobQuery.Add(GetEntityQuery(entityQueryDescContainer.CheckAbilityGrantedJobQueryDesc));
+
+
             abilityCooldownEffects.Add(nativeArray);
         }
 
@@ -148,9 +161,11 @@ public class GenericAbilitySystem : JobComponentSystem {
                 validCooldownEffects = abilityCooldownEffects[i],
                 cooldownRemainingForAbility = effectRemainingForAbility
             }.Schedule(inputDeps);
-            inputDeps = abilities[i].AbilityJobs.CheckAbilityAvailableJob(this, inputDeps, attributeComponents, effectRemainingForAbility);
-            inputDeps = abilities[i].AbilityJobs.UpdateCooldownsJob(this, inputDeps, effectRemainingForAbility);
-            inputDeps = abilities[i].AbilityJobs.BeginAbilityCastJob(this, inputDeps, commandBuffer, attributeComponents, Time.time);
+            var abilityJob = abilities[i].AbilityJobs;
+            var entityQueries = abilities[i].EntityQueries;
+            inputDeps = abilityJob.CheckAbilityAvailableJob(m_UpdateAbilityAvailableQuery[i], m_GenericCheckResourceForAbilityJobQuery[i], inputDeps, attributeComponents, effectRemainingForAbility);
+            inputDeps = abilityJob.UpdateCooldownsJob(m_UpdateCooldownsJobQuery[i], inputDeps, effectRemainingForAbility);
+            inputDeps = abilityJob.BeginAbilityCastJob(m_AbilityBeginCastQuery[i], inputDeps, commandBuffer, attributeComponents, Time.time);
             effectRemainingForAbility.Dispose(inputDeps);
         }
 

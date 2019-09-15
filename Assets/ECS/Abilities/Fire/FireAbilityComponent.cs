@@ -11,6 +11,8 @@ namespace GameplayAbilitySystem.Abilities.Fire {
 
         public IAbilityJobs AbilityJobs => new DefaultAbilityJobs<FireAbilityComponent>();
 
+        public IEntityQueryDescContainer EntityQueries => new EntityQueryDescContainerBasic<FireAbilityComponent>();
+
         public void ApplyAbilityCosts(int index, EntityCommandBuffer.Concurrent Ecb, Entity Source, Entity Target, AttributesComponent attributesComponent, float WorldTime) {
             new DefaultGameplayEffect().ApplyGameplayEffect<FireAbilityCost>(index, Ecb, Source, Target, attributesComponent, WorldTime);
         }
