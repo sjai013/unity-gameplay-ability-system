@@ -1,6 +1,3 @@
-# UPDATE 2019-08-19
-## The project is still in active development, and is being converted to ECS/DOTS stack in the 0.5 branch.  Next release (hopefully before 2019-09-15) is a complete rewrite of the project in ECS (pure where possible, hybrid elsewhere).  This change is almost a complete rewrite, and deprecates the ScriptableObject architecture in favour of class-based definitions.
-
 # Gameplay Ability System for Unity
 Gameplay Ability System for Unity (or GAS for short) is a Unity framework for creating games which contain any kind of abilities (e.g. DotA, Skyrim).  The framework helps to simplify the interaction between components in a unified manner.  
 
