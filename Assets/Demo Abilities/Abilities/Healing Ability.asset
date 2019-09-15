@@ -38,6 +38,7 @@ MonoBehaviour:
       _added: []
     _targetBlockedTags:
       _added: []
+  Ability: 1
   _gameplayCost:
     _costGameplayEffect: {fileID: 11400000, guid: 520415e26382f224c867fce4071958df,
       type: 2}
@@ -48,16 +49,17 @@ MonoBehaviour:
   _onGameplayAbilityCommitted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _onGameplayAbilityCancelled:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _onGameplayAbilityEnded:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _abilityLogic: {fileID: 11400000, guid: 3bca910e2eb21f1488595e49c96ce66c, type: 2}
+  _targettingLogic: {fileID: 0}

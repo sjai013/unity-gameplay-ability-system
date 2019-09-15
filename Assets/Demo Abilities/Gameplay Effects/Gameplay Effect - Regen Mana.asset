@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameplayEffectPolicy:
     _durationPolicy: 0
-    _durationMagnitude: 0
+    _durationMagnitude: 10
     _modifiers:
     - _attributeType: {fileID: 11400000, guid: 124a7a186e5666c4b8fdc11ca51efeb7, type: 2}
       _modifierOperationType: 0
@@ -32,9 +32,11 @@ MonoBehaviour:
     _grantedTags:
       _added: []
     _ongoingTagRequirements:
-      _added: []
+      _requirePresence: []
+      _requireAbsence: []
     _applicationTagRequirements:
-      _added: []
+      _requirePresence: []
+      _requireAbsence: []
     _removeGameplayEffectsWithTag:
       _added: []
   Period:

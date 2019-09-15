@@ -13,23 +13,13 @@ MonoBehaviour:
   m_Name: Gameplay Effect - Damaging
   m_EditorClassIdentifier: 
   _gameplayEffectPolicy:
-    _durationPolicy: 0
+    _durationPolicy: 2
     _durationMagnitude: 10
     _modifiers:
     - _attributeType: {fileID: 11400000, guid: 08c3bc3be14b22e4aadc300234c0587a, type: 2}
       _modifierOperationType: 1
       _magnitudeCalculationType: 0
-      _scaledMagnitude: 0.9
-      _sourceTags:
-        RequireTags: []
-        IgnoreTags: []
-      _targetTags:
-        RequireTags: []
-        IgnoreTags: []
-    - _attributeType: {fileID: 11400000, guid: 08c3bc3be14b22e4aadc300234c0587a, type: 2}
-      _modifierOperationType: 0
-      _magnitudeCalculationType: 0
-      _scaledMagnitude: -5
+      _scaledMagnitude: -0.1
       _sourceTags:
         RequireTags: []
         IgnoreTags: []
@@ -41,6 +31,12 @@ MonoBehaviour:
       _added: []
     _grantedTags:
       _added: []
+    _ongoingTagRequirements:
+      _requirePresence: []
+      _requireAbsence: []
+    _applicationTagRequirements:
+      _requirePresence: []
+      _requireAbsence: []
     _removeGameplayEffectsWithTag:
       _added:
       - Tag: {fileID: 0}

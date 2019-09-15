@@ -19,7 +19,7 @@ MonoBehaviour:
     - _attributeType: {fileID: 11400000, guid: 124a7a186e5666c4b8fdc11ca51efeb7, type: 2}
       _modifierOperationType: 0
       _magnitudeCalculationType: 0
-      _scaledMagnitude: -3
+      _scaledMagnitude: -20
       _sourceTags:
         RequireTags: []
         IgnoreTags: []
@@ -32,9 +32,21 @@ MonoBehaviour:
     _grantedTags:
       _added: []
     _ongoingTagRequirements:
-      _added: []
+      _requirePresence: []
+      _requireAbsence: []
     _applicationTagRequirements:
-      _added: []
+      _requirePresence: []
+      _requireAbsence: []
     _removeGameplayEffectsWithTag:
       _added: []
+  Period:
+    Period: 0
+    ExecuteOnApplication: 0
+    ApplyGameEffectOnExecute: {fileID: 0}
   GameplayCues: []
+  StackingPolicy:
+    StackingType: 0
+    StackLimit: 0
+    StackDurationRefreshPolicy: 0
+    StackPeriodResetPolicy: 0
+    StackExpirationPolicy: 0

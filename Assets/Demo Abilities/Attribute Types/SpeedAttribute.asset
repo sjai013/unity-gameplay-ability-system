@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c18cae5443a104f8743ad77dae4df8, type: 3}
   m_Name: SpeedAttribute
   m_EditorClassIdentifier: 
+  AttributeId: 4

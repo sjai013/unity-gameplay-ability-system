@@ -1781,6 +1781,7 @@ SkinnedMeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1891,6 +1892,10 @@ GameObject:
   - component: {fileID: 5555714685437361603}
   - component: {fileID: 5555714685437361608}
   - component: {fileID: 7899279095716547604}
+  - component: {fileID: 4296990303564377507}
+  - component: {fileID: 7606552053032496123}
+  - component: {fileID: 319760963773948485}
+  - component: {fileID: 6048140556220432197}
   m_Layer: 0
   m_Name: Enemy Ethan
   m_TagString: Untagged
@@ -1976,10 +1981,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 544bca395e0b0ef4d9dfece00bc3c242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PreviousAnimationEvent: {fileID: 0}
   CustomAnimationEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.CustomAnimationUnityEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.CustomAnimationUnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   AnimationComplete:
     m_PersistentCalls:
@@ -2004,28 +2010,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargettingLocation: {fileID: 5555714685437583682}
-  _onGameplayAbilityActivated:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _onGameplayAbilityEnded:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _onGameplayEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GameplayEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _activeGameplayEffectsContainer:
-    _activeCooldowns: []
-  _onGameplayAbilityCommitted:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Events.GenericAbilityEvent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &5555714685437361608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2041,12 +2025,12 @@ MonoBehaviour:
   _attributeBaseValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _attributeCurrentValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp-firstpass,
+    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _attributes:
   - _attributeType: {fileID: 11400000, guid: 8769ea8817563784a87cb6142aef671b, type: 2}
@@ -2059,11 +2043,11 @@ MonoBehaviour:
     _baseValue: 5
     _currentValue: 5
   - _attributeType: {fileID: 11400000, guid: 124a7a186e5666c4b8fdc11ca51efeb7, type: 2}
-    _baseValue: 20
-    _currentValue: 20
+    _baseValue: 50
+    _currentValue: 50
   - _attributeType: {fileID: 11400000, guid: 9513cbcc3a089f742b9c48ae4201b1db, type: 2}
-    _baseValue: 20
-    _currentValue: 20
+    _baseValue: 50
+    _currentValue: 50
   _preAttributeBaseChangeHandler: {fileID: 0}
   _preAttributeChangeHandler: {fileID: 11400000, guid: d0fb19ee49913db48946ce55707e8938,
     type: 2}
@@ -2080,6 +2064,122 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StatChangeHandler: {fileID: 11400000, guid: 80a161f938c6c674ca02402d6ecd7c52, type: 2}
+--- !u!114 &4296990303564377507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555714685437361602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98537c238586d554397a08703062c104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Abilities:
+  - Ability: {fileID: 11400000, guid: ae33e3a3cccb84e4fb4bfb4c2d5c089e, type: 2}
+    AbilityType: 0
+    AbilityTarget: {fileID: 0}
+  - Ability: {fileID: 11400000, guid: 2583a21c4bcf5a240a37b1568534e68f, type: 2}
+    AbilityType: 0
+    AbilityTarget: {fileID: 5555714685437361603}
+  - Ability: {fileID: 11400000, guid: 2ad2b404d2dbabc42ad72e779397634f, type: 2}
+    AbilityType: 1
+    AbilityTarget: {fileID: 5555714685437361603}
+  TargetPool: []
+--- !u!114 &7606552053032496123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555714685437361602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c616ba6d7fe50574a8085de0087bf060, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Inputs:
+  - Button: Ability 1
+    ButtonState: 2
+    Handler:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4296990303564377507}
+          m_MethodName: CastAbility
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Button: Ability 2
+    ButtonState: 2
+    Handler:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4296990303564377507}
+          m_MethodName: CastAbility
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Button: Ability 3
+    ButtonState: 2
+    Handler:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4296990303564377507}
+          m_MethodName: CastAbility
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+--- !u!114 &319760963773948485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555714685437361602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 1
+--- !u!114 &6048140556220432197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555714685437361602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2902537d25492e84d8711b0f90fe9442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiAttributeUpdater: {fileID: 1359308431272715899}
 --- !u!1 &5555714685437361604
 GameObject:
   m_ObjectHideFlags: 0
@@ -2934,7 +3034,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6587082090465148645}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 0
@@ -2956,7 +3056,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6587082090465148645}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
@@ -3106,3 +3206,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1071020996309585044}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1359308431272715899 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2017678857333680879, guid: e05a0ff48b22f914d920b149824050af,
+    type: 3}
+  m_PrefabInstance: {fileID: 1071020996309585044}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9ea719c96c1a34dacdc5689c3ac0e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
