@@ -1770,6 +1770,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1896,6 +1897,7 @@ GameObject:
   - component: {fileID: 7606552053032496123}
   - component: {fileID: 319760963773948485}
   - component: {fileID: 6048140556220432197}
+  - component: {fileID: 8132362273714373629}
   m_Layer: 0
   m_Name: Enemy Ethan
   m_TagString: Untagged
@@ -1985,18 +1987,12 @@ MonoBehaviour:
   CustomAnimationEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.CustomAnimationUnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   AnimationComplete:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   AnimationStarted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &5555714685437361603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2025,13 +2021,9 @@ MonoBehaviour:
   _attributeBaseValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _attributeCurrentValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _attributes:
   - _attributeType: {fileID: 11400000, guid: 8769ea8817563784a87cb6142aef671b, type: 2}
     _baseValue: 100
@@ -2116,8 +2108,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
   - Button: Ability 2
     ButtonState: 2
     Handler:
@@ -2134,8 +2124,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
   - Button: Ability 3
     ButtonState: 2
     Handler:
@@ -2152,8 +2140,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
 --- !u!114 &319760963773948485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2180,6 +2166,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _uiAttributeUpdater: {fileID: 1359308431272715899}
+--- !u!114 &8132362273714373629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555714685437361602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 191bcecd95b8d00419347548f9819bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Attributes:
+  - GameplayAbilitySystem.Attributes.CharacterLevelAttributeComponent, Assembly-CSharp,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - GameplayAbilitySystem.Attributes.MaxManaAttributeComponent, Assembly-CSharp,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - GameplayAbilitySystem.Attributes.MaxHealthAttributeComponent, Assembly-CSharp,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - GameplayAbilitySystem.Attributes.ManaAttributeComponent, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - GameplayAbilitySystem.Attributes.HealthAttributeComponent, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
 --- !u!1 &5555714685437361604
 GameObject:
   m_ObjectHideFlags: 0
@@ -3071,11 +3080,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2813750359774979275}
     m_Modifications:
-    - target: {fileID: 5694074306757467403, guid: e05a0ff48b22f914d920b149824050af,
-        type: 3}
-      propertyPath: m_Name
-      value: Bar
-      objectReference: {fileID: 0}
     - target: {fileID: 2202905021266549665, guid: e05a0ff48b22f914d920b149824050af,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3198,6 +3202,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 8769ea8817563784a87cb6142aef671b,
         type: 2}
+    - target: {fileID: 5694074306757467403, guid: e05a0ff48b22f914d920b149824050af,
+        type: 3}
+      propertyPath: m_Name
+      value: Bar
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e05a0ff48b22f914d920b149824050af, type: 3}
 --- !u!224 &1175243351360853813 stripped

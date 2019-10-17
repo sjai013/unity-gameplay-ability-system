@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -499,6 +500,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
@@ -1013,6 +1019,11 @@ PrefabInstance:
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &162468921 stripped
@@ -1272,6 +1283,11 @@ PrefabInstance:
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &185726433 stripped
@@ -1329,11 +1345,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 772122999}
     m_Modifications:
-    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
-        type: 3}
-      propertyPath: m_Name
-      value: Ability 7
-      objectReference: {fileID: 0}
     - target: {fileID: 2368979380633877767, guid: 6abd691f7e8403745ad594b75a550b12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1438,6 +1449,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
+        type: 3}
+      propertyPath: m_Name
+      value: Ability 7
       objectReference: {fileID: 0}
     - target: {fileID: 223490126, guid: 6abd691f7e8403745ad594b75a550b12, type: 3}
       propertyPath: m_Color.a
@@ -1976,24 +1992,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 321425062f13a8247aff859aa26c1789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &561542994 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7899279095267793602, guid: fddc582aed5bbbd4ab4ac8025536d369,
-    type: 3}
-  m_PrefabInstance: {fileID: 863385731}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &561542995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 561542994}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 191bcecd95b8d00419347548f9819bf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &581392356
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2148,11 +2146,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 772122999}
     m_Modifications:
-    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
-        type: 3}
-      propertyPath: m_Name
-      value: Ability 3
-      objectReference: {fileID: 0}
     - target: {fileID: 2368979380633877767, guid: 6abd691f7e8403745ad594b75a550b12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2257,6 +2250,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
+        type: 3}
+      propertyPath: m_Name
+      value: Ability 3
       objectReference: {fileID: 0}
     - target: {fileID: 223490126, guid: 6abd691f7e8403745ad594b75a550b12, type: 3}
       propertyPath: m_Color.a
@@ -2365,8 +2363,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -2912,6 +2911,11 @@ PrefabInstance:
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &789928572 stripped
@@ -2955,11 +2959,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7899279095267793602, guid: fddc582aed5bbbd4ab4ac8025536d369,
-        type: 3}
-      propertyPath: m_Name
-      value: Ethan
-      objectReference: {fileID: 0}
     - target: {fileID: 7899279095267886658, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -2994,6 +2993,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.00000002606248
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.CharacterLevelAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.MaxManaAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.MaxHealthAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.ManaAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.HealthAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 7899279095267793602, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
+      propertyPath: m_Name
+      value: Ethan
       objectReference: {fileID: 0}
     - target: {fileID: 7899279095267886754, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
@@ -3033,7 +3072,7 @@ PrefabInstance:
     - target: {fileID: 7899279095267886754, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7899279095267886754, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
@@ -3518,7 +3557,7 @@ Terrain:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 949310894}
   m_Enabled: 1
-  serializedVersion: 5
+  serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: a3ebff49934351346bd766fce2d1c88e, type: 2}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
@@ -3541,6 +3580,7 @@ Terrain:
   m_ScaleInLightmap: 0.0256
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
+  m_RenderingLayerMask: 1
   m_AllowAutoConnect: 1
 --- !u!4 &949310897
 Transform:
@@ -3930,6 +3970,11 @@ PrefabInstance:
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!114 &1079858720 stripped
@@ -3974,7 +4019,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 863385731}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 561542994}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98537c238586d554397a08703062c104, type: 3}
@@ -4053,11 +4098,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 772122999}
     m_Modifications:
-    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
-        type: 3}
-      propertyPath: m_Name
-      value: Ability 2
-      objectReference: {fileID: 0}
     - target: {fileID: 2368979380633877767, guid: 6abd691f7e8403745ad594b75a550b12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4162,6 +4202,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
+        type: 3}
+      propertyPath: m_Name
+      value: Ability 2
       objectReference: {fileID: 0}
     - target: {fileID: 223490126, guid: 6abd691f7e8403745ad594b75a550b12, type: 3}
       propertyPath: m_Color.a
@@ -4517,6 +4562,11 @@ PrefabInstance:
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &1333259927 stripped
@@ -4771,6 +4821,11 @@ PrefabInstance:
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &1343071312 stripped
@@ -4810,11 +4865,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 772122999}
     m_Modifications:
-    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
-        type: 3}
-      propertyPath: m_Name
-      value: Ability 4
-      objectReference: {fileID: 0}
     - target: {fileID: 2368979380633877767, guid: 6abd691f7e8403745ad594b75a550b12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4919,6 +4969,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
+        type: 3}
+      propertyPath: m_Name
+      value: Ability 4
       objectReference: {fileID: 0}
     - target: {fileID: 223490126, guid: 6abd691f7e8403745ad594b75a550b12, type: 3}
       propertyPath: m_Color.a
@@ -5171,6 +5226,11 @@ PrefabInstance:
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &1485088249 stripped
@@ -5210,11 +5270,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 772122999}
     m_Modifications:
-    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
-        type: 3}
-      propertyPath: m_Name
-      value: Ability 6
-      objectReference: {fileID: 0}
     - target: {fileID: 2368979380633877767, guid: 6abd691f7e8403745ad594b75a550b12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5319,6 +5374,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
+        type: 3}
+      propertyPath: m_Name
+      value: Ability 6
       objectReference: {fileID: 0}
     - target: {fileID: 223490126, guid: 6abd691f7e8403745ad594b75a550b12, type: 3}
       propertyPath: m_Color.a
@@ -5555,7 +5615,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 863385731}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 561542994}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 955d1cc64d738074886242fa61f0bdf3, type: 3}
@@ -5715,11 +5775,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 772122999}
     m_Modifications:
-    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
-        type: 3}
-      propertyPath: m_Name
-      value: Ability 8
-      objectReference: {fileID: 0}
     - target: {fileID: 2368979380633877767, guid: 6abd691f7e8403745ad594b75a550b12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5824,6 +5879,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
+        type: 3}
+      propertyPath: m_Name
+      value: Ability 8
       objectReference: {fileID: 0}
     - target: {fileID: 223490126, guid: 6abd691f7e8403745ad594b75a550b12, type: 3}
       propertyPath: m_Color.a
@@ -6377,6 +6437,11 @@ PrefabInstance:
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &1944015480 stripped
@@ -6682,8 +6747,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 2.1954272, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 7899279095716712560}
   - {fileID: 1124098576}
+  - {fileID: 7899279095716712560}
   - {fileID: 108145617}
   - {fileID: 1343071312}
   - {fileID: 1333259927}
@@ -6704,11 +6769,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 772122999}
     m_Modifications:
-    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
-        type: 3}
-      propertyPath: m_Name
-      value: Ability 5
-      objectReference: {fileID: 0}
     - target: {fileID: 2368979380633877767, guid: 6abd691f7e8403745ad594b75a550b12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6813,6 +6873,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
+        type: 3}
+      propertyPath: m_Name
+      value: Ability 5
       objectReference: {fileID: 0}
     - target: {fileID: 223490126, guid: 6abd691f7e8403745ad594b75a550b12, type: 3}
       propertyPath: m_Color.a
@@ -7003,7 +7068,7 @@ PrefabInstance:
     - target: {fileID: 5555714685437583778, guid: 87613a41b93a7d44a9290c82c0dd98c2,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5555714685437583778, guid: 87613a41b93a7d44a9290c82c0dd98c2,
         type: 3}
@@ -7064,11 +7129,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 772122999}
     m_Modifications:
-    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
-        type: 3}
-      propertyPath: m_Name
-      value: Ability 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2368979380633877767, guid: 6abd691f7e8403745ad594b75a550b12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7173,6 +7233,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979380633877766, guid: 6abd691f7e8403745ad594b75a550b12,
+        type: 3}
+      propertyPath: m_Name
+      value: Ability 1
       objectReference: {fileID: 0}
     - target: {fileID: 223490126, guid: 6abd691f7e8403745ad594b75a550b12, type: 3}
       propertyPath: m_Color.a

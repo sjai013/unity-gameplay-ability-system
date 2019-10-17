@@ -1870,6 +1870,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1999,6 +2000,7 @@ GameObject:
   - component: {fileID: 7544501127484694303}
   - component: {fileID: 4510869574579509217}
   - component: {fileID: 1290736138258644803}
+  - component: {fileID: 8385586271098587248}
   m_Layer: 0
   m_Name: Ethan
   m_TagString: Untagged
@@ -2122,18 +2124,12 @@ MonoBehaviour:
   CustomAnimationEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.CustomAnimationUnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   AnimationComplete:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   AnimationStarted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &7899279095267793603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2162,13 +2158,9 @@ MonoBehaviour:
   _attributeBaseValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _attributeCurrentValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: GameplayAbilitySystem.Attributes.AttributeChangeDataEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _attributes:
   - _attributeType: {fileID: 11400000, guid: 8769ea8817563784a87cb6142aef671b, type: 2}
     _baseValue: 100
@@ -2218,8 +2210,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
   - Button: Ability 2
     ButtonState: 2
     Handler:
@@ -2236,8 +2226,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
   - Button: Ability 3
     ButtonState: 2
     Handler:
@@ -2254,8 +2242,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
 --- !u!114 &7899279095267793605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2331,6 +2317,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _uiAttributeUpdater: {fileID: 2017678857625141388}
+--- !u!114 &8385586271098587248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7899279095267793602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 191bcecd95b8d00419347548f9819bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Attributes:
+  - GameplayAbilitySystem.CharacterLevelAttributeComponent, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - GameplayAbilitySystem.MaxManaAttributeComponent, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - GameplayAbilitySystem.ManaAttributeComponent, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - GameplayAbilitySystem.MaxHealthAttributeComponent, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  - GameplayAbilitySystem.HealthAttributeComponent, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
 --- !u!1 &7899279095267793604
 GameObject:
   m_ObjectHideFlags: 0
@@ -3123,11 +3132,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5254092497300666198}
     m_Modifications:
-    - target: {fileID: 5694074306757467403, guid: e05a0ff48b22f914d920b149824050af,
-        type: 3}
-      propertyPath: m_Name
-      value: Mana
-      objectReference: {fileID: 0}
     - target: {fileID: 2202905021266549665, guid: e05a0ff48b22f914d920b149824050af,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3160,6 +3164,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 9513cbcc3a089f742b9c48ae4201b1db,
         type: 2}
+    - target: {fileID: 5694074306757467403, guid: e05a0ff48b22f914d920b149824050af,
+        type: 3}
+      propertyPath: m_Name
+      value: Mana
+      objectReference: {fileID: 0}
     - target: {fileID: 5506949580311150231, guid: e05a0ff48b22f914d920b149824050af,
         type: 3}
       propertyPath: m_Color.r
@@ -3202,11 +3211,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5254092497300666198}
     m_Modifications:
-    - target: {fileID: 5694074306757467403, guid: e05a0ff48b22f914d920b149824050af,
-        type: 3}
-      propertyPath: m_Name
-      value: HP
-      objectReference: {fileID: 0}
     - target: {fileID: 2202905021266549665, guid: e05a0ff48b22f914d920b149824050af,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3329,8 +3333,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 8769ea8817563784a87cb6142aef671b,
         type: 2}
+    - target: {fileID: 5694074306757467403, guid: e05a0ff48b22f914d920b149824050af,
+        type: 3}
+      propertyPath: m_Name
+      value: HP
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e05a0ff48b22f914d920b149824050af, type: 3}
+--- !u!224 &3468449178994551106 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2202905021266549665, guid: e05a0ff48b22f914d920b149824050af,
+    type: 3}
+  m_PrefabInstance: {fileID: 3364226669340750563}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3652452763574720524 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2017678857333680879, guid: e05a0ff48b22f914d920b149824050af,
@@ -3343,9 +3358,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb9ea719c96c1a34dacdc5689c3ac0e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &3468449178994551106 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2202905021266549665, guid: e05a0ff48b22f914d920b149824050af,
-    type: 3}
-  m_PrefabInstance: {fileID: 3364226669340750563}
-  m_PrefabAsset: {fileID: 0}

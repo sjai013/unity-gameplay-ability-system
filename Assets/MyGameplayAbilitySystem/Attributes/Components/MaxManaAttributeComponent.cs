@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 
 
-namespace GameplayAbilitySystem {
+namespace GameplayAbilitySystem.Attributes {
     public struct MaxManaAttributeComponent : IComponentData, IAttributeComponent {
         public int BaseValue;
         public int CurrentValue;
