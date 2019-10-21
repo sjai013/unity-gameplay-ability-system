@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using GameplayAbilitySystem.Enums;
 using UnityEngine.Events;
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     public class Aggregator {

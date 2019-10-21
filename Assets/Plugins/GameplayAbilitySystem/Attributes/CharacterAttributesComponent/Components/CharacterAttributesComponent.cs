@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.Attributes {
+namespace GameplayAbilitySystem.Attributes.Components {
     [DisallowMultipleComponent]
     [RequiresEntityConversion]
     public class CharacterAttributesComponent : MonoBehaviour, IConvertGameObjectToEntity {

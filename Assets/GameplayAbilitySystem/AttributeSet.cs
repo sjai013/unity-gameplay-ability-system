@@ -5,7 +5,7 @@ using System.Linq;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.Attributes {
+namespace GameplayAbilitySystem.Attributes.Components {
 
     /// <inheritdoc />
     [AddComponentMenu("Gameplay Ability System/Attribute Set")]

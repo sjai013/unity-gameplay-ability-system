@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Collections.Generic;
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 using UniRx.Async;
 
 namespace GameplayAbilitySystem.GameplayEffects {

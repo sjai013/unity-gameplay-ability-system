@@ -7,7 +7,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace GameplayAbilitySystem.Attributes {
+namespace GameplayAbilitySystem.Attributes.Components {
     [CustomEditor(typeof(CharacterAttributesComponent))]
     public class CharacterAttributesComponentEditor : Editor {
         private VisualElement m_RootElement;

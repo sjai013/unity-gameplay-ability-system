@@ -1,4 +1,4 @@
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 
 namespace GameplayAbilitySystem.Interfaces {
     /// <summary>

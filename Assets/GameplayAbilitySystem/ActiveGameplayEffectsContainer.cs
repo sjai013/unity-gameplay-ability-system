@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
 using GameplayAbilitySystem.Interfaces;
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 using System;
 using UnityEngine.Events;
 using UniRx.Async;

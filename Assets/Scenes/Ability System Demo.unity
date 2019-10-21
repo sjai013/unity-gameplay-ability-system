@@ -3002,31 +3002,31 @@ PrefabInstance:
     - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
       propertyPath: Attributes.Array.data[0]
-      value: GameplayAbilitySystem.Attributes.CharacterLevelAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      objectReference: {fileID: 0}
-    - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
-        type: 3}
-      propertyPath: Attributes.Array.data[1]
-      value: GameplayAbilitySystem.Attributes.MaxManaAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      objectReference: {fileID: 0}
-    - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
-        type: 3}
-      propertyPath: Attributes.Array.data[2]
       value: GameplayAbilitySystem.Attributes.MaxHealthAttributeComponent, Assembly-CSharp,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.HealthAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.CharacterLevelAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
+        type: 3}
       propertyPath: Attributes.Array.data[3]
-      value: GameplayAbilitySystem.Attributes.ManaAttributeComponent, Assembly-CSharp,
+      value: GameplayAbilitySystem.Attributes.MaxManaAttributeComponent, Assembly-CSharp,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
       propertyPath: Attributes.Array.data[4]
-      value: GameplayAbilitySystem.Attributes.HealthAttributeComponent, Assembly-CSharp,
+      value: GameplayAbilitySystem.Attributes.ManaAttributeComponent, Assembly-CSharp,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 7899279095267793602, guid: fddc582aed5bbbd4ab4ac8025536d369,
@@ -3216,6 +3216,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fddc582aed5bbbd4ab4ac8025536d369, type: 3}
+--- !u!1 &863385732 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7899279095267793602, guid: fddc582aed5bbbd4ab4ac8025536d369,
+    type: 3}
+  m_PrefabInstance: {fileID: 863385731}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &863385733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 863385732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3042cc57a0faad4e913cceaa0796cca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &872576276
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4019,7 +4037,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 863385731}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 863385732}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98537c238586d554397a08703062c104, type: 3}
@@ -5615,7 +5633,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 863385731}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 863385732}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 955d1cc64d738074886242fa61f0bdf3, type: 3}
@@ -7119,6 +7137,41 @@ PrefabInstance:
         type: 3}
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.HealthAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.CharacterLevelAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.MaxManaAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.MaxHealthAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.ManaAttributeComponent, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}

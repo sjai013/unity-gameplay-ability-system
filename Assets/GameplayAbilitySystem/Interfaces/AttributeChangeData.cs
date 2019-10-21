@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-namespace GameplayAbilitySystem.Attributes {
+namespace GameplayAbilitySystem.Attributes.Components {
     /// <summary>
     /// Container for attribute change events
     /// </summary>
