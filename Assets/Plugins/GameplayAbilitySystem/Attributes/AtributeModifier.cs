@@ -20,7 +20,7 @@ namespace GameplayAbilitySystem.Attributes.Components {
     /// </summary>
     /// <typeparam name="TOper">The element type of the array</typeparam>
     /// <typeparam name="TAttribute">The element type of the array</typeparam>
-    public struct AttributeModifier<TOper, TAttribute>: IComponentData
+    public struct AttributeModifier<TOper, TAttribute> : IComponentData
     where TOper : struct, IAttributeOperator
     where TAttribute : struct, IAttributeComponent {
         public float Value;

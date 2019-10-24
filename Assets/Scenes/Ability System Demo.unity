@@ -506,6 +506,36 @@ PrefabInstance:
       propertyPath: Attributes.Array.size
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &73980768 stripped
@@ -759,6 +789,41 @@ PrefabInstance:
         type: 3}
       propertyPath: _attributeCurrentValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
@@ -1024,6 +1089,36 @@ PrefabInstance:
       propertyPath: Attributes.Array.size
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &162468921 stripped
@@ -1287,6 +1382,36 @@ PrefabInstance:
         type: 3}
       propertyPath: Attributes.Array.size
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
@@ -2916,6 +3041,36 @@ PrefabInstance:
       propertyPath: Attributes.Array.size
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &789928572 stripped
@@ -3002,32 +3157,32 @@ PrefabInstance:
     - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
       propertyPath: Attributes.Array.data[0]
-      value: GameplayAbilitySystem.Attributes.MaxHealthAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
       propertyPath: Attributes.Array.data[1]
-      value: GameplayAbilitySystem.Attributes.HealthAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
       propertyPath: Attributes.Array.data[2]
-      value: GameplayAbilitySystem.Attributes.CharacterLevelAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
       propertyPath: Attributes.Array.data[3]
-      value: GameplayAbilitySystem.Attributes.MaxManaAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
       propertyPath: Attributes.Array.data[4]
-      value: GameplayAbilitySystem.Attributes.ManaAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 7899279095267793602, guid: fddc582aed5bbbd4ab4ac8025536d369,
         type: 3}
@@ -3993,6 +4148,36 @@ PrefabInstance:
       propertyPath: Attributes.Array.size
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!114 &1079858720 stripped
@@ -4585,6 +4770,36 @@ PrefabInstance:
       propertyPath: Attributes.Array.size
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &1333259927 stripped
@@ -4843,6 +5058,36 @@ PrefabInstance:
         type: 3}
       propertyPath: Attributes.Array.size
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
@@ -5248,6 +5493,36 @@ PrefabInstance:
         type: 3}
       propertyPath: Attributes.Array.size
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
@@ -6460,6 +6735,36 @@ PrefabInstance:
       propertyPath: Attributes.Array.size
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
+        type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!4 &1944015480 stripped
@@ -7146,32 +7451,32 @@ PrefabInstance:
     - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
         type: 3}
       propertyPath: Attributes.Array.data[0]
-      value: GameplayAbilitySystem.Attributes.HealthAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
         type: 3}
       propertyPath: Attributes.Array.data[1]
-      value: GameplayAbilitySystem.Attributes.CharacterLevelAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
         type: 3}
       propertyPath: Attributes.Array.data[2]
-      value: GameplayAbilitySystem.Attributes.MaxManaAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
         type: 3}
       propertyPath: Attributes.Array.data[3]
-      value: GameplayAbilitySystem.Attributes.MaxHealthAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 8132362273714373629, guid: 87613a41b93a7d44a9290c82c0dd98c2,
         type: 3}
       propertyPath: Attributes.Array.data[4]
-      value: GameplayAbilitySystem.Attributes.ManaAttributeComponent, Assembly-CSharp,
-        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+        Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}

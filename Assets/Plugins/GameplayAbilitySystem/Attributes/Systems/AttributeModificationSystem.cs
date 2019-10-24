@@ -1,22 +1,30 @@
-﻿using GameplayAbilitySystem.Attributes.Components;
+﻿using System.Collections.Generic;
+using GameplayAbilitySystem.Attributes.Components;
 using Unity.Entities;
 using Unity.Jobs;
 
 namespace GameplayAbilitySystem.Attributes.Systems {
-    public abstract class AttributeModificationSystem<TOper, TAttribute> : JobComponentSystem
-    where TAttribute : struct, IAttributeComponent
-    where TOper : struct, IAttributeOperator {
-        private EntityQuery Query;
-        protected override void OnCreate() {
-            this.Query = GetEntityQuery(ComponentType.ReadOnly<TAttribute>(), ComponentType.ReadOnly<TOper>(), ComponentType.ReadOnly<AttributeModifier<TOper,TAttribute>>());
+    public abstract class AttributeModificationSystem<TAttribute> : JobComponentSystem
+    // where TAttribute : struct, IAttributeComponent, IComponentData
+    where TAttribute : struct, IAttributeComponent, IComponentData {
+        protected List<EntityQuery> Queries;
 
+        protected EntityQuery CreateQuery<TOper>()
+        where TOper : struct, IAttributeOperator, IComponentData {
+            return GetEntityQuery(
+                ComponentType.ReadOnly<TAttribute>(),
+                ComponentType.ReadOnly<TOper>(),
+                ComponentType.ReadOnly<AttributeModifier<TOper, TAttribute>>(),
+                ComponentType.ReadOnly<AttributesOwnerComponent>()
+                );
         }
         protected override JobHandle OnUpdate(JobHandle inputDependencies) {
-            inputDependencies = ScheduleJobs(this.Query, inputDependencies);
+            inputDependencies = ScheduleJobs(inputDependencies);
             return inputDependencies;
         }
-        protected abstract JobHandle ScheduleJobs(EntityQuery query, JobHandle inputDependencies);
+        protected abstract JobHandle ScheduleJobs(JobHandle inputDependencies);
     }
 
 }
+
 
