@@ -4,9 +4,22 @@ using Unity.Entities;
 using Unity.Jobs;
 
 namespace GameplayAbilitySystem.Attributes.Systems {
+    
+    /// <summary>
+    /// This is the base for all attribute modification systems.  
+    /// Custom attribute modification types should inherit from this class
+    /// and modify as necessary.
+    /// 
+    /// See <see cref="GenericAttributeSystem{TAttributeTag}"> for a sample modifier system
+    /// </summary>
+    /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
     public abstract class AttributeModificationSystem<TAttribute> : JobComponentSystem
     where TAttribute : struct, IAttributeComponent, IComponentData {
-        protected List<EntityQuery> Queries;
+
+        /// <summary>
+        /// This is the list of queries that are use
+        /// </summary>
+        protected EntityQuery[] Queries = new EntityQuery[3];
         protected EntityQuery actorsWithAttributesQuery;
         protected EntityQuery CreateQuery<TOper>()
         where TOper : struct, IAttributeOperator, IComponentData {
