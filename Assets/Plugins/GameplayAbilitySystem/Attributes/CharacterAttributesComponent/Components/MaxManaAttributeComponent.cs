@@ -7,7 +7,7 @@ using Operators = GameplayAbilitySystem.Attributes.Components.Operators;
 
 namespace GameplayAbilitySystem.Attributes.Components {
     public struct MaxManaAttributeComponent : IComponentData, IAttributeComponent {
-        public int BaseValue;
-        public int CurrentValue;
+        public float BaseValue { get; set; }
+        public float CurrentValue { get; set; }
     }
 }

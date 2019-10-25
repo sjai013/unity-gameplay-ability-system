@@ -30,7 +30,10 @@ namespace GameplayAbilitySystem.Attributes.Components {
                 var type = Type.GetType(Attributes[i]);
                 dstManager.AddComponent(entity, type);
             }
+            dstManager.AddComponent(entity, typeof(ActorWithAttributesTag));
         }
-
     }
+
+    struct ActorWithAttributesTag : IComponentData { }
 }
+

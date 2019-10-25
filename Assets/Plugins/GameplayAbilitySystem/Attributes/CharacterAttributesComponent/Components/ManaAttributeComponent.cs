@@ -1,18 +1,15 @@
-﻿using System;
-using Unity.Collections;
-using Unity.Entities;
-using Unity.Mathematics;
+﻿using Unity.Entities;
 using GameplayAbilitySystem.Attributes.Components;
 using Operators = GameplayAbilitySystem.Attributes.Components.Operators;
-[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Add, ManaAttributeComponentTag>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Multiply, ManaAttributeComponentTag>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Divide, ManaAttributeComponentTag>))]
+
+[assembly: RegisterGenericComponentType(typeof(AttributeComponentTag<ManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Add, ManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Multiply, ManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Divide, ManaAttributeComponent>))]
 
 namespace GameplayAbilitySystem.Attributes.Components {
     public struct ManaAttributeComponent : IComponentData, IAttributeComponent {
-        public int BaseValue;
-        public int CurrentValue;
+        public float BaseValue { get; set; }
+        public float CurrentValue { get; set; }
     }
-
-    public struct ManaAttributeComponentTag : IComponentData, IAttributeComponent {}
 }

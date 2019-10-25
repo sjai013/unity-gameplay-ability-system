@@ -2,22 +2,15 @@
 using GameplayAbilitySystem.Attributes.Components;
 using Operators = GameplayAbilitySystem.Attributes.Components.Operators;
 
-[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Add, HealthAttributeComponentTag>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Multiply, HealthAttributeComponentTag>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Divide, HealthAttributeComponentTag>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeComponentTag<HealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Add, HealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Multiply, HealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Divide, HealthAttributeComponent>))]
+
 
 namespace GameplayAbilitySystem.Attributes.Components {
-    public struct HealthAttributeComponent : IComponentData {
-        public int BaseValue;
-        public int CurrentValue;
+    public struct HealthAttributeComponent : IComponentData, IAttributeComponent {
+        public float BaseValue { get; set; }
+        public float CurrentValue { get; set; }
     }
-
-    public struct HealthAttributeComponentTag : IComponentData, IAttributeComponent {}
-}
-
-
-namespace GameplayAbilitySystem.Attributes.Systems {
-
-    // public class HealthAddAttributeModificationSystem : AttributeModificationSystem_Add<HealthAttributeComponent> { }
-
 }
