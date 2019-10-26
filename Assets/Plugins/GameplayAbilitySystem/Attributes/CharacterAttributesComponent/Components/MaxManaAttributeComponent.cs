@@ -1,6 +1,8 @@
 ﻿using Unity.Entities;
 using GameplayAbilitySystem.Attributes.Components;
 using Operators = GameplayAbilitySystem.Attributes.Components.Operators;
+
+[assembly: RegisterGenericComponentType(typeof(AttributeComponentTag<MaxManaAttributeComponent>))]
 [assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Add, MaxManaAttributeComponent>))]
 [assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Multiply, MaxManaAttributeComponent>))]
 [assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Divide, MaxManaAttributeComponent>))]

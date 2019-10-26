@@ -18,34 +18,12 @@ namespace GameplayAbilitySystem.Attributes.JobTypes {
     /// until this job has completed.
     /// </summary>
     [BurstCompile]
-    public struct GetAttributeValuesJob_Sum1<TOper, TAttribute> : IJob
-where TOper : struct, IAttributeOperator, IComponentData
-where TAttribute : struct, IAttributeComponent, IComponentData {
-        public NativeHashMap<Entity, float> AttributeModifierValues;
-        [ReadOnly] [DeallocateOnJobCompletion] public NativeArray<AttributesOwnerComponent> attributeOwners;
-        [ReadOnly] [DeallocateOnJobCompletion] public NativeArray<AttributeModifier<TOper, TAttribute>> attributeModifiers;
-        public void Execute() {
-            for (var i = 0; i < attributeOwners.Length; i++) {
-                // if (!AttributeModifierValues.TryGetValue(attributeOwners[i], out var val)) {
-                //     AttributeModifierValues.TryAdd(attributeOwners[i], 0f);
-                // }
-                // AttributeModifierValues[attributeOwners[i]] += attributeModifiers[i];
-
-                if (!AttributeModifierValues.TryAdd(attributeOwners[i], attributeModifiers[i])) {
-                    AttributeModifierValues[attributeOwners[i]] += attributeModifiers[i];
-                }
-            }
-        }
-    }
-
-
-    [BurstCompile]
-    struct GetAttributeValuesJob_Sum2<TOper, TAttribute> : IJobForEachWithEntity<AttributesOwnerComponent, AttributeModifier<TOper, TAttribute>>
+    struct GetAttributeValuesJob_Sum<TOper, TAttribute> : IJobForEachWithEntity<AttributesOwnerComponent, AttributeModifier<TOper, TAttribute>>
     where TOper : struct, IComponentData, IAttributeOperator
     where TAttribute : struct, IComponentData, IAttributeComponent {
         public NativeMultiHashMap<Entity, float>.ParallelWriter AttributeModifierValues;
         public void Execute(Entity entity, int index, [ReadOnly] ref AttributesOwnerComponent owner, [ReadOnly] ref AttributeModifier<TOper, TAttribute> attributeModifier) {
-            AttributeModifierValues.Add(owner, attributeModifier);
+            // AttributeModifierValues.Add(owner, attributeModifier);
         }
     }
 

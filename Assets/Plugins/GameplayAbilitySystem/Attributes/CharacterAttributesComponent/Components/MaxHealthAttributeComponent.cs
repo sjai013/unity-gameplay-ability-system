@@ -1,9 +1,7 @@
-﻿using System;
-using Unity.Collections;
-using Unity.Entities;
-using Unity.Mathematics;
+﻿using Unity.Entities;
 using GameplayAbilitySystem.Attributes.Components;
 using Operators = GameplayAbilitySystem.Attributes.Components.Operators;
+[assembly: RegisterGenericComponentType(typeof(AttributeComponentTag<MaxHealthAttributeComponent>))]
 [assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Add, MaxHealthAttributeComponent>))]
 [assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Multiply, MaxHealthAttributeComponent>))]
 [assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Divide, MaxHealthAttributeComponent>))]

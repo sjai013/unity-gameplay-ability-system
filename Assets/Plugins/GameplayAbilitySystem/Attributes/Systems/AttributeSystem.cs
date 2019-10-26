@@ -87,7 +87,7 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
         private void ScheduleAttributeJob<TOper>(JobHandle inputDependencies, EntityQuery query, out NativeMultiHashMap<Entity, float> AttributeHash, out JobHandle job)
         where TOper : struct, IAttributeOperator, IComponentData {
             AttributeHash = new NativeMultiHashMap<Entity, float>(query.CalculateEntityCount(), Allocator.TempJob);
-            job = new GetAttributeValuesJob_Sum2<TOper, TAttributeTag>
+            job = new GetAttributeValuesJob_Sum<TOper, TAttributeTag>
             {
                 AttributeModifierValues = AttributeHash.AsParallelWriter()
             }.Schedule(query, inputDependencies);
@@ -110,7 +110,7 @@ where TAttribute : struct, IAttributeComponent, IComponentData {
             typeof(AttributesOwnerComponent)
         );
 
-        for (var i = 0; i < 100; i++) {
+        for (var i = 0; i < 0; i++) {
             var entity = EntityManager.CreateEntity(archetype);
             EntityManager.SetComponentData(entity, new GameplayAbilitySystem.Attributes.Components.AttributeModifier<TOper, TAttribute>()
             {
