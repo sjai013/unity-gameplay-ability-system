@@ -12,6 +12,13 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     /// This is a generic attribute modification system which can be used
     /// out of the box, and supports single attribute modifications, using 
     /// Add, Multiply, and Divide operators.
+    /// 
+    /// The added, multiplied, and divided values are summed for each entity first, and then
+    /// the calculation formula is applied to each entity: 
+    /// <br/>
+    /// <code>
+    /// (BaseValue + added) + (BaseValue * (multiplied / divided))
+    /// </code>
     /// </summary>
     /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
     public abstract class GenericAttributeSystem<TAttributeTag> : AttributeModificationSystem<TAttributeTag>
