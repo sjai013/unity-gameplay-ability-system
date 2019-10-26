@@ -105,7 +105,7 @@ where TAttribute : struct, IAttributeComponent, IComponentData {
 
         for (var i = 0; i < 100; i++) {
             var entity = EntityManager.CreateEntity(archetype);
-            EntityManager.SetComponentData(entity, new Components.AttributeModifier<TOper, TAttribute>()
+            EntityManager.SetComponentData(entity, new GameplayAbilitySystem.Attributes.Components.AttributeModifier<TOper, TAttribute>()
             {
                 Value = 1
             });
