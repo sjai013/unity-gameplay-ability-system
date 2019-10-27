@@ -17,7 +17,7 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     /// the calculation formula is applied to each entity: 
     /// <br/>
     /// <code>
-    /// (BaseValue + added) + (BaseValue * (multiplied / divided))
+    /// CurrentValue = Added + (BaseValue * [1 + multiplied - divided])
     /// </code>
     /// </summary>
     /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
@@ -36,13 +36,13 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
             CreateEntities<Components.Operators.Multiply, TAttributeTag>.CreateAttributeOperEntities(EntityManager, newEntity1, newEntity2);
 
             this.actorsWithAttributesQuery = GetEntityQuery(
-                ComponentType.ReadOnly<ActorWithAttributesTag>(),
+                ComponentType.ReadOnly<ActorWithAttributes>(),
                 ComponentType.ReadWrite<TAttributeTag>()
                 );
         }
 
         [BurstCompile]
-        [RequireComponentTag(typeof(ActorWithAttributesTag))]
+        [RequireComponentTag(typeof(ActorWithAttributes))]
         struct AttributeCombinerJob : IJobForEachWithEntity<TAttributeTag> {
             [ReadOnly] public NativeMultiHashMap<Entity, float> AddAttributes;
             [ReadOnly] public NativeMultiHashMap<Entity, float> DivideAttributes;
@@ -52,9 +52,8 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
                 var added = SumFromNMHM(entity, AddAttributes);
                 var multiplied = SumFromNMHM(entity, MultiplyAttributes);
                 var divided = SumFromNMHM(entity, DivideAttributes);
-                if (divided == 0) divided = 1;
 
-                attribute.CurrentValue = attribute.BaseValue + added + attribute.BaseValue * (multiplied / divided);
+                attribute.CurrentValue = added + attribute.BaseValue * (1 + multiplied -  divided);
             }
             private float SumFromNMHM(Entity entity, NativeMultiHashMap<Entity, float> values) {
                 values.TryGetFirstValue(entity, out var sum, out var multiplierIt);
@@ -123,22 +122,13 @@ where TAttribute : struct, IAttributeComponent, IComponentData {
             });
         }
     }
-
-    public static Entity CreatePlayerEntity(EntityManager EntityManager) {
-        var playerArchetype = EntityManager.CreateArchetype(
-            typeof(HealthAttributeComponent),
-            typeof(ActorWithAttributesTag)
-        );
-
-        return EntityManager.CreateEntity(playerArchetype);
-    }
 }
 
 internal class CreatePlayer {
     public static Entity CreatePlayerEntity(EntityManager EntityManager) {
         var playerArchetype = EntityManager.CreateArchetype(
             typeof(HealthAttributeComponent),
-            typeof(ActorWithAttributesTag)
+            typeof(ActorWithAttributes)
         );
 
         return EntityManager.CreateEntity(playerArchetype);
