@@ -53,7 +53,7 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
                 var multiplied = SumFromNMHM(entity, MultiplyAttributes);
                 var divided = SumFromNMHM(entity, DivideAttributes);
 
-                attribute.CurrentValue = added + attribute.BaseValue * (1 + multiplied -  divided);
+                attribute.CurrentValue = added + attribute.BaseValue * (1 + multiplied - divided);
             }
             private float SumFromNMHM(Entity entity, NativeMultiHashMap<Entity, float> values) {
                 values.TryGetFirstValue(entity, out var sum, out var multiplierIt);

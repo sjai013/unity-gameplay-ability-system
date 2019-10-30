@@ -3,7 +3,9 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Unity.Entities"
+        "Unity.Entities",
+        "Unity.Entities.Tests",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [
         "Editor"
@@ -14,7 +16,7 @@
     "precompiledReferences": [
         "nunit.framework.dll"
     ],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],
