@@ -4,9 +4,20 @@ namespace GameplayAbilitySystem.Attributes.Components {
 
     /// <summary>
     /// Attribute types should implement this interface.
-    /// 
+    /// <para>
     /// See <see cref="GameplayAbilitySystem.Attributes.Components.AttributeModifier{TOper, TAttribute}"/>
     /// for details on specifying how the attribute will affect attribute values.
+    /// </para>
+    /// <para>
+    /// The <see cref="BaseValue"/> is the "permanent" value for the attribute, and the <see cref="BaseValue"/>
+    /// represents temporary/transient modifications to the attribute.  The <see cref="CurrentValue"/>
+    /// should be used for calculations.  The <see cref="BaseValue"/> is only used as a means of 
+    /// calculating the <see cref="CurrentValue"/>.
+    /// </para>
+    /// <para>
+    /// For example, a particular item might grant the player a 10% damage boost.
+    /// If the player's damage <see cref="BaseValue"/> is 100, then the <see cref="CurrentValue"/> would be 110.
+    /// </para>
     /// </summary>
     public interface IAttributeComponent {
         float BaseValue { get; set; }

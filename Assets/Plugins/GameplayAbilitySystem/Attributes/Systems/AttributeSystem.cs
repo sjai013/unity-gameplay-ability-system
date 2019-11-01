@@ -28,13 +28,6 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
             this.Queries[1] = CreateQuery<Components.Operators.Multiply>();
             this.Queries[2] = CreateQuery<Components.Operators.Divide>();
 
-            var newEntity1 = CreatePlayer.CreatePlayerEntity(EntityManager);
-            var newEntity2 = CreatePlayer.CreatePlayerEntity(EntityManager);
-
-            CreateEntities<Components.Operators.Add, TAttributeTag>.CreateAttributeOperEntities(EntityManager, newEntity1, newEntity2);
-            CreateEntities<Components.Operators.Divide, TAttributeTag>.CreateAttributeOperEntities(EntityManager, newEntity1, newEntity2);
-            CreateEntities<Components.Operators.Multiply, TAttributeTag>.CreateAttributeOperEntities(EntityManager, newEntity1, newEntity2);
-
             this.actorsWithAttributesQuery = GetEntityQuery(
                 ComponentType.ReadOnly<ActorWithAttributes>(),
                 ComponentType.ReadWrite<TAttributeTag>()
