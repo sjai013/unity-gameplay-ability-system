@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Attributes.Components {
-    [DisallowMultipleComponent]
-    public class CharacterAttributesComponent : MonoBehaviour {
+    [CreateAssetMenu(fileName = "ActorAttributes", menuName = "Gameplay Ability System/Attributes/Attributes Prototype")]
+    public class CharacterAttributesScriptableObject : ScriptableObject {
         [SerializeField]
         [HideInInspector]
         public List<string> Attributes = new List<string>();
@@ -19,9 +19,4 @@ namespace GameplayAbilitySystem.Attributes.Components {
             return types;
         }
     }
-    public struct ActorWithAttributes : IComponentData {
-        public Entity TransformEntity;
-    }
-
 }
-

@@ -23,9 +23,13 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
         List<ComponentType> attributeTypes = new List<ComponentType>();
 
         // Get reference to character attribute component on script, and list of attributes
-        if (this.TryGetComponent<CharacterAttributesComponent>(out var component)) {
-            attributeTypes = component.ComponentArchetype;
+        attributeTypes = new List<ComponentType>();
+        if (this.TryGetComponent<CharacterAttributesAuthoringComponent>(out var component)) {
+            if (component.Attributes != null && component.Attributes.Attributes != null) {
+                attributeTypes = component.Attributes.ComponentArchetype;
+            }
         }
+
         // Add tag component to indicate that this entity represents an actor with attributes
         attributeTypes.Add(typeof(ActorWithAttributes));
         var attributeArchetype = dstManager.CreateArchetype(attributeTypes.ToArray());

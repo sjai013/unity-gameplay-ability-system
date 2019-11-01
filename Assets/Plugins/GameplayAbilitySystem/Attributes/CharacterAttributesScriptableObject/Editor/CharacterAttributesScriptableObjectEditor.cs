@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace GameplayAbilitySystem.Attributes.Components {
-    [CustomEditor(typeof(CharacterAttributesComponent))]
+    [CustomEditor(typeof(CharacterAttributesScriptableObject))]
     public class CharacterAttributesComponentEditor : Editor {
         private VisualElement m_RootElement;
         private VisualTreeAsset m_ModulesVisualTree;
@@ -20,11 +20,11 @@ namespace GameplayAbilitySystem.Attributes.Components {
             m_RootElement = new VisualElement();
             m_ModulesVisualTree =
                 AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                    "Assets/Plugins/GameplayAbilitySystem/Attributes/CharacterAttributesComponent/Editor/CharacterAttributesComponentEditor.uxml"
+                    "Assets/Plugins/GameplayAbilitySystem/Attributes/CharacterAttributesScriptableObject/Editor/CharacterAttributesScriptableObjectEditor.uxml"
                 );
             var stylesheet =
                 AssetDatabase.LoadAssetAtPath<StyleSheet>(
-                    "Assets/Plugins/GameplayAbilitySystem/Attributes/CharacterAttributesComponent/Editor/CharacterAttributesComponentEditor.uss"
+                    "Assets/Plugins/GameplayAbilitySystem/Attributes/CharacterAttributesScriptableObject/Editor/CharacterAttributesScriptableObjectEditor.uss"
                 );
             m_RootElement.styleSheets.Add(stylesheet);
             

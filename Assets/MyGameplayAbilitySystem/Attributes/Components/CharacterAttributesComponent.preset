@@ -31,26 +31,26 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: Attributes.Array.data[0]
-    value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
-      Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
+      GameplayAbilitySystem.Attributes, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: Attributes.Array.data[1]
-    value: GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
-      Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
+      GameplayAbilitySystem.Attributes, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: Attributes.Array.data[2]
-    value: GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent,
-      Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
+      GameplayAbilitySystem.Attributes, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: Attributes.Array.data[3]
-    value: GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent,
-      Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent, GameplayAbilitySystem.Attributes,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: Attributes.Array.data[4]
-    value: GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    value: GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent,
+      GameplayAbilitySystem.Attributes, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     objectReference: {fileID: 0}
