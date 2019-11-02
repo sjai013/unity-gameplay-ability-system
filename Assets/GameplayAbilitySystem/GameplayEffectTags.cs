@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     [Serializable]
-    public class GameplayEffectTags : IGameplayEffectTags {
+    public class GameplayEffectTags : _IGameplayEffectTags {
         [SerializeField]
         private GameplayEffectAddRemoveTagContainer _assetTags = new GameplayEffectAddRemoveTagContainer();
 

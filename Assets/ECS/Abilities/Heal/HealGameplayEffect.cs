@@ -2,7 +2,7 @@ using Unity.Entities;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.Heal {
-    public struct HealGameplayEffect : IGameplayEffect, IComponentData {
+    public struct HealGameplayEffect : _IGameplayEffect, IComponentData {
         public DurationPolicyComponent DurationPolicy { get; set; }
         public Entity Target { get; set; }
         public Entity Source { get; set; }
@@ -17,7 +17,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             // };
 
             var attributeModEntity = Ecb.CreateEntity(index);
-            Ecb.AddComponent(index, attributeModEntity, new HealthAttributeModifier());
+            Ecb.AddComponent(index, attributeModEntity, new _HealthAttributeModifier());
             // Ecb.AddComponent(index, attributeModEntity, new TemporaryAttributeModification());
             Ecb.AddComponent(index, attributeModEntity, new PermanentAttributeModification());
             // Ecb.AddComponent(index, attributeModEntity, gameplayEffectData);
@@ -30,11 +30,11 @@ namespace GameplayAbilitySystem.Abilities.Heal {
         public void ApplyGameplayEffect(EntityManager EntityManager, AttributesComponent attributesComponent, float WorldTime) {
             var attributeModData = AttributeModData();
             var attributeModEntity = EntityManager.CreateEntity(
-                                                        typeof(HealthAttributeModifier),
+                                                        typeof(_HealthAttributeModifier),
                                                         // typeof(TemporaryAttributeModification),
                                                         typeof(PermanentAttributeModification),
-                                                        typeof(AttributeModificationComponent),
-                                                        typeof(GameplayEffectDurationComponent)
+                                                        typeof(_AttributeModificationComponent),
+                                                        typeof(_GameplayEffectDurationComponent)
             );
 
 
@@ -49,8 +49,8 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             EntityManager.SetComponentData(attributeModEntity, attributeModData);
             // EntityManager.SetComponentData(attributeModEntity, gameplayEffectData);
         }
-        private AttributeModificationComponent AttributeModData() {
-            return new AttributeModificationComponent()
+        private _AttributeModificationComponent AttributeModData() {
+            return new _AttributeModificationComponent()
             {
                 Add = DamageAdder,
                 Multiply = 0,

@@ -1,15 +1,12 @@
-using System.Linq;
 using System.Collections.Generic;
-using GameplayAbilitySystem.Enums;
 using GameplayAbilitySystem.GameplayEffects;
 
-namespace GameplayAbilitySystem.Interfaces
-{
+namespace GameplayAbilitySystem.Interfaces {
 
     /// <summary>
     /// This is used to define how long the <see cref="GameplayEffect"/> lasts, and what it does (e.g. how much damage)
     /// </summary>
-    public interface IGameplayEffectPolicy
+    public interface _IGameplayEffectPolicy
     {
         /// <summary>
         /// Whether the <see cref="GameplayEffect"/> lasts for some finite time, infinite time, or is applied instantly
@@ -33,7 +30,7 @@ namespace GameplayAbilitySystem.Interfaces
     /// <summary>
     /// Gameplay effect tags
     /// </summary>
-    public interface IGameplayEffectTags
+    public interface _IGameplayEffectTags
     {
         /// <summary>
         /// <see cref="GameplayTag"/> the <see cref="GameplayEffect"/> has

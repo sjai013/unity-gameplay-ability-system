@@ -165,7 +165,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
                 var attributeModEntity = commandBuffer.CreateEntity();
                 // Get base attribute value
                 var attrValue = Target.GetNumericAttributeBase(item.Value.attribute);
-                var attributeModData = new AttributeModificationComponent() {
+                var attributeModData = new _AttributeModificationComponent() {
                     Add = item.Value.add,
                     Multiply = item.Value.multiply,
                     Divide = item.Value.divide,
@@ -178,16 +178,16 @@ namespace GameplayAbilitySystem.GameplayEffects {
                 // Set appropriate attribute modifier
                 switch (item.Key) {
                     case 0:
-                        commandBuffer.AddComponent(attributeModEntity, new HealthAttributeModifier());
+                        commandBuffer.AddComponent(attributeModEntity, new _HealthAttributeModifier());
                         break;
                     case 1:
-                        commandBuffer.AddComponent(attributeModEntity, new MaxHealthAttributeModifier());
+                        commandBuffer.AddComponent(attributeModEntity, new _MaxHealthAttributeModifier());
                         break;
                     case 2:
                         commandBuffer.AddComponent(attributeModEntity, new ManaAttributeModifier());
                         break;
                     case 3:
-                        commandBuffer.AddComponent(attributeModEntity, new MaxManaAttributeModifier());
+                        commandBuffer.AddComponent(attributeModEntity, new _MaxManaAttributeModifier());
                         break;
                 }
 
@@ -198,7 +198,7 @@ namespace GameplayAbilitySystem.GameplayEffects {
     
                 } else {
                     commandBuffer.AddComponent(attributeModEntity, new TemporaryAttributeModification());
-                    var gameplayEffectData = new GameplayEffectDurationComponent() {
+                    var gameplayEffectData = new _GameplayEffectDurationComponent() {
                         WorldStartTime = Time.time,
                         Duration = GameplayEffectPolicy.DurationMagnitude,
                     };

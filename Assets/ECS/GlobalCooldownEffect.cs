@@ -7,7 +7,7 @@ struct GlobalCooldownEffect : ICooldown, IComponentData {
     public DurationPolicyComponent DurationPolicy { get; set; }
 
     public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, AttributesComponent attributesComponent, float WorldTime) {
-        var attributeModData = new AttributeModificationComponent()
+        var attributeModData = new _AttributeModificationComponent()
         {
             Add = 0,
             Multiply = 0,
@@ -18,7 +18,7 @@ struct GlobalCooldownEffect : ICooldown, IComponentData {
         };
 
         var attributeModEntity = Ecb.CreateEntity(index);
-        var gameplayEffectData = new GameplayEffectDurationComponent()
+        var gameplayEffectData = new _GameplayEffectDurationComponent()
         {
             WorldStartTime = WorldTime,
             Duration = Duration,

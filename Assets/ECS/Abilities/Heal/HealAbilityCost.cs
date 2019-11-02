@@ -8,7 +8,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
         public DurationPolicyComponent DurationPolicy { get; set; }
         const int ManaCost = 2;
         public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, AttributesComponent attributesComponent, float WorldTime) {
-            var attributeModData = new AttributeModificationComponent()
+            var attributeModData = new _AttributeModificationComponent()
             {
                 Add = -ManaCost,
                 Multiply = 0,
@@ -25,7 +25,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
         }
 
         public void ApplyGameplayEffect(EntityManager EntityManager, AttributesComponent attributesComponent, float WorldTime) {
-            var attributeModData = new AttributeModificationComponent()
+            var attributeModData = new _AttributeModificationComponent()
             {
                 Add = -ManaCost,
                 Multiply = 0,
@@ -38,7 +38,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             var attributeModEntity = EntityManager.CreateEntity(
                                             typeof(ManaAttributeModifier),
                                             typeof(PermanentAttributeModification),
-                                            typeof(AttributeModificationComponent)
+                                            typeof(_AttributeModificationComponent)
             );
             EntityManager.SetComponentData(attributeModEntity, attributeModData);
         }

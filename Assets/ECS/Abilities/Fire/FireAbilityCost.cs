@@ -21,8 +21,8 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             var attributeModEntity = EntityManager.CreateEntity(
                                             typeof(ManaAttributeModifier),
                                             typeof(PermanentAttributeModification),
-                                            typeof(AttributeModificationComponent),
-                                            typeof(GameplayEffectDurationComponent)
+                                            typeof(_AttributeModificationComponent),
+                                            typeof(_GameplayEffectDurationComponent)
             );
 
             EntityManager.SetComponentData(attributeModEntity, attributeModData);
@@ -32,8 +32,8 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             return attributes;
         }
 
-        private AttributeModificationComponent AttributeModData(Entity Source, Entity Target) {
-            return new AttributeModificationComponent()
+        private _AttributeModificationComponent AttributeModData(Entity Source, Entity Target) {
+            return new _AttributeModificationComponent()
             {
                 Add = -ManaCost,
                 Multiply = 0,

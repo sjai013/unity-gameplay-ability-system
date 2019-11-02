@@ -2,7 +2,7 @@ using Unity.Entities;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.HealthRegen {
-    public struct HealthRegenGameplayEffect : IPeriodicEffect, IComponentData {
+    public struct HealthRegenGameplayEffect : _IPeriodicEffect, IComponentData {
         public DurationPolicyComponent DurationPolicy { get; set; }
         public Entity Target { get; set; }
         public Entity Source { get; set; }
@@ -11,7 +11,7 @@ namespace GameplayAbilitySystem.Abilities.HealthRegen {
             var attributeModData = AttributeModData();
 
             var attributeModEntity = Ecb.CreateEntity(index);
-            Ecb.AddComponent(index, attributeModEntity, new HealthAttributeModifier());
+            Ecb.AddComponent(index, attributeModEntity, new _HealthAttributeModifier());
             // Ecb.AddComponent(index, attributeModEntity, new TemporaryAttributeModification());
             Ecb.AddComponent(index, attributeModEntity, new PermanentAttributeModification());
             // Ecb.AddComponent(index, attributeModEntity, gameplayEffectData);
@@ -21,8 +21,8 @@ namespace GameplayAbilitySystem.Abilities.HealthRegen {
 
         public void ApplyGameplayEffect(EntityManager EntityManager, AttributesComponent attributesComponent, float WorldTime) {
         }
-        private AttributeModificationComponent AttributeModData() {
-            return new AttributeModificationComponent()
+        private _AttributeModificationComponent AttributeModData() {
+            return new _AttributeModificationComponent()
             {
                 Add = DamageAdder,
                 Multiply = 0,

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     [Serializable]
-    public class GameplayEffectPolicy : IGameplayEffectPolicy {
+    public class GameplayEffectPolicy : _IGameplayEffectPolicy {
         [SerializeField]
         private EDurationPolicy _durationPolicy = default;
 
