@@ -2,7 +2,7 @@
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-namespace GameplayAbilitySystem.GameplayEffects.Systems {
+namespace GameplayAbilitySystem.GameplayEffects.Components {
 
     [Serializable]
     public struct GameplayEffectDurationComponent : IComponentData {

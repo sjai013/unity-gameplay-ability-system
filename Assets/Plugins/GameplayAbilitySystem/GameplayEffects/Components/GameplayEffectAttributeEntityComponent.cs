@@ -1,6 +1,6 @@
 using System;
 using Unity.Entities;
-namespace GameplayAbilitySystem.GameplayEffects.Systems {
+namespace GameplayAbilitySystem.GameplayEffects.Components {
     [Serializable]
     public struct GameplayEffectAttributeEntityComponent : IComponentData {
         public Entity Value;

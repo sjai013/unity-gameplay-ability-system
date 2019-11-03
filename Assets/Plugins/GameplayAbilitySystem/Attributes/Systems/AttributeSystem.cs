@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Attributes.JobTypes;
+using GameplayAbilitySystem.Common.Components;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using UnityEngine;
 
 namespace GameplayAbilitySystem.Attributes.Systems {
     /// <summary>
@@ -23,19 +22,19 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
     public abstract class GenericAttributeSystem<TAttributeTag> : AttributeModificationSystem<TAttributeTag>
 where TAttributeTag : struct, IAttributeComponent, IComponentData {
-        protected override void OnCreate() {
+            protected override void OnCreate() {
             this.Queries[0] = CreateQuery<Components.Operators.Add>();
             this.Queries[1] = CreateQuery<Components.Operators.Multiply>();
             this.Queries[2] = CreateQuery<Components.Operators.Divide>();
 
             this.actorsWithAttributesQuery = GetEntityQuery(
-                ComponentType.ReadOnly<ActorWithAttributes>(),
+                ComponentType.ReadOnly<AbilitySystemActor>(),
                 ComponentType.ReadWrite<TAttributeTag>()
                 );
         }
 
         [BurstCompile]
-        [RequireComponentTag(typeof(ActorWithAttributes))]
+        [RequireComponentTag(typeof(AbilitySystemActor))]
         struct AttributeCombinerJob : IJobForEachWithEntity<TAttributeTag> {
             [ReadOnly] public NativeMultiHashMap<Entity, float> AddAttributes;
             [ReadOnly] public NativeMultiHashMap<Entity, float> DivideAttributes;
@@ -76,6 +75,14 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
             return inputDependencies;
         }
 
+        /// <summary>
+        /// Schedules an attribute job
+        /// </summary>
+        /// <param name="inputDependencies">JobHandle</param>
+        /// <param name="query">The EntityQuery used for filtering group</param>
+        /// <param name="AttributeHash">Attribute MultiHashMap mapping entity to attribute value</param>
+        /// <param name="job">Returned job handle</param>
+        /// <typeparam name="TOper">The type of operator for this attribute job</typeparam>
         private void ScheduleAttributeJob<TOper>(JobHandle inputDependencies, EntityQuery query, out NativeMultiHashMap<Entity, float> AttributeHash, out JobHandle job)
         where TOper : struct, IAttributeOperator, IComponentData {
             AttributeHash = new NativeMultiHashMap<Entity, float>(query.CalculateEntityCount(), Allocator.TempJob);
@@ -121,7 +128,7 @@ internal class CreatePlayer {
     public static Entity CreatePlayerEntity(EntityManager EntityManager) {
         var playerArchetype = EntityManager.CreateArchetype(
             typeof(HealthAttributeComponent),
-            typeof(ActorWithAttributes)
+            typeof(AbilitySystemActor)
         );
 
         return EntityManager.CreateEntity(playerArchetype);

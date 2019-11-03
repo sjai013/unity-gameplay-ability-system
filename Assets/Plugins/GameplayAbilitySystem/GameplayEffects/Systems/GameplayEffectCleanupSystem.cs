@@ -1,3 +1,4 @@
+using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

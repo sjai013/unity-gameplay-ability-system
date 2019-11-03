@@ -3,10 +3,10 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "GameplayAbilitySystem.Attributes",
         "Unity.Entities",
         "Unity.Jobs",
-        "Unity.Collections"
+        "Unity.Collections",
+        "GameplayAbilitySystem"
     ],
     "includePlatforms": [
         "Editor"

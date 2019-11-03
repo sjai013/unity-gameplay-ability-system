@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Attributes:
   - GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
-    GameplayAbilitySystem.Attributes, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent, GameplayAbilitySystem.Attributes,
+    GameplayAbilitySystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent, GameplayAbilitySystem,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent, GameplayAbilitySystem.Attributes,
+  - GameplayAbilitySystem.Attributes.Components.MaxHealthAttributeComponent, GameplayAbilitySystem,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent, GameplayAbilitySystem.Attributes,
+  - GameplayAbilitySystem.Attributes.Components.ManaAttributeComponent, GameplayAbilitySystem,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent, GameplayAbilitySystem.Attributes,
+  - GameplayAbilitySystem.Attributes.Components.HealthAttributeComponent, GameplayAbilitySystem,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

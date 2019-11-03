@@ -13,9 +13,6 @@ namespace GameplayAbilitySystem.Attributes.JobTypes {
     /// the hashmap AttributeModifierValues.
     /// 
     /// The AttributeModifierValues hashmap can then be used in other jobs.  
-    /// 
-    /// Note that the hashmap is read and written to, so other jobs should not access this
-    /// until this job has completed.
     /// </summary>
     [BurstCompile]
     struct GetAttributeValuesJob_Sum<TOper, TAttribute> : IJobForEachWithEntity<AttributesOwnerComponent, AttributeModifier<TOper, TAttribute>>
@@ -23,7 +20,7 @@ namespace GameplayAbilitySystem.Attributes.JobTypes {
     where TAttribute : struct, IComponentData, IAttributeComponent {
         public NativeMultiHashMap<Entity, float>.ParallelWriter AttributeModifierValues;
         public void Execute(Entity entity, int index, [ReadOnly] ref AttributesOwnerComponent owner, [ReadOnly] ref AttributeModifier<TOper, TAttribute> attributeModifier) {
-            // AttributeModifierValues.Add(owner, attributeModifier);
+            AttributeModifierValues.Add(owner, attributeModifier);
         }
     }
 
