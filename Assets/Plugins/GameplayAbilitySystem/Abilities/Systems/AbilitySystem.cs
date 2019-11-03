@@ -81,7 +81,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         }
 
         private JobHandle CooldownJobs(JobHandle inputDeps) {
-            NativeMultiHashMap<Entity, GameplayEffectDurationComponent> Cooldowns = new NativeMultiHashMap<Entity, GameplayEffectDurationComponent>(CooldownEffectsQuery.CalculateEntityCount()*2, Allocator.TempJob);
+            NativeMultiHashMap<Entity, GameplayEffectDurationComponent> Cooldowns = new NativeMultiHashMap<Entity, GameplayEffectDurationComponent>(CooldownEffectsQuery.CalculateEntityCount()*2 + grantedAbilityQuery.CalculateEntityCount(), Allocator.TempJob);
 
             // Collect all effects which act as cooldowns for this ability
             inputDeps = new GatherCooldownGameplayEffectsJob
