@@ -9,31 +9,53 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
     public class GameplayEffectCleanupSystem : JobComponentSystem {
 
         public BeginSimulationEntityCommandBufferSystem m_EntityCommandBuffer;
+        private EntityQuery m_Group;
         protected override void OnCreate() {
             m_EntityCommandBuffer = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
+            m_Group = GetEntityQuery(ComponentType.ReadOnly<GameplayEffectDurationComponent>());
             // Create test entities
-            var archetype = EntityManager.CreateArchetype(
-                typeof(GameplayEffectDurationComponent),
-                typeof(GameplayEffectAttributeEntityComponent)
-            );
+            // var archetype = EntityManager.CreateArchetype(
+            //     typeof(GameplayEffectDurationComponent),
+            //     typeof(GameplayEffectAttributeEntityComponent)
+            // );
         }
 
         [BurstCompile]
-        struct CleanupJob : IJobForEachWithEntity<GameplayEffectDurationComponent, GameplayEffectAttributeEntityComponent> {
+        struct CleanupJob : IJobChunk {
             public EntityCommandBuffer.Concurrent Ecb;
-            public void Execute(Entity entity, int index, ref GameplayEffectDurationComponent durationComponent, ref GameplayEffectAttributeEntityComponent attributeEntityComponent) {
-                var duration = durationComponent.RemainingTime;
-                if (duration <= 0f) {
-                    Ecb.DestroyEntity(index, attributeEntityComponent);
-                    Ecb.DestroyEntity(index, entity);
+            [ReadOnly] public ArchetypeChunkComponentType<GameplayEffectDurationComponent> DurationComponents;
+            [ReadOnly] public ArchetypeChunkComponentType<GameplayEffectAttributeEntityComponent> AttributeEntityComponents;
+            [ReadOnly] public ArchetypeChunkEntityType EntityType;
+            public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex) {
+
+                var chunkDurations = chunk.GetNativeArray(DurationComponents);
+                var hasAttribute = chunk.Has<GameplayEffectAttributeEntityComponent>(AttributeEntityComponents);
+                var chunkAttributeEntities = new NativeArray<GameplayEffectAttributeEntityComponent>();
+                var chunkEntities = chunk.GetNativeArray(EntityType);
+                if (hasAttribute) {
+                    chunkAttributeEntities = chunk.GetNativeArray<GameplayEffectAttributeEntityComponent>(AttributeEntityComponents);
+                }
+                for (var i = 0; i < chunk.Count; i++) {
+                    var Entity = chunkEntities[i];
+                    var durationComponent = chunkDurations[i];
+                    var duration = durationComponent.RemainingTime;
+                    if (duration <= 0f) {
+                        if (hasAttribute) {
+                            Ecb.DestroyEntity(chunkIndex, chunkAttributeEntities[i]);
+                        }
+                        Ecb.DestroyEntity(chunkIndex, Entity);
+                    }
                 }
             }
         }
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
             inputDeps = new CleanupJob
             {
-                Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent()
-            }.Schedule(this, inputDeps);
+                Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent(),
+                EntityType = GetArchetypeChunkEntityType(),
+                DurationComponents = GetArchetypeChunkComponentType<GameplayEffectDurationComponent>(),
+                AttributeEntityComponents = GetArchetypeChunkComponentType<GameplayEffectAttributeEntityComponent>()
+            }.Schedule(m_Group, inputDeps);
 
             m_EntityCommandBuffer.AddJobHandleForProducer(inputDeps);
 
