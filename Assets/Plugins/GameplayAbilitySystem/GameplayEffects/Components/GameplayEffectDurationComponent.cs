@@ -8,5 +8,15 @@ namespace GameplayAbilitySystem.GameplayEffects.Components {
     public struct GameplayEffectDurationComponent : IComponentData {
         public float WorldStartTime;
         public float RemainingTime;
+        public float NominalDuration;
+
+        public static GameplayEffectDurationComponent Initialise(float duration, float startWorldTime) {
+            return new GameplayEffectDurationComponent
+            {
+                NominalDuration = duration,
+                RemainingTime = duration,
+                WorldStartTime = startWorldTime
+            };
+        }
     }
 }

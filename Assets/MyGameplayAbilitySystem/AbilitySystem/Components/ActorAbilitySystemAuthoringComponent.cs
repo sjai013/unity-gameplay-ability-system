@@ -42,6 +42,8 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
             TransformEntity = entity
         });
         dstManager.SetName(abilitySystemEntity, this.gameObject.name + " - GameplayAbilitySystem");
+
+        TestAbilitySystemCooldown(dstManager, abilitySystemEntity);
     }
 
     /// <summary>
@@ -58,19 +60,11 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
 
         var cooldownEntity = dstManager.CreateEntity(cooldownArchetype);
         dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity, abilitySystemEntity);
-        dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity, new GameplayEffectDurationComponent
-        {
-            RemainingTime = 10,
-            WorldStartTime = 1
-        });
+        dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity, GameplayEffectDurationComponent.Initialise(10, 1));
 
         var cooldownEntity2 = dstManager.CreateEntity(cooldownArchetype);
         dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity2, abilitySystemEntity);
-        dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity2, new GameplayEffectDurationComponent
-        {
-            RemainingTime = 5,
-            WorldStartTime = 1
-        });
+        dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity2, GameplayEffectDurationComponent.Initialise(5, 1));
     }
 }
 

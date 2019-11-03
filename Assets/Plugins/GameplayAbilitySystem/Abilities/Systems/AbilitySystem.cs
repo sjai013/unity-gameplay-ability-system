@@ -23,10 +23,10 @@ namespace GameplayAbilitySystem.Abilities.Systems {
     public abstract class AbilitySystem<T> : JobComponentSystem
     where T : struct, IAbilityTagComponent, IComponentData {
         protected abstract EntityQuery CooldownEffectsQuery { get; }
-        private EntityQuery _GrantedAbilityQuery;
+        private EntityQuery grantedAbilityQuery;
 
         protected override void OnCreate() {
-            _GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActor>(), ComponentType.ReadWrite<T>());
+            grantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActor>(), ComponentType.ReadWrite<T>());
         }
 
         [BurstCompile]
@@ -48,11 +48,30 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             private GameplayEffectDurationComponent GetMaxFromNMHP(Entity entity, NativeMultiHashMap<Entity, GameplayEffectDurationComponent> values) {
                 values.TryGetFirstValue(entity, out var longestCooldownComponent, out var multiplierIt);
                 while (values.TryGetNextValue(out var tempLongestCooldownComponent, ref multiplierIt)) {
-                    if (tempLongestCooldownComponent.RemainingTime > longestCooldownComponent.RemainingTime) {
+                    var tDiff = tempLongestCooldownComponent.RemainingTime - longestCooldownComponent.RemainingTime;
+                    var newPercentRemaining = tempLongestCooldownComponent.RemainingTime / tempLongestCooldownComponent.NominalDuration;
+                    var oldPercentRemaining = longestCooldownComponent.RemainingTime / longestCooldownComponent.NominalDuration;
+
+                    // If the duration currently being evaluated has more time remaining than the previous one,
+                    // use this as the cooldown.
+                    // If the durations are the same, then use the one which has the longer nominal time.
+                    // E.g. if we have two abilities, one with a nominal duration of 10s and 2s respectively,
+                    // but both have 1s remaining, then the "main" cooldown should be the 10s cooldown.
+                    if (tDiff > 0) {
+                        longestCooldownComponent = tempLongestCooldownComponent;
+                    } else if (tDiff == 0 && tempLongestCooldownComponent.NominalDuration > longestCooldownComponent.NominalDuration) {
                         longestCooldownComponent = tempLongestCooldownComponent;
                     }
                 }
                 return longestCooldownComponent;
+            }
+        }
+
+        struct CooldownAbilityIsZeroIfAbsentJob : IJobForEachWithEntity<T> {
+            public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
+
+            public void Execute(Entity entity, int index, ref T abilityDurationComponent) {
+                GameplayEffectDurations.Add(entity, GameplayEffectDurationComponent.Initialise(0, 0));
             }
         }
 
@@ -62,16 +81,25 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         }
 
         private JobHandle CooldownJobs(JobHandle inputDeps) {
-            NativeMultiHashMap<Entity, GameplayEffectDurationComponent> Cooldowns = new NativeMultiHashMap<Entity, GameplayEffectDurationComponent>(CooldownEffectsQuery.CalculateEntityCount(), Allocator.TempJob);
+            NativeMultiHashMap<Entity, GameplayEffectDurationComponent> Cooldowns = new NativeMultiHashMap<Entity, GameplayEffectDurationComponent>(CooldownEffectsQuery.CalculateEntityCount()*2, Allocator.TempJob);
+
+            // Collect all effects which act as cooldowns for this ability
             inputDeps = new GatherCooldownGameplayEffectsJob
             {
                 GameplayEffectDurations = Cooldowns.AsParallelWriter()
             }.Schedule(CooldownEffectsQuery, inputDeps);
 
+            // Add a default value of '0' for all entities as well
+            inputDeps = new CooldownAbilityIsZeroIfAbsentJob
+            {
+                GameplayEffectDurations = Cooldowns.AsParallelWriter()
+            }.Schedule(grantedAbilityQuery, inputDeps);
+
+            // Get the effect with the longest cooldown remaining
             inputDeps = new GatherLongestCooldownPerEntity
             {
                 GameplayEffectDurationComponent = Cooldowns
-            }.Schedule(_GrantedAbilityQuery, inputDeps);
+            }.Schedule(grantedAbilityQuery, inputDeps);
 
             Cooldowns.Dispose(inputDeps);
             return inputDeps;
