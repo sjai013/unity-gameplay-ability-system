@@ -41,7 +41,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         }
 
         protected abstract void InitialiseCooldownQuery();
-        protected abstract JobHandle CheckAbilityAvailable();
+        protected abstract JobHandle CheckAbilityAvailable(JobHandle inputDeps);
         protected abstract JobHandle CooldownJobs(JobHandle inputDeps);
 
         [BurstCompile]
@@ -93,6 +93,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
 
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
             inputDeps = CooldownJobs(inputDeps);
+            inputDeps = CheckAbilityAvailable(inputDeps);
             return inputDeps;
         }
 

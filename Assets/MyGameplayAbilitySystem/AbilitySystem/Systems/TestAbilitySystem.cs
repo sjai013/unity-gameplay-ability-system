@@ -23,8 +23,8 @@ public class TestAbilitySystem : AbilitySystem<TestAbilityTag> {
         _cooldownEffectsQuery = GetEntityQuery(_cooldownQueryDesc);
     }
 
-    protected override JobHandle CheckAbilityAvailable() {
-        throw new System.NotImplementedException();
+    protected override JobHandle CheckAbilityAvailable(JobHandle inputDeps) {
+        return inputDeps;
     }
 
     protected override JobHandle CooldownJobs(JobHandle inputDeps) {
