@@ -22,15 +22,30 @@ namespace GameplayAbilitySystem.Abilities.Systems {
     /// <typeparam name="T">The Ability</typeparam>
     public abstract class AbilitySystem<T> : JobComponentSystem
     where T : struct, IAbilityTagComponent, IComponentData {
+
+        /// <summary>
+        /// Query to use for collecting applicable GameplayEffects which put
+        /// this ability on cooldown.
+        /// </summary>
+        /// <value></value>
         protected abstract EntityQuery CooldownEffectsQuery { get; }
-        private EntityQuery grantedAbilityQuery;
+
+        /// <summary>
+        /// Query to isolate entities that define actors and their capabilities
+        /// </summary>
+        protected EntityQuery grantedAbilityQuery;
 
         protected override void OnCreate() {
             grantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActor>(), ComponentType.ReadWrite<T>());
+            InitialiseCooldownQuery();
         }
 
+        protected abstract void InitialiseCooldownQuery();
+        protected abstract JobHandle CheckAbilityAvailable();
+        protected abstract JobHandle CooldownJobs(JobHandle inputDeps);
+
         [BurstCompile]
-        struct GatherCooldownGameplayEffectsJob : IJobForEach<GameplayEffectTargetComponent, GameplayEffectDurationComponent> {
+        protected struct GatherCooldownGameplayEffectsJob : IJobForEach<GameplayEffectTargetComponent, GameplayEffectDurationComponent> {
             public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
             public void Execute(ref GameplayEffectTargetComponent targetComponent, ref GameplayEffectDurationComponent durationComponent) {
                 GameplayEffectDurations.Add(targetComponent, durationComponent);
@@ -39,7 +54,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
 
         [BurstCompile]
         [RequireComponentTag(typeof(AbilitySystemActor))]
-        struct GatherLongestCooldownPerEntity : IJobForEachWithEntity<T> {
+        protected struct GatherLongestCooldownPerEntity : IJobForEachWithEntity<T> {
             [ReadOnly] public NativeMultiHashMap<Entity, GameplayEffectDurationComponent> GameplayEffectDurationComponent;
             public void Execute(Entity entity, int index, [ReadOnly]  ref T durationComponent) {
                 durationComponent.DurationComponent = GetMaxFromNMHP(entity, GameplayEffectDurationComponent);
@@ -67,7 +82,8 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             }
         }
 
-        struct CooldownAbilityIsZeroIfAbsentJob : IJobForEachWithEntity<T> {
+        [BurstCompile]
+        protected struct CooldownAbilityIsZeroIfAbsentJob : IJobForEachWithEntity<T> {
             public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
 
             public void Execute(Entity entity, int index, ref T abilityDurationComponent) {
@@ -80,30 +96,6 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             return inputDeps;
         }
 
-        private JobHandle CooldownJobs(JobHandle inputDeps) {
-            NativeMultiHashMap<Entity, GameplayEffectDurationComponent> Cooldowns = new NativeMultiHashMap<Entity, GameplayEffectDurationComponent>(CooldownEffectsQuery.CalculateEntityCount()*2 + grantedAbilityQuery.CalculateEntityCount(), Allocator.TempJob);
-
-            // Collect all effects which act as cooldowns for this ability
-            inputDeps = new GatherCooldownGameplayEffectsJob
-            {
-                GameplayEffectDurations = Cooldowns.AsParallelWriter()
-            }.Schedule(CooldownEffectsQuery, inputDeps);
-
-            // Add a default value of '0' for all entities as well
-            inputDeps = new CooldownAbilityIsZeroIfAbsentJob
-            {
-                GameplayEffectDurations = Cooldowns.AsParallelWriter()
-            }.Schedule(grantedAbilityQuery, inputDeps);
-
-            // Get the effect with the longest cooldown remaining
-            inputDeps = new GatherLongestCooldownPerEntity
-            {
-                GameplayEffectDurationComponent = Cooldowns
-            }.Schedule(grantedAbilityQuery, inputDeps);
-
-            Cooldowns.Dispose(inputDeps);
-            return inputDeps;
-        }
     }
 }
 
