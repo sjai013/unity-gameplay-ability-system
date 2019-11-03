@@ -22,25 +22,6 @@ namespace GameplayAbilitySystem.Abilities.Systems {
     /// <typeparam name="T">The Ability</typeparam>
     public abstract class AbilitySystem<T> : JobComponentSystem
     where T : struct, IAbilityTagComponent, IComponentData {
-
-        /// <summary>
-        /// Query to use for collecting applicable GameplayEffects which put
-        /// this ability on cooldown.
-        /// </summary>
-        /// <value></value>
-        protected abstract EntityQuery CooldownEffectsQuery { get; }
-
-        /// <summary>
-        /// Query to isolate entities that define actors and their capabilities
-        /// </summary>
-        protected EntityQuery grantedAbilityQuery;
-
-        protected override void OnCreate() {
-            grantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActor>(), ComponentType.ReadWrite<T>());
-            InitialiseCooldownQuery();
-        }
-
-        protected abstract void InitialiseCooldownQuery();
         protected abstract JobHandle CheckAbilityAvailable(JobHandle inputDeps);
         protected abstract JobHandle CooldownJobs(JobHandle inputDeps);
 

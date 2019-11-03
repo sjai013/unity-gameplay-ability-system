@@ -1,4 +1,5 @@
 using GameplayAbilitySystem.Abilities.Systems;
+using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Collections;
 using Unity.Entities;
@@ -12,23 +13,30 @@ public struct TestAbilityTag : IAbilityTagComponent, IComponentData {
 
 public class TestAbilitySystem : AbilitySystem<TestAbilityTag> {
 
-    private EntityQuery _cooldownEffectsQuery;
-
-    protected override void InitialiseCooldownQuery() {
+    private EntityQuery CooldownEffectsQuery;
+    private EntityQuery GrantedAbilityQuery;
+    protected override void OnCreate() {
+        InitialiseQueries();
+    }
+    protected void InitialiseQueries() {
         EntityQueryDesc _cooldownQueryDesc = new EntityQueryDesc
         {
             All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectDurationComponent>(), ComponentType.ReadOnly<GameplayEffectTargetComponent>() },
             Any = new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() }
         };
-        _cooldownEffectsQuery = GetEntityQuery(_cooldownQueryDesc);
+        CooldownEffectsQuery = GetEntityQuery(_cooldownQueryDesc);
+        GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActor>(), ComponentType.ReadWrite<TestAbilityTag>());
     }
 
     protected override JobHandle CheckAbilityAvailable(JobHandle inputDeps) {
+        // Check the granted ability entity for this ability.  Usually, if cooldown <= 0, ability is not available.
+
+        // Any other logic that determines whether the 
         return inputDeps;
     }
 
     protected override JobHandle CooldownJobs(JobHandle inputDeps) {
-        NativeMultiHashMap<Entity, GameplayEffectDurationComponent> Cooldowns = new NativeMultiHashMap<Entity, GameplayEffectDurationComponent>(CooldownEffectsQuery.CalculateEntityCount() * 2 + grantedAbilityQuery.CalculateEntityCount(), Allocator.TempJob);
+        NativeMultiHashMap<Entity, GameplayEffectDurationComponent> Cooldowns = new NativeMultiHashMap<Entity, GameplayEffectDurationComponent>(CooldownEffectsQuery.CalculateEntityCount() * 2 + GrantedAbilityQuery.CalculateEntityCount(), Allocator.TempJob);
 
         // Collect all effects which act as cooldowns for this ability
         inputDeps = new GatherCooldownGameplayEffectsJob
@@ -40,17 +48,16 @@ public class TestAbilitySystem : AbilitySystem<TestAbilityTag> {
         inputDeps = new CooldownAbilityIsZeroIfAbsentJob
         {
             GameplayEffectDurations = Cooldowns.AsParallelWriter()
-        }.Schedule(grantedAbilityQuery, inputDeps);
+        }.Schedule(GrantedAbilityQuery, inputDeps);
 
         // Get the effect with the longest cooldown remaining
         inputDeps = new GatherLongestCooldownPerEntity
         {
             GameplayEffectDurationComponent = Cooldowns
-        }.Schedule(grantedAbilityQuery, inputDeps);
+        }.Schedule(GrantedAbilityQuery, inputDeps);
 
         Cooldowns.Dispose(inputDeps);
         return inputDeps;
     }
 
-    protected override EntityQuery CooldownEffectsQuery => _cooldownEffectsQuery;
 }
