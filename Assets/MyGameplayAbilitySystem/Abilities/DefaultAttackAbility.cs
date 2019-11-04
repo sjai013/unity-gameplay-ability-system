@@ -19,14 +19,16 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using GameplayAbilitySystem.Attributes.Components;
-using GameplayAbilitySystem.Attributes.Systems;
-namespace MyGameplayAbilitySystem.Attributes.Systems {
-    public class HealthAttributeSystem : GenericAttributeSystem<HealthAttributeComponent> { }
-    public class ManaAttributeSystem : GenericAttributeSystem<ManaAttributeComponent> { }
-    public class MaxHealthAttributeSystem : GenericAttributeSystem<MaxHealthAttributeComponent> { }
-    public class MaxManaAttributeSystem : GenericAttributeSystem<MaxManaAttributeComponent> { }
-    public class CharacterLevelAttributeSystem : GenericAttributeSystem<CharacterLevelAttributeComponent> { }
+using GameplayAbilitySystem.Abilities.Systems;
+using GameplayAbilitySystem.GameplayEffects.Components;
+using Unity.Entities;
 
+public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
+    public GameplayEffectDurationComponent _durationComponent;
+    public GameplayEffectDurationComponent DurationComponent { get => _durationComponent; set => _durationComponent = value; }
+}
+
+public class DefaultAttackAbility : GenericAbilitySystem<DefaultAttackAbilityTag> {
+    protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
 
 }
