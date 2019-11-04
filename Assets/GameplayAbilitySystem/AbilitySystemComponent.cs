@@ -1,5 +1,5 @@
 ﻿using GameplayAbilitySystem.Abilities;
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Events;
 using GameplayAbilitySystem.GameplayCues;
 using GameplayAbilitySystem.GameplayEffects;

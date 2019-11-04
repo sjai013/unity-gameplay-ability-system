@@ -9,7 +9,7 @@ namespace GameplayAbilitySystem.Abilities.Fire {
         public DurationPolicyComponent DurationPolicy { get; set; }
 
         public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, AttributesComponent attributesComponent, float WorldTime) {
-            var attributeModData = new AttributeModificationComponent()
+            var attributeModData = new _AttributeModificationComponent()
             {
                 Add = 0,
                 Multiply = 0,
@@ -20,7 +20,7 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             };
 
             var attributeModEntity = Ecb.CreateEntity(index);
-            var gameplayEffectData = new GameplayEffectDurationComponent()
+            var gameplayEffectData = new _GameplayEffectDurationComponent()
             {
                 WorldStartTime = WorldTime,
                 Duration = Duration,

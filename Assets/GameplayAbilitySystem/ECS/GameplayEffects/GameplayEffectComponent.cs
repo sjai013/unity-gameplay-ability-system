@@ -1,7 +1,7 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 
-public struct GameplayEffectDurationComponent : IGameplayEffectComponent, IComponentData {
+public struct _GameplayEffectDurationComponent : _IGameplayEffectComponent, IComponentData {
     public float WorldStartTime;
     public float Duration;
     public float TimeRemaining;
@@ -10,7 +10,7 @@ public struct GameplayEffectDurationComponent : IGameplayEffectComponent, ICompo
 }
 
 
-public struct AttributeModificationComponent : IComponentData {
+public struct _AttributeModificationComponent : IComponentData {
     public float Change;
     public float Multiply;
     public float Divide;
@@ -20,13 +20,13 @@ public struct AttributeModificationComponent : IComponentData {
 }
 
 
-public interface AttributeModification : IComponentData { }
+public interface _AttributeModification : IComponentData { }
 
-public struct GameplayEffectExpired : IComponentData { }
+public struct _GameplayEffectExpired : IComponentData { }
 
-public interface IGameplayEffectComponent  { }
+public interface _IGameplayEffectComponent  { }
 
-public struct AttributeModificationUndoAppliedComponent : IComponentData { }
+public struct _AttributeModificationUndoAppliedComponent : IComponentData { }
 
-public struct MaxHealthAttributeModifier : IComponentData { }
-public struct MaxManaAttributeModifier : IComponentData { }
+public struct _MaxHealthAttributeModifier : IComponentData { }
+public struct _MaxManaAttributeModifier : IComponentData { }

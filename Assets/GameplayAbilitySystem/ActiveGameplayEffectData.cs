@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using GameplayAbilitySystem.Interfaces;
 using System.Collections.Generic;
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 
 namespace GameplayAbilitySystem.GameplayEffects {
     /// <summary>

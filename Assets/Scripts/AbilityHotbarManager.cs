@@ -30,7 +30,7 @@ public class AbilityHotbarManager : MonoBehaviour {
 
 public class AbilityHotbarUpdateSystem : ComponentSystem {
     public Entity CharacterEntity;
-    public List<AbilityHotbarButton> AbilityButtons;
+    public List<AbilityHotbarButton> AbilityButtons = new List<AbilityHotbarButton>();
     EAbility[] AbilityMapping;
 
     protected override void OnCreate() {

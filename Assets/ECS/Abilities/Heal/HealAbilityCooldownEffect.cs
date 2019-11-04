@@ -8,7 +8,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
         public DurationPolicyComponent DurationPolicy { get; set; }
 
         public void ApplyCooldownEffect(int index, EntityCommandBuffer.Concurrent Ecb, float WorldTime) {
-            var attributeModData = new AttributeModificationComponent()
+            var attributeModData = new _AttributeModificationComponent()
             {
                 Add = 0,
                 Multiply = 0,
@@ -19,7 +19,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             };
 
             var attributeModEntity = Ecb.CreateEntity(index);
-            var gameplayEffectData = new GameplayEffectDurationComponent()
+            var gameplayEffectData = new _GameplayEffectDurationComponent()
             {
                 WorldStartTime = WorldTime,
                 Duration = Duration,
@@ -38,7 +38,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
         }
 
         public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, AttributesComponent attributesComponent, float WorldTime) {
-            var attributeModData = new AttributeModificationComponent()
+            var attributeModData = new _AttributeModificationComponent()
             {
                 Add = 0,
                 Multiply = 0,
@@ -49,7 +49,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             };
 
             var attributeModEntity = Ecb.CreateEntity(index);
-            var gameplayEffectData = new GameplayEffectDurationComponent()
+            var gameplayEffectData = new _GameplayEffectDurationComponent()
             {
                 WorldStartTime = WorldTime,
                 Duration = Duration,

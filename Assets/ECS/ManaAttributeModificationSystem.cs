@@ -3,15 +3,15 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 
-public struct ManaAttributeModifier : IComponentData, AttributeModifier {
-    public void PermanentAttributeModification(ref AttributeModificationComponent attrMod, ref AttributesComponent attrs) {
+public struct ManaAttributeModifier : IComponentData, _AttributeModifier {
+    public void PermanentAttributeModification(ref _AttributeModificationComponent attrMod, ref AttributesComponent attrs) {
         var attr = attrs.Mana;
         attrMod.Change = attrMod.Add + (attr.BaseValue * attrMod.Multiply) + (attrMod.Divide != 0 ? attr.BaseValue / attrMod.Divide : 0);
         attr.BaseValue += attrMod.Change;
         attrs.Mana = attr;
     }
 
-    public void TemporaryAttributeModification(ref AttributeModificationComponent attrMod, ref AttributesComponent attrs) {
+    public void TemporaryAttributeModification(ref _AttributeModificationComponent attrMod, ref AttributesComponent attrs) {
         var attr = attrs.Mana;
         attrMod.Change = attrMod.Add + (attr.BaseValue * attrMod.Multiply) + (attrMod.Divide != 0 ? attr.BaseValue / attrMod.Divide : 0);
         attr.TempDelta += attrMod.Change;
@@ -19,4 +19,4 @@ public struct ManaAttributeModifier : IComponentData, AttributeModifier {
     }
 }
 
-public class ManaModificationSystem : AttributeModificationSystem<ManaAttributeModifier> { }
+// public class ManaModificationSystem : _AttributeModificationSystem<ManaAttributeModifier> { }

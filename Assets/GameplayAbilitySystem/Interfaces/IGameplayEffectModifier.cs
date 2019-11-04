@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameplayAbilitySystem;
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Enums;
 using GameplayAbilitySystem.GameplayEffects;
 

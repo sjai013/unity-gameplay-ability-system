@@ -1,14 +1,14 @@
 using Unity.Entities;
 
 namespace GameplayAbilitySystem.Abilities.Fire {
-    public struct FireGameplayEffect : IGameplayEffect, IComponentData {
+    public struct FireGameplayEffect : _IGameplayEffect, IComponentData {
         public Entity Target { get; set; }
         public Entity Source { get; set; }
         public DurationPolicyComponent DurationPolicy { get; set; }
         const float DamageMultiplier = -0.1f;
         const float DamageAdder = -5;
         public void ApplyGameplayEffect(int index, EntityCommandBuffer.Concurrent Ecb, AttributesComponent attributesComponent, float WorldTime) {
-            var attributeModData = new AttributeModificationComponent()
+            var attributeModData = new _AttributeModificationComponent()
             {
                 Add = DamageAdder,
                 Multiply = DamageMultiplier,
@@ -19,13 +19,13 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             };
 
             var attributeModEntity = Ecb.CreateEntity(index);
-            Ecb.AddComponent(index, attributeModEntity, new HealthAttributeModifier());
+            Ecb.AddComponent(index, attributeModEntity, new _HealthAttributeModifier());
             Ecb.AddComponent(index, attributeModEntity, new PermanentAttributeModification());
             Ecb.AddComponent(index, attributeModEntity, attributeModData);
         }
 
         public void ApplyGameplayEffect(EntityManager EntityManager, AttributesComponent attributesComponent, float WorldTime) {
-            var attributeModData = new AttributeModificationComponent()
+            var attributeModData = new _AttributeModificationComponent()
             {
                 Add = DamageAdder,
                 Multiply = DamageMultiplier,
@@ -36,9 +36,9 @@ namespace GameplayAbilitySystem.Abilities.Fire {
             };
 
             var attributeModEntity = EntityManager.CreateEntity(
-                                                        typeof(HealthAttributeModifier),
+                                                        typeof(_HealthAttributeModifier),
                                                         typeof(PermanentAttributeModification),
-                                                        typeof(AttributeModificationComponent)
+                                                        typeof(_AttributeModificationComponent)
             );
             EntityManager.SetComponentData(attributeModEntity, attributeModData);
         }

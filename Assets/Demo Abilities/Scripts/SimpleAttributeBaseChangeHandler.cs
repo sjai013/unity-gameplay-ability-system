@@ -1,10 +1,10 @@
 using System.Linq;
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 
 
-namespace AbilitySystemDemo.Attributes {
+namespace AbilitySystemDemo.Attributes.Components {
     [CreateAssetMenu(fileName = "Simple Attribute Base Change Handler", menuName = "Ability System Demo/Attributes/Simple Attribute Base Change Handler")]
     public class SimpleAttributeBaseChangeHandler : BaseAttributeChangeHandler {
         public AttributeType MaxHealth;

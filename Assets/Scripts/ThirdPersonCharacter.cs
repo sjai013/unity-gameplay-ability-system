@@ -1,4 +1,4 @@
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 using UnityEngine;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
@@ -16,9 +16,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		[SerializeField] float m_MoveSpeedMultiplier = 1f;
 		[SerializeField] float m_AnimSpeedMultiplier = 1f;
 		[SerializeField] float m_GroundCheckDistance = 0.1f;
-        public AttributeType SpeedAttribute;
-        public AttributeSet AttributeSet;
-
         Rigidbody m_Rigidbody;
 		Animator m_Animator;
 		bool m_IsGrounded;
@@ -193,7 +190,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			// this allows us to modify the positional speed before it's applied.
 			if (m_IsGrounded && Time.deltaTime > 0)
 			{
-                var newMoveSpeedMultiplier = m_MoveSpeedMultiplier * AttributeSet.Attributes.Find(x => x.AttributeType == SpeedAttribute).CurrentValue;
+                var newMoveSpeedMultiplier = m_MoveSpeedMultiplier;
                 Vector3 v = (m_Animator.deltaPosition * newMoveSpeedMultiplier) / Time.deltaTime;
 
 				// we preserve the existing y part of the current velocity.

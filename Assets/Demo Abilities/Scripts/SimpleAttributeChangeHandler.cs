@@ -1,5 +1,5 @@
 using System.Linq;
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Interfaces;
 using UnityEngine;
 

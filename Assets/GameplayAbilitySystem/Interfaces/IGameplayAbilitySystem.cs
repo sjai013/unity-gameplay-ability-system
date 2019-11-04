@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameplayAbilitySystem.Abilities;
-using GameplayAbilitySystem.Attributes;
+using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Events;
 using GameplayAbilitySystem.GameplayEffects;
 using UnityEngine;
