@@ -32,15 +32,23 @@ namespace GameplayAbilitySystem.Attributes.JobTypes {
     /// 
     /// The AttributeModifierValues hashmap can then be used in other jobs.  
     /// </summary>
-    [BurstCompile]
-    struct GetAttributeValuesJob_Sum<TOper, TAttribute> : IJobForEachWithEntity<AttributesOwnerComponent, AttributeModifier<TOper, TAttribute>>
-    where TOper : struct, IComponentData, IAttributeOperator
-    where TAttribute : struct, IComponentData, IAttributeComponent {
-        public NativeMultiHashMap<Entity, float>.ParallelWriter AttributeModifierValues;
-        public void Execute(Entity entity, int index, [ReadOnly] ref AttributesOwnerComponent owner, [ReadOnly] ref AttributeModifier<TOper, TAttribute> attributeModifier) {
-            AttributeModifierValues.Add(owner, attributeModifier);
+        [BurstCompile]
+        struct GetAttributeValuesJob_Sum<TOper, TAttribute> : IJobChunk
+        where TOper : struct, IComponentData, IAttributeOperator
+        where TAttribute : struct, IComponentData, IAttributeComponent {
+            public NativeMultiHashMap<Entity, float>.ParallelWriter AttributeModifierValues;
+            [ReadOnly] public ArchetypeChunkComponentType<AttributesOwnerComponent> owners;
+            [ReadOnly] public ArchetypeChunkComponentType<AttributeModifier<TOper, TAttribute>> attributeModifiers;
+            public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex) {
+                var chunkOwners = chunk.GetNativeArray(owners);
+                var chunkAttributeModifiers = chunk.GetNativeArray(attributeModifiers);
+                for (var i = 0; i < chunk.Count; i++) {
+                    var owner = chunkOwners[i];
+                    var attributeModifier = chunkAttributeModifiers[i];
+                    AttributeModifierValues.Add(owner, attributeModifier);
+                }
+            }
         }
-    }
 
 
 }

@@ -109,11 +109,11 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
             AttributeHash = new NativeMultiHashMap<Entity, float>(query.CalculateEntityCount(), Allocator.TempJob);
             job = new GetAttributeValuesJob_Sum<TOper, TAttributeTag>
             {
+                owners = GetArchetypeChunkComponentType<AttributesOwnerComponent>(false),
+                attributeModifiers = GetArchetypeChunkComponentType<AttributeModifier<TOper, TAttributeTag>>(false),
                 AttributeModifierValues = AttributeHash.AsParallelWriter()
             }.Schedule(query, inputDependencies);
         }
-
-
     }
 }
 
