@@ -113,6 +113,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
 
 public interface IAbilityTagComponent {
     GameplayEffectDurationComponent DurationComponent { get; set; }
+    int AbilityState { get; set; }
 }
 
 

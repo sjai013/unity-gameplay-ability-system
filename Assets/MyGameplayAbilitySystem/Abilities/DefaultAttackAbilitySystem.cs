@@ -24,11 +24,14 @@ using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 
 public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
-    public GameplayEffectDurationComponent _durationComponent;
     public GameplayEffectDurationComponent DurationComponent { get => _durationComponent; set => _durationComponent = value; }
+    public int AbilityState { get => _abilityState; set => _abilityState = value; }
+    public GameplayEffectDurationComponent _durationComponent;
+    private int _abilityState;
+
 }
 
-public class DefaultAttackAbility : GenericAbilitySystem<DefaultAttackAbilityTag> {
+public class DefaultAttackAbilitySystem : GenericAbilitySystem<DefaultAttackAbilityTag> {
     protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
 
 }
