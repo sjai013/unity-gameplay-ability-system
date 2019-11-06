@@ -49,13 +49,13 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
             this.Queries[2] = CreateQuery<Components.Operators.Divide>();
 
             this.actorsWithAttributesQuery = GetEntityQuery(
-                ComponentType.ReadOnly<AbilitySystemActor>(),
+                ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(),
                 ComponentType.ReadWrite<TAttributeTag>()
                 );
         }
 
         [BurstCompile]
-        [RequireComponentTag(typeof(AbilitySystemActor))]
+        [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
         struct AttributeCombinerJob : IJobForEachWithEntity<TAttributeTag> {
             [ReadOnly] public NativeMultiHashMap<Entity, float> AddAttributes;
             [ReadOnly] public NativeMultiHashMap<Entity, float> DivideAttributes;
@@ -149,7 +149,7 @@ internal class CreatePlayer {
     public static Entity CreatePlayerEntity(EntityManager EntityManager) {
         var playerArchetype = EntityManager.CreateArchetype(
             typeof(HealthAttributeComponent),
-            typeof(AbilitySystemActor)
+            typeof(AbilitySystemActorTransformComponent)
         );
 
         return EntityManager.CreateEntity(playerArchetype);

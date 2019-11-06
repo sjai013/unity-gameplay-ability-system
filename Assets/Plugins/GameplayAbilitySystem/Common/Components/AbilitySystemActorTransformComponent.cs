@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Created on Mon Nov 04 2019
  *
  * The MIT License (MIT)
@@ -22,8 +22,8 @@
 using Unity.Entities;
 
 namespace GameplayAbilitySystem.Common.Components {
-    public struct AbilitySystemActor : IComponentData {
-        public Entity TransformEntity;
+    public struct AbilitySystemActorTransformComponent : IComponentData {
+        public Entity Value;
     }
 }
 

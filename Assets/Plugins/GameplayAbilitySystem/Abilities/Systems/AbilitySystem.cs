@@ -19,6 +19,7 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Burst;
@@ -50,7 +51,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         [BurstCompile]
         protected struct GatherCooldownGameplayEffectsJob : IJobForEach<GameplayEffectTargetComponent, GameplayEffectDurationComponent> {
             public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
-            public void Execute(ref GameplayEffectTargetComponent targetComponent, ref GameplayEffectDurationComponent durationComponent) {
+            public void Execute([ReadOnly] ref GameplayEffectTargetComponent targetComponent, [ReadOnly] ref GameplayEffectDurationComponent durationComponent) {
                 GameplayEffectDurations.Add(targetComponent, durationComponent);
             }
         }
@@ -59,11 +60,11 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         /// Get the longest cooldown for the ability for each entity
         /// </summary>
         [BurstCompile]
-        [RequireComponentTag(typeof(AbilitySystemActor))]
-        protected struct GatherLongestCooldownPerEntity : IJobForEachWithEntity<T> {
+        [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
+        protected struct GatherLongestCooldownPerEntity : IJobForEach<T, AbilityOwnerComponent> {
             [ReadOnly] public NativeMultiHashMap<Entity, GameplayEffectDurationComponent> GameplayEffectDurationComponent;
-            public void Execute(Entity entity, int index, [ReadOnly]  ref T durationComponent) {
-                durationComponent.DurationComponent = GetMaxFromNMHP(entity, GameplayEffectDurationComponent);
+            public void Execute([ReadOnly]ref T durationComponent, [ReadOnly] ref AbilityOwnerComponent ownerComponent) {
+                durationComponent.DurationComponent = GetMaxFromNMHP(ownerComponent, GameplayEffectDurationComponent);
             }
 
             private GameplayEffectDurationComponent GetMaxFromNMHP(Entity entity, NativeMultiHashMap<Entity, GameplayEffectDurationComponent> values) {
@@ -94,10 +95,10 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         /// use that as the default for each ability.
         /// </summary>
         [BurstCompile]
-        protected struct CooldownAbilityIsZeroIfAbsentJob : IJobForEachWithEntity<T> {
+        protected struct CooldownAbilityIsZeroIfAbsentJob : IJobForEach<T, AbilityOwnerComponent> {
             public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
-            public void Execute(Entity entity, int index, ref T abilityDurationComponent) {
-                GameplayEffectDurations.Add(entity, GameplayEffectDurationComponent.Initialise(0, 0));
+            public void Execute([ReadOnly] ref T abilityDurationComponent, [ReadOnly] ref AbilityOwnerComponent ownerComponent) {
+                GameplayEffectDurations.Add(ownerComponent, GameplayEffectDurationComponent.Initialise(0, 0));
             }
         }
 

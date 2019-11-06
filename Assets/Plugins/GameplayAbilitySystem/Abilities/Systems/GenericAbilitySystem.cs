@@ -20,6 +20,7 @@
  */
 
 using System;
+using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Collections;
@@ -48,7 +49,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             };
 
             CooldownEffectsQuery = GetEntityQuery(_cooldownQueryDesc);
-            GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActor>(), ComponentType.ReadWrite<T>());
+            GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(), ComponentType.ReadOnly<AbilityOwnerComponent>(), ComponentType.ReadWrite<T>());
         }
 
         protected override JobHandle CheckAbilityAvailable(JobHandle inputDeps) {

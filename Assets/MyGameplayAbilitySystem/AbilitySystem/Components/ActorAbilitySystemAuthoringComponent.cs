@@ -20,6 +20,7 @@
  */
 
 using System.Collections.Generic;
+using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
@@ -42,12 +43,28 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
     public CharacterAttributesScriptableObject Attributes;
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-        var abilitySystemEntity = CreateEntities(entity, dstManager);
+        var abilitySystemAttributesEntity = CreateAttributeEntities(entity, dstManager);
+        var abilitySystemGrantedAbilityEntity = CreateGrantedAbilityEntities<DefaultAttackAbilityTag>(entity, dstManager, abilitySystemAttributesEntity);
 
-        TestAbilitySystemCooldown(dstManager, abilitySystemEntity);
+        TestAbilitySystemCooldown(dstManager, abilitySystemAttributesEntity);
     }
 
-    private Entity CreateEntities(Entity entity, EntityManager entityManager) {
+    private Entity CreateGrantedAbilityEntities<T>(Entity entity, EntityManager dstManager, Entity abilitySystemAttributesEntity) {
+        var grantedAbilityArchetype = dstManager.CreateArchetype(typeof(AbilitySystemActorTransformComponent), typeof(T), typeof(AbilityOwnerComponent));
+        var abilitySystemGrantedAbilityEntity = dstManager.CreateEntity(grantedAbilityArchetype);
+        dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilitySystemActorTransformComponent
+        {
+            Value = entity
+        });
+        dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilityOwnerComponent
+        {
+            Value = abilitySystemAttributesEntity
+        });
+        dstManager.SetName(abilitySystemGrantedAbilityEntity, this.gameObject.name + " - Granted Ability - " + typeof(T).Name);
+        return abilitySystemGrantedAbilityEntity;
+    }
+
+    private Entity CreateAttributeEntities(Entity entity, EntityManager entityManager) {
         List<ComponentType> attributeTypes = new List<ComponentType>();
 
         // Get reference to character attribute component on script, and list of attributes
@@ -57,17 +74,20 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
         }
 
         // Add tag component to indicate that this entity represents an actor with attributes
-        attributeTypes.Add(typeof(AbilitySystemActor));
-        attributeTypes.Add(typeof(DefaultAttackAbilityTag));
+        attributeTypes.Add(typeof(AbilitySystemActorTransformComponent));
         var attributeArchetype = entityManager.CreateArchetype(attributeTypes.ToArray());
         // Create a new entity for this actor
-        var abilitySystemEntity = entityManager.CreateEntity(attributeArchetype);
-        entityManager.SetComponentData(abilitySystemEntity, new AbilitySystemActor
+        var abilitySystemAttributesEntity = entityManager.CreateEntity(attributeArchetype);
+        entityManager.SetComponentData(abilitySystemAttributesEntity, new AbilitySystemActorTransformComponent
         {
-            TransformEntity = entity
+            Value = entity
         });
-        entityManager.SetName(abilitySystemEntity, this.gameObject.name + " - GameplayAbilitySystem");
-        return abilitySystemEntity;
+        entityManager.SetName(abilitySystemAttributesEntity, this.gameObject.name + " - GameplayAbilitySystem");
+
+
+        // attributeTypes.Add(typeof(DefaultAttackAbilityTag));
+
+        return abilitySystemAttributesEntity;
     }
 
     /// <summary>
