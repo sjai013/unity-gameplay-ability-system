@@ -23,12 +23,18 @@ using System;
 using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.Systems {
+    public enum AbilityStates {
+        DISABLED, READY
+    };
+
+    public struct NullComponent : IComponentData { }
 
     public abstract class GenericAbilitySystem<T> : AbilitySystem<T>
     where T : struct, IAbilityTagComponent, IComponentData {
@@ -45,16 +51,17 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             EntityQueryDesc _cooldownQueryDesc = new EntityQueryDesc
             {
                 All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectDurationComponent>(), ComponentType.ReadOnly<GameplayEffectTargetComponent>() },
-                Any = CooldownEffects
+                Any = CooldownEffects.Length == 0 ? new ComponentType[] { typeof(NullComponent) } : CooldownEffects,
             };
+
 
             CooldownEffectsQuery = GetEntityQuery(_cooldownQueryDesc);
             GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(), ComponentType.ReadOnly<AbilityOwnerComponent>(), ComponentType.ReadWrite<T>());
         }
 
-        protected override JobHandle CheckAbilityAvailable(JobHandle inputDeps) {
+        protected override JobHandle UpdateAbilityState(JobHandle inputDeps) {
             // Check the granted ability entity for this ability.  Usually, if cooldown <= 0, ability is not available.
-
+            inputDeps = new CheckAbilityAvailableJob().Schedule(GrantedAbilityQuery, inputDeps);
             // Any other logic that determines whether the ability can be activated
             return inputDeps;
         }
@@ -84,5 +91,71 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             return inputDeps;
         }
 
+        /// <summary>
+        /// Gather all cooldown effects for this ability
+        /// </summary>
+        [BurstCompile]
+        protected struct GatherCooldownGameplayEffectsJob : IJobForEach<GameplayEffectTargetComponent, GameplayEffectDurationComponent> {
+            public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
+            public void Execute([ReadOnly] ref GameplayEffectTargetComponent targetComponent, [ReadOnly] ref GameplayEffectDurationComponent durationComponent) {
+                GameplayEffectDurations.Add(targetComponent, durationComponent);
+            }
+        }
+
+        /// <summary>
+        /// Get the longest cooldown for the ability for each entity
+        /// </summary>
+        [BurstCompile]
+        [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
+        protected struct GatherLongestCooldownPerEntity : IJobForEach<T, AbilityOwnerComponent> {
+            [ReadOnly] public NativeMultiHashMap<Entity, GameplayEffectDurationComponent> GameplayEffectDurationComponent;
+            public void Execute([ReadOnly]ref T abilityTagComponent, [ReadOnly] ref AbilityOwnerComponent ownerComponent) {
+                abilityTagComponent.DurationComponent = GetMaxFromNMHP(ownerComponent, GameplayEffectDurationComponent);
+            }
+
+            private GameplayEffectDurationComponent GetMaxFromNMHP(Entity entity, NativeMultiHashMap<Entity, GameplayEffectDurationComponent> values) {
+                values.TryGetFirstValue(entity, out var longestCooldownComponent, out var multiplierIt);
+                while (values.TryGetNextValue(out var tempLongestCooldownComponent, ref multiplierIt)) {
+                    var tDiff = tempLongestCooldownComponent.RemainingTime - longestCooldownComponent.RemainingTime;
+                    var newPercentRemaining = tempLongestCooldownComponent.RemainingTime / tempLongestCooldownComponent.NominalDuration;
+                    var oldPercentRemaining = longestCooldownComponent.RemainingTime / longestCooldownComponent.NominalDuration;
+
+                    // If the duration currently being evaluated has more time remaining than the previous one,
+                    // use this as the cooldown.
+                    // If the durations are the same, then use the one which has the longer nominal time.
+                    // E.g. if we have two abilities, one with a nominal duration of 10s and 2s respectively,
+                    // but both have 1s remaining, then the "main" cooldown should be the 10s cooldown.
+                    if (tDiff > 0) {
+                        longestCooldownComponent = tempLongestCooldownComponent;
+                    } else if (tDiff == 0 && tempLongestCooldownComponent.NominalDuration > longestCooldownComponent.NominalDuration) {
+                        longestCooldownComponent = tempLongestCooldownComponent;
+                    }
+                }
+                return longestCooldownComponent;
+            }
+        }
+
+        /// <summary>
+        /// If an entity has no active cooldowns active for an ability, we would never get the chance
+        /// to update the cooldown to 0.  This inserts a default cooldown of '0', so we can
+        /// use that as the default for each ability.
+        /// </summary>
+        [BurstCompile]
+        protected struct CooldownAbilityIsZeroIfAbsentJob : IJobForEach<T, AbilityOwnerComponent> {
+            public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
+            public void Execute([ReadOnly] ref T abilityTagComponent, [ReadOnly] ref AbilityOwnerComponent ownerComponent) {
+                GameplayEffectDurations.Add(ownerComponent, GameplayEffectDurationComponent.Initialise(0, 0));
+            }
+        }
+
+        protected struct CheckAbilityAvailableJob : IJobForEach<T> {
+            public void Execute(ref T abilityTagComponent) {
+                if (abilityTagComponent.DurationComponent.RemainingTime <= 0) {
+                    abilityTagComponent.AbilityState = (int)AbilityStates.READY;
+                } else {
+                    abilityTagComponent.AbilityState = (int)AbilityStates.DISABLED;
+                }
+            }
+        }
     }
 }

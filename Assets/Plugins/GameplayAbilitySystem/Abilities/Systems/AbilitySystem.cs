@@ -42,69 +42,11 @@ namespace GameplayAbilitySystem.Abilities.Systems {
     /// <typeparam name="T">The Ability</typeparam>
     public abstract class AbilitySystem<T> : JobComponentSystem
     where T : struct, IAbilityTagComponent, IComponentData {
-        protected abstract JobHandle CheckAbilityAvailable(JobHandle inputDeps);
+        protected abstract JobHandle UpdateAbilityState(JobHandle inputDeps);
         protected abstract JobHandle CooldownJobs(JobHandle inputDeps);
-
-        /// <summary>
-        /// Gather all cooldown effects for this ability
-        /// </summary>
-        [BurstCompile]
-        protected struct GatherCooldownGameplayEffectsJob : IJobForEach<GameplayEffectTargetComponent, GameplayEffectDurationComponent> {
-            public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
-            public void Execute([ReadOnly] ref GameplayEffectTargetComponent targetComponent, [ReadOnly] ref GameplayEffectDurationComponent durationComponent) {
-                GameplayEffectDurations.Add(targetComponent, durationComponent);
-            }
-        }
-
-        /// <summary>
-        /// Get the longest cooldown for the ability for each entity
-        /// </summary>
-        [BurstCompile]
-        [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
-        protected struct GatherLongestCooldownPerEntity : IJobForEach<T, AbilityOwnerComponent> {
-            [ReadOnly] public NativeMultiHashMap<Entity, GameplayEffectDurationComponent> GameplayEffectDurationComponent;
-            public void Execute([ReadOnly]ref T durationComponent, [ReadOnly] ref AbilityOwnerComponent ownerComponent) {
-                durationComponent.DurationComponent = GetMaxFromNMHP(ownerComponent, GameplayEffectDurationComponent);
-            }
-
-            private GameplayEffectDurationComponent GetMaxFromNMHP(Entity entity, NativeMultiHashMap<Entity, GameplayEffectDurationComponent> values) {
-                values.TryGetFirstValue(entity, out var longestCooldownComponent, out var multiplierIt);
-                while (values.TryGetNextValue(out var tempLongestCooldownComponent, ref multiplierIt)) {
-                    var tDiff = tempLongestCooldownComponent.RemainingTime - longestCooldownComponent.RemainingTime;
-                    var newPercentRemaining = tempLongestCooldownComponent.RemainingTime / tempLongestCooldownComponent.NominalDuration;
-                    var oldPercentRemaining = longestCooldownComponent.RemainingTime / longestCooldownComponent.NominalDuration;
-
-                    // If the duration currently being evaluated has more time remaining than the previous one,
-                    // use this as the cooldown.
-                    // If the durations are the same, then use the one which has the longer nominal time.
-                    // E.g. if we have two abilities, one with a nominal duration of 10s and 2s respectively,
-                    // but both have 1s remaining, then the "main" cooldown should be the 10s cooldown.
-                    if (tDiff > 0) {
-                        longestCooldownComponent = tempLongestCooldownComponent;
-                    } else if (tDiff == 0 && tempLongestCooldownComponent.NominalDuration > longestCooldownComponent.NominalDuration) {
-                        longestCooldownComponent = tempLongestCooldownComponent;
-                    }
-                }
-                return longestCooldownComponent;
-            }
-        }
-
-        /// <summary>
-        /// If an entity has no active cooldowns active for an ability, we would never get the chance
-        /// to update the cooldown to 0.  This inserts a default cooldown of '0', so we can
-        /// use that as the default for each ability.
-        /// </summary>
-        [BurstCompile]
-        protected struct CooldownAbilityIsZeroIfAbsentJob : IJobForEach<T, AbilityOwnerComponent> {
-            public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
-            public void Execute([ReadOnly] ref T abilityDurationComponent, [ReadOnly] ref AbilityOwnerComponent ownerComponent) {
-                GameplayEffectDurations.Add(ownerComponent, GameplayEffectDurationComponent.Initialise(0, 0));
-            }
-        }
-
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
             inputDeps = CooldownJobs(inputDeps);
-            inputDeps = CheckAbilityAvailable(inputDeps);
+            inputDeps = UpdateAbilityState(inputDeps);
             return inputDeps;
         }
 
