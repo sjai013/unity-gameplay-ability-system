@@ -54,7 +54,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         protected override JobHandle CheckAbilityAvailable(JobHandle inputDeps) {
             // Check the granted ability entity for this ability.  Usually, if cooldown <= 0, ability is not available.
 
-            // Any other logic that determines whether the 
+            // Any other logic that determines whether the ability can be activated
             return inputDeps;
         }
 

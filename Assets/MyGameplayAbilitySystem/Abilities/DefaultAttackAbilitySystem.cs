@@ -27,7 +27,7 @@ public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
     public GameplayEffectDurationComponent DurationComponent { get => _durationComponent; set => _durationComponent = value; }
     public int AbilityState { get => _abilityState; set => _abilityState = value; }
     public GameplayEffectDurationComponent _durationComponent;
-    private int _abilityState;
+    public int _abilityState;
 
 }
 
