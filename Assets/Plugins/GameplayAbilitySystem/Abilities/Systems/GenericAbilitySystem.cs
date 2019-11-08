@@ -41,7 +41,80 @@ namespace GameplayAbilitySystem.Abilities.Systems {
 
         protected EntityQuery CooldownEffectsQuery;
         protected EntityQuery GrantedAbilityQuery;
+
+        /// <summary>
+        /// The ability owns these effects.
+        /// </summary>
+        /// <value></value>
+        protected virtual ComponentType[] AbilityOwningEffects { get; }
+
+        /// <summary>
+        /// The ability has these cooldowns.
+        /// </summary>
+        /// <value></value>
         protected abstract ComponentType[] CooldownEffects { get; }
+
+        /// <summary>
+        /// This ability cancels currently *executing* abilities which own these effects.
+        /// E.g. cancelling a chanelling spell
+        /// </summary>
+        /// <value></value>
+        protected abstract ComponentType[] CancelAbilitiesWithOwningEffects { get; }
+
+        /// <summary>
+        /// Prevents execution of abilities that have these effects
+        /// </summary>
+        /// <value></value>
+        protected abstract ComponentType[] BlockAbilitiesWithEffects { get; }
+
+        /// <summary>
+        /// Provides the actor executing this ability with these effects. 
+        /// These effects are automatically removed once the ability has
+        /// finished executing.
+        /// </summary>
+        /// <value></value>
+        protected abstract ComponentType[] SourceActivationOwnedEffects { get; }
+
+        /// <summary>
+        /// The actor needs to have all these tags applied to begin executing
+        /// the ability.  
+        /// 
+        /// E.g. Allowing casting of Fire 2 only if we have already cast Fire 1
+        /// </summary>
+        /// <value></value>
+        protected abstract ComponentType[] SourceActivationRequiredTags { get; }
+
+        /// <summary>
+        /// The actor must not have any of these tags to begin executing the ability.
+        /// 
+        /// E.g. Can't cast magic if the actor is silenced.
+        /// </summary>
+        /// <value></value>
+        protected abstract ComponentType[] SourceActivationBlockedTags { get; }
+
+        /// <summary>
+        /// The target needs to have all these tags applied to begin executing
+        /// the ability.  
+        /// 
+        /// E.g. Allowing casting Remedy on a silenced target, only if the target is poisoned.
+        /// 
+        /// For AOE effects, this means that the spell will still cast, but will have no effect on
+        /// targets that do not have all these tags.
+        /// </summary>
+        /// <value></value>
+        protected abstract ComponentType[] TargetRequiredTags { get; }
+
+        /// <summary>
+        /// The target must not have any of these tags to begin executing the ability.
+        /// 
+        /// E.g. Can't cast magic if the actor is silenced.
+        /// 
+        /// For AOE effects, this means that the spell will still cast, but will have no effect
+        /// on targets that have any of these tags.
+        /// </summary>
+        /// <value></value>
+        protected abstract ComponentType[] TargetBlockedTags { get; }
+
         protected override void OnCreate() {
             InitialiseQueries();
         }

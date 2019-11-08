@@ -34,4 +34,17 @@ public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
 public class DefaultAttackAbilitySystem : GenericAbilitySystem<DefaultAttackAbilityTag> {
     protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
 
+    protected override ComponentType[] CancelAbilitiesWithOwningEffects => new ComponentType[] { };
+
+    protected override ComponentType[] BlockAbilitiesWithEffects => new ComponentType[] { };
+
+    protected override ComponentType[] SourceActivationOwnedEffects => new ComponentType[] { };
+
+    protected override ComponentType[] SourceActivationRequiredTags => new ComponentType[] { };
+
+    protected override ComponentType[] SourceActivationBlockedTags => new ComponentType[] { };
+
+    protected override ComponentType[] TargetRequiredTags => new ComponentType[] { };
+
+    protected override ComponentType[] TargetBlockedTags => new ComponentType[] { };
 }
