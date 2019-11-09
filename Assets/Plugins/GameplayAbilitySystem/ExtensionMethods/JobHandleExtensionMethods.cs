@@ -31,5 +31,10 @@ namespace GameplayAbilitySystem.ExtensionMethods {
             return jobData.Schedule(query, jobHandle);
         }
 
+        public static JobHandle ScheduleJob<T>(this JobHandle jobHandle, T jobData, ComponentSystemBase system)
+        where T : struct, IBaseJobForEach {
+            return jobData.Schedule(system, jobHandle);
+        }
+
     }
 }
