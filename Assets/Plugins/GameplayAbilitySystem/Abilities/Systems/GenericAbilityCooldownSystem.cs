@@ -56,8 +56,6 @@ namespace GameplayAbilitySystem.Abilities.Systems {
                 All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectDurationComponent>(), ComponentType.ReadOnly<GameplayEffectTargetComponent>() },
                 Any = CooldownEffects.Length == 0 ? new ComponentType[] { typeof(NullComponent) } : CooldownEffects,
             };
-
-
             CooldownEffectsQuery = GetEntityQuery(_cooldownQueryDesc);
             GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(), ComponentType.ReadOnly<AbilityOwnerComponent>(), ComponentType.ReadWrite<T>());
         }
