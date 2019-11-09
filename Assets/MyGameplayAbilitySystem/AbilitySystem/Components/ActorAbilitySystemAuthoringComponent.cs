@@ -44,7 +44,7 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
         var abilitySystemAttributesEntity = CreateAttributeEntities(entity, dstManager);
-        var abilitySystemGrantedAbilityEntity = CreateGrantedAbilityEntities<DefaultAttackAbilityTag>(entity, dstManager, abilitySystemAttributesEntity);
+        var abilitySystemGrantedAbilityEntity = CreateGrantedAbilityEntities<MyGameplayAbilitySystem.Abilities.DefaultAttackAbilityTag>(entity, dstManager, abilitySystemAttributesEntity);
 
         TestAbilitySystemCooldown(dstManager, abilitySystemAttributesEntity);
     }

@@ -20,18 +20,39 @@
  */
 
 using GameplayAbilitySystem.Abilities.Systems;
+using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
+using Unity.Jobs;
 
-public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
-    public GameplayEffectDurationComponent DurationComponent { get => _durationComponent; set => _durationComponent = value; }
-    public int AbilityState { get => _abilityState; set => _abilityState = value; }
-    public GameplayEffectDurationComponent _durationComponent;
-    public int _abilityState;
+namespace MyGameplayAbilitySystem.Abilities {
+    public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
+        public GameplayEffectDurationComponent DurationComponent { get => _durationComponent; set => _durationComponent = value; }
+        public int AbilityState { get => _abilityState; set => _abilityState = value; }
+        public GameplayEffectDurationComponent _durationComponent;
+        public int _abilityState;
 
-}
+    }
 
-public class DefaultAttackAbilitySystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
-    protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
+    public class DefaultAttackAbilitySystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
+        protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
+
+    }
+
+    public class DefaultAttackAbilityStateUpdate : JobComponentSystem {
+
+        public struct Job : IJobForEach<DefaultAttackAbilityTag> {
+            public void Execute(ref DefaultAttackAbilityTag abilityTag) {
+                if (abilityTag._durationComponent.RemainingTime <= 0) {
+                    abilityTag._abilityState = (int)AbilityStates.READY;
+                } else {
+                    abilityTag._abilityState = (int)AbilityStates.DISABLED;
+                }
+            }
+        }
+        protected override JobHandle OnUpdate(JobHandle inputDeps) {
+            return inputDeps.ScheduleJob(new Job(), this);
+        }
+    }
 
 }
