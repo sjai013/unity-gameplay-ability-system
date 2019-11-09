@@ -22,6 +22,7 @@
 using System;
 using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Common.Components;
+using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Burst;
 using Unity.Collections;
@@ -61,26 +62,17 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(), ComponentType.ReadOnly<AbilityOwnerComponent>(), ComponentType.ReadWrite<T>());
         }
 
+
+
         protected override JobHandle CooldownJobs(JobHandle inputDeps) {
             NativeMultiHashMap<Entity, GameplayEffectDurationComponent> Cooldowns = new NativeMultiHashMap<Entity, GameplayEffectDurationComponent>(CooldownEffectsQuery.CalculateEntityCount() * 2 + GrantedAbilityQuery.CalculateEntityCount(), Allocator.TempJob);
 
             // Collect all effects which act as cooldowns for this ability
-            inputDeps = new GatherCooldownGameplayEffectsJob
-            {
-                GameplayEffectDurations = Cooldowns.AsParallelWriter()
-            }.Schedule(CooldownEffectsQuery, inputDeps);
-
-            // Add a default value of '0' for all entities as well
-            inputDeps = new CooldownAbilityIsZeroIfAbsentJob
-            {
-                GameplayEffectDurations = Cooldowns.AsParallelWriter()
-            }.Schedule(GrantedAbilityQuery, inputDeps);
-
-            // Get the effect with the longest cooldown remaining
-            inputDeps = new GatherLongestCooldownPerEntity
-            {
-                GameplayEffectDurationComponent = Cooldowns
-            }.Schedule(GrantedAbilityQuery, inputDeps);
+            var job1 = new GatherCooldownGameplayEffectsJob { GameplayEffectDurations = Cooldowns.AsParallelWriter() };
+            var job2 = new GatherLongestCooldownPerEntity { GameplayEffectDurationComponent = Cooldowns };
+            inputDeps = inputDeps
+                        .ScheduleJob(job1, CooldownEffectsQuery)
+                        .ScheduleJob(job2, GrantedAbilityQuery);
 
             Cooldowns.Dispose(inputDeps);
             return inputDeps;
@@ -109,7 +101,11 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             }
 
             private GameplayEffectDurationComponent GetMaxFromNMHP(Entity entity, NativeMultiHashMap<Entity, GameplayEffectDurationComponent> values) {
-                values.TryGetFirstValue(entity, out var longestCooldownComponent, out var multiplierIt);
+                if (!values.TryGetFirstValue(entity, out var longestCooldownComponent, out var multiplierIt)) {
+                    // If there are no active cooldowns for this actor, then use a default.
+                    longestCooldownComponent = new GameplayEffectDurationComponent();
+                }
+
                 while (values.TryGetNextValue(out var tempLongestCooldownComponent, ref multiplierIt)) {
                     var tDiff = tempLongestCooldownComponent.RemainingTime - longestCooldownComponent.RemainingTime;
                     var newPercentRemaining = tempLongestCooldownComponent.RemainingTime / tempLongestCooldownComponent.NominalDuration;
@@ -130,27 +126,14 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             }
         }
 
-        /// <summary>
-        /// If an entity has no active cooldowns active for an ability, we would never get the chance
-        /// to update the cooldown to 0.  This inserts a default cooldown of '0', so we can
-        /// use that as the default for each ability.
-        /// </summary>
-        [BurstCompile]
-        protected struct CooldownAbilityIsZeroIfAbsentJob : IJobForEach<T, AbilityOwnerComponent> {
-            public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
-            public void Execute([ReadOnly] ref T abilityTagComponent, [ReadOnly] ref AbilityOwnerComponent ownerComponent) {
-                GameplayEffectDurations.Add(ownerComponent, GameplayEffectDurationComponent.Initialise(0, 0));
-            }
-        }
-
-        protected struct CheckAbilityAvailableJob : IJobForEach<T> {
-            public void Execute(ref T abilityTagComponent) {
-                if (abilityTagComponent.DurationComponent.RemainingTime <= 0) {
-                    abilityTagComponent.AbilityState = (int)AbilityStates.READY;
-                } else {
-                    abilityTagComponent.AbilityState = (int)AbilityStates.DISABLED;
-                }
-            }
-        }
+        // protected struct CheckAbilityAvailableJob : IJobForEach<T> {
+        //     public void Execute(ref T abilityTagComponent) {
+        //         if (abilityTagComponent.DurationComponent.RemainingTime <= 0) {
+        //             abilityTagComponent.AbilityState = (int)AbilityStates.READY;
+        //         } else {
+        //             abilityTagComponent.AbilityState = (int)AbilityStates.DISABLED;
+        //         }
+        //     }
+        // }
     }
 }
