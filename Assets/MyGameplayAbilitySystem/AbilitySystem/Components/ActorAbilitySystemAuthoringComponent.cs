@@ -25,6 +25,7 @@ using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -45,7 +46,9 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
         var abilitySystemAttributesEntity = CreateAttributeEntities(entity, dstManager);
         var abilitySystemGrantedAbilityEntity = CreateGrantedAbilityEntities<MyGameplayAbilitySystem.Abilities.DefaultAttackAbilityTag>(entity, dstManager, abilitySystemAttributesEntity);
-
+        CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilitySystemAttributesEntity);
+        CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Multiply, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilitySystemAttributesEntity);
+        CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Divide, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilitySystemAttributesEntity);
         TestAbilitySystemCooldown(dstManager, abilitySystemAttributesEntity);
     }
 
@@ -112,3 +115,44 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
     }
 }
 
+
+internal class CreateEntities<TOper, TAttribute>
+where TOper : struct, IAttributeOperator, IComponentData
+where TAttribute : struct, IAttributeComponent, IComponentData {
+    public static void CreateAttributeOperEntities(EntityManager EntityManager, Entity ActorEntity) {
+
+        var archetype = EntityManager.CreateArchetype(
+            typeof(TOper),
+            typeof(AttributeComponentTag<TAttribute>),
+            typeof(AttributeModifier<TOper, TAttribute>),
+            typeof(AttributesOwnerComponent)
+        );
+
+        var random = new Unity.Mathematics.Random((uint)ActorEntity.Index);
+
+
+        for (var i = 0; i < 5; i++) {
+            var entity = EntityManager.CreateEntity(archetype);
+            EntityManager.SetComponentData(entity, new GameplayAbilitySystem.Attributes.Components.AttributeModifier<TOper, TAttribute>()
+            {
+                Value = random.NextFloat(0, 50)
+            });
+
+            EntityManager.SetComponentData(entity, new AttributesOwnerComponent()
+            {
+                Value = ActorEntity
+            });
+        }
+    }
+}
+
+internal class CreatePlayer {
+    public static Entity CreatePlayerEntity(EntityManager EntityManager) {
+        var playerArchetype = EntityManager.CreateArchetype(
+            typeof(HealthAttributeComponent),
+            typeof(AbilitySystemActorTransformComponent)
+        );
+
+        return EntityManager.CreateEntity(playerArchetype);
+    }
+}

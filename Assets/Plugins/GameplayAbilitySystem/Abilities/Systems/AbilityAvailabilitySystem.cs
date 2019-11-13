@@ -23,10 +23,6 @@ using Unity.Entities;
 using Unity.Jobs;
 
 namespace GameplayAbilitySystem.Abilities.Systems {
-    public enum AbilityStates {
-        DISABLED, READY
-    };
-
     /// <summary>
     /// Updates the Ability State to indicate if the ability is available.
     /// 

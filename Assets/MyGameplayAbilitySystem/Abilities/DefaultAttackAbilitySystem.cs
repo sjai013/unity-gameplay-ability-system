@@ -22,6 +22,7 @@
 using GameplayAbilitySystem.Abilities.Systems;
 using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects.Components;
+using MyGameplayAbilitySystem.AbilitySystem.Enums;
 using Unity.Entities;
 using Unity.Jobs;
 
@@ -46,7 +47,7 @@ namespace MyGameplayAbilitySystem.Abilities {
                 if (abilityTag._durationComponent.RemainingTime <= 0) {
                     abilityTag._abilityState = (int)AbilityStates.READY;
                 } else {
-                    abilityTag._abilityState = (int)AbilityStates.DISABLED;
+                    abilityTag._abilityState = (int)AbilityStates.ON_COOLDOWN;
                 }
             }
         }

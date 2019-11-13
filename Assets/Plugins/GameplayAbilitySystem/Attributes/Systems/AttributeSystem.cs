@@ -106,7 +106,11 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
         /// <typeparam name="TOper">The type of operator for this attribute job</typeparam>
         private void ScheduleAttributeJob<TOper>(JobHandle inputDependencies, EntityQuery query, out NativeMultiHashMap<Entity, float> AttributeHash, out JobHandle job)
         where TOper : struct, IAttributeOperator, IComponentData {
+            var nEntities = query.CalculateEntityCount();
+            job = inputDependencies;
             AttributeHash = new NativeMultiHashMap<Entity, float>(query.CalculateEntityCount(), Allocator.TempJob);
+            if (nEntities == 0) return;
+
             job = new GetAttributeValuesJob_Sum<TOper, TAttributeTag>
             {
                 owners = GetArchetypeChunkComponentType<AttributesOwnerComponent>(false),
@@ -114,44 +118,5 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
                 AttributeModifierValues = AttributeHash.AsParallelWriter()
             }.Schedule(query, inputDependencies);
         }
-    }
-}
-
-
-internal class CreateEntities<TOper, TAttribute>
-where TOper : struct, IAttributeOperator, IComponentData
-where TAttribute : struct, IAttributeComponent, IComponentData {
-    public static void CreateAttributeOperEntities(EntityManager EntityManager, Entity Entity1, Entity Entity2) {
-
-        var archetype = EntityManager.CreateArchetype(
-            typeof(TOper),
-            typeof(AttributeComponentTag<TAttribute>),
-            typeof(AttributeModifier<TOper, TAttribute>),
-            typeof(AttributesOwnerComponent)
-        );
-
-        for (var i = 0; i < 0; i++) {
-            var entity = EntityManager.CreateEntity(archetype);
-            EntityManager.SetComponentData(entity, new GameplayAbilitySystem.Attributes.Components.AttributeModifier<TOper, TAttribute>()
-            {
-                Value = 1
-            });
-
-            EntityManager.SetComponentData(entity, new AttributesOwnerComponent()
-            {
-                Value = i % 2 == 0 ? Entity1 : Entity2
-            });
-        }
-    }
-}
-
-internal class CreatePlayer {
-    public static Entity CreatePlayerEntity(EntityManager EntityManager) {
-        var playerArchetype = EntityManager.CreateArchetype(
-            typeof(HealthAttributeComponent),
-            typeof(AbilitySystemActorTransformComponent)
-        );
-
-        return EntityManager.CreateEntity(playerArchetype);
     }
 }
