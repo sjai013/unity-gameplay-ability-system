@@ -59,7 +59,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
                 for (var i = 0; i < chunk.Count; i++) {
                     var Entity = chunkEntities[i];
                     var durationComponent = chunkDurations[i];
-                    var duration = durationComponent.RemainingTime;
+                    var duration = durationComponent.Value.RemainingTime;
                     if (duration <= 0f) {
                         if (hasAttribute) {
                             Ecb.DestroyEntity(chunkIndex, chunkAttributeEntities[i]);

@@ -11,7 +11,7 @@ namespace GameplayAbilitySystem.Abilities.Heal {
             // We could create a new entity to capture the position of the projectile, but to keep it simple
             // we use the existing entity
 
-            Entities.WithAll<HealAbilityComponent, AbilityStateComponent, AbilitySourceTargetComponent>().ForEach((Entity entity, ref HealAbilityComponent ability, ref AbilityStateComponent abilityState, ref AbilitySourceTargetComponent sourceTarget) => {
+            Entities.WithAll<HealAbilityComponent, _AbilityStateComponent, AbilitySourceTargetComponent>().ForEach((Entity entity, ref HealAbilityComponent ability, ref _AbilityStateComponent abilityState, ref AbilitySourceTargetComponent sourceTarget) => {
                 if (abilityState.State != EAbilityState.Activate) return;
                 var transforms = GetComponentDataFromEntity<LocalToWorld>(true);
                 var sourceTransform = transforms[sourceTarget.Source];

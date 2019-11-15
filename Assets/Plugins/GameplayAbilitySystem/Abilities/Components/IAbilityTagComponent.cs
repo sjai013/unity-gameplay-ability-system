@@ -19,11 +19,27 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
+using Unity.Entities;
 
-public interface IAbilityTagComponent {
-    GameplayEffectDurationComponent DurationComponent { get; set; }
-    int AbilityState { get; set; }
+namespace GameplayAbilitySystem.Abilities.Components {
+    public interface IAbilityTagComponent { }
+
+    public struct AbilityCooldownComponent : IComponentData {
+        public TimeRemainingComponent Value;
+        public static implicit operator TimeRemainingComponent(AbilityCooldownComponent e) { return e.Value; }
+        public static implicit operator AbilityCooldownComponent(TimeRemainingComponent e) { return new AbilityCooldownComponent { Value = e }; }
+    }
+
+    public struct AbilityStateComponent : IComponentData {
+        public int Value;
+        public static implicit operator int(AbilityStateComponent e) { return e.Value; }
+        public static implicit operator AbilityStateComponent(int e) { return new AbilityStateComponent { Value = e }; }
+
+    }
+
 }
+
 
 

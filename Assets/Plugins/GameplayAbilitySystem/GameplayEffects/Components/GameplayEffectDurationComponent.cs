@@ -20,21 +20,26 @@
  */
 
 using System;
+using GameplayAbilitySystem.Common.Components;
 using Unity.Entities;
 namespace GameplayAbilitySystem.GameplayEffects.Components {
 
     [Serializable]
     public struct GameplayEffectDurationComponent : IComponentData {
-        public float WorldStartTime;
-        public float RemainingTime;
-        public float NominalDuration;
+        public TimeRemainingComponent Value;
+
+        public static implicit operator TimeRemainingComponent(GameplayEffectDurationComponent e) { return e.Value; }
+        public static implicit operator GameplayEffectDurationComponent(TimeRemainingComponent e) { return new GameplayEffectDurationComponent { Value = e }; }
 
         public static GameplayEffectDurationComponent Initialise(float duration, float startWorldTime) {
             return new GameplayEffectDurationComponent
             {
-                NominalDuration = duration,
-                RemainingTime = duration,
-                WorldStartTime = startWorldTime
+                Value = new TimeRemainingComponent
+                {
+                    NominalDuration = duration,
+                    RemainingTime = duration,
+                    WorldStartTime = startWorldTime
+                }
             };
         }
     }

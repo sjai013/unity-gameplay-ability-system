@@ -4,10 +4,10 @@ using Unity.Entities;
 
 [BurstCompile]
 [RequireComponentTag(typeof(AbilityComponent))]
-public struct GenericUpdateAbilityAvailableJob<T1> : IJobForEach<AbilityStateComponent, AbilitySourceTargetComponent, T1>
+public struct GenericUpdateAbilityAvailableJob<T1> : IJobForEach<_AbilityStateComponent, AbilitySourceTargetComponent, T1>
 where T1 : struct, IComponentData, IAbilityBehaviour {
     [ReadOnly] public NativeHashMap<Entity, GrantedAbilityCooldownComponent> cooldownsRemainingForAbility;
-    public void Execute(ref AbilityStateComponent state, [ReadOnly] ref AbilitySourceTargetComponent sourceTarget, [ReadOnly] ref T1 ability) {
+    public void Execute(ref _AbilityStateComponent state, [ReadOnly] ref AbilitySourceTargetComponent sourceTarget, [ReadOnly] ref T1 ability) {
         if (state.State != EAbilityState.CheckCooldown) return;
         cooldownsRemainingForAbility.TryGetValue(sourceTarget.Source, out var cooldownRemaining);
         if (cooldownRemaining.TimeRemaining > 0) {

@@ -20,6 +20,7 @@
  */
 
 using System;
+using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.ExtensionMethods;
@@ -57,20 +58,21 @@ namespace GameplayAbilitySystem.Abilities.Systems {
                 Any = CooldownEffects.Length == 0 ? new ComponentType[] { typeof(NullComponent) } : CooldownEffects,
             };
             CooldownEffectsQuery = GetEntityQuery(_cooldownQueryDesc);
-            GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(), ComponentType.ReadOnly<AbilityOwnerComponent>(), ComponentType.ReadWrite<T>());
+            GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(), ComponentType.ReadOnly<AbilityOwnerComponent>(), ComponentType.ReadOnly<T>(), ComponentType.ReadWrite<AbilityCooldownComponent>(), ComponentType.ReadWrite<AbilityStateComponent>());
         }
 
 
 
         protected override JobHandle CooldownJobs(JobHandle inputDeps) {
-            NativeMultiHashMap<Entity, GameplayEffectDurationComponent> Cooldowns = new NativeMultiHashMap<Entity, GameplayEffectDurationComponent>(CooldownEffectsQuery.CalculateEntityCount() * 2 + GrantedAbilityQuery.CalculateEntityCount(), Allocator.TempJob);
+            NativeMultiHashMap<Entity, AbilityCooldownComponent> Cooldowns = new NativeMultiHashMap<Entity, AbilityCooldownComponent>(CooldownEffectsQuery.CalculateEntityCount() * 2 + GrantedAbilityQuery.CalculateEntityCount(), Allocator.TempJob);
 
             // Collect all effects which act as cooldowns for this ability
-            var job1 = new GatherCooldownGameplayEffectsJob { GameplayEffectDurations = Cooldowns.AsParallelWriter() };
-            var job2 = new GatherLongestCooldownPerEntity { GameplayEffectDurationComponent = Cooldowns };
+            var job1 = new GatherCooldownGameplayEffectsJob { AbilityCooldowns = Cooldowns.AsParallelWriter() };
+            var job2 = new GatherLongestCooldownPerEntity { AbilityCooldowns = Cooldowns };
             inputDeps = inputDeps
                         .ScheduleJob(job1, CooldownEffectsQuery)
-                        .ScheduleJob(job2, GrantedAbilityQuery);
+                        .ScheduleJob(job2, GrantedAbilityQuery)
+                        ;
 
             Cooldowns.Dispose(inputDeps);
             return inputDeps;
@@ -81,9 +83,9 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         /// </summary>
         [BurstCompile]
         protected struct GatherCooldownGameplayEffectsJob : IJobForEach<GameplayEffectTargetComponent, GameplayEffectDurationComponent> {
-            public NativeMultiHashMap<Entity, GameplayEffectDurationComponent>.ParallelWriter GameplayEffectDurations;
+            public NativeMultiHashMap<Entity, AbilityCooldownComponent>.ParallelWriter AbilityCooldowns;
             public void Execute([ReadOnly] ref GameplayEffectTargetComponent targetComponent, [ReadOnly] ref GameplayEffectDurationComponent durationComponent) {
-                GameplayEffectDurations.Add(targetComponent, durationComponent);
+                AbilityCooldowns.Add(targetComponent, durationComponent.Value);
             }
         }
 
@@ -92,22 +94,22 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         /// </summary>
         [BurstCompile]
         [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
-        protected struct GatherLongestCooldownPerEntity : IJobForEach<T, AbilityOwnerComponent> {
-            [ReadOnly] public NativeMultiHashMap<Entity, GameplayEffectDurationComponent> GameplayEffectDurationComponent;
-            public void Execute([ReadOnly]ref T abilityTagComponent, [ReadOnly] ref AbilityOwnerComponent ownerComponent) {
-                abilityTagComponent.DurationComponent = GetMaxFromNMHP(ownerComponent, GameplayEffectDurationComponent);
+        protected struct GatherLongestCooldownPerEntity : IJobForEach<T, AbilityCooldownComponent, AbilityOwnerComponent> {
+            [ReadOnly] public NativeMultiHashMap<Entity, AbilityCooldownComponent> AbilityCooldowns;
+            public void Execute([ReadOnly]ref T abilityTagComponent, [WriteOnly] ref AbilityCooldownComponent cooldown, [ReadOnly] ref AbilityOwnerComponent ownerComponent) {
+                cooldown.Value = GetMaxFromNMHP(ownerComponent, AbilityCooldowns);
             }
 
-            private GameplayEffectDurationComponent GetMaxFromNMHP(Entity entity, NativeMultiHashMap<Entity, GameplayEffectDurationComponent> values) {
+            private AbilityCooldownComponent GetMaxFromNMHP(Entity entity, NativeMultiHashMap<Entity, AbilityCooldownComponent> values) {
                 if (!values.TryGetFirstValue(entity, out var longestCooldownComponent, out var multiplierIt)) {
                     // If there are no active cooldowns for this actor, then use a default.
-                    longestCooldownComponent = new GameplayEffectDurationComponent();
+                    longestCooldownComponent = new AbilityCooldownComponent();
                 }
 
                 while (values.TryGetNextValue(out var tempLongestCooldownComponent, ref multiplierIt)) {
-                    var tDiff = tempLongestCooldownComponent.RemainingTime - longestCooldownComponent.RemainingTime;
-                    var newPercentRemaining = tempLongestCooldownComponent.RemainingTime / tempLongestCooldownComponent.NominalDuration;
-                    var oldPercentRemaining = longestCooldownComponent.RemainingTime / longestCooldownComponent.NominalDuration;
+                    var tDiff = tempLongestCooldownComponent.Value.RemainingTime - longestCooldownComponent.Value.RemainingTime;
+                    var newPercentRemaining = tempLongestCooldownComponent.Value.RemainingTime / tempLongestCooldownComponent.Value.NominalDuration;
+                    var oldPercentRemaining = longestCooldownComponent.Value.RemainingTime / longestCooldownComponent.Value.NominalDuration;
 
                     // If the duration currently being evaluated has more time remaining than the previous one,
                     // use this as the cooldown.
@@ -116,7 +118,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
                     // but both have 1s remaining, then the "main" cooldown should be the 10s cooldown.
                     if (tDiff > 0) {
                         longestCooldownComponent = tempLongestCooldownComponent;
-                    } else if (tDiff == 0 && tempLongestCooldownComponent.NominalDuration > longestCooldownComponent.NominalDuration) {
+                    } else if (tDiff == 0 && tempLongestCooldownComponent.Value.NominalDuration > longestCooldownComponent.Value.NominalDuration) {
                         longestCooldownComponent = tempLongestCooldownComponent;
                     }
                 }

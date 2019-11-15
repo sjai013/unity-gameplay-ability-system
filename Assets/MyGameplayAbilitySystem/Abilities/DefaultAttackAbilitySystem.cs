@@ -19,6 +19,7 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems;
 using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects.Components;
@@ -27,13 +28,7 @@ using Unity.Entities;
 using Unity.Jobs;
 
 namespace MyGameplayAbilitySystem.Abilities {
-    public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
-        public GameplayEffectDurationComponent DurationComponent { get => _durationComponent; set => _durationComponent = value; }
-        public int AbilityState { get => _abilityState; set => _abilityState = value; }
-        public GameplayEffectDurationComponent _durationComponent;
-        public int _abilityState;
-
-    }
+    public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData { }
 
     public class DefaultAttackAbilitySystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
         protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
@@ -42,12 +37,13 @@ namespace MyGameplayAbilitySystem.Abilities {
 
     public class DefaultAttackAbilityStateUpdate : JobComponentSystem {
 
-        public struct Job : IJobForEach<DefaultAttackAbilityTag> {
-            public void Execute(ref DefaultAttackAbilityTag abilityTag) {
-                if (abilityTag._durationComponent.RemainingTime <= 0) {
-                    abilityTag._abilityState = (int)AbilityStates.READY;
+        [RequireComponentTag(typeof(DefaultAttackAbilityTag))]
+        public struct Job : IJobForEach<AbilityCooldownComponent, AbilityStateComponent> {
+            public void Execute(ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state) {
+                if (cooldown.Value.RemainingTime <= 0) {
+                    state = (int)AbilityStates.READY;
                 } else {
-                    abilityTag._abilityState = (int)AbilityStates.ON_COOLDOWN;
+                    state = (int)AbilityStates.ON_COOLDOWN;
                 }
             }
         }

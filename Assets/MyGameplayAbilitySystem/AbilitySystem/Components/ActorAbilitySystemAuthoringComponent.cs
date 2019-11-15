@@ -20,6 +20,7 @@
  */
 
 using System.Collections.Generic;
+using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.Components;
@@ -53,7 +54,7 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
     }
 
     private Entity CreateGrantedAbilityEntities<T>(Entity entity, EntityManager dstManager, Entity abilitySystemAttributesEntity) {
-        var grantedAbilityArchetype = dstManager.CreateArchetype(typeof(AbilitySystemActorTransformComponent), typeof(T), typeof(AbilityOwnerComponent));
+        var grantedAbilityArchetype = dstManager.CreateArchetype(typeof(AbilitySystemActorTransformComponent), typeof(T), typeof(AbilityOwnerComponent), typeof(AbilityCooldownComponent), typeof(AbilityStateComponent));
         var abilitySystemGrantedAbilityEntity = dstManager.CreateEntity(grantedAbilityArchetype);
         dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilitySystemActorTransformComponent
         {

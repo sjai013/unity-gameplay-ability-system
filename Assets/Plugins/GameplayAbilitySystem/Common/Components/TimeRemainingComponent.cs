@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created on Mon Nov 04 2019
  *
  * The MIT License (MIT)
@@ -19,35 +19,11 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using GameplayAbilitySystem.GameplayEffects.Components;
-using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
-using Unity.Jobs;
-using Unity.Mathematics;
-using UnityEngine;
+namespace GameplayAbilitySystem.Common.Components {
+    public struct TimeRemainingComponent {
+        public float WorldStartTime;
+        public float RemainingTime;
+        public float NominalDuration;
 
-namespace GameplayAbilitySystem.GameplayEffects.Systems {
-
-    [UpdateInGroup(typeof(GameplayEffectGroupUpdateBeginSystem))]
-    public class GameplayEffectDurationUpdateSystem : JobComponentSystem {
-        [BurstCompile]
-        struct GameplayEffectDurationUpdateSystemJob : IJobForEach<GameplayEffectDurationComponent> {
-            public float deltaTime;
-            public void Execute(ref GameplayEffectDurationComponent duration) {
-                duration.Value.RemainingTime -= deltaTime;
-                duration.Value.RemainingTime = math.max(0, duration.Value.RemainingTime);
-            }
-        }
-
-        protected override JobHandle OnUpdate(JobHandle inputDependencies) {
-            var job = new GameplayEffectDurationUpdateSystemJob
-            {
-                deltaTime = Time.deltaTime
-            };
-
-            // Now that the job is set up, schedule it to be run. 
-            return job.Schedule(this, inputDependencies);
-        }
     }
 }
