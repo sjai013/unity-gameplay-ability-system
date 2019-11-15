@@ -21,14 +21,17 @@
 
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems;
+using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.ExtensionMethods;
-using GameplayAbilitySystem.GameplayEffects.Components;
 using MyGameplayAbilitySystem.AbilitySystem.Enums;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 
 namespace MyGameplayAbilitySystem.Abilities {
     public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData { }
+
+
 
     public class DefaultAttackAbilitySystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
         protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
@@ -37,9 +40,15 @@ namespace MyGameplayAbilitySystem.Abilities {
 
     public class DefaultAttackAbilityStateUpdate : JobComponentSystem {
 
+        private EntityQuery abilityQuery;
+        protected override void OnCreate() {
+            abilityQuery = GetEntityQuery(typeof(DefaultAttackAbilityTag), typeof(AbilityOwnerComponent));
+        }
+
         [RequireComponentTag(typeof(DefaultAttackAbilityTag))]
         public struct Job : IJobForEach<AbilityCooldownComponent, AbilityStateComponent> {
             public void Execute(ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state) {
+
                 if (cooldown.Value.RemainingTime <= 0) {
                     state = (int)AbilityStates.READY;
                 } else {
@@ -47,8 +56,15 @@ namespace MyGameplayAbilitySystem.Abilities {
                 }
             }
         }
+
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
-            return inputDeps.ScheduleJob(new Job(), this);
+            // a.Capacity = 1000;
+            // Check if we have hashmap is of a reasonable size given the query size
+            inputDeps = inputDeps.ScheduleJob(new Job(), this)
+            ;
+
+
+            return inputDeps;
         }
     }
 

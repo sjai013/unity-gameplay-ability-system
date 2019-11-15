@@ -26,6 +26,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using UnityEngine;
 
 namespace GameplayAbilitySystem.Attributes.Systems {
     /// <summary>
@@ -43,10 +44,17 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
     public abstract class GenericAttributeSystem<TAttributeTag> : AttributeModificationSystem<TAttributeTag>
 where TAttributeTag : struct, IAttributeComponent, IComponentData {
+        private NativeMultiHashMap<Entity, float> AttributeHashAdd;
+        private NativeMultiHashMap<Entity, float> AttributeHashMultiply;
+        private NativeMultiHashMap<Entity, float> AttributeHashDivide;
         protected override void OnCreate() {
             this.Queries[0] = CreateQuery<Components.Operators.Add>();
             this.Queries[1] = CreateQuery<Components.Operators.Multiply>();
             this.Queries[2] = CreateQuery<Components.Operators.Divide>();
+
+            this.AttributeHashAdd = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
+            this.AttributeHashMultiply = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
+            this.AttributeHashDivide = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
 
             this.actorsWithAttributesQuery = GetEntityQuery(
                 ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(),
@@ -77,9 +85,9 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
             }
         }
         protected override JobHandle ScheduleJobs(JobHandle inputDependencies) {
-            ScheduleAttributeJob<Components.Operators.Add>(inputDependencies, this.Queries[0], out var AttributeHashAdd, out var addJob);
-            ScheduleAttributeJob<Components.Operators.Multiply>(inputDependencies, this.Queries[1], out var AttributeHashMultiply, out var mulJob);
-            ScheduleAttributeJob<Components.Operators.Divide>(inputDependencies, this.Queries[2], out var AttributeHashDivide, out var divideJob);
+            ScheduleAttributeJob<Components.Operators.Add>(ref inputDependencies, ref this.Queries[0], ref AttributeHashAdd, out var addJob);
+            ScheduleAttributeJob<Components.Operators.Multiply>(ref inputDependencies, ref this.Queries[1], ref AttributeHashMultiply, out var mulJob);
+            ScheduleAttributeJob<Components.Operators.Divide>(ref inputDependencies, ref this.Queries[2], ref AttributeHashDivide, out var divideJob);
             inputDependencies = JobHandle.CombineDependencies(addJob, divideJob, mulJob);
 
             inputDependencies = new AttributeCombinerJob
@@ -89,9 +97,9 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
                 MultiplyAttributes = AttributeHashMultiply
             }.Schedule(this.actorsWithAttributesQuery, inputDependencies);
 
-            inputDependencies = AttributeHashAdd.Dispose(inputDependencies);
-            inputDependencies = AttributeHashMultiply.Dispose(inputDependencies);
-            inputDependencies = AttributeHashDivide.Dispose(inputDependencies);
+            // inputDependencies = AttributeHashAdd.Dispose(inputDependencies);
+            // inputDependencies = AttributeHashMultiply.Dispose(inputDependencies);
+            // inputDependencies = AttributeHashDivide.Dispose(inputDependencies);
 
             return inputDependencies;
         }
@@ -104,19 +112,26 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
         /// <param name="AttributeHash">Attribute MultiHashMap mapping entity to attribute value</param>
         /// <param name="job">Returned job handle</param>
         /// <typeparam name="TOper">The type of operator for this attribute job</typeparam>
-        private void ScheduleAttributeJob<TOper>(JobHandle inputDependencies, EntityQuery query, out NativeMultiHashMap<Entity, float> AttributeHash, out JobHandle job)
+        private void ScheduleAttributeJob<TOper>(ref JobHandle inputDependencies, ref EntityQuery query, ref NativeMultiHashMap<Entity, float> AttributeHash, out JobHandle job)
         where TOper : struct, IAttributeOperator, IComponentData {
             var nEntities = query.CalculateEntityCount();
-            job = inputDependencies;
-            AttributeHash = new NativeMultiHashMap<Entity, float>(query.CalculateEntityCount(), Allocator.TempJob);
-            if (nEntities == 0) return;
-
-            job = new GetAttributeValuesJob_Sum<TOper, TAttributeTag>
+            var hashCapacity = AttributeHash.Capacity;
+            AttributeHash.Clear();
+            if (hashCapacity < nEntities) { // We need to increase hash capacity
+                AttributeHash.Capacity = (int)(nEntities * 1.1);
+                Debug.Log("Increasing");
+            } else if (hashCapacity > nEntities * 4) { // We need to reduce hash capacity
+                AttributeHash = new NativeMultiHashMap<Entity, float>(nEntities, Allocator.Persistent);
+                Debug.Log("Decreasing");
+            }
+            // // AttributeHash = new NativeMultiHashMap<Entity, float>(query.CalculateEntityCount(), Allocator.TempJob);
+            inputDependencies = new GetAttributeValuesJob_Sum<TOper, TAttributeTag>
             {
                 owners = GetArchetypeChunkComponentType<AttributesOwnerComponent>(false),
                 attributeModifiers = GetArchetypeChunkComponentType<AttributeModifier<TOper, TAttributeTag>>(false),
                 AttributeModifierValues = AttributeHash.AsParallelWriter()
             }.Schedule(query, inputDependencies);
+            job = inputDependencies;
         }
     }
 }
