@@ -20,7 +20,7 @@
  */
 
 using GameplayAbilitySystem.Attributes.Components;
-using GameplayAbilitySystem.Attributes.JobTypes;
+using GameplayAbilitySystem.Attributes.Jobs;
 using GameplayAbilitySystem.Common.Components;
 using Unity.Burst;
 using Unity.Collections;
@@ -119,10 +119,8 @@ where TAttributeTag : struct, IAttributeComponent, IComponentData {
             AttributeHash.Clear();
             if (hashCapacity < nEntities) { // We need to increase hash capacity
                 AttributeHash.Capacity = (int)(nEntities * 1.1);
-                Debug.Log("Increasing");
             } else if (hashCapacity > nEntities * 4) { // We need to reduce hash capacity
                 AttributeHash = new NativeMultiHashMap<Entity, float>(nEntities, Allocator.Persistent);
-                Debug.Log("Decreasing");
             }
             // // AttributeHash = new NativeMultiHashMap<Entity, float>(query.CalculateEntityCount(), Allocator.TempJob);
             inputDependencies = new GetAttributeValuesJob_Sum<TOper, TAttributeTag>

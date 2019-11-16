@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38b5e9621581fb34aaa40813351b6873, type: 3}
-  m_Name: Default
+  m_Script: {fileID: 11500000, guid: 99266a82bbf970649af39caf58366851, type: 3}
+  m_Name: DefaultAttributes
   m_EditorClassIdentifier: 
-  Attributes:
+  Components:
   - GameplayAbilitySystem.Attributes.Components.CharacterLevelAttributeComponent,
     GameplayAbilitySystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - GameplayAbilitySystem.Attributes.Components.MaxManaAttributeComponent, GameplayAbilitySystem,

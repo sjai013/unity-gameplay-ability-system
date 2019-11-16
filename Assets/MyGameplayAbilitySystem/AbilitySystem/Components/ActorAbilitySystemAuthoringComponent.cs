@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Attributes.Components;
+using GameplayAbilitySystem.Attributes.ScriptableObjects;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
@@ -43,38 +44,52 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
     // For example,
     //    public float scale;
     public CharacterAttributesScriptableObject Attributes;
+    public GrantedAbilitiesScriptableObject GrantedAbilities;
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
         var abilitySystemAttributesEntity = CreateAttributeEntities(entity, dstManager);
-        var abilitySystemGrantedAbilityEntity = CreateGrantedAbilityEntities<MyGameplayAbilitySystem.Abilities.DefaultAttackAbilityTag>(entity, dstManager, abilitySystemAttributesEntity);
+
+        var abilitySystemGrantedAbilityEntity = CreateGrantedAbilityEntities(entity, dstManager, abilitySystemAttributesEntity);
         CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilitySystemAttributesEntity);
         CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Multiply, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilitySystemAttributesEntity);
         CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Divide, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilitySystemAttributesEntity);
         TestAbilitySystemCooldown(dstManager, abilitySystemAttributesEntity);
     }
 
-    private Entity CreateGrantedAbilityEntities<T>(Entity entity, EntityManager dstManager, Entity abilitySystemAttributesEntity) {
-        var grantedAbilityArchetype = dstManager.CreateArchetype(typeof(AbilitySystemActorTransformComponent), typeof(T), typeof(AbilityOwnerComponent), typeof(AbilityCooldownComponent), typeof(AbilityStateComponent));
-        var abilitySystemGrantedAbilityEntity = dstManager.CreateEntity(grantedAbilityArchetype);
-        dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilitySystemActorTransformComponent
-        {
-            Value = entity
-        });
-        dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilityOwnerComponent
-        {
-            Value = abilitySystemAttributesEntity
-        });
-        dstManager.SetName(abilitySystemGrantedAbilityEntity, this.gameObject.name + " - Granted Ability - " + typeof(T).Name);
-        return abilitySystemGrantedAbilityEntity;
+    private List<Entity> CreateGrantedAbilityEntities(Entity entity, EntityManager dstManager, Entity abilitySystemAttributesEntity) {
+
+        var grantedAbilities = new List<ComponentType>();
+        if (GrantedAbilities != null && GrantedAbilities.Components != null) {
+            grantedAbilities = GrantedAbilities.ComponentTypes;
+        }
+
+        var entities = new List<Entity>();
+
+        for (var i = 0; i < grantedAbilities.Count; i++) {
+            var abilityType = grantedAbilities[i];
+            var grantedAbilityArchetype = dstManager.CreateArchetype(typeof(AbilitySystemActorTransformComponent), abilityType, typeof(AbilityOwnerComponent), typeof(AbilityCooldownComponent), typeof(AbilityStateComponent));
+            var abilitySystemGrantedAbilityEntity = dstManager.CreateEntity(grantedAbilityArchetype);
+            
+            dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilitySystemActorTransformComponent
+            {
+                Value = entity
+            });
+            dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilityOwnerComponent
+            {
+                Value = abilitySystemAttributesEntity
+            });
+            dstManager.SetName(abilitySystemGrantedAbilityEntity, this.gameObject.name + " - Granted Ability - " + abilityType.GetManagedType().Name);
+            entities.Add(abilitySystemGrantedAbilityEntity);
+        }
+
+        return entities;
     }
 
     private Entity CreateAttributeEntities(Entity entity, EntityManager entityManager) {
-        List<ComponentType> attributeTypes = new List<ComponentType>();
-
         // Get reference to character attribute component on script, and list of attributes
-        attributeTypes = new List<ComponentType>();
-        if (Attributes != null && Attributes.Attributes != null) {
-            attributeTypes = Attributes.ComponentArchetype;
+        var attributeTypes = new List<ComponentType>();
+        if (Attributes != null && Attributes.Components != null) {
+            attributeTypes = Attributes.ComponentTypes;
         }
 
         // Add tag component to indicate that this entity represents an actor with attributes

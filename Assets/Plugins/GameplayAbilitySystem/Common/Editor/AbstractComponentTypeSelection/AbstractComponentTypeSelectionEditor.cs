@@ -25,11 +25,12 @@ using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace GameplayAbilitySystem.Attributes.Components {
-    [CustomEditor(typeof(CharacterAttributesScriptableObject))]
-    public class CharacterAttributesComponentEditor : Editor {
+    public abstract class AbstractComponentTypeSelectionEditor<T> : Editor {
         private VisualElement m_RootElement;
         private VisualTreeAsset m_ModulesVisualTree;
-        private List<IAttributeComponent> attributeComponents;
+        private List<T> components;
+
+        const string baseAssetPath = "Assets/Plugins/GameplayAbilitySystem/Common/Editor/AbstractComponentTypeSelection/";
 
         // Start is called before the first frame update
         public void OnEnable() {
@@ -37,23 +38,23 @@ namespace GameplayAbilitySystem.Attributes.Components {
             m_RootElement = new VisualElement();
             m_ModulesVisualTree =
                 AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                    "Assets/Plugins/GameplayAbilitySystem/Attributes/CharacterAttributesScriptableObject/Editor/CharacterAttributesScriptableObjectEditor.uxml"
+                    baseAssetPath + "/AbstractComponentTypeSelectionEditor.uxml"
                 );
             var stylesheet =
                 AssetDatabase.LoadAssetAtPath<StyleSheet>(
-                    "Assets/Plugins/GameplayAbilitySystem/Attributes/CharacterAttributesScriptableObject/Editor/CharacterAttributesScriptableObjectEditor.uss"
+                    baseAssetPath + "/AbstractComponentTypeSelectionEditor.uss"
                 );
             m_RootElement.styleSheets.Add(stylesheet);
 
             // Cleanup any strings which correspond to types that no longer exist.
-            var allTypes = new AttributeCollector().GetAllAttributeClasses(System.AppDomain.CurrentDomain);
+            var allTypes = new ComponentCollector().GetAllTypes(System.AppDomain.CurrentDomain);
             var serializedTypeStrings = new List<string>();
-            var attributesSerialized = serializedObject.FindProperty("Attributes");
-            var count = attributesSerialized.arraySize;
+            var componentsSerialized = serializedObject.FindProperty("Components");
+            var count = componentsSerialized.arraySize;
             for (var i = count - 1; i >= 0; i--) {
-                var type = attributesSerialized.GetArrayElementAtIndex(i).stringValue;
+                var type = componentsSerialized.GetArrayElementAtIndex(i).stringValue;
                 if (!allTypes.Any(x => x.AssemblyQualifiedName == type)) {
-                    attributesSerialized.DeleteArrayElementAtIndex(i);
+                    componentsSerialized.DeleteArrayElementAtIndex(i);
                 }
             }
             serializedObject.ApplyModifiedProperties();
@@ -64,13 +65,13 @@ namespace GameplayAbilitySystem.Attributes.Components {
             var container = m_RootElement;
             container.Clear();
             m_ModulesVisualTree.CloneTree(container);
-            var allTypes = new AttributeCollector().GetAllAttributeClasses(System.AppDomain.CurrentDomain);
+            var allTypes = new ComponentCollector().GetAllTypes(System.AppDomain.CurrentDomain);
 
-            var attributesSerialized = serializedObject.FindProperty("Attributes");
+            var componentsSerialized = serializedObject.FindProperty("Components");
             var serializedTypeStrings = new List<string>();
-            var count = attributesSerialized.arraySize;
+            var count = componentsSerialized.arraySize;
             for (var i = 0; i < count; i++) {
-                serializedTypeStrings.Add(attributesSerialized.GetArrayElementAtIndex(i).stringValue);
+                serializedTypeStrings.Add(componentsSerialized.GetArrayElementAtIndex(i).stringValue);
             }
 
             foreach (var type in allTypes) {
@@ -78,19 +79,19 @@ namespace GameplayAbilitySystem.Attributes.Components {
                     var existingIndex = serializedTypeStrings.FindIndex(x => x == type.AssemblyQualifiedName);
                     // if this already exists in the list, delete it
                     if (existingIndex >= 0) {
-                        attributesSerialized.DeleteArrayElementAtIndex(existingIndex);
+                        componentsSerialized.DeleteArrayElementAtIndex(existingIndex);
                         serializedObject.ApplyModifiedProperties();
                     } else {
                         // Add it to list
-                        attributesSerialized.InsertArrayElementAtIndex(0);
-                        attributesSerialized.GetArrayElementAtIndex(0).stringValue = type.AssemblyQualifiedName;
+                        componentsSerialized.InsertArrayElementAtIndex(0);
+                        componentsSerialized.GetArrayElementAtIndex(0).stringValue = type.AssemblyQualifiedName;
                         serializedObject.ApplyModifiedProperties();
                     }
                     CreateInspectorGUI();
                 })
                 { text = type.Name };
 
-                // If this type is in the list of selected attributes, mark it enabled
+                // If this type is in the list of selected components, mark it enabled
                 if (serializedTypeStrings.Any(x => x == type.AssemblyQualifiedName)) {
                     button.AddToClassList("enabled-button");
                 }
@@ -102,13 +103,12 @@ namespace GameplayAbilitySystem.Attributes.Components {
 
             return container;
         }
-        public class AttributeCollector {
-
-            public IEnumerable<System.Type> GetAllAttributeClasses(System.AppDomain domain) {
-                var attributeInterface = typeof(IAttributeComponent);
+        public class ComponentCollector {
+            public IEnumerable<System.Type> GetAllTypes(System.AppDomain domain) {
+                var componentInterface = typeof(T);
                 var types = domain.GetAssemblies()
                             .SelectMany(s => s.GetTypes())
-                            .Where(p => attributeInterface.IsAssignableFrom(p) && !p.IsInterface);
+                            .Where(p => componentInterface.IsAssignableFrom(p) && !p.IsInterface);
 
                 return types;
             }

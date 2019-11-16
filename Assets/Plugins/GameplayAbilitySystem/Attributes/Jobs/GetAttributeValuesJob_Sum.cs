@@ -24,7 +24,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GameplayAbilitySystem.Attributes.JobTypes {
+namespace GameplayAbilitySystem.Attributes.Jobs {
 
     /// <summary>
     /// Creates a job which sums up the attributes for each entity, and stores the results in 
