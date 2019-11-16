@@ -34,6 +34,9 @@ using UnityEngine;
 namespace GameplayAbilitySystem.Abilities.Systems {
     public struct NullComponent : IComponentData { }
 
+
+
+    [UpdateInGroup(typeof(AbilityGroupUpdateBeginSystem))]
     public abstract class GenericAbilityCooldownSystem<T> : AbilityCooldownSystem<T>
     where T : struct, IAbilityTagComponent, IComponentData {
 

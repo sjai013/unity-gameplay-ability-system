@@ -43,8 +43,11 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
     //
     // For example,
     //    public float scale;
-    public CharacterAttributesScriptableObject Attributes;
-    public GrantedAbilitiesScriptableObject GrantedAbilities;
+    [SerializeReference]
+    private CharacterAttributesScriptableObject Attributes;
+
+    [SerializeReference]
+    private GrantedAbilitiesScriptableObject GrantedAbilities;
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
         var abilitySystemAttributesEntity = CreateAttributeEntities(entity, dstManager);

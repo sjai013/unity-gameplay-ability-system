@@ -33,21 +33,16 @@ namespace MyGameplayAbilitySystem.Abilities {
 
 
 
-    public class DefaultAttackAbilitySystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
+    public class DefaultAttackAbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
         protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
 
     }
 
-    public class DefaultAttackAbilityStateUpdate : JobComponentSystem {
-
-        private EntityQuery abilityQuery;
-        protected override void OnCreate() {
-            abilityQuery = GetEntityQuery(typeof(DefaultAttackAbilityTag), typeof(AbilityOwnerComponent));
-        }
+    public class DefaultAttackAbilityStateUpdateSystem : GenericAbilityStateUpdateSystem<DefaultAttackAbilityTag> {
 
         [RequireComponentTag(typeof(DefaultAttackAbilityTag))]
         public struct Job : IJobForEach<AbilityCooldownComponent, AbilityStateComponent> {
-            public void Execute(ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state) {
+            public void Execute([ReadOnly] ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state) {
 
                 if (cooldown.Value.RemainingTime <= 0) {
                     state = (int)AbilityStates.READY;
@@ -56,14 +51,8 @@ namespace MyGameplayAbilitySystem.Abilities {
                 }
             }
         }
-
-        protected override JobHandle OnUpdate(JobHandle inputDeps) {
-            // a.Capacity = 1000;
-            // Check if we have hashmap is of a reasonable size given the query size
-            inputDeps = inputDeps.ScheduleJob(new Job(), this)
-            ;
-
-
+        protected override JobHandle StateJobs(JobHandle inputDeps) {
+            inputDeps = inputDeps.ScheduleJob(new Job(), abilityQuery);
             return inputDeps;
         }
     }

@@ -1,5 +1,5 @@
-﻿/*
- * Created on Mon Nov 04 2019
+/*
+ * Created on Mon Nov 17 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -20,27 +20,19 @@
  */
 
 using GameplayAbilitySystem.Abilities.Components;
-using GameplayAbilitySystem.AbilitySystem.Components;
-using GameplayAbilitySystem.Common.Components;
-using GameplayAbilitySystem.GameplayEffects.Components;
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 
 namespace GameplayAbilitySystem.Abilities.Systems {
-
     /// <summary>
-    /// Defines the system for handling ability parameters, such as
-    /// current cooldown for each actor.
-    /// 
+    /// Defines the system for update the ability state
     /// </summary>
     /// <typeparam name="T">The Ability</typeparam>
-    public abstract class AbilityCooldownSystem<T> : JobComponentSystem
+    public abstract class AbilityStateSystem<T> : JobComponentSystem
     where T : struct, IAbilityTagComponent, IComponentData {
-        protected abstract JobHandle CooldownJobs(JobHandle inputDeps);
+        protected abstract JobHandle StateJobs(JobHandle inputDeps);
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
-            inputDeps = CooldownJobs(inputDeps);
+            inputDeps = StateJobs(inputDeps);
             return inputDeps;
         }
     }

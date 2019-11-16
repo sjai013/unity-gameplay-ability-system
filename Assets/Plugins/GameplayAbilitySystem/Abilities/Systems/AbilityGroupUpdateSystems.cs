@@ -1,5 +1,5 @@
-﻿/*
- * Created on Mon Nov 04 2019
+/*
+ * Created on Sun Nov 17 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -19,29 +19,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using GameplayAbilitySystem.Abilities.Components;
-using GameplayAbilitySystem.AbilitySystem.Components;
-using GameplayAbilitySystem.Common.Components;
-using GameplayAbilitySystem.GameplayEffects.Components;
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 
 namespace GameplayAbilitySystem.Abilities.Systems {
+    [UpdateAfter(typeof(SimulationSystemGroup))]
+    public class AbilityGroupUpdateBeginSystem : ComponentSystemGroup { }
 
-    /// <summary>
-    /// Defines the system for handling ability parameters, such as
-    /// current cooldown for each actor.
-    /// 
-    /// </summary>
-    /// <typeparam name="T">The Ability</typeparam>
-    public abstract class AbilityCooldownSystem<T> : JobComponentSystem
-    where T : struct, IAbilityTagComponent, IComponentData {
-        protected abstract JobHandle CooldownJobs(JobHandle inputDeps);
-        protected override JobHandle OnUpdate(JobHandle inputDeps) {
-            inputDeps = CooldownJobs(inputDeps);
-            return inputDeps;
-        }
-    }
+    [UpdateAfter(typeof(AbilityGroupUpdateBeginSystem))]
+    public class AbilityGroupUpdateEndSystem : ComponentSystemGroup { }
 }

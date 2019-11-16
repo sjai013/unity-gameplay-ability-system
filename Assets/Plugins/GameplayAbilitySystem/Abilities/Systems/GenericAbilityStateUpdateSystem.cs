@@ -1,5 +1,5 @@
-﻿/*
- * Created on Mon Nov 04 2019
+/*
+ * Created on Mon Nov 17 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -21,26 +21,27 @@
 
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.AbilitySystem.Components;
-using GameplayAbilitySystem.Common.Components;
-using GameplayAbilitySystem.GameplayEffects.Components;
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 
 namespace GameplayAbilitySystem.Abilities.Systems {
+    [UpdateInGroup(typeof(AbilityGroupUpdateEndSystem))]
+    public abstract class GenericAbilityStateUpdateSystem<T> : AbilityStateSystem<T>
+    where T : struct, IComponentData, IAbilityTagComponent {
 
-    /// <summary>
-    /// Defines the system for handling ability parameters, such as
-    /// current cooldown for each actor.
-    /// 
-    /// </summary>
-    /// <typeparam name="T">The Ability</typeparam>
-    public abstract class AbilityCooldownSystem<T> : JobComponentSystem
-    where T : struct, IAbilityTagComponent, IComponentData {
-        protected abstract JobHandle CooldownJobs(JobHandle inputDeps);
+        protected EntityQuery abilityQuery;
+
+        protected override void OnCreate() {
+            abilityQuery = GetEntityQuery(ComponentType.ReadOnly<T>(),
+                                            ComponentType.ReadOnly<AbilityOwnerComponent>(),
+                                            ComponentType.ReadOnly<AbilityCooldownComponent>(),
+                                            ComponentType.ReadWrite<AbilityStateComponent>()
+                                            );
+        }
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
-            inputDeps = CooldownJobs(inputDeps);
+            // a.Capacity = 1000;
+            // Check if we have hashmap is of a reasonable size given the query size
+            inputDeps = StateJobs(inputDeps);
             return inputDeps;
         }
     }
