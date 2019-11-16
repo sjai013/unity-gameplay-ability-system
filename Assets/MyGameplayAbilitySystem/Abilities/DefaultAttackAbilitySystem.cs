@@ -24,6 +24,7 @@ using GameplayAbilitySystem.Abilities.Systems;
 using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.ExtensionMethods;
 using MyGameplayAbilitySystem.AbilitySystem.Enums;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -41,6 +42,7 @@ namespace MyGameplayAbilitySystem.Abilities {
     public class DefaultAttackAbilityStateUpdateSystem : GenericAbilityStateUpdateSystem<DefaultAttackAbilityTag> {
 
         [RequireComponentTag(typeof(DefaultAttackAbilityTag))]
+        [BurstCompile]
         public struct Job : IJobForEach<AbilityCooldownComponent, AbilityStateComponent> {
             public void Execute([ReadOnly] ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state) {
 
