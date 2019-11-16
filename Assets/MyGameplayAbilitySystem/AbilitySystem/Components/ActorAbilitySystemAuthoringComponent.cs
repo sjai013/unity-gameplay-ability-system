@@ -48,11 +48,14 @@ public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameO
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
         var abilitySystemAttributesEntity = CreateAttributeEntities(entity, dstManager);
-
         var abilitySystemGrantedAbilityEntity = CreateGrantedAbilityEntities(entity, dstManager, abilitySystemAttributesEntity);
+
+        // Create some dummy health attributes to simulate a scenario where there are many modifiers for an attribute active in the world
         CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilitySystemAttributesEntity);
         CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Multiply, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilitySystemAttributesEntity);
         CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Divide, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilitySystemAttributesEntity);
+
+        // Create some dummy cooldown gameplay effects to simulate a scenario where an ability is on cooldown due to a gameplay effect
         TestAbilitySystemCooldown(dstManager, abilitySystemAttributesEntity);
     }
 
