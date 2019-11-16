@@ -1890,7 +1890,6 @@ GameObject:
   - component: {fileID: 5555714685437361613}
   - component: {fileID: 5555714685437361612}
   - component: {fileID: 319760963773948485}
-  - component: {fileID: 8132362273714373629}
   - component: {fileID: 396651187017546649}
   m_Layer: 0
   m_Name: Enemy Ethan
@@ -1978,19 +1977,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 1
---- !u!114 &8132362273714373629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5555714685437361602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 191bcecd95b8d00419347548f9819bf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Attributes: {fileID: 11400000, guid: d18a3caf3a779ac45a39016bd3a29afe, type: 2}
 --- !u!114 &396651187017546649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2003,6 +1989,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 053d43866d0f08a4aaadf9a8535b78dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Attributes: {fileID: 11400000, guid: 5cdd6f896f75eca448b3cf43ed8920dc, type: 2}
+  GrantedAbilities: {fileID: 11400000, guid: ab6d286abd280f9468634e3608ee426c, type: 2}
 --- !u!1 &5555714685437361604
 GameObject:
   m_ObjectHideFlags: 0

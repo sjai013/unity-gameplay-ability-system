@@ -1992,7 +1992,6 @@ GameObject:
   - component: {fileID: 7899279095267793611}
   - component: {fileID: 7899279095267793610}
   - component: {fileID: 7544501127484694303}
-  - component: {fileID: 8385586271098587248}
   - component: {fileID: 6998549849375546409}
   m_Layer: 0
   m_Name: Ethan
@@ -2084,12 +2083,9 @@ MonoBehaviour:
   m_JumpPower: 12
   m_GravityMultiplier: 2
   m_RunCycleLegOffset: 0.2
-  m_MoveSpeedMultiplier: 0.2
+  m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: 0.5
-  SpeedAttribute: {fileID: 11400000, guid: e5f56864ce3c4b742868ac560a891f48, type: 2}
-  AttributeSet: {fileID: 7899279095267793608, guid: fddc582aed5bbbd4ab4ac8025536d369,
-    type: 3}
 --- !u!114 &7899279095267793610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2115,19 +2111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 1
---- !u!114 &8385586271098587248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7899279095267793602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 191bcecd95b8d00419347548f9819bf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Attributes: {fileID: 11400000, guid: d18a3caf3a779ac45a39016bd3a29afe, type: 2}
 --- !u!114 &6998549849375546409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2140,6 +2123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 053d43866d0f08a4aaadf9a8535b78dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Attributes: {fileID: 11400000, guid: 5cdd6f896f75eca448b3cf43ed8920dc, type: 2}
+  GrantedAbilities: {fileID: 11400000, guid: 439bf3d694487a341aad3640dc2d7609, type: 2}
 --- !u!1 &7899279095267793604
 GameObject:
   m_ObjectHideFlags: 0
