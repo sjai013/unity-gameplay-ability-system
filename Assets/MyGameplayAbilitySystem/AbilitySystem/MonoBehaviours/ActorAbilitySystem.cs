@@ -1,5 +1,5 @@
-﻿/*
- * Created on Mon Nov 04 2019
+/*
+ * Created on Sun Nov 17 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -19,15 +19,13 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using GameplayAbilitySystem.Abilities.Components;
-using GameplayAbilitySystem.Abilities.Systems.Generic;
 using Unity.Entities;
+using UnityEngine;
 
-namespace MyGameplayAbilitySystem.Abilities {
+namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
 
-    public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData { }
-    public class DefaultAttackAbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
-        protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
-
+    public class ActorAbilitySystem: MonoBehaviour {
+        public Entity AbilityOwnerEntity;
+        public Entity AbilitySystemActorTransformEntity;
     }
 }

@@ -19,6 +19,7 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
@@ -37,6 +38,12 @@ namespace GameplayAbilitySystem.Abilities.Components {
         public static implicit operator int(AbilityStateComponent e) { return e.Value; }
         public static implicit operator AbilityStateComponent(int e) { return new AbilityStateComponent { Value = e }; }
 
+    }
+
+    public struct AbilityIdentifierComponent : IComponentData {
+        public int Value;
+        public static implicit operator int(AbilityIdentifierComponent e) { return e.Value; }
+        public static implicit operator AbilityIdentifierComponent(int e) { return new AbilityIdentifierComponent { Value = e }; }
     }
 
 }
