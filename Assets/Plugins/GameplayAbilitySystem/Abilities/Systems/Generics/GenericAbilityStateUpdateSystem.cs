@@ -24,8 +24,8 @@ using GameplayAbilitySystem.AbilitySystem.Components;
 using Unity.Entities;
 using Unity.Jobs;
 
-namespace GameplayAbilitySystem.Abilities.Systems {
-    [UpdateInGroup(typeof(AbilityGroupUpdateEndSystem))]
+namespace GameplayAbilitySystem.Abilities.Systems.Generic {
+    [UpdateInGroup(typeof(AbilityUpdateEndSystemGroup))]
     public abstract class GenericAbilityStateUpdateSystem<T> : AbilityStateSystem<T>
     where T : struct, IComponentData, IAbilityTagComponent {
 
@@ -39,8 +39,6 @@ namespace GameplayAbilitySystem.Abilities.Systems {
                                             );
         }
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
-            // a.Capacity = 1000;
-            // Check if we have hashmap is of a reasonable size given the query size
             inputDeps = StateJobs(inputDeps);
             return inputDeps;
         }

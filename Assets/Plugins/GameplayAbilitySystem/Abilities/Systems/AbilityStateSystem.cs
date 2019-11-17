@@ -38,7 +38,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         }
     }
 
-    [UpdateInGroup(typeof(AbilityGroupUpdateInitialiseSystem))]
+    [UpdateInGroup(typeof(AbilityUpdateInitialiseSystemGroup))]
     public class ResetAbilityStates : JobComponentSystem {
 
         struct Job : IJobForEach<AbilityStateComponent> {

@@ -20,14 +20,8 @@
  */
 
 using GameplayAbilitySystem.Abilities.Components;
-using GameplayAbilitySystem.Abilities.Systems;
-using GameplayAbilitySystem.AbilitySystem.Components;
-using GameplayAbilitySystem.AbilitySystem.Enums;
-using GameplayAbilitySystem.ExtensionMethods;
-using Unity.Burst;
-using Unity.Collections;
+using GameplayAbilitySystem.Abilities.Systems.Generic;
 using Unity.Entities;
-using Unity.Jobs;
 
 namespace MyGameplayAbilitySystem.Abilities {
     public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData { }

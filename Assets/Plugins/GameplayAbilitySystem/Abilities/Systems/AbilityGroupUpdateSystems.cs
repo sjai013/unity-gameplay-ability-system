@@ -23,11 +23,17 @@ using Unity.Entities;
 
 namespace GameplayAbilitySystem.Abilities.Systems {
     [UpdateAfter(typeof(SimulationSystemGroup))]
-    public class AbilityGroupUpdateInitialiseSystem : ComponentSystemGroup { }
+    public class AbilitySystemGroup : ComponentSystemGroup { }
 
-    [UpdateAfter(typeof(AbilityGroupUpdateInitialiseSystem))]
-    public class AbilityGroupUpdateSystem : ComponentSystemGroup { }
+    [UpdateAfter(typeof(SimulationSystemGroup))]
+    [UpdateInGroup(typeof(AbilitySystemGroup))]
+    public class AbilityUpdateInitialiseSystemGroup : ComponentSystemGroup { }
 
-    [UpdateAfter(typeof(AbilityGroupUpdateSystem))]
-    public class AbilityGroupUpdateEndSystem : ComponentSystemGroup { }
+    [UpdateAfter(typeof(AbilityUpdateInitialiseSystemGroup))]
+    [UpdateInGroup(typeof(AbilitySystemGroup))]
+    public class AbilityUpdateSystemGroup : ComponentSystemGroup { }
+
+    [UpdateAfter(typeof(AbilityUpdateSystemGroup))]
+    [UpdateInGroup(typeof(AbilitySystemGroup))]
+    public class AbilityUpdateEndSystemGroup : ComponentSystemGroup { }
 }

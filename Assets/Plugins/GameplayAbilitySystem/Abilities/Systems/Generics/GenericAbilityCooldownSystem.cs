@@ -32,12 +32,12 @@ using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
 
-namespace GameplayAbilitySystem.Abilities.Systems {
+namespace GameplayAbilitySystem.Abilities.Systems.Generic {
     public struct NullComponent : IComponentData { }
 
 
 
-    [UpdateInGroup(typeof(AbilityGroupUpdateSystem))]
+    [UpdateInGroup(typeof(AbilityUpdateSystemGroup))]
     public abstract class GenericAbilityCooldownSystem<T> : AbilityCooldownSystem<T>
     where T : struct, IAbilityTagComponent, IComponentData {
 
