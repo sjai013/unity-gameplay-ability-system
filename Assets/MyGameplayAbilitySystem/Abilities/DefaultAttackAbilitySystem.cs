@@ -22,8 +22,8 @@
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems;
 using GameplayAbilitySystem.AbilitySystem.Components;
+using GameplayAbilitySystem.AbilitySystem.Enums;
 using GameplayAbilitySystem.ExtensionMethods;
-using MyGameplayAbilitySystem.AbilitySystem.Enums;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -31,32 +31,8 @@ using Unity.Jobs;
 
 namespace MyGameplayAbilitySystem.Abilities {
     public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData { }
-
-
-
     public class DefaultAttackAbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
         protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
 
     }
-
-    public class DefaultAttackAbilityStateUpdateSystem : GenericAbilityStateUpdateSystem<DefaultAttackAbilityTag> {
-
-        [RequireComponentTag(typeof(DefaultAttackAbilityTag))]
-        [BurstCompile]
-        public struct Job : IJobForEach<AbilityCooldownComponent, AbilityStateComponent> {
-            public void Execute([ReadOnly] ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state) {
-
-                if (cooldown.Value.RemainingTime <= 0) {
-                    state = (int)AbilityStates.READY;
-                } else {
-                    state = (int)AbilityStates.ON_COOLDOWN;
-                }
-            }
-        }
-        protected override JobHandle StateJobs(JobHandle inputDeps) {
-            inputDeps = inputDeps.ScheduleJob(new Job(), abilityQuery);
-            return inputDeps;
-        }
-    }
-
 }

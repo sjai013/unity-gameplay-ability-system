@@ -20,6 +20,7 @@
  */
 
 using GameplayAbilitySystem.Abilities.Components;
+using GameplayAbilitySystem.AbilitySystem.Enums;
 using Unity.Entities;
 using Unity.Jobs;
 
@@ -33,6 +34,20 @@ namespace GameplayAbilitySystem.Abilities.Systems {
         protected abstract JobHandle StateJobs(JobHandle inputDeps);
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
             inputDeps = StateJobs(inputDeps);
+            return inputDeps;
+        }
+    }
+
+    [UpdateInGroup(typeof(AbilityGroupUpdateInitialiseSystem))]
+    public class ResetAbilityStates : JobComponentSystem {
+
+        struct Job : IJobForEach<AbilityStateComponent> {
+            public void Execute(ref AbilityStateComponent state) {
+                state = (int)AbilityStates.READY;
+            }
+        }
+        protected override JobHandle OnUpdate(JobHandle inputDeps) {
+            inputDeps = new Job().Schedule(this, inputDeps);
             return inputDeps;
         }
     }

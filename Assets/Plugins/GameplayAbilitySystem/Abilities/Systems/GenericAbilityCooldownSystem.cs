@@ -22,6 +22,7 @@
 using System;
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.AbilitySystem.Components;
+using GameplayAbilitySystem.AbilitySystem.Enums;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects.Components;
@@ -36,7 +37,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
 
 
 
-    [UpdateInGroup(typeof(AbilityGroupUpdateBeginSystem))]
+    [UpdateInGroup(typeof(AbilityGroupUpdateSystem))]
     public abstract class GenericAbilityCooldownSystem<T> : AbilityCooldownSystem<T>
     where T : struct, IAbilityTagComponent, IComponentData {
 
@@ -72,9 +73,11 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             // Collect all effects which act as cooldowns for this ability
             var job1 = new GatherCooldownGameplayEffectsJob { AbilityCooldowns = Cooldowns.AsParallelWriter() };
             var job2 = new GatherLongestCooldownPerEntity { AbilityCooldowns = Cooldowns };
+            var stateUpdateJob = new AbilityStateUpdateJob();
             inputDeps = inputDeps
                         .ScheduleJob(job1, CooldownEffectsQuery)
                         .ScheduleJob(job2, GrantedAbilityQuery)
+                        .ScheduleJob(stateUpdateJob, this)
                         ;
 
             Cooldowns.Dispose(inputDeps);
@@ -129,14 +132,13 @@ namespace GameplayAbilitySystem.Abilities.Systems {
             }
         }
 
-        // protected struct CheckAbilityAvailableJob : IJobForEach<T> {
-        //     public void Execute(ref T abilityTagComponent) {
-        //         if (abilityTagComponent.DurationComponent.RemainingTime <= 0) {
-        //             abilityTagComponent.AbilityState = (int)AbilityStates.READY;
-        //         } else {
-        //             abilityTagComponent.AbilityState = (int)AbilityStates.DISABLED;
-        //         }
-        //     }
-        // }
+        [BurstCompile]
+        public struct AbilityStateUpdateJob : IJobForEach<AbilityCooldownComponent, AbilityStateComponent> {
+            public void Execute([ReadOnly] ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state) {
+                if (cooldown.Value.RemainingTime > 0) {
+                    state |= (int)AbilityStates.ON_COOLDOWN;
+                }
+            }
+        }
     }
 }
