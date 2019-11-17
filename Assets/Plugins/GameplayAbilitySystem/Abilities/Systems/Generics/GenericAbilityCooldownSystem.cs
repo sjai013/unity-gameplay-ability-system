@@ -30,6 +30,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.Systems.Generic {
@@ -135,9 +136,8 @@ namespace GameplayAbilitySystem.Abilities.Systems.Generic {
         [BurstCompile]
         public struct AbilityStateUpdateJob : IJobForEach<AbilityCooldownComponent, AbilityStateComponent> {
             public void Execute([ReadOnly] ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state) {
-                if (cooldown.Value.RemainingTime > 0) {
-                    state |= (int)AbilityStates.ON_COOLDOWN;
-                }
+                int flag = math.select(0, (int)AbilityStates.ON_COOLDOWN, cooldown.Value.RemainingTime > 0);
+                state |= flag;
             }
         }
     }
