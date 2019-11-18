@@ -93,7 +93,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
                 });
                 dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilityIdentifierComponent
                 {
-                    Value = 2
+                    Value = 1
                 });
                 dstManager.SetName(abilitySystemGrantedAbilityEntity, this.gameObject.name + " - Granted Ability - " + abilityType.GetManagedType().Name);
                 entities.Add(abilitySystemGrantedAbilityEntity);

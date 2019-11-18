@@ -20,12 +20,13 @@ public class AbilityHotbarManager : MonoBehaviour {
 
 }
 
-
 public class AbilityHotbarUpdateSystem : ComponentSystem {
     public Entity AbilityOwnerEntity;
 
     [SerializeField]
     public List<AbilityHotbarButton> AbilityButtons = new List<AbilityHotbarButton>();
+
+    private Dictionary<int, int> AbilityIdentifiers;
     EAbility[] AbilityMapping;
 
     // Dict of ability types, so we can map it to the appropriate ability button.
@@ -39,6 +40,18 @@ public class AbilityHotbarUpdateSystem : ComponentSystem {
             EAbility.HealAbility
         };
 
+        AbilityIdentifiers = new Dictionary<int, int>
+        {
+            {1,0},
+            {2,1},
+            {3,3},
+            {4,4},
+            {5,5},
+            {6,6},
+            {7,7},
+            {8,8},
+        };
+
     }
 
 
@@ -49,8 +62,8 @@ public class AbilityHotbarUpdateSystem : ComponentSystem {
         }
 
         Entities.ForEach<AbilityOwnerComponent, AbilityCooldownComponent, AbilityStateComponent, AbilityIdentifierComponent>((Entity entity, ref AbilityOwnerComponent abilityOwner, ref AbilityCooldownComponent abilityCooldown, ref AbilityStateComponent state, ref AbilityIdentifierComponent identifier) => {
-            if (identifier == 2 && abilityOwner.Value == AbilityOwnerEntity) {
-                UpdateButton(0, abilityCooldown.Value.NominalDuration, abilityCooldown.Value.RemainingTime, true);
+            if (AbilityIdentifiers.ContainsKey(identifier) && abilityOwner.Value == AbilityOwnerEntity) {
+                UpdateButton(AbilityIdentifiers[identifier], abilityCooldown.Value.NominalDuration, abilityCooldown.Value.RemainingTime, true);
             }
             // UpdateButton(0, cooldown.Duration, cooldown.TimeRemaining);
             // for (var i = 0; i < AbilityMapping.Length; i++) {
