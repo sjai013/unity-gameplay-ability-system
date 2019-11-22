@@ -23,6 +23,7 @@ using Unity.Entities;
 using GameplayAbilitySystem.Attributes.Components;
 using Operators = GameplayAbilitySystem.Attributes.Components.Operators;
 using UnityEngine;
+using GameplayAbilitySystem.Common.Editor;
 
 [assembly: RegisterGenericComponentType(typeof(AttributeComponentTag<HealthAttributeComponent>))]
 [assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Add, HealthAttributeComponent>))]
@@ -31,6 +32,7 @@ using UnityEngine;
 
 
 namespace GameplayAbilitySystem.Attributes.Components {
+    [AbilitySystemDisplayName("Health")]
     public struct HealthAttributeComponent : IComponentData, IAttributeComponent {
         public float _baseValue;
         public float _currentValue;

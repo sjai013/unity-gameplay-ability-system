@@ -21,21 +21,23 @@
 
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems.Generic;
-using GameplayAbilitySystem.AbilitySystem.Components;
-using GameplayAbilitySystem.Common.Components;
-using Unity.Collections;
+using GameplayAbilitySystem.Common.Editor;
 using Unity.Entities;
-using Unity.Jobs;
-
 namespace MyGameplayAbilitySystem.Abilities {
 
+    [AbilitySystemDisplayName("Default Attack Ability")]
     public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData { }
-    public class DefaultAttackAbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
-        protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
+
+    public class DefaultAttackAbilitySystem {
+        public class DefaultAttackAbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
+            protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
+
+        }
+
+        public class DefaultAttackAssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> {
+            protected override int AbilityIdentifier => 1;
+        }
 
     }
 
-    public class DefaultAttackAssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> {
-        protected override int AbilityIdentifier => 1;
-    }
 }

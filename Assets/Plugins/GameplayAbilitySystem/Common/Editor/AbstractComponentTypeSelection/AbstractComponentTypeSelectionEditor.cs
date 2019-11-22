@@ -24,8 +24,16 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace GameplayAbilitySystem.Attributes.Components {
-    public abstract class AbstractComponentTypeSelectionEditor<T> : Editor {
+namespace GameplayAbilitySystem.Common.Editor {
+
+    public class AbilitySystemDisplayNameAttribute : System.Attribute {
+        public string Name { get; set; }
+        public AbilitySystemDisplayNameAttribute(string name) {
+            this.Name = name;
+        }
+    }
+
+    public abstract class AbstractComponentTypeSelectionEditor<T> : UnityEditor.Editor {
         private VisualElement m_RootElement;
         private VisualTreeAsset m_ModulesVisualTree;
         private List<T> components;
@@ -75,6 +83,13 @@ namespace GameplayAbilitySystem.Attributes.Components {
             }
 
             foreach (var type in allTypes) {
+                // Look for a "DisplayName" attribute
+                var displayNameAttribute = (AbilitySystemDisplayNameAttribute)System.Attribute.GetCustomAttribute(type, typeof(AbilitySystemDisplayNameAttribute));
+                string displayName = "";
+                if (displayNameAttribute != null) {
+                    displayName = displayNameAttribute.Name;
+                }
+
                 var button = new Button(() => {
                     var existingIndex = serializedTypeStrings.FindIndex(x => x == type.AssemblyQualifiedName);
                     // if this already exists in the list, delete it
@@ -89,7 +104,7 @@ namespace GameplayAbilitySystem.Attributes.Components {
                     }
                     CreateInspectorGUI();
                 })
-                { text = type.Name };
+                { text = displayName == "" ? type.FullName : displayName };
 
                 // If this type is in the list of selected components, mark it enabled
                 if (serializedTypeStrings.Any(x => x == type.AssemblyQualifiedName)) {
