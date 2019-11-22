@@ -37,7 +37,6 @@ namespace GameplayAbilitySystem.Abilities.Systems.Generic {
     public struct NullComponent : IComponentData { }
 
 
-
     [UpdateInGroup(typeof(AbilityUpdateSystemGroup))]
     public abstract class GenericAbilityCooldownSystem<T> : AbilityCooldownSystem<T>
     where T : struct, IAbilityTagComponent, IComponentData {

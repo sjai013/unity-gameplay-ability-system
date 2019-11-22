@@ -21,7 +21,11 @@
 
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems.Generic;
+using GameplayAbilitySystem.AbilitySystem.Components;
+using GameplayAbilitySystem.Common.Components;
+using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
 
 namespace MyGameplayAbilitySystem.Abilities {
 
@@ -29,5 +33,9 @@ namespace MyGameplayAbilitySystem.Abilities {
     public class DefaultAttackAbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
         protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
 
+    }
+
+    public class DefaultAttackAssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> {
+        protected override int AbilityIdentifier => 1;
     }
 }

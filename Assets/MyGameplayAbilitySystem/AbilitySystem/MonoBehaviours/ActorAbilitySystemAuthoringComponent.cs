@@ -37,6 +37,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
     [RequireComponent(typeof(ActorAbilitySystem))]
 
     public class ActorAbilitySystemAuthoringComponent : MonoBehaviour, IConvertGameObjectToEntity {
+
         // Add fields to your component here. Remember that:
         //
         // * The purpose of this class is to store data for authoring purposes - it is not for use while the game is
@@ -80,7 +81,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
 
             for (var i = 0; i < grantedAbilities.Count; i++) {
                 var abilityType = grantedAbilities[i];
-                var grantedAbilityArchetype = dstManager.CreateArchetype(typeof(AbilitySystemActorTransformComponent), abilityType, typeof(AbilityOwnerComponent), typeof(AbilityCooldownComponent), typeof(AbilityStateComponent), typeof(AbilityIdentifierComponent));
+                var grantedAbilityArchetype = dstManager.CreateArchetype(typeof(AbilitySystemActorTransformComponent), abilityType, typeof(AbilityOwnerComponent), typeof(AbilityCooldownComponent), typeof(AbilityStateComponent));
                 var abilitySystemGrantedAbilityEntity = dstManager.CreateEntity(grantedAbilityArchetype);
 
                 dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilitySystemActorTransformComponent
@@ -91,10 +92,10 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
                 {
                     Value = abilitySystemAttributesEntity
                 });
-                dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilityIdentifierComponent
-                {
-                    Value = 1
-                });
+                // dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilityIdentifierComponent
+                // {
+                //     Value = 1
+                // });
                 dstManager.SetName(abilitySystemGrantedAbilityEntity, this.gameObject.name + " - Granted Ability - " + abilityType.GetManagedType().Name);
                 entities.Add(abilitySystemGrantedAbilityEntity);
             }

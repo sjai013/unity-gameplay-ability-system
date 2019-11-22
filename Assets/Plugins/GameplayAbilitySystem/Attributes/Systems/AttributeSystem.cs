@@ -29,6 +29,8 @@ using Unity.Jobs;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Attributes.Systems {
+    [UpdateAfter(typeof(SimulationSystemGroup))]
+    public class AttributeSystemGroup : ComponentSystemGroup { }
     /// <summary>
     /// This is a generic attribute modification system which can be used
     /// out of the box, and supports single attribute modifications, using 
@@ -42,6 +44,7 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     /// </code>
     /// </summary>
     /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
+    [UpdateInGroup(typeof(AttributeSystemGroup))]
     public abstract class GenericAttributeSystem<TAttributeTag> : AttributeModificationSystem<TAttributeTag>
 where TAttributeTag : struct, IAttributeComponent, IComponentData {
         private NativeMultiHashMap<Entity, float> AttributeHashAdd;
