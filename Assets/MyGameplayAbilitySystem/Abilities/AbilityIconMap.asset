@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9082ac1fa3fe92845bb19ea1a8d204fe, type: 3}
+  m_Name: AbilityIconMap
+  m_EditorClassIdentifier: 
+  AbilityIconMaps:
+  - {fileID: 11400000, guid: ff24dfddeb143554ab888ed3538e76e9, type: 2}
+  - {fileID: 11400000, guid: f6c818180aa104040b5fe286d7bfc1fc, type: 2}
+  - {fileID: 11400000, guid: 5662dcbddfcbe674aa7627e16befa06f, type: 2}
+  - {fileID: 11400000, guid: 4b8211d9520e3964094f7804380e286a, type: 2}

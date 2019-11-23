@@ -2959,10 +2959,7 @@ MonoBehaviour:
   - {fileID: 1513173659}
   - {fileID: 306094967}
   - {fileID: 1674056545}
-  AbilityIconMaps:
-  - {fileID: 11400000, guid: 0070029b6fee3f84497c0f97b2ec50b1, type: 2}
-  - {fileID: 11400000, guid: e25e318419daff64b80fbbe8395ce4d7, type: 2}
-  - {fileID: 11400000, guid: 41861390fb35db2438aaa41db2f84fec, type: 2}
+  AbilityIconMaps: {fileID: 11400000, guid: b00af17568cfb5c418be69d75357fb87, type: 2}
   AbilityIdentifiers: 0100000002000000030000000400000005000000060000000700000008000000
 --- !u!223 &1167899088
 Canvas:

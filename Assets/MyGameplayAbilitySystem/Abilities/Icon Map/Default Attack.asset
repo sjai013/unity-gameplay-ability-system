@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64213770ac1891a4bb059196f0ef53a7, type: 3}
+  m_Name: Default Attack
+  m_EditorClassIdentifier: 
+  AbilityIdentifier: 1
+  Sprite: {fileID: 21300000, guid: 012e223bae53ce3439432cd17309ca89, type: 3}
+  SpriteColor: {r: 1, g: 0, b: 0.010215759, a: 1}
