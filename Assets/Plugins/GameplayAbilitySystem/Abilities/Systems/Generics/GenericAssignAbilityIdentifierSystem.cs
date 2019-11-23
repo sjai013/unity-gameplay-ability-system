@@ -39,10 +39,10 @@ namespace GameplayAbilitySystem.Abilities.Systems.Generic {
 
         [ExcludeComponent(typeof(AbilityIdentifierComponent))]
         [RequireComponentTag(typeof(AbilitySystemActorTransformComponent), typeof(AbilityOwnerComponent), typeof(AbilityCooldownComponent))]
-        struct Job : IJobForEachWithEntity<AbilityStateComponent, T> {
+        struct Job : IJobForEachWithEntity<T> {
             public EntityCommandBuffer.Concurrent Ecb;
             public int AbilityIdentifier;
-            public void Execute(Entity entity, int index, ref AbilityStateComponent c0, [ReadOnly] ref T c1) {
+            public void Execute(Entity entity, int index, [ReadOnly] ref T _) {
                 Ecb.AddComponent(index, entity, new AbilityIdentifierComponent { Value = AbilityIdentifier });
             }
         }

@@ -134,6 +134,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
         /// <param name="abilitySystemEntity"></param>
         private void TestAbilitySystemCooldown(EntityManager dstManager, Entity abilitySystemEntity) {
 
+            // Create a "Global Cooldown" gameplay effect, as would be created when a real ability is cast
             var cooldownArchetype = dstManager.CreateArchetype(
                 typeof(GameplayEffectDurationComponent),
                 typeof(GameplayEffectTargetComponent),

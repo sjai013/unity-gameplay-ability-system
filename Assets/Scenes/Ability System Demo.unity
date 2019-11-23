@@ -5000,17 +5000,6 @@ PrefabInstance:
       propertyPath: m_FillAmount
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2368979379177886076, guid: 6abd691f7e8403745ad594b75a550b12,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 012e223bae53ce3439432cd17309ca89,
-        type: 3}
-    - target: {fileID: 2368979379177886076, guid: 6abd691f7e8403745ad594b75a550b12,
-        type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2368979379177886078, guid: 6abd691f7e8403745ad594b75a550b12,
         type: 3}
       propertyPath: m_IsActive
