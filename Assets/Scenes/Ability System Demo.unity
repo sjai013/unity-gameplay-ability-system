@@ -2963,6 +2963,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0070029b6fee3f84497c0f97b2ec50b1, type: 2}
   - {fileID: 11400000, guid: e25e318419daff64b80fbbe8395ce4d7, type: 2}
   - {fileID: 11400000, guid: 41861390fb35db2438aaa41db2f84fec, type: 2}
+  AbilityIdentifiers: 0100000002000000030000000400000005000000060000000700000008000000
 --- !u!223 &1167899088
 Canvas:
   m_ObjectHideFlags: 0
@@ -5011,6 +5012,11 @@ PrefabInstance:
     - target: {fileID: 2368979379177886076, guid: 6abd691f7e8403745ad594b75a550b12,
         type: 3}
       propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2368979379177886078, guid: 6abd691f7e8403745ad594b75a550b12,
+        type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

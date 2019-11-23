@@ -15,3 +15,5 @@ MonoBehaviour:
   Components:
   - MyGameplayAbilitySystem.Abilities.DefaultAttackAbilityTag, Assembly-CSharp, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
+  - MyGameplayAbilitySystem.Abilities.Fire1AbilityTag, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null

@@ -28,16 +28,28 @@ namespace MyGameplayAbilitySystem.Abilities {
     [AbilitySystemDisplayName("Default Attack Ability")]
     public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData { }
 
+
+
     public class DefaultAttackAbilitySystem {
-        public class DefaultAttackAbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
+        public class AbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
             protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
 
         }
-
-        public class DefaultAttackAssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> {
+        public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> {
             protected override int AbilityIdentifier => 1;
         }
+    }
 
+    [AbilitySystemDisplayName("Fire 1")]
+    public struct Fire1AbilityTag : IAbilityTagComponent, IComponentData { }
+    public class Fire1AbilitySystem {
+        public class AbilityCooldownSystem : GenericAbilityCooldownSystem<Fire1AbilityTag> {
+            protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
+
+        }
+        public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<Fire1AbilityTag> {
+            protected override int AbilityIdentifier => 2;
+        }
     }
 
 }
