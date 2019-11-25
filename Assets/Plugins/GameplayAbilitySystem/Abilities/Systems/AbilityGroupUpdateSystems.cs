@@ -22,10 +22,9 @@
 using Unity.Entities;
 
 namespace GameplayAbilitySystem.Abilities.Systems {
-    [UpdateAfter(typeof(SimulationSystemGroup))]
+    [UpdateInGroup(typeof(InitializationSystemGroup))]
     public class AbilitySystemGroup : ComponentSystemGroup { }
 
-    [UpdateAfter(typeof(SimulationSystemGroup))]
     [UpdateInGroup(typeof(AbilitySystemGroup))]
     public class AbilityUpdateInitialiseSystemGroup : ComponentSystemGroup { }
 

@@ -29,10 +29,10 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
     [UpdateInGroup(typeof(GameplayEffectGroupUpdateEndSystem))]
     public class GameplayEffectCleanupSystem : JobComponentSystem {
 
-        public BeginSimulationEntityCommandBufferSystem m_EntityCommandBuffer;
+        public BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
         private EntityQuery m_Group;
         protected override void OnCreate() {
-            m_EntityCommandBuffer = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
+            m_EntityCommandBuffer = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
             m_Group = GetEntityQuery(ComponentType.ReadOnly<GameplayEffectDurationComponent>());
             // Create test entities
             // var archetype = EntityManager.CreateArchetype(

@@ -31,10 +31,10 @@ namespace GameplayAbilitySystem.Abilities.Systems.Generic {
     public abstract class GenericAssignAbilityIdentifierSystem<T> : JobComponentSystem
     where T : struct, IComponentData {
 
-        BeginSimulationEntityCommandBufferSystem m_EntityCommandBuffer;
+        BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
         protected abstract int AbilityIdentifier { get; }
         protected override void OnCreate() {
-            m_EntityCommandBuffer = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
+            m_EntityCommandBuffer = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
         }
 
         [ExcludeComponent(typeof(AbilityIdentifierComponent))]

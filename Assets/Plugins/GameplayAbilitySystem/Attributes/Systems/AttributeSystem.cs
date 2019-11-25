@@ -29,7 +29,7 @@ using Unity.Jobs;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Attributes.Systems {
-    [UpdateAfter(typeof(SimulationSystemGroup))]
+    [UpdateInGroup(typeof(InitializationSystemGroup))]
     public class AttributeSystemGroup : ComponentSystemGroup { }
     /// <summary>
     /// This is a generic attribute modification system which can be used
@@ -47,17 +47,13 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     [UpdateInGroup(typeof(AttributeSystemGroup))]
     public abstract class GenericAttributeSystem<TAttributeTag> : AttributeModificationSystem<TAttributeTag>
 where TAttributeTag : struct, IAttributeComponent, IComponentData {
-        private NativeMultiHashMap<Entity, float> AttributeHashAdd;
-        private NativeMultiHashMap<Entity, float> AttributeHashMultiply;
-        private NativeMultiHashMap<Entity, float> AttributeHashDivide;
+        private NativeMultiHashMap<Entity, float> AttributeHashAdd = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
+        private NativeMultiHashMap<Entity, float> AttributeHashMultiply = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
+        private NativeMultiHashMap<Entity, float> AttributeHashDivide = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
         protected override void OnCreate() {
             this.Queries[0] = CreateQuery<Components.Operators.Add>();
             this.Queries[1] = CreateQuery<Components.Operators.Multiply>();
             this.Queries[2] = CreateQuery<Components.Operators.Divide>();
-
-            this.AttributeHashAdd = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
-            this.AttributeHashMultiply = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
-            this.AttributeHashDivide = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
 
             this.actorsWithAttributesQuery = GetEntityQuery(
                 ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(),

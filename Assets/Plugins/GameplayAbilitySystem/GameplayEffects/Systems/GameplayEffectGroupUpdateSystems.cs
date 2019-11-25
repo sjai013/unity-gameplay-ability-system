@@ -23,7 +23,7 @@ using Unity.Entities;
 
 namespace GameplayAbilitySystem.GameplayEffects.Systems {
 
-    [UpdateAfter(typeof(SimulationSystemGroup))]
+    [UpdateInGroup(typeof(InitializationSystemGroup))]
     public class GameplayEffectGroup : ComponentSystemGroup { }
 
     [UpdateInGroup(typeof(GameplayEffectGroup))]
