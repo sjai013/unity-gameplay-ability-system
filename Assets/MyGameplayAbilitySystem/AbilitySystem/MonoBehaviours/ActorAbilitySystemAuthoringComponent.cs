@@ -66,8 +66,8 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
             CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Divide, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
 
             // Create some dummy cooldown gameplay effects to simulate a scenario where an ability is on cooldown due to a gameplay effect
-            TestAbilitySystemCooldown(dstManager, abilityOwnerEntity, new Fire1AbilityTag());
-            TestAbilitySystemCooldown(dstManager, abilityOwnerEntity, new DefaultAttackAbilityTag());
+            TestAbilitySystemCooldown<Fire1AbilityTag>(dstManager, abilityOwnerEntity);
+            TestAbilitySystemCooldown<DefaultAttackAbilityTag>(dstManager, abilityOwnerEntity);
         }
 
         private List<Entity> CreateGrantedAbilityEntities(Entity entity, EntityManager dstManager, Entity abilitySystemAttributesEntity) {
@@ -132,8 +132,9 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
         /// </summary>
         /// <param name="dstManager"></param>
         /// <param name="abilitySystemEntity"></param>
-        private void TestAbilitySystemCooldown(EntityManager dstManager, Entity abilitySystemEntity, IAbilityTagComponent ability) {
-            ability.CreateCooldownEntities(dstManager, abilitySystemEntity);
+        private void TestAbilitySystemCooldown<T>(EntityManager dstManager, Entity abilitySystemEntity)
+        where T : struct, IAbilityTagComponent {
+            (new T()).CreateCooldownEntities(dstManager, abilitySystemEntity);
         }
     }
 
