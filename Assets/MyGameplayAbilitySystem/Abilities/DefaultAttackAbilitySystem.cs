@@ -27,7 +27,18 @@ using Unity.Entities;
 namespace MyGameplayAbilitySystem.Abilities {
 
     [AbilitySystemDisplayName("Default Attack Ability")]
-    public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData { }
+    public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
+        public void CreateCooldownEntities(EntityManager dstManager, Entity actorEntity) {
+            var cooldownArchetype1 = dstManager.CreateArchetype(
+    typeof(GameplayEffectDurationComponent),
+    typeof(GameplayEffectTargetComponent),
+    typeof(GlobalCooldownGameplayEffectComponent));
+
+            var cooldownEntity1 = dstManager.CreateEntity(cooldownArchetype1);
+            dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity1, actorEntity);
+            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity1, GameplayEffectDurationComponent.Initialise(1, UnityEngine.Time.time));
+        }
+    }
 
     public class DefaultAttackAbilitySystem {
         public class AbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
@@ -40,18 +51,6 @@ namespace MyGameplayAbilitySystem.Abilities {
 
         public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> {
             protected override int AbilityIdentifier => 1;
-        }
-
-        public static void CreateCooldownEffects(EntityManager dstManager, Entity actorEntity) {
-            // Create a "Global Cooldown" gameplay effect, as would be created when a real ability is cast
-            var cooldownArchetype1 = dstManager.CreateArchetype(
-                typeof(GameplayEffectDurationComponent),
-                typeof(GameplayEffectTargetComponent),
-                typeof(GlobalCooldownGameplayEffectComponent));
-
-            var cooldownEntity1 = dstManager.CreateEntity(cooldownArchetype1);
-            dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity1, actorEntity);
-            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity1, GameplayEffectDurationComponent.Initialise(1, UnityEngine.Time.time));
         }
 
     }

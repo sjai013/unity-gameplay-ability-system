@@ -25,7 +25,9 @@ using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 
 namespace GameplayAbilitySystem.Abilities.Components {
-    public interface IAbilityTagComponent { }
+    public interface IAbilityTagComponent {
+        void CreateCooldownEntities(EntityManager dstManager, Entity actorEntity);
+    }
 
     public struct AbilityCooldownComponent : IComponentData {
         public TimeRemainingComponent Value;
