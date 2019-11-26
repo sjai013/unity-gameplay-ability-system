@@ -21,6 +21,7 @@
 
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems.Generic;
+using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.Editor;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
@@ -37,6 +38,26 @@ namespace MyGameplayAbilitySystem.Abilities {
             var cooldownEntity1 = dstManager.CreateEntity(cooldownArchetype1);
             dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity1, actorEntity);
             dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity1, GameplayEffectDurationComponent.Initialise(1, UnityEngine.Time.time));
+        }
+
+        public void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
+            var archetype = dstManager.CreateArchetype(
+                            typeof(GameplayAbilitySystem.Attributes.Components.Operators.Add),
+                            typeof(AttributeComponentTag<ManaAttributeComponent>),
+                            typeof(AttributeModifier<GameplayAbilitySystem.Attributes.Components.Operators.Add, ManaAttributeComponent>),
+                            typeof(AttributesOwnerComponent)
+                        );
+
+            var entity = dstManager.CreateEntity(archetype);
+            dstManager.SetComponentData(entity, new AttributeModifier<GameplayAbilitySystem.Attributes.Components.Operators.Add, ManaAttributeComponent>()
+            {
+                Value = -1
+            });
+
+            dstManager.SetComponentData(entity, new AttributesOwnerComponent()
+            {
+                Value = actorEntity
+            });
         }
     }
 

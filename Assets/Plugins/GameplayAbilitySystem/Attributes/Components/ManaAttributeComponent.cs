@@ -32,7 +32,9 @@ using GameplayAbilitySystem.Common.Editor;
 namespace GameplayAbilitySystem.Attributes.Components {
     [AbilitySystemDisplayName("Mana")]
     public struct ManaAttributeComponent : IComponentData, IAttributeComponent {
-        public float BaseValue { get; set; }
-        public float CurrentValue { get; set; }
+        public float _baseValue;
+        public float _currentValue;
+        public float BaseValue { get => _baseValue; set => _baseValue = value; }
+        public float CurrentValue { get => _currentValue; set => _currentValue = value; }
     }
 }

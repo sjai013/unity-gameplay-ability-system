@@ -67,7 +67,10 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
 
             // Create some dummy cooldown gameplay effects to simulate a scenario where an ability is on cooldown due to a gameplay effect
             TestAbilitySystemCooldown<Fire1AbilityTag>(dstManager, abilityOwnerEntity);
+            TestAbilityCost<Fire1AbilityTag>(dstManager, abilityOwnerEntity);
+
             TestAbilitySystemCooldown<DefaultAttackAbilityTag>(dstManager, abilityOwnerEntity);
+            TestAbilityCost<DefaultAttackAbilityTag>(dstManager, abilityOwnerEntity);
         }
 
         private List<Entity> CreateGrantedAbilityEntities(Entity entity, EntityManager dstManager, Entity abilitySystemAttributesEntity) {
@@ -135,6 +138,11 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
         private void TestAbilitySystemCooldown<T>(EntityManager dstManager, Entity abilitySystemEntity)
         where T : struct, IAbilityTagComponent {
             (new T()).CreateCooldownEntities(dstManager, abilitySystemEntity);
+        }
+
+        private void TestAbilityCost<T>(EntityManager dstManager, Entity abilitySystemEntity)
+     where T : struct, IAbilityTagComponent {
+            (new T()).CreateSourceAttributeModifiers(dstManager, abilitySystemEntity);
         }
     }
 
