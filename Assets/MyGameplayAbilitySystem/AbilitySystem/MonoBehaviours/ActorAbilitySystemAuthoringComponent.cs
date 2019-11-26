@@ -20,15 +20,14 @@
  */
 
 using System.Collections.Generic;
-using System.Linq;
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Attributes.ScriptableObjects;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
+using MyGameplayAbilitySystem.Abilities;
 using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
@@ -134,19 +133,8 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
         /// <param name="abilitySystemEntity"></param>
         private void TestAbilitySystemCooldown(EntityManager dstManager, Entity abilitySystemEntity) {
 
-            // Create a "Global Cooldown" gameplay effect, as would be created when a real ability is cast
-            var cooldownArchetype = dstManager.CreateArchetype(
-                typeof(GameplayEffectDurationComponent),
-                typeof(GameplayEffectTargetComponent),
-                typeof(GlobalCooldownGameplayEffectComponent));
-
-            var cooldownEntity = dstManager.CreateEntity(cooldownArchetype);
-            dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity, abilitySystemEntity);
-            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity, GameplayEffectDurationComponent.Initialise(10, 1));
-
-            var cooldownEntity2 = dstManager.CreateEntity(cooldownArchetype);
-            dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity2, abilitySystemEntity);
-            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity2, GameplayEffectDurationComponent.Initialise(5, 1));
+            DefaultAttackAbilitySystem.CreateCooldownEffects(dstManager, abilitySystemEntity);
+            Fire1AbilitySystem.CreateCooldownEffects(dstManager, abilitySystemEntity);
         }
     }
 

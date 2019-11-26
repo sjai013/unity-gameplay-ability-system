@@ -22,17 +22,43 @@
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems.Generic;
 using GameplayAbilitySystem.Common.Editor;
+using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 namespace MyGameplayAbilitySystem.Abilities {
     [AbilitySystemDisplayName("Fire 1")]
     public struct Fire1AbilityTag : IAbilityTagComponent, IComponentData { }
     public class Fire1AbilitySystem {
         public class AbilityCooldownSystem : GenericAbilityCooldownSystem<Fire1AbilityTag> {
-            protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
+            protected override ComponentType[] CooldownEffects => new ComponentType[] {
+                ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>()
+                ,ComponentType.ReadOnly<Fire1CooldownGameplayEffectComponent>()
+                };
 
         }
         public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<Fire1AbilityTag> {
             protected override int AbilityIdentifier => 2;
+        }
+
+        public static void CreateCooldownEffects(EntityManager dstManager, Entity actorEntity) {
+            // Create a "Global Cooldown" gameplay effect, as would be created when a real ability is cast
+            var cooldownArchetype1 = dstManager.CreateArchetype(
+                typeof(GameplayEffectDurationComponent),
+                typeof(GameplayEffectTargetComponent),
+                typeof(GlobalCooldownGameplayEffectComponent));
+
+            var cooldownEntity1 = dstManager.CreateEntity(cooldownArchetype1);
+            dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity1, actorEntity);
+            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity1, GameplayEffectDurationComponent.Initialise(1, UnityEngine.Time.time));
+
+            // Create a "Global Cooldown" gameplay effect, as would be created when a real ability is cast
+            var cooldownArchetype2 = dstManager.CreateArchetype(
+                typeof(GameplayEffectDurationComponent),
+                typeof(GameplayEffectTargetComponent),
+                typeof(Fire1CooldownGameplayEffectComponent));
+
+            var cooldownEntity2 = dstManager.CreateEntity(cooldownArchetype2);
+            dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity2, actorEntity);
+            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity2, GameplayEffectDurationComponent.Initialise(5, UnityEngine.Time.time));
         }
     }
 

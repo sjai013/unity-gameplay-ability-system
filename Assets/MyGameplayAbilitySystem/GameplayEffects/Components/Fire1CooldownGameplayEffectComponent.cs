@@ -1,5 +1,5 @@
-﻿/*
- * Created on Mon Nov 04 2019
+/*
+ * Created on Mon Nov 26 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -21,4 +21,4 @@
 
 using Unity.Entities;
 
-public struct GlobalCooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {}
+public struct Fire1CooldownGameplayEffectComponent: IGameplayEffectTagComponent, IComponentData {}

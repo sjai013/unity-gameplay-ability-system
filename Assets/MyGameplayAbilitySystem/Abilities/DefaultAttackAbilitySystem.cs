@@ -22,6 +22,7 @@
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems.Generic;
 using GameplayAbilitySystem.Common.Editor;
+using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 namespace MyGameplayAbilitySystem.Abilities {
 
@@ -30,12 +31,29 @@ namespace MyGameplayAbilitySystem.Abilities {
 
     public class DefaultAttackAbilitySystem {
         public class AbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
-            protected override ComponentType[] CooldownEffects => new ComponentType[] { ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>() };
+            protected override ComponentType[] CooldownEffects =>
+                new ComponentType[] {
+                    ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>()
+                };
 
         }
+
         public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> {
             protected override int AbilityIdentifier => 1;
         }
+
+        public static void CreateCooldownEffects(EntityManager dstManager, Entity actorEntity) {
+            // Create a "Global Cooldown" gameplay effect, as would be created when a real ability is cast
+            var cooldownArchetype1 = dstManager.CreateArchetype(
+                typeof(GameplayEffectDurationComponent),
+                typeof(GameplayEffectTargetComponent),
+                typeof(GlobalCooldownGameplayEffectComponent));
+
+            var cooldownEntity1 = dstManager.CreateEntity(cooldownArchetype1);
+            dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity1, actorEntity);
+            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity1, GameplayEffectDurationComponent.Initialise(1, UnityEngine.Time.time));
+        }
+
     }
 
 }
