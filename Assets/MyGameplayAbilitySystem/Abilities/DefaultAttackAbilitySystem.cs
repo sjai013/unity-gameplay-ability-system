@@ -31,9 +31,9 @@ namespace MyGameplayAbilitySystem.Abilities {
     public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
         public void CreateCooldownEntities(EntityManager dstManager, Entity actorEntity) {
             var cooldownArchetype1 = dstManager.CreateArchetype(
-    typeof(GameplayEffectDurationComponent),
-    typeof(GameplayEffectTargetComponent),
-    typeof(GlobalCooldownGameplayEffectComponent));
+                                    typeof(GameplayEffectDurationComponent),
+                                    typeof(GameplayEffectTargetComponent),
+                                    typeof(GlobalCooldownGameplayEffectComponent));
 
             var cooldownEntity1 = dstManager.CreateEntity(cooldownArchetype1);
             dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity1, actorEntity);

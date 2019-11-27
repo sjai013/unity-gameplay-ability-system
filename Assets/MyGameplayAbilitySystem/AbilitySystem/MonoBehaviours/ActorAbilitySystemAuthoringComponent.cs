@@ -25,7 +25,6 @@ using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Attributes.ScriptableObjects;
 using GameplayAbilitySystem.Common.Components;
-using GameplayAbilitySystem.GameplayEffects.Components;
 using MyGameplayAbilitySystem.Abilities;
 using Unity.Entities;
 using UnityEngine;
