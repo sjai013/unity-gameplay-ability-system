@@ -1096,7 +1096,7 @@ GameObject:
   - component: {fileID: 450259521}
   - component: {fileID: 450259520}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Arena
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2225,7 +2225,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-22022
+  m_Name: pb_Mesh16606
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2449,8 +2449,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8385586271098587248, guid: fddc582aed5bbbd4ab4ac8025536d369, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fddc582aed5bbbd4ab4ac8025536d369, type: 3}
 --- !u!1001 &872576276
 PrefabInstance:
@@ -5192,9 +5191,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Target: {fileID: 1124098576}
   m_AutoTargetPlayer: 1
-  m_UpdateType: 0
+  m_UpdateType: 1
   m_Pivot: {fileID: 0}
-  m_MoveSpeed: 50
+  m_MoveSpeed: 5
   m_TurnSpeed: 1.5
   m_TurnSmoothing: 0
   m_TiltMax: 75
