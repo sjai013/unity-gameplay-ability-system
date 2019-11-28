@@ -27,8 +27,9 @@ public class PlayerControllerSystem : JobComponentSystem {
         public float deltaTime;
 
         public void Execute(ref Translation translation, ref Rotation rotation, [ReadOnly] ref PlayerMovementRotationMultiplierComponent rotationMultiplierComponent, [ReadOnly] ref PlayerMovementSpeedMultiplierComponent speedMultiplierComponent) {
-            var q = quaternion.AxisAngle(new float3(0.0f, 1.0f, 0.0f), movementVector.x * rotationMultiplierComponent.Value * deltaTime);
             translation.Value += math.mul(rotation.Value, new float3(0, 0, 1)) * movementVector.y * deltaTime * speedMultiplierComponent.Value;
+            
+            var q = quaternion.AxisAngle(new float3(0.0f, 1.0f, 0.0f), movementVector.x * rotationMultiplierComponent.Value * deltaTime);
             rotation.Value = math.mul(q, rotation.Value);
         }
     }
