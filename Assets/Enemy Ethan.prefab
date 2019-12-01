@@ -105,7 +105,6 @@ GameObject:
   - component: {fileID: 7534438872715740495}
   - component: {fileID: 71150410700236051}
   - component: {fileID: 9102410460715931438}
-  - component: {fileID: 4100678656891511344}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -174,19 +173,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &4100678656891511344
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4828340121438080378}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5555714685437361602
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,6 +185,7 @@ GameObject:
   - component: {fileID: 319760963773948485}
   - component: {fileID: 396651187017546649}
   - component: {fileID: 4400339242248586328}
+  - component: {fileID: 731426747}
   m_Layer: 0
   m_Name: Enemy Ethan
   m_TagString: Untagged
@@ -261,6 +248,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ee21ed47e3b5b46ac1de1af1726cf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &731426747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555714685437361602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dde9dffa201d724c8a98b31c069b13b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: {fileID: 1359308431272715899}
+  Mana: {fileID: 0}
 --- !u!1 &6587082090465148645
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,3 +486,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1071020996309585044}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1359308431272715899 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2017678857333680879, guid: e05a0ff48b22f914d920b149824050af,
+    type: 3}
+  m_PrefabInstance: {fileID: 1071020996309585044}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9ea719c96c1a34dacdc5689c3ac0e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

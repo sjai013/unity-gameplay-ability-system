@@ -37,7 +37,7 @@ namespace MyGameplayAbilitySystem.Abilities {
 
             var cooldownEntity1 = dstManager.CreateEntity(cooldownArchetype1);
             dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity1, actorEntity);
-            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity1, GameplayEffectDurationComponent.Initialise(1, UnityEngine.Time.time));
+            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity1, GameplayEffectDurationComponent.Initialise(0.2f, UnityEngine.Time.time));
         }
 
         public void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
@@ -52,6 +52,26 @@ namespace MyGameplayAbilitySystem.Abilities {
             dstManager.SetComponentData(entity, new AttributeModifier<GameplayAbilitySystem.Attributes.Components.Operators.Add, ManaAttributeComponent>()
             {
                 Value = -1
+            });
+
+            dstManager.SetComponentData(entity, new AttributesOwnerComponent()
+            {
+                Value = actorEntity
+            });
+        }
+
+        public void CreateTargetAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
+            var archetype = dstManager.CreateArchetype(
+                            typeof(GameplayAbilitySystem.Attributes.Components.Operators.Add),
+                            typeof(AttributeComponentTag<HealthAttributeComponent>),
+                            typeof(AttributeModifier<GameplayAbilitySystem.Attributes.Components.Operators.Add, HealthAttributeComponent>),
+                            typeof(AttributesOwnerComponent)
+                        );
+
+            var entity = dstManager.CreateEntity(archetype);
+            dstManager.SetComponentData(entity, new AttributeModifier<GameplayAbilitySystem.Attributes.Components.Operators.Add, HealthAttributeComponent>()
+            {
+                Value = -5
             });
 
             dstManager.SetComponentData(entity, new AttributesOwnerComponent()

@@ -63,6 +63,15 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
             CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
             CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Multiply, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
             CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Divide, HealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
+            CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, MaxHealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
+            CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Multiply, MaxHealthAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
+
+            CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, ManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
+            CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Multiply, ManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
+            CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Divide, ManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
+CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, MaxManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
+            CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Multiply, MaxManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
+
 
             // Create some dummy cooldown gameplay effects to simulate a scenario where an ability is on cooldown due to a gameplay effect
             TestAbilitySystemCooldown<Fire1AbilityTag>(dstManager, abilityOwnerEntity);

@@ -27,5 +27,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
     public class ActorAbilitySystem: MonoBehaviour {
         public Entity AbilityOwnerEntity;
         public Entity AbilitySystemActorTransformEntity;
+
+        public Transform CastPoint;
     }
 }

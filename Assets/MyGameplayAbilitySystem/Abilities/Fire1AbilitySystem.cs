@@ -69,6 +69,10 @@ namespace MyGameplayAbilitySystem.Abilities {
                 Value = actorEntity
             });
         }
+
+        public void CreateTargetAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
+            throw new System.NotImplementedException();
+        }
     }
     public class Fire1AbilitySystem {
         public class AbilityCooldownSystem : GenericAbilityCooldownSystem<Fire1AbilityTag> {

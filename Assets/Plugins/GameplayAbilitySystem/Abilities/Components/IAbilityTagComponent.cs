@@ -28,6 +28,7 @@ namespace GameplayAbilitySystem.Abilities.Components {
     public interface IAbilityTagComponent {
         void CreateCooldownEntities(EntityManager dstManager, Entity actorEntity);
         void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity);
+        void CreateTargetAttributeModifiers(EntityManager dstManager, Entity actorEntity);
     }
 
     public struct AbilityCooldownComponent : IComponentData {

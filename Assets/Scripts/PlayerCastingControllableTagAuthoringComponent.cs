@@ -19,7 +19,6 @@ public class PlayerCastingControllableTagAuthoringComponent : MonoBehaviour, ICo
     //    public float scale;
 
 
-
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
         // Call methods on 'dstManager' to create runtime components on 'entity' here. Remember that:
         //
