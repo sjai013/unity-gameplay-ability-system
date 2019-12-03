@@ -31,6 +31,9 @@ namespace GameplayAbilitySystem.Abilities.Components {
         void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity);
         void CreateTargetAttributeModifiers(EntityManager dstManager, Entity actorEntity);
 
+        void BeginActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity);
+        void EndActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity);
+
     }
 
     public struct AbilityCooldownComponent : IComponentData {

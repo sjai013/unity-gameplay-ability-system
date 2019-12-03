@@ -28,6 +28,10 @@ using Unity.Entities;
 namespace MyGameplayAbilitySystem.Abilities {
     [AbilitySystemDisplayName("Fire 1")]
     public struct Fire1AbilityTag : IAbilityTagComponent, IComponentData {
+        public void BeginActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity) {
+            throw new System.NotImplementedException();
+        }
+
         public void CommitAbility(EntityManager dstManager, Entity actorEntity) {
             CreateCooldownEntities(dstManager, actorEntity);
             CreateSourceAttributeModifiers(dstManager, actorEntity);
@@ -76,6 +80,10 @@ namespace MyGameplayAbilitySystem.Abilities {
         }
 
         public void CreateTargetAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
+            throw new System.NotImplementedException();
+        }
+
+        public void EndActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity) {
             throw new System.NotImplementedException();
         }
     }

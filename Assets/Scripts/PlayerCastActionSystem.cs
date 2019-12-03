@@ -33,22 +33,27 @@ using UnityEngine.Playables;
 public class PlayerCastActionSystem : ComponentSystem {
     protected override void OnUpdate() {
 
-        Entities.WithAll<PlayerCastingControllableTagComponent>().ForEach((Entity entity, ActorAbilitySystem actorAbilitySystem, ref Translation translation, ref Rotation rotation) => {
-            var forwardVector = math.normalize(math.mul(rotation.Value, new float3(0, 0, 1)));
+        Entities.WithAll<PlayerCastingControllableTagComponent>().ForEach((Entity entity, ActorAbilitySystem actorAbilitySystem) => {
             if (Input.GetKeyUp("1")) {
-                actorAbilitySystem.StartCoroutine(DoDefaultAttack(actorAbilitySystem, forwardVector));
+                actorAbilitySystem.StartCoroutine(DoDefaultAttack(entity, actorAbilitySystem));
             }
 
         });
     }
 
-    private IEnumerator DoDefaultAttack(ActorAbilitySystem actorAbilitySystem, float3 forwardVector) {
+    private IEnumerator DoDefaultAttack(Entity entity, ActorAbilitySystem actorAbilitySystem) {
+        var translation = GetComponentDataFromEntity<Translation>()[entity];
+        var rotation = GetComponentDataFromEntity<Rotation>()[entity];
         var AbilityState = -1;
+        Entity GrantedAbilityEntity = default(Entity);
+        var forwardVector = math.normalize(math.mul(rotation.Value, new float3(0, 0, 1)));
+
         // Check if player can use ability (the GrantedAbility entity contains this information)
         Entities
-            .WithAllReadOnly<AbilityOwnerComponent, AbilityStateComponent, DefaultAttackAbilityTag>().ForEach((ref AbilityStateComponent abilityState, ref AbilityOwnerComponent abilityOwner) => {
+            .WithAllReadOnly<AbilityOwnerComponent, AbilityStateComponent, DefaultAttackAbilityTag>().ForEach((Entity grantedAbilityEntity, ref AbilityStateComponent abilityState, ref AbilityOwnerComponent abilityOwner) => {
                 if (abilityOwner == actorAbilitySystem.AbilityOwnerEntity) {
                     AbilityState = abilityState;
+                    GrantedAbilityEntity = grantedAbilityEntity;
                 }
             });
 
@@ -58,6 +63,7 @@ public class PlayerCastActionSystem : ComponentSystem {
             // something like "This ability is on cooldown" on the screen.
             yield break;
         }
+
 
 
 
@@ -80,10 +86,14 @@ public class PlayerCastActionSystem : ComponentSystem {
             }
         }
 
+        new DefaultAttackAbilityTag().BeginActivateAbility(EntityManager, GrantedAbilityEntity);
+
         playerCastHelper.PlaySwingAnimation();
         yield return playerCastHelper.StartCoroutine(playerCastHelper.CheckForSwingHit(wasHit, EntityManager, targetEntity));
         // Default attack - trigger cooldown and resource cost
         (new DefaultAttackAbilityTag()).CommitAbility(EntityManager, actorAbilitySystem.AbilityOwnerEntity);
+        new DefaultAttackAbilityTag().EndActivateAbility(EntityManager, GrantedAbilityEntity);
+
     }
 
 }
