@@ -28,6 +28,11 @@ using Unity.Entities;
 namespace MyGameplayAbilitySystem.Abilities {
     [AbilitySystemDisplayName("Fire 1")]
     public struct Fire1AbilityTag : IAbilityTagComponent, IComponentData {
+        public void CommitAbility(EntityManager dstManager, Entity actorEntity) {
+            CreateCooldownEntities(dstManager, actorEntity);
+            CreateSourceAttributeModifiers(dstManager, actorEntity);
+        }
+
         public void CreateCooldownEntities(EntityManager dstManager, Entity actorEntity) {
             // Create a "Global Cooldown" gameplay effect, as would be created when a real ability is cast
             var cooldownArchetype1 = dstManager.CreateArchetype(
