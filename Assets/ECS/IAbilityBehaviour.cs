@@ -4,7 +4,7 @@ using Unity.Jobs;
 /// <summary>
 /// Provides collection of functionality all abilities need to have
 /// </summary>
-public interface IAbilityBehaviour {
+public interface _IAbilityBehaviour {
 
     /// <summary>
     /// Application of costs associated with ability

@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Jobs;
 
 public struct DefaultAbilityJobs<T1> : IAbilityJobs
-where T1 : struct, IComponentData, IAbilityBehaviour {
+where T1 : struct, IComponentData, _IAbilityBehaviour {
     public JobHandle BeginAbilityCastJob(EntityQuery query, JobHandle inputDeps, EntityCommandBuffer.Concurrent Ecb, ComponentDataFromEntity<AttributesComponent> attributesComponent, float WorldTime) {
         var job = new GenericBeginAbilityCast<T1>()
         {
@@ -14,7 +14,7 @@ where T1 : struct, IComponentData, IAbilityBehaviour {
         return job.Schedule(query, inputDeps);
     }
 
-    public JobHandle UpdateCooldownsJob(EntityQuery query, JobHandle inputDeps, NativeHashMap<Entity, GrantedAbilityCooldownComponent> cooldownsRemainingForAbility) {
+    public JobHandle UpdateCooldownsJob(EntityQuery query, JobHandle inputDeps, NativeHashMap<Entity, _GrantedAbilityCooldownComponent> cooldownsRemainingForAbility) {
         var job = new GenericUpdateAbilityCooldownJob<T1>()
         {
             cooldownsRemainingForAbility = cooldownsRemainingForAbility
@@ -23,8 +23,8 @@ where T1 : struct, IComponentData, IAbilityBehaviour {
         return job;
     }
 
-    public JobHandle CheckAbilityAvailableJob(EntityQuery UpdateAbilityAvailable, EntityQuery CheckResource, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent, NativeHashMap<Entity, GrantedAbilityCooldownComponent> abilityCooldowns) {
-        var job1 = new GenericUpdateAbilityAvailableJob<T1>
+    public JobHandle CheckAbilityAvailableJob(EntityQuery UpdateAbilityAvailable, EntityQuery CheckResource, JobHandle inputDeps, ComponentDataFromEntity<AttributesComponent> attributesComponent, NativeHashMap<Entity, _GrantedAbilityCooldownComponent> abilityCooldowns) {
+        var job1 = new _GenericUpdateAbilityAvailableJob<T1>
         {
             cooldownsRemainingForAbility = abilityCooldowns
         }.Schedule(UpdateAbilityAvailable, inputDeps);

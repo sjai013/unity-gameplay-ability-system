@@ -3,9 +3,9 @@ using Unity.Collections;
 using Unity.Entities;
 
 [BurstCompile]
-[RequireComponentTag(typeof(GrantedAbilityComponent), typeof(GrantedAbilityCooldownComponent))]
+[RequireComponentTag(typeof(GrantedAbilityComponent), typeof(_GrantedAbilityCooldownComponent))]
 public struct GenericCheckAbilityGrantedJob<T1> : IJobForEachWithEntity<T1>
-where T1 : struct, IComponentData, IAbilityBehaviour {
+where T1 : struct, IComponentData, _IAbilityBehaviour {
 
     [WriteOnly] public NativeHashMap<Entity, bool>.ParallelWriter AbilityGranted;
 

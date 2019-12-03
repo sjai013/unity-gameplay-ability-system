@@ -4,7 +4,7 @@ using Unity.Jobs;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.Heal {
-    public struct HealAbilityComponent : IAbilityBehaviour, IComponentData {
+    public struct HealAbilityComponent : _IAbilityBehaviour, IComponentData {
         public EAbility AbilityType { get => EAbility.HealAbility; }
         public EGameplayEffect[] CooldownEffects => new EGameplayEffect[] { EGameplayEffect.GlobalCooldown, EGameplayEffect.HealAbilityCooldown };
         public IAbilityJobs AbilityJobs => new DefaultAbilityJobs<HealAbilityComponent>();

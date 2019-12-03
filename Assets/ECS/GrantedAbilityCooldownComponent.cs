@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-public struct GrantedAbilityCooldownComponent : IComponentData {
+public struct _GrantedAbilityCooldownComponent : IComponentData {
     public float TimeRemaining;
     public float Duration;
 }

@@ -10,6 +10,6 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
 
         public abstract void ActivateAbility(AbilitySystemComponent AbilitySystem, GameplayAbility Ability);
 
-        public abstract void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, IAbilityBehaviour Ability);
+        public abstract void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, _IAbilityBehaviour Ability);
     }
 }

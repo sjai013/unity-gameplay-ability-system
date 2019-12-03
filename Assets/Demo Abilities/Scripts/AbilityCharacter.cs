@@ -22,13 +22,13 @@ public class AbilityCharacter : MonoBehaviour {
             var entity = em.CreateEntity();
             em.AddComponent(entity, entry.Value);
             em.AddComponent(entity, typeof(GrantedAbilityComponent));
-            em.AddComponent(entity, typeof(GrantedAbilityCooldownComponent));
-            em.AddComponent(entity, typeof(AbilityComponent));
+            em.AddComponent(entity, typeof(_GrantedAbilityCooldownComponent));
+            em.AddComponent(entity, typeof(_AbilityComponent));
             em.SetComponentData(entity, new GrantedAbilityComponent()
             {
                 GrantedTo = SelfAbilitySystem.entity
             });
-            em.SetComponentData(entity, new AbilityComponent()
+            em.SetComponentData(entity, new _AbilityComponent()
             {
                 Ability = entry.Key
             });            

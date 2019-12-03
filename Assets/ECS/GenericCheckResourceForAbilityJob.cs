@@ -3,11 +3,11 @@ using Unity.Collections;
 using Unity.Entities;
 
 [BurstCompile]
-[RequireComponentTag(typeof(AbilityComponent))]
-public struct GenericCheckResourceForAbilityJob<T1> : IJobForEach<AbilitySourceTargetComponent, _AbilityStateComponent, T1>
-where T1 : struct, IComponentData, IAbilityBehaviour {
+[RequireComponentTag(typeof(_AbilityComponent))]
+public struct GenericCheckResourceForAbilityJob<T1> : IJobForEach<_AbilitySourceTargetComponent, _AbilityStateComponent, T1>
+where T1 : struct, IComponentData, _IAbilityBehaviour {
     [ReadOnly] public ComponentDataFromEntity<AttributesComponent> attributesComponent;
-    public void Execute([ReadOnly] ref AbilitySourceTargetComponent abilitySourceTarget, ref _AbilityStateComponent state, [ReadOnly] ref T1 ability) {
+    public void Execute([ReadOnly] ref _AbilitySourceTargetComponent abilitySourceTarget, ref _AbilityStateComponent state, [ReadOnly] ref T1 ability) {
         if (state.State != EAbilityState.CheckResource) return;
         var resourceAvailable = false;
         var sourceAttrs = attributesComponent[abilitySourceTarget.Source];

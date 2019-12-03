@@ -51,7 +51,7 @@ namespace GameplayAbilitySystem.Abilities.AbilityActivations {
             DestroyImmediate(projectile);
         }
 
-        public override async void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, IAbilityBehaviour Ability) {
+        public override async void ActivateAbility(AbilitySystemComponent Source, AbilitySystemComponent Target, _IAbilityBehaviour Ability) {
             var abilitySystemActor = Source.GetActor();
             var animationEventSystemComponent = abilitySystemActor.GetComponent<AnimationEventSystem>();
             var animatorComponent = abilitySystemActor.GetComponent<Animator>();

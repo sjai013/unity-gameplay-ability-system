@@ -1,10 +1,10 @@
 using System;
 using Unity.Entities;
 
-public struct AbilityComponent : IComponentData, IEquatable<AbilityComponent> {
+public struct _AbilityComponent : IComponentData, IEquatable<_AbilityComponent> {
     public EAbility Ability;
 
-    public bool Equals(AbilityComponent other) {
+    public bool Equals(_AbilityComponent other) {
         if (Ability == other.Ability) return true;
         return false;
     }

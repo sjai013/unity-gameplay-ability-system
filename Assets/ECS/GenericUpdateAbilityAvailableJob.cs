@@ -3,11 +3,11 @@ using Unity.Collections;
 using Unity.Entities;
 
 [BurstCompile]
-[RequireComponentTag(typeof(AbilityComponent))]
-public struct GenericUpdateAbilityAvailableJob<T1> : IJobForEach<_AbilityStateComponent, AbilitySourceTargetComponent, T1>
-where T1 : struct, IComponentData, IAbilityBehaviour {
-    [ReadOnly] public NativeHashMap<Entity, GrantedAbilityCooldownComponent> cooldownsRemainingForAbility;
-    public void Execute(ref _AbilityStateComponent state, [ReadOnly] ref AbilitySourceTargetComponent sourceTarget, [ReadOnly] ref T1 ability) {
+[RequireComponentTag(typeof(_AbilityComponent))]
+public struct _GenericUpdateAbilityAvailableJob<_T1> : IJobForEach<_AbilityStateComponent, _AbilitySourceTargetComponent, _T1>
+where _T1 : struct, IComponentData, _IAbilityBehaviour {
+    [ReadOnly] public NativeHashMap<Entity, _GrantedAbilityCooldownComponent> cooldownsRemainingForAbility;
+    public void Execute(ref _AbilityStateComponent state, [ReadOnly] ref _AbilitySourceTargetComponent sourceTarget, [ReadOnly] ref _T1 ability) {
         if (state.State != EAbilityState.CheckCooldown) return;
         cooldownsRemainingForAbility.TryGetValue(sourceTarget.Source, out var cooldownRemaining);
         if (cooldownRemaining.TimeRemaining > 0) {

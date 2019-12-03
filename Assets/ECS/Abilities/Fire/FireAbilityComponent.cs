@@ -3,7 +3,7 @@ using Unity.Jobs;
 using UnityEngine;
 
 namespace GameplayAbilitySystem.Abilities.Fire {
-    public struct FireAbilityComponent : IAbilityBehaviour, IComponentData {
+    public struct FireAbilityComponent : _IAbilityBehaviour, IComponentData {
 
         public EAbility AbilityType { get => EAbility.FireAbility; }
 
