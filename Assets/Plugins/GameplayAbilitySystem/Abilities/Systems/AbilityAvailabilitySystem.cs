@@ -31,6 +31,7 @@ namespace GameplayAbilitySystem.Abilities.Systems {
     /// the actor has been granted the ability, and it is currently available to use
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [UpdateInGroup(typeof(AbilityUpdateSystemGroup))]
     public abstract class AbilityAvailabilitySystem<T> : JobComponentSystem
     where T : struct, IAbilityTagComponent, IComponentData {
         protected abstract JobHandle UpdateAbilityAvailability(JobHandle inputDeps);

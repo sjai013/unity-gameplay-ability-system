@@ -82,14 +82,15 @@ public class AbilityHotbarUpdateSystem : ComponentSystem {
             }
         }
 
-        Entities.ForEach<AbilityOwnerComponent, AbilityCooldownComponent, AbilityStateComponent, AbilityIdentifierComponent>((Entity entity, ref AbilityOwnerComponent abilityOwner, ref AbilityCooldownComponent abilityCooldown, ref AbilityStateComponent state, ref AbilityIdentifierComponent identifier) => {
+        Entities
+            .ForEach<AbilityOwnerComponent, AbilityCooldownComponent, AbilityStateComponent, AbilityIdentifierComponent>((Entity entity, ref AbilityOwnerComponent abilityOwner, ref AbilityCooldownComponent abilityCooldown, ref AbilityStateComponent state, ref AbilityIdentifierComponent identifier) => {
             // Only do this for the appropriate actor
             if (abilityOwner.Value == AbilityOwnerEntity) {
                 // Check our list to see if this ability is defined
                 var id = identifier.Value;
                 var abilityIdentifierIndex = AbilityIdentifiers.FindIndex(x => x == id);
                 if (abilityIdentifierIndex >= 0) {
-                    UpdateButton(abilityIdentifierIndex, abilityCooldown.Value.NominalDuration, abilityCooldown.Value.RemainingTime, true);
+                    UpdateButton(abilityIdentifierIndex, abilityCooldown.Value.NominalDuration, abilityCooldown.Value.RemainingTime, state > 0);
                 }
             }
 
@@ -101,6 +102,10 @@ public class AbilityHotbarUpdateSystem : ComponentSystem {
         var remainingPercent = 1f;
         if (cooldownDuration != 0) {
             remainingPercent = 1 - cooldownTimeRemaining / cooldownDuration;
+        }
+
+        if (remainingPercent == 1 && cooldownActive) {
+            remainingPercent = 0;
         }
         button.SetCooldownRemainingPercent(remainingPercent);
     }
