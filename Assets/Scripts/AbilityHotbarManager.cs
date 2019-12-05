@@ -39,10 +39,7 @@ public class AbilityHotbarManager : MonoBehaviour {
         World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityButtons = AbilityButtons;
         World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityIdentifiers = AbilityIdentifiers;
         World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityIconMaps = AbilityIconMaps.AbilityIconMaps;
-
     }
-
-
 }
 
 public class AbilityHotbarUpdateSystem : ComponentSystem {
@@ -56,18 +53,15 @@ public class AbilityHotbarUpdateSystem : ComponentSystem {
 
     public List<AbilityIconMap> AbilityIconMaps;
 
-
-    // Dict of ability types, so we can map it to the appropriate ability button.
-    // We have no way of identifying abilities right now from the components, so we'll
-    // need to assign an ID type of component along with the AbilityTagComponent
-
-    protected override void OnCreate() {
-
-
-    }
-
+    public Entity[] GrantedAbilityEntities = new Entity[8];
 
     protected override void OnUpdate() {
+        // We need to store list of entities corresponding to the player's granted abilities
+        // If the first ability is still null, then update the granted abilities list
+        if (GrantedAbilityEntities[0] == default(Entity)) {
+            UpdateGrantedAbilityEntitiesList();
+        }
+        
         for (int i = 0; i < AbilityButtons.Count; i++) {
             // reset all cooldowns
             AbilityButtons[i].SetCooldownRemainingPercent(1);
@@ -80,22 +74,40 @@ public class AbilityHotbarUpdateSystem : ComponentSystem {
                 AbilityButtons[i].ImageIcon.sprite = null;
                 AbilityButtons[i].ImageIcon.color = new Color32(0, 0, 0, 0);
             }
+
+
+            if (World.Active.EntityManager.HasComponent<AbilityCooldownComponent>(GrantedAbilityEntities[i])) {
+                var abilityCooldown = World.Active.EntityManager.GetComponentData<AbilityCooldownComponent>(GrantedAbilityEntities[i]);
+                var abilityState = World.Active.EntityManager.GetComponentData<AbilityStateComponent>(GrantedAbilityEntities[i]);
+                UpdateButton(i, abilityCooldown.Value.NominalDuration, abilityCooldown.Value.RemainingTime, abilityState > 0);
+            }
+
+        }
+
+    }
+
+    public void UpdateGrantedAbilityEntitiesList() {
+        // Clear existing list of granted abilities
+        for (var i = 0; i < GrantedAbilityEntities.Length; i++) {
+            GrantedAbilityEntities[i] = default(Entity);
         }
 
         Entities
-            .ForEach<AbilityOwnerComponent, AbilityCooldownComponent, AbilityStateComponent, AbilityIdentifierComponent>((Entity entity, ref AbilityOwnerComponent abilityOwner, ref AbilityCooldownComponent abilityCooldown, ref AbilityStateComponent state, ref AbilityIdentifierComponent identifier) => {
+        .ForEach<AbilityOwnerComponent, AbilityCooldownComponent, AbilityStateComponent, AbilityIdentifierComponent>((Entity entity, ref AbilityOwnerComponent abilityOwner, ref AbilityCooldownComponent abilityCooldown, ref AbilityStateComponent state, ref AbilityIdentifierComponent identifier) => {
             // Only do this for the appropriate actor
             if (abilityOwner.Value == AbilityOwnerEntity) {
                 // Check our list to see if this ability is defined
                 var id = identifier.Value;
                 var abilityIdentifierIndex = AbilityIdentifiers.FindIndex(x => x == id);
                 if (abilityIdentifierIndex >= 0) {
-                    UpdateButton(abilityIdentifierIndex, abilityCooldown.Value.NominalDuration, abilityCooldown.Value.RemainingTime, state > 0);
+                    GrantedAbilityEntities[abilityIdentifierIndex] = entity;
                 }
             }
 
         });
     }
+
+
     private void UpdateButton(int index, float cooldownDuration, float cooldownTimeRemaining, bool cooldownActive) {
 
         var button = AbilityButtons[index];
