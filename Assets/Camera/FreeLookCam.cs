@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityStandardAssets.CrossPlatformInput;
+using static InputSystem.InputSystem;
 
-namespace UnityStandardAssets.Cameras
-{
-    public class FreeLookCam : PivotBasedCameraRig
-    {
+namespace UnityStandardAssets.Cameras {
+    public class FreeLookCam : PivotBasedCameraRig {
         // This script is designed to be placed on the root object of a camera rig,
         // comprising 3 gameobjects, each parented to the next:
 
@@ -27,28 +27,68 @@ namespace UnityStandardAssets.Cameras
         public Vector3 m_PivotEulers;
         public Quaternion m_PivotTargetRot;
         public Quaternion m_TransformTargetRot;
+        public InputSystem.InputSystem controls;
 
-        protected override void Awake()
-        {
+        protected override void Awake() {
             base.Awake();
             // Lock or unlock the cursor.
             Cursor.lockState = m_LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !m_LockCursor;
-			m_PivotEulers = m_Pivot.rotation.eulerAngles;
+            m_PivotEulers = m_Pivot.rotation.eulerAngles;
 
-	        m_PivotTargetRot = m_Pivot.transform.localRotation;
-			m_TransformTargetRot = transform.localRotation;
+            m_PivotTargetRot = m_Pivot.transform.localRotation;
+            m_TransformTargetRot = transform.localRotation;
+
+            if (controls == null) {
+                controls = new InputSystem.InputSystem();
+            }
+            controls.Movement.Enable();
+
+        }
+        public void FixedUpdate() {
+            var look = controls.Movement.Look.ReadValue<Vector2>();
+            HandleRotation(look.x, look.y);
         }
 
 
-        protected override void FollowTarget(float deltaTime)
-        {
+        protected override void FollowTarget(float deltaTime) {
             if (m_Target == null) return;
             // Move the rig towards target position.
-            transform.position = Vector3.Lerp(transform.position, m_Target.position, deltaTime*m_MoveSpeed);
+            transform.position = Vector3.Lerp(transform.position, m_Target.position, deltaTime * m_MoveSpeed);
         }
 
+        private void HandleRotation(float x, float y) {
+            if (Time.timeScale < float.Epsilon)
+                return;
 
-      
+            // Adjust the look angle by an amount proportional to the turn speed and horizontal input.
+            this.m_LookAngle += x * this.m_TurnSpeed;
+
+            // Rotate the rig (the root object) around Y axis only:
+            this.m_TransformTargetRot = Quaternion.Euler(0f, this.m_LookAngle, 0f);
+
+            if (this.m_VerticalAutoReturn) {
+                // For tilt input, we need to behave differently depending on whether we're using mouse or touch input:
+                // on mobile, vertical input is directly mapped to tilt value, so it springs back automatically when the look input is released
+                // we have to test whether above or below zero because we want to auto-return to zero even if min and max are not symmetrical.
+                this.m_TiltAngle = y > 0 ? Mathf.Lerp(0, -this.m_TiltMin, y) : Mathf.Lerp(0, this.m_TiltMax, -y);
+            } else {
+                // on platforms with a mouse, we adjust the current angle based on Y mouse input and turn speed
+                this.m_TiltAngle -= y * this.m_TurnSpeed;
+                // and make sure the new value is within the tilt range
+                this.m_TiltAngle = Mathf.Clamp(this.m_TiltAngle, -this.m_TiltMin, this.m_TiltMax);
+            }
+
+            // Tilt input around X is applied to the pivot (the child of this object)
+            this.m_PivotTargetRot = Quaternion.Euler(this.m_TiltAngle, this.m_PivotEulers.y, this.m_PivotEulers.z);
+
+            if (this.m_TurnSmoothing > 0) {
+                this.m_Pivot.localRotation = Quaternion.Slerp(this.m_Pivot.localRotation, this.m_PivotTargetRot, this.m_TurnSmoothing * Time.deltaTime);
+                this.transform.localRotation = Quaternion.Slerp(this.transform.localRotation, this.m_TransformTargetRot, this.m_TurnSmoothing * Time.deltaTime);
+            } else {
+                this.m_Pivot.localRotation = this.m_PivotTargetRot;
+                this.transform.localRotation = this.m_TransformTargetRot;
+            }
+        }
     }
 }

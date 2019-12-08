@@ -29,10 +29,10 @@ using Unity.Jobs;
 namespace GameplayAbilitySystem.Abilities.Systems.Generic {
     [UpdateInGroup(typeof(AbilityUpdateEndSystemGroup))]
     public abstract class GenericAssignAbilityIdentifierSystem<T> : JobComponentSystem
-    where T : struct, IComponentData {
+    where T : struct, IComponentData, IAbilityTagComponent {
 
         BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
-        protected abstract int AbilityIdentifier { get; }
+        protected int AbilityIdentifier => new T().AbilityIdentifier;
         protected override void OnCreate() {
             m_EntityCommandBuffer = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
         }

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Fire
+  - UI
   layers:
   - Default
   - TransparentFX
@@ -16,9 +17,9 @@ TagManager:
   - 
   - Terrain
   - Character
-  - 
-  - 
-  - 
+  - Wall
+  - Hurtbox
+  - Hitbox
   - 
   - 
   - 

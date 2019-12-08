@@ -19,6 +19,7 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Collections;
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems.Generic;
 using GameplayAbilitySystem.Attributes.Components;
@@ -28,6 +29,8 @@ using Unity.Entities;
 namespace MyGameplayAbilitySystem.Abilities {
     [AbilitySystemDisplayName("Fire 1")]
     public struct Fire1AbilityTag : IAbilityTagComponent, IComponentData {
+        public int AbilityIdentifier => 2;
+
         public void BeginActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity) {
             throw new System.NotImplementedException();
         }
@@ -83,6 +86,10 @@ namespace MyGameplayAbilitySystem.Abilities {
             throw new System.NotImplementedException();
         }
 
+        public IEnumerator DoAbility(object Payload) {
+            throw new System.NotImplementedException();
+        }
+
         public void EndActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity) {
             throw new System.NotImplementedException();
         }
@@ -95,9 +102,7 @@ namespace MyGameplayAbilitySystem.Abilities {
                 };
 
         }
-        public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<Fire1AbilityTag> {
-            protected override int AbilityIdentifier => 2;
-        }
+        public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<Fire1AbilityTag> { }
     }
 
 }

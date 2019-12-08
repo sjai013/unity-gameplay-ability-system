@@ -1,5 +1,5 @@
 ﻿/*
- * Created on Tue Dec 03 2019
+ * Created on Sat Dec 07 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -20,40 +20,20 @@
  */
 
 using System.Collections;
-using MyGameplayAbilitySystem.Abilities;
-using Unity.Entities;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
 
-public class PlayerCastTimelineHelperMono : MonoBehaviour {
+public class AnimationEventGrabber : MonoBehaviour
+{
     // Start is called before the first frame update
-    public bool isSwinging { get; set; }
-    public PlayableAsset SwingWeaponPlayable;
-    private PlayableDirector playableDirector;
-    void Start() {
-        playableDirector = GetComponent<PlayableDirector>();
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
-    void Update() {
-
-    }
-
-    public void PlaySwingAnimation() {
-        playableDirector.Play(SwingWeaponPlayable);
-    }
-
-    public IEnumerator CheckForSwingHit(bool hit, EntityManager EntityManager, Entity targetEntity) {
-        // Wait for swing to begin
-        while (!isSwinging) yield return null;
-
-        // Swing started, check if we've hit something, or if the swing check period is complete
-        while (isSwinging) {
-            yield return null;
-        }
-
-        if (hit) {
-            (new DefaultAttackAbilityTag()).CreateTargetAttributeModifiers(EntityManager, targetEntity);
-        }
+    void Update()
+    {
+        
     }
 }

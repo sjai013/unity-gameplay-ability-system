@@ -20,12 +20,16 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 
 namespace GameplayAbilitySystem.Abilities.Components {
     public interface IAbilityTagComponent {
+        int AbilityIdentifier { get; }
         void CreateCooldownEntities(EntityManager dstManager, Entity actorEntity);
         void CommitAbility(EntityManager dstManager, Entity actorEntity);
         void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity);
@@ -34,6 +38,24 @@ namespace GameplayAbilitySystem.Abilities.Components {
         void BeginActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity);
         void EndActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity);
 
+        IEnumerator DoAbility(object Payload);
+
+    }
+
+    public static class AbilityManager {
+
+        public static IEnumerable<ComponentType> AbilityComponentTypes() {
+            // Use reflection to get list of all structs that implement IAbilityTagComponent
+            // Check each granted ability to see if it has a component that matches the IAbilityTagComponent
+            var componentInterface = typeof(IAbilityTagComponent);
+            var types = System.AppDomain.CurrentDomain.GetAssemblies()
+                        .SelectMany(s => s.GetTypes())
+                        .Where(p => componentInterface.IsAssignableFrom(p) && !p.IsInterface && p.IsValueType)
+                        .Select(x => (ComponentType)x)
+                        .Where(x => x != null);
+
+            return types;
+        }
     }
 
     public struct AbilityCooldownComponent : IComponentData {

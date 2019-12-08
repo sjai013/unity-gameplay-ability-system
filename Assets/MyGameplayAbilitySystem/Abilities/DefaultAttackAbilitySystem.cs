@@ -19,6 +19,7 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System.Collections;
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems;
 using GameplayAbilitySystem.Abilities.Systems.Generic;
@@ -27,14 +28,20 @@ using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.Editor;
 using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects.Components;
+using MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using UnityEngine;
 
 namespace MyGameplayAbilitySystem.Abilities {
 
     [AbilitySystemDisplayName("Default Attack Ability")]
     public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
+        private const string AnimationStartTriggerName = "DoSwingAttack";
+
+        public int AbilityIdentifier => 1;
+
         public void CreateCooldownEntities(EntityManager dstManager, Entity actorEntity) {
             var cooldownArchetype1 = dstManager.CreateArchetype(
                                     typeof(GameplayEffectDurationComponent),
@@ -105,6 +112,103 @@ namespace MyGameplayAbilitySystem.Abilities {
             // Remove component from entity
             dstManager.RemoveComponent<DefaultAttackAbilityActive>(grantedAbilityEntity);
         }
+
+        public IEnumerator CheckAbilityHit(EntityManager EntityManager, Entity sourceEntity, Entity targetEntity) {
+            yield return null;
+        }
+
+        public IEnumerator DoAbility(object Payload) {
+            if (Payload is Payload payload) {
+                payload.ActorAbilitySystem.StartCoroutine(AbilityActionLogic(payload));
+            } else {
+                Debug.LogWarningFormat("The payload passed to {0} does not match the expected payload format.", this.GetType());
+            }
+
+            yield return null;
+        }
+
+        private IEnumerator AbilityActionLogic(Payload payload) {
+            var entityManager = payload.EntityManager;
+            var transform = payload.ActorTransform;
+            var actorAbilitySystem = payload.ActorAbilitySystem;
+            var grantedAbilityEntity = payload.GrantedAbilityEntity;
+            // Check ability state
+            var abilityStateComponent = entityManager.GetComponentData<AbilityStateComponent>(grantedAbilityEntity);
+
+            if (abilityStateComponent.Value != 0) yield break;
+            var animator = actorAbilitySystem.GetComponent<Animator>();
+            BeginActivateAbility(entityManager, grantedAbilityEntity);
+            CreateSourceAttributeModifiers(entityManager, actorAbilitySystem.AbilityOwnerEntity);
+            var animatorLayerName = "Weapon";
+            var animatorStateName = animatorLayerName + ".Swing";
+            var animatorStateFullHash = Animator.StringToHash(animatorStateName);
+            var animatorLayerIndex = animator.GetLayerIndex(animatorLayerName);
+
+            // Get animator state info
+            var weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
+
+            animator.SetTrigger(AnimationStartTriggerName);
+            // Wait to reach the "Swing" state
+            while (!weaponLayerAnimatorStateInfo.IsName(animatorStateName)) {
+                yield return null;
+                weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
+            }
+
+            // In the swing state, do raycast and hit damage
+            // Raycast forward, and if we hit something, reduce it's HP.
+            RaycastHit hit;
+            Vector3 rayOrigin = actorAbilitySystem.CastPoint.transform.position;
+            var forwardVector = actorAbilitySystem.transform.forward;
+            // Does the ray intersect any objects
+            if (!Physics.Raycast(rayOrigin, forwardVector, out hit, Mathf.Infinity)) {
+                yield break;
+            }
+            bool wasHit = false;
+            Entity targetEntity = default(Entity);
+            if (hit.distance < 1f) {
+                Debug.DrawRay(rayOrigin, forwardVector * hit.distance, Color.black, 1f);
+                Debug.Log(hit.transform.gameObject);
+                if (hit.transform.TryGetComponent<HurtboxMonoComponent>(out var hurtboxComponent)) {
+                    targetEntity = hurtboxComponent.ActorAbilitySystem.AbilityOwnerEntity;
+                    Debug.Log(hurtboxComponent.ActorAbilitySystem.gameObject);
+                    wasHit = true;
+                }
+            }
+
+            Debug.Log(targetEntity);
+            // Once we are more than 50% through the animation, trigger the damage
+            while (weaponLayerAnimatorStateInfo.normalizedTime < 0.5f) {
+                yield return null;
+                weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
+            }
+
+            CreateTargetAttributeModifiers(entityManager, targetEntity);
+            while (weaponLayerAnimatorStateInfo.IsName("Weapon.Swing")) {
+                yield return null;
+                weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
+            }
+            // Once we are no longer in the swing animation, commit the ability
+            CreateCooldownEntities(entityManager, actorAbilitySystem.AbilityOwnerEntity);
+            EndActivateAbility(entityManager, grantedAbilityEntity);
+            yield return null;
+        }
+
+        AnimatorStateInfo GetAnimatorStateInfo(Animator animator, int layerIndex, string animatorStateName) {
+            var animatorStateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
+            var animatorStateInfoNext = animator.GetNextAnimatorStateInfo(layerIndex);
+            if (animatorStateInfoNext.IsName(animatorStateName)) animatorStateInfo = animatorStateInfoNext;
+            return animatorStateInfo;
+        }
+        public class Activation {
+
+        }
+
+        public struct Payload {
+            public EntityManager EntityManager;
+            public Transform ActorTransform;
+            public ActorAbilitySystem ActorAbilitySystem;
+            public Entity GrantedAbilityEntity;
+        }
     }
 
     public class DefaultAttackAbilitySystem {
@@ -135,9 +239,7 @@ namespace MyGameplayAbilitySystem.Abilities {
             }
         }
 
-        public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> {
-            protected override int AbilityIdentifier => 1;
-        }
+        public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> { }
 
     }
 

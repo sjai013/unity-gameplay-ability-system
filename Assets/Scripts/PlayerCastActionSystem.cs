@@ -28,17 +28,11 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
-using UnityEngine.Playables;
 
 public class PlayerCastActionSystem : ComponentSystem {
     protected override void OnUpdate() {
 
-        Entities.WithAll<PlayerCastingControllableTagComponent>().ForEach((Entity entity, ActorAbilitySystem actorAbilitySystem) => {
-            if (Input.GetKeyUp("1")) {
-                actorAbilitySystem.StartCoroutine(DoDefaultAttack(entity, actorAbilitySystem));
-            }
 
-        });
     }
 
     private IEnumerator DoDefaultAttack(Entity entity, ActorAbilitySystem actorAbilitySystem) {
