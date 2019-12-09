@@ -188,6 +188,9 @@ namespace MyGameplayAbilitySystem.Abilities {
             if (hitTarget != null) {
                 CreateTargetAttributeModifiers(entityManager, hitTarget.AbilityOwnerEntity);
                 animator.SetTrigger("ReturnWeaponToIdle");
+                // Once we are no longer in the swing animation, commit the ability
+                CreateCooldownEntities(entityManager, actorAbilitySystem.AbilityOwnerEntity);
+
             }
             // Get target entity
             while (weaponLayerAnimatorStateInfo.IsName("Weapon.Swing")) {
@@ -196,10 +199,13 @@ namespace MyGameplayAbilitySystem.Abilities {
             }
 
             animator.ResetTrigger("ReturnWeaponToIdle");
-
-            // Once we are no longer in the swing animation, commit the ability
-            CreateCooldownEntities(entityManager, actorAbilitySystem.AbilityOwnerEntity);
             EndActivateAbility(entityManager, grantedAbilityEntity);
+            
+            // If we didn't anything, create cooldown entities
+            if (hitTarget == null) {
+                CreateCooldownEntities(entityManager, actorAbilitySystem.AbilityOwnerEntity);
+            }
+
             yield return null;
         }
 
