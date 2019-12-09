@@ -1874,7 +1874,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: -7.4380455}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 1e-45}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -2228,7 +2228,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17350
+  m_Name: pb_Mesh17354
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2452,27 +2452,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2308554864401960524, guid: fddc582aed5bbbd4ab4ac8025536d369, type: 3}
+    - target: {fileID: 863385734, guid: fddc582aed5bbbd4ab4ac8025536d369, type: 3}
+      propertyPath: moveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fddc582aed5bbbd4ab4ac8025536d369, type: 3}
---- !u!1 &863385732 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7899279095267793602, guid: fddc582aed5bbbd4ab4ac8025536d369,
-    type: 3}
-  m_PrefabInstance: {fileID: 863385731}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &863385733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 863385732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0e411bc437255c47840f84aaca9216a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &872576276
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3613,7 +3598,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 863385731}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 863385732}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98ee21ed47e3b5b46ac1de1af1726cf0, type: 3}
@@ -5045,8 +5030,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4694580746774770855, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87613a41b93a7d44a9290c82c0dd98c2, type: 3}
 --- !u!1001 &2368979380446301518
 PrefabInstance:
@@ -5219,19 +5203,19 @@ MonoBehaviour:
   m_Target: {fileID: 1124098576}
   m_AutoTargetPlayer: 1
   m_UpdateType: 1
-  m_Pivot: {fileID: 0}
-  m_MoveSpeed: 5
-  m_TurnSpeed: 1.5
-  m_TurnSmoothing: 0
-  m_TiltMax: 75
-  m_TiltMin: 45
-  m_LockCursor: 0
+  m_Pivot: {fileID: 3138204868274165951}
+  m_MoveSpeed: 1
+  m_TurnSpeed: 0.2
+  m_TurnSmoothing: 10
+  m_TiltMax: 50
+  m_TiltMin: 10
+  m_LockCursor: 1
   m_VerticalAutoReturn: 0
-  m_LookAngle: 0
-  m_TiltAngle: 0
-  m_PivotEulers: {x: 0, y: 0, z: 0}
-  m_PivotTargetRot: {x: 0, y: 0, z: 0, w: 0}
-  m_TransformTargetRot: {x: 0, y: 0, z: 0, w: 0}
+  m_LookAngle: 2164.483
+  m_TiltAngle: 41.249985
+  m_PivotEulers: {x: -0, y: 0, z: 0}
+  m_PivotTargetRot: {x: 0.35224992, y: 0, z: 0, w: 0.935906}
+  m_TransformTargetRot: {x: 0, y: 0.039109793, z: 0, w: 0.9992349}
 --- !u!124 &3138204868265195455
 Behaviour:
   m_ObjectHideFlags: 0

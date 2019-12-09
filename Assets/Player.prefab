@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1340536210}
   - component: {fileID: 1340536211}
+  - component: {fileID: 5416369453588903348}
   m_Layer: 12
   m_Name: Hitbox
   m_TagString: Untagged
@@ -39,11 +40,24 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340536209}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
+  m_IsTrigger: 1
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5416369453588903348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340536209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 906711b37a3d03d4086e57699dd5293a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActorAbilitySystem: {fileID: 1888591096130298535}
 --- !u!1 &1884499364
 GameObject:
   m_ObjectHideFlags: 0
@@ -54,6 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1884499365}
   - component: {fileID: 1884499366}
+  - component: {fileID: 4570854595902227326}
   m_Layer: 11
   m_Name: Hurtbox
   m_TagString: Untagged
@@ -83,11 +98,24 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1884499364}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4570854595902227326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884499364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ab95550404ecb04888ec1db28f34872, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActorAbilitySystem: {fileID: 1888591096130298535}
 --- !u!1 &821864033725763170
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,9 +534,9 @@ GameObject:
   - component: {fileID: 863385736}
   - component: {fileID: 863385733}
   - component: {fileID: 863385734}
-  - component: {fileID: 2308554864401960524}
+  - component: {fileID: 2057110330817295526}
   m_Layer: 0
-  m_Name: Ethan
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -656,7 +684,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 15
---- !u!114 &2308554864401960524
+--- !u!114 &2057110330817295526
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -665,48 +693,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7899279095267793602}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Script: {fileID: 11500000, guid: c0e411bc437255c47840f84aaca9216a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 6d20819b19a909342bd5df7d9ed84015,
-    type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7899279095267793602}
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 90c51565-156c-4ea4-9ef1-e57ed3c070cc
-    m_ActionName: KBM/WASD[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 548c37f1-82a8-4c99-9fa1-84e12e29a04c
-    m_ActionName: KBM/ Cast 1[/Keyboard/1]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1346cc8a-d455-407a-aa83-ce3be306d361
-    m_ActionName: Player/Look[/Mouse/delta]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: KBM
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  CastAbilityButtonMap: 
 --- !u!1001 &295742051
 PrefabInstance:
   m_ObjectHideFlags: 0

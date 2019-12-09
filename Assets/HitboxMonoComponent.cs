@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours;
 using UnityEngine;
-
-public class HurtboxMonoComponent : MonoBehaviour {
+public class HitboxMonoComponent : MonoBehaviour {
     public ActorAbilitySystem ActorAbilitySystem;
     public event EventHandler<ColliderEventArgs> TriggerEnterEvent;
 
@@ -16,4 +15,6 @@ public class HurtboxMonoComponent : MonoBehaviour {
             other = other
         });
     }
+
+
 }

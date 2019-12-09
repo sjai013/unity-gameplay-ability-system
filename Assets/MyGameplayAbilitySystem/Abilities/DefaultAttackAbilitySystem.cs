@@ -19,6 +19,7 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System;
 using System.Collections;
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems;
@@ -154,39 +155,48 @@ namespace MyGameplayAbilitySystem.Abilities {
                 weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
             }
 
-            // In the swing state, do raycast and hit damage
-            // Raycast forward, and if we hit something, reduce it's HP.
-            RaycastHit hit;
-            Vector3 rayOrigin = actorAbilitySystem.CastPoint.transform.position;
-            var forwardVector = actorAbilitySystem.transform.forward;
-            // Does the ray intersect any objects
-            if (!Physics.Raycast(rayOrigin, forwardVector, out hit, Mathf.Infinity)) {
-                yield break;
-            }
-            bool wasHit = false;
-            Entity targetEntity = default(Entity);
-            if (hit.distance < 1f) {
-                Debug.DrawRay(rayOrigin, forwardVector * hit.distance, Color.black, 1f);
-                Debug.Log(hit.transform.gameObject);
-                if (hit.transform.TryGetComponent<HurtboxMonoComponent>(out var hurtboxComponent)) {
-                    targetEntity = hurtboxComponent.ActorAbilitySystem.AbilityOwnerEntity;
-                    Debug.Log(hurtboxComponent.ActorAbilitySystem.gameObject);
-                    wasHit = true;
-                }
-            }
+            // In the swing state, check for a collision between this hitbox and any hurtbox
+            // Get reference to all hitboxes on source
+            var hitboxes = payload.ActorAbilitySystem.GetComponentsInChildren<HitboxMonoComponent>(false);
+            ActorAbilitySystem hitTarget = null;
 
-            Debug.Log(targetEntity);
-            // Once we are more than 50% through the animation, trigger the damage
-            while (weaponLayerAnimatorStateInfo.normalizedTime < 0.5f) {
+
+
+            // Once we're about 35% through the animation, allow hit to trigger
+            while (weaponLayerAnimatorStateInfo.normalizedTime < 0.35f) {
                 yield return null;
                 weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
             }
 
-            CreateTargetAttributeModifiers(entityManager, targetEntity);
+            void HitTriggered(object sender, ColliderEventArgs e) {
+                hitTarget = e.other.gameObject.GetComponent<HurtboxMonoComponent>().ActorAbilitySystem;
+            }
+
+            // Subscribe each hitbox on actor to the HitTriggered method
+
+            for (int i = 0; i < hitboxes.Length; i++) {
+                hitboxes[i].TriggerEnterEvent += HitTriggered;
+            }
+
+            // Wait for hitTriggered to become true, or animation to complete
+            while (weaponLayerAnimatorStateInfo.IsName("Weapon.Swing") && hitTarget == null) {
+                yield return new WaitForFixedUpdate();
+                weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
+            }
+
+            // If we get to here trigger return to idle state
+            if (hitTarget != null) {
+                CreateTargetAttributeModifiers(entityManager, hitTarget.AbilityOwnerEntity);
+                animator.SetTrigger("ReturnWeaponToIdle");
+            }
+            // Get target entity
             while (weaponLayerAnimatorStateInfo.IsName("Weapon.Swing")) {
-                yield return null;
+                yield return new WaitForFixedUpdate();
                 weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
             }
+
+            animator.ResetTrigger("ReturnWeaponToIdle");
+
             // Once we are no longer in the swing animation, commit the ability
             CreateCooldownEntities(entityManager, actorAbilitySystem.AbilityOwnerEntity);
             EndActivateAbility(entityManager, grantedAbilityEntity);

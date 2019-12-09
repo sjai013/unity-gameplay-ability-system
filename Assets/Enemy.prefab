@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1687781940}
   - component: {fileID: 1687781941}
-  - component: {fileID: 1180816480873807952}
+  - component: {fileID: 3282985377655092570}
   m_Layer: 11
   m_Name: Hurtbox
   m_TagString: Untagged
@@ -40,12 +40,12 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687781939}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.2, y: 1.2, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1180816480873807952
+--- !u!114 &3282985377655092570
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 4400339242248586328}
   - component: {fileID: 731426747}
   m_Layer: 0
-  m_Name: Enemy Ethan
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
