@@ -161,7 +161,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
         public static void CreateAttributeOperEntities(EntityManager EntityManager, Entity ActorEntity) {
 
 
-             random = new Unity.Mathematics.Random((uint)ActorEntity.Index);
+            var random = new Unity.Mathematics.Random((uint)ActorEntity.Index);
 
             for (var i = 0; i < 5; i++) {
                 new TemporaryAttributeModifierTag().CreateAttributeModifier<TAttribute, TOper>(EntityManager, ActorEntity, random.NextFloat(0,50));
