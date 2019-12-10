@@ -21,25 +21,12 @@
 
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Attributes.Jobs;
-using GameplayAbilitySystem.Common;
 using GameplayAbilitySystem.Common.Components;
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using UnityEngine;
 
 namespace GameplayAbilitySystem.Attributes.Systems {
-    [UpdateInGroup(typeof(InitializationSystemGroup))]
-    public class AttributeSystemGroup : ComponentSystemGroup { }
-
-    [UpdateInGroup(typeof(AttributeSystemGroup))]
-    public class AttributeBaseValueGroup : ComponentSystemGroup { }
-
-    [UpdateInGroup(typeof(AttributeSystemGroup))]
-    [UpdateAfter(typeof(AttributeBaseValueGroup))]
-    public class AttributeCurrentValueGroup : ComponentSystemGroup { }
-
     [UpdateInGroup(typeof(AttributeSystemGroup))]
     public abstract class GenericAttributeSystem<TAttributeTag, TAttributeModifierTag> : AttributeModificationSystem<TAttributeTag>
         where TAttributeTag : struct, IAttributeComponent, IComponentData
@@ -119,121 +106,5 @@ namespace GameplayAbilitySystem.Attributes.Systems {
         protected abstract JobHandle CleanupJob(JobHandle inputDeps);
 
 
-    }
-
-    /// <summary>
-    /// This is a generic attribute temporary modification system which can be used
-    /// out of the box, and supports single attribute modifications, using 
-    /// Add, Multiply, and Divide operators.
-    /// 
-    /// The added, multiplied, and divided values are summed for each entity first, and then
-    /// the calculation formula is applied to each entity: 
-    /// <br/>
-    /// <code>
-    /// CurrentValue = Added + (BaseValue * [1 + multiplied - divided])
-    /// </code>
-    /// </summary>
-    /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
-    [UpdateInGroup(typeof(AttributeCurrentValueGroup))]
-    public class GenericAttributeTemporarySystem<TAttributeTag> : GenericAttributeSystem<TAttributeTag, TemporaryAttributeModifierTag>
-        where TAttributeTag : struct, IAttributeComponent, IComponentData {
-
-        [BurstCompile]
-        [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
-        struct AttributeCombinerJob : IJobForEachWithEntity<TAttributeTag> {
-            [ReadOnly] public NativeMultiHashMap<Entity, float> AddAttributes;
-            [ReadOnly] public NativeMultiHashMap<Entity, float> DivideAttributes;
-            [ReadOnly] public NativeMultiHashMap<Entity, float> MultiplyAttributes;
-
-            public void Execute(Entity entity, int index, ref TAttributeTag attribute) {
-                var added = SumFromNMHM(entity, AddAttributes);
-                var multiplied = SumFromNMHM(entity, MultiplyAttributes);
-                var divided = SumFromNMHM(entity, DivideAttributes);
-
-                attribute.CurrentValue = added + attribute.BaseValue * (1 + multiplied - divided);
-            }
-            private float SumFromNMHM(Entity entity, NativeMultiHashMap<Entity, float> values) {
-                values.TryGetFirstValue(entity, out var sum, out var multiplierIt);
-                while (values.TryGetNextValue(out var tempSum, ref multiplierIt)) {
-                    sum += tempSum;
-                }
-                return sum;
-            }
-        }
-        protected override JobHandle ScheduleAttributeCombinerJob(JobHandle inputDeps) {
-            inputDeps = new AttributeCombinerJob
-            {
-                AddAttributes = AttributeHashAdd,
-                DivideAttributes = AttributeHashDivide,
-                MultiplyAttributes = AttributeHashMultiply
-            }.Schedule(this.actorsWithAttributesQuery, inputDeps);
-            return inputDeps;
-        }
-
-        protected override JobHandle CleanupJob(JobHandle inputDeps) {
-            return inputDeps;
-        }
-    }
-
-
-    /// <summary>
-    /// This is a generic attribute permanent modification system which can be used
-    /// out of the box, and supports single attribute modifications, using 
-    /// Add, Multiply, and Divide operators.
-    /// 
-    /// The added, multiplied, and divided values are summed for each entity first, and then
-    /// the calculation formula is applied to each entity: 
-    /// <br/>
-    /// <code>
-    /// BaseValue = Added + (BaseValue * [1 + multiplied - divided])
-    /// </code>
-    /// </summary>
-    /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
-    [UpdateInGroup(typeof(AttributeBaseValueGroup))]
-    public class GenericAttributePermanentSystem<TAttributeTag> : GenericAttributeSystem<TAttributeTag, PermanentAttributeModifierTag>
-        where TAttributeTag : struct, IAttributeComponent, IComponentData {
-
-        [BurstCompile]
-        [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
-        struct AttributeCombinerJob : IJobForEachWithEntity<TAttributeTag> {
-            [ReadOnly] public NativeMultiHashMap<Entity, float> AddAttributes;
-            // [ReadOnly] public NativeMultiHashMap<Entity, float> DivideAttributes;
-            // [ReadOnly] public NativeMultiHashMap<Entity, float> MultiplyAttributes;
-
-            public void Execute(Entity entity, int index, ref TAttributeTag attribute) {
-                var added = SumFromNMHM(entity, AddAttributes);
-                // var multiplied = SumFromNMHM(entity, MultiplyAttributes);
-                // var divided = SumFromNMHM(entity, DivideAttributes);
-
-                // Ignore multiplication.  I'm not sure how to handle add/multiply/divide given that order
-                // of operations could be arbitrary, and therefore not repeatable.
-                // For now, only allow addition, because that's repeatable.
-                attribute.BaseValue = added + attribute.BaseValue; //* (1 + multiplied - divided);  
-
-            }
-            private float SumFromNMHM(Entity entity, NativeMultiHashMap<Entity, float> values) {
-                values.TryGetFirstValue(entity, out var sum, out var multiplierIt);
-                while (values.TryGetNextValue(out var tempSum, ref multiplierIt)) {
-                    sum += tempSum;
-                }
-                return sum;
-            }
-        }
-
-
-        protected override JobHandle ScheduleAttributeCombinerJob(JobHandle inputDeps) {
-            inputDeps = new AttributeCombinerJob
-            {
-                AddAttributes = AttributeHashAdd,
-                // DivideAttributes = AttributeHashDivide,
-                // MultiplyAttributes = AttributeHashMultiply
-            }.Schedule(this.actorsWithAttributesQuery, inputDeps);
-            return inputDeps;
-        }
-
-
-        protected override JobHandle CleanupJob(JobHandle inputDeps) {
-            return inputDeps;
-        }
     }
 }

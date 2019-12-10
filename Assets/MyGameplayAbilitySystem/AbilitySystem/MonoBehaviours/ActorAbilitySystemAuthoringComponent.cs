@@ -103,10 +103,6 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
                 {
                     Value = abilitySystemAttributesEntity
                 });
-                // dstManager.SetComponentData(abilitySystemGrantedAbilityEntity, new AbilityIdentifierComponent
-                // {
-                //     Value = 1
-                // });
                 dstManager.SetName(abilitySystemGrantedAbilityEntity, this.gameObject.name + " - Granted Ability - " + abilityType.GetManagedType().Name);
                 entities.Add(abilitySystemGrantedAbilityEntity);
             }
@@ -131,10 +127,6 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
                 Value = entity
             });
             entityManager.SetName(abilitySystemAttributesEntity, this.gameObject.name + " - GameplayAbilitySystem");
-
-
-            // attributeTypes.Add(typeof(DefaultAttackAbilityTag));
-
             return abilitySystemAttributesEntity;
         }
 
@@ -159,12 +151,9 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
     where TOper : struct, IAttributeOperator, IComponentData
     where TAttribute : struct, IAttributeComponent, IComponentData {
         public static void CreateAttributeOperEntities(EntityManager EntityManager, Entity ActorEntity) {
-
-
             var random = new Unity.Mathematics.Random((uint)ActorEntity.Index);
-
             for (var i = 0; i < 5; i++) {
-                new TemporaryAttributeModifierTag().CreateAttributeModifier<TAttribute, TOper>(EntityManager, ActorEntity, random.NextFloat(0,50));
+                new PermanentAttributeModifierTag().CreateAttributeModifier<TAttribute, TOper>(EntityManager, ActorEntity, random.NextFloat(0,50));
             }
         }
     }

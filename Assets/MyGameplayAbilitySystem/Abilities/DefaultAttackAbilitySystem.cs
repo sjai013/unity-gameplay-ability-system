@@ -56,7 +56,7 @@ namespace MyGameplayAbilitySystem.Abilities {
         }
 
         public void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
-            var entity = new TemporaryAttributeModifierTag()
+            var entity = new PermanentAttributeModifierTag()
                     .CreateAttributeModifier<ManaAttributeComponent, Components.Operators.Add>(dstManager, actorEntity, -1);
         }
 
@@ -65,7 +65,7 @@ namespace MyGameplayAbilitySystem.Abilities {
             CreateSourceAttributeModifiers(dstManager, actorEntity);
         }
         public void CreateTargetAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
-            var entity = new TemporaryAttributeModifierTag()
+            var entity = new PermanentAttributeModifierTag()
                                 .CreateAttributeModifier<HealthAttributeComponent, Components.Operators.Add>(dstManager, actorEntity, -5);
 
         }
