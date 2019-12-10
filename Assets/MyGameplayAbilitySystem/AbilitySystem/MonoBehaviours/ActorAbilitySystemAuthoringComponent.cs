@@ -69,7 +69,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
             CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, ManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
             CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Multiply, ManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
             CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Divide, ManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
-CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, MaxManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
+            CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, MaxManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
             CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Multiply, MaxManaAttributeComponent>.CreateAttributeOperEntities(dstManager, abilityOwnerEntity);
 
 
@@ -160,27 +160,11 @@ CreateEntities<GameplayAbilitySystem.Attributes.Components.Operators.Add, MaxMan
     where TAttribute : struct, IAttributeComponent, IComponentData {
         public static void CreateAttributeOperEntities(EntityManager EntityManager, Entity ActorEntity) {
 
-            var archetype = EntityManager.CreateArchetype(
-                typeof(TOper),
-                typeof(AttributeComponentTag<TAttribute>),
-                typeof(AttributeModifier<TOper, TAttribute>),
-                typeof(AttributesOwnerComponent)
-            );
 
-            var random = new Unity.Mathematics.Random((uint)ActorEntity.Index);
-
+             random = new Unity.Mathematics.Random((uint)ActorEntity.Index);
 
             for (var i = 0; i < 5; i++) {
-                var entity = EntityManager.CreateEntity(archetype);
-                EntityManager.SetComponentData(entity, new GameplayAbilitySystem.Attributes.Components.AttributeModifier<TOper, TAttribute>()
-                {
-                    Value = random.NextFloat(0, 50)
-                });
-
-                EntityManager.SetComponentData(entity, new AttributesOwnerComponent()
-                {
-                    Value = ActorEntity
-                });
+                new TemporaryAttributeModifierTag().CreateAttributeModifier<TAttribute, TOper>(EntityManager, ActorEntity, random.NextFloat(0,50));
             }
         }
     }

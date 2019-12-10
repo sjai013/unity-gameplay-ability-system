@@ -22,11 +22,18 @@
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Attributes.Systems;
 namespace MyGameplayAbilitySystem.Attributes.Systems {
-    public class HealthAttributeSystem : GenericAttributeSystem<HealthAttributeComponent> { }
-    public class ManaAttributeSystem : GenericAttributeSystem<ManaAttributeComponent> { }
-    public class MaxHealthAttributeSystem : GenericAttributeSystem<MaxHealthAttributeComponent> { }
-    public class MaxManaAttributeSystem : GenericAttributeSystem<MaxManaAttributeComponent> { }
-    public class CharacterLevelAttributeSystem : GenericAttributeSystem<CharacterLevelAttributeComponent> { }
+
+    public class HealthAttributePermanentSystem : GenericAttributePermanentSystem<HealthAttributeComponent> { }
+    public class ManaAttributePermanentSystem : GenericAttributePermanentSystem<ManaAttributeComponent> { }
+    public class MaxHealthAttributePermanentSystem : GenericAttributePermanentSystem<MaxHealthAttributeComponent> { }
+    public class MaxManaAttributePermanentSystem : GenericAttributePermanentSystem<MaxManaAttributeComponent> { }
+    public class CharacterLevelAttributePermanentSystem : GenericAttributePermanentSystem<CharacterLevelAttributeComponent> { }
+
+    public class HealthAttributeTemporarySystem : GenericAttributeTemporarySystem<HealthAttributeComponent> { }
+    public class ManaAttributeTemporarySystem : GenericAttributeTemporarySystem<ManaAttributeComponent> { }
+    public class MaxHealthAttributeTemporarySystem : GenericAttributeTemporarySystem<MaxHealthAttributeComponent> { }
+    public class MaxManaAttributeTemporarySystem : GenericAttributeTemporarySystem<MaxManaAttributeComponent> { }
+    public class CharacterLevelAttributeTemporarySystem : GenericAttributeTemporarySystem<CharacterLevelAttributeComponent> { }
 
 
 }

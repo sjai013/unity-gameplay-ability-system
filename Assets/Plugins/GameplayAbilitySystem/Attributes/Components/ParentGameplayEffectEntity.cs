@@ -19,36 +19,13 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using GameplayAbilitySystem.Attributes.Components;
 using Unity.Entities;
-using Unity.Jobs;
 
-namespace GameplayAbilitySystem.Attributes.Systems {
+namespace GameplayAbilitySystem.Attributes.Components {
+    public struct ParentGameplayEffectEntity : IComponentData {
+        public Entity Value;
+        public static implicit operator Entity(ParentGameplayEffectEntity e) { return e.Value; }
+        public static implicit operator ParentGameplayEffectEntity(Entity e) { return new ParentGameplayEffectEntity { Value = e }; }
 
-    /// <summary>
-    /// This is the base for all attribute modification systems.  
-    /// Custom attribute modification types should inherit from this class
-    /// and modify as necessary.
-    /// 
-    /// See <see cref="GenericAttributeTemporarySystem{TAttributeTag}"> for a sample modifier system
-    /// </summary>
-    /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
-    public abstract class AttributeModificationSystem<TAttribute> : JobComponentSystem
-    where TAttribute : struct, IAttributeComponent, IComponentData {
-
-        /// <summary>
-        /// This is the list of queries that are use
-        /// </summary>
-        protected EntityQuery[] Queries = new EntityQuery[3];
-        protected EntityQuery actorsWithAttributesQuery;
-
-        protected override JobHandle OnUpdate(JobHandle inputDependencies) {
-            inputDependencies = ScheduleJobs(inputDependencies);
-            return inputDependencies;
-        }
-        protected abstract JobHandle ScheduleJobs(JobHandle inputDependencies);
     }
-
 }
-
-
