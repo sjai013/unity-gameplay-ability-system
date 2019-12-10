@@ -23,6 +23,7 @@ using Unity.Entities;
 
 namespace GameplayAbilitySystem.Attributes.Components {
     public struct TemporaryAttributeModifierTag : IComponentData, IAttributeModifierTag {
+        public Entity ParentGameplayEffect;
         public EntityArchetype AttributeModifierArchetype<TAttribute, TOperator>(EntityManager entityManager)
             where TAttribute : struct, IAttributeComponent, IComponentData
             where TOperator : struct, IAttributeOperator {
@@ -58,6 +59,11 @@ namespace GameplayAbilitySystem.Attributes.Components {
             entityManager.SetComponentData(entity, new AttributesOwnerComponent()
             {
                 Value = Target
+            });
+
+            entityManager.SetComponentData(entity, new ParentGameplayEffectEntity()
+            {
+                Value = ParentGameplayEffect
             });
             return entity;
         }
