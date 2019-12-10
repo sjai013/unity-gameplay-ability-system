@@ -34,6 +34,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
+using Components = GameplayAbilitySystem.Attributes.Components;
 
 namespace MyGameplayAbilitySystem.Abilities {
 
@@ -55,23 +56,8 @@ namespace MyGameplayAbilitySystem.Abilities {
         }
 
         public void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
-            var archetype = dstManager.CreateArchetype(
-                            typeof(GameplayAbilitySystem.Attributes.Components.Operators.Add),
-                            typeof(AttributeComponentTag<ManaAttributeComponent>),
-                            typeof(AttributeModifier<GameplayAbilitySystem.Attributes.Components.Operators.Add, ManaAttributeComponent>),
-                            typeof(AttributesOwnerComponent)
-                        );
-
-            var entity = dstManager.CreateEntity(archetype);
-            dstManager.SetComponentData(entity, new AttributeModifier<GameplayAbilitySystem.Attributes.Components.Operators.Add, ManaAttributeComponent>()
-            {
-                Value = -1
-            });
-
-            dstManager.SetComponentData(entity, new AttributesOwnerComponent()
-            {
-                Value = actorEntity
-            });
+            var entity = new TemporaryAttributeModifierTag()
+                    .CreateAttributeModifier<ManaAttributeComponent, Components.Operators.Add>(dstManager, actorEntity, -1);
         }
 
         public void CommitAbility(EntityManager dstManager, Entity actorEntity) {
@@ -79,23 +65,9 @@ namespace MyGameplayAbilitySystem.Abilities {
             CreateSourceAttributeModifiers(dstManager, actorEntity);
         }
         public void CreateTargetAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
-            var archetype = dstManager.CreateArchetype(
-                            typeof(GameplayAbilitySystem.Attributes.Components.Operators.Add),
-                            typeof(AttributeComponentTag<HealthAttributeComponent>),
-                            typeof(AttributeModifier<GameplayAbilitySystem.Attributes.Components.Operators.Add, HealthAttributeComponent>),
-                            typeof(AttributesOwnerComponent)
-                        );
+            var entity = new TemporaryAttributeModifierTag()
+                                .CreateAttributeModifier<HealthAttributeComponent, Components.Operators.Add>(dstManager, actorEntity, -5);
 
-            var entity = dstManager.CreateEntity(archetype);
-            dstManager.SetComponentData(entity, new AttributeModifier<GameplayAbilitySystem.Attributes.Components.Operators.Add, HealthAttributeComponent>()
-            {
-                Value = -5
-            });
-
-            dstManager.SetComponentData(entity, new AttributesOwnerComponent()
-            {
-                Value = actorEntity
-            });
         }
 
         public void BeginActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity) {
@@ -200,7 +172,7 @@ namespace MyGameplayAbilitySystem.Abilities {
 
             animator.ResetTrigger("ReturnWeaponToIdle");
             EndActivateAbility(entityManager, grantedAbilityEntity);
-            
+
             // If we didn't anything, create cooldown entities
             if (hitTarget == null) {
                 CreateCooldownEntities(entityManager, actorAbilitySystem.AbilityOwnerEntity);
