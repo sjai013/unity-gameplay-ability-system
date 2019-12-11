@@ -61,7 +61,7 @@ namespace GameplayAbilitySystem.Attributes.Components {
                 Value = Target
             });
 
-            entityManager.SetComponentData(entity, new ParentGameplayEffectEntity()
+            entityManager.SetSharedComponentData(entity, new ParentGameplayEffectEntity()
             {
                 Value = ParentGameplayEffect
             });

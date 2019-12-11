@@ -24,9 +24,13 @@ using Unity.Entities;
 namespace GameplayAbilitySystem.Attributes.Systems {
     [UpdateInGroup(typeof(InitializationSystemGroup))]
     public class AttributeSystemGroup : ComponentSystemGroup { }
+    [UpdateInGroup(typeof(AttributeSystemGroup))]
+    public class AttributeGroupUpdateBeginSystem : ComponentSystemGroup { }
 
     [UpdateInGroup(typeof(AttributeSystemGroup))]
+    [UpdateAfter(typeof(AttributeGroupUpdateBeginSystem))]
     public class AttributeBaseValueGroup : ComponentSystemGroup { }
+
 
     [UpdateInGroup(typeof(AttributeSystemGroup))]
     [UpdateAfter(typeof(AttributeBaseValueGroup))]

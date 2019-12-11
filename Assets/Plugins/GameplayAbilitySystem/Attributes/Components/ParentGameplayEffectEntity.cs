@@ -22,7 +22,7 @@
 using Unity.Entities;
 
 namespace GameplayAbilitySystem.Attributes.Components {
-    public struct ParentGameplayEffectEntity : IComponentData {
+    public struct ParentGameplayEffectEntity : ISharedComponentData {
         public Entity Value;
         public static implicit operator Entity(ParentGameplayEffectEntity e) { return e.Value; }
         public static implicit operator ParentGameplayEffectEntity(Entity e) { return new ParentGameplayEffectEntity { Value = e }; }

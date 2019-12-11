@@ -29,7 +29,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
     [UpdateInGroup(typeof(GameplayEffectGroupUpdateEndSystem))]
     public class GameplayEffectCleanupSystem : JobComponentSystem {
 
-        public BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
+        private BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
         private EntityQuery m_Group;
         protected override void OnCreate() {
             m_EntityCommandBuffer = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
@@ -45,25 +45,16 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
         struct CleanupJob : IJobChunk {
             public EntityCommandBuffer.Concurrent Ecb;
             [ReadOnly] public ArchetypeChunkComponentType<GameplayEffectDurationComponent> DurationComponents;
-            [ReadOnly] public ArchetypeChunkComponentType<GameplayEffectAttributeEntityComponent> AttributeEntityComponents;
             [ReadOnly] public ArchetypeChunkEntityType EntityType;
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex) {
 
                 var chunkDurations = chunk.GetNativeArray(DurationComponents);
-                var hasAttribute = chunk.Has<GameplayEffectAttributeEntityComponent>(AttributeEntityComponents);
-                var chunkAttributeEntities = new NativeArray<GameplayEffectAttributeEntityComponent>();
                 var chunkEntities = chunk.GetNativeArray(EntityType);
-                if (hasAttribute) {
-                    chunkAttributeEntities = chunk.GetNativeArray<GameplayEffectAttributeEntityComponent>(AttributeEntityComponents);
-                }
                 for (var i = 0; i < chunk.Count; i++) {
                     var Entity = chunkEntities[i];
                     var durationComponent = chunkDurations[i];
                     var duration = durationComponent.Value.RemainingTime;
                     if (duration <= 0f) {
-                        if (hasAttribute) {
-                            Ecb.DestroyEntity(chunkIndex, chunkAttributeEntities[i]);
-                        }
                         Ecb.DestroyEntity(chunkIndex, Entity);
                     }
                 }
@@ -75,7 +66,6 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
                 Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent(),
                 EntityType = GetArchetypeChunkEntityType(),
                 DurationComponents = GetArchetypeChunkComponentType<GameplayEffectDurationComponent>(),
-                AttributeEntityComponents = GetArchetypeChunkComponentType<GameplayEffectAttributeEntityComponent>()
             }.Schedule(m_Group, inputDeps);
 
             m_EntityCommandBuffer.AddJobHandleForProducer(inputDeps);
