@@ -33,6 +33,7 @@ namespace GameplayAbilitySystem.Attributes.Components {
 
             return archetype;
         }
+
         public ComponentType[] AttributeOperatorQueryComponents<TAttribute, TOperator>()
             where TAttribute : struct, IAttributeComponent, IComponentData
             where TOperator : struct, IAttributeOperator {
@@ -56,6 +57,28 @@ namespace GameplayAbilitySystem.Attributes.Components {
             });
 
             entityManager.SetComponentData(entity, new AttributesOwnerComponent()
+            {
+                Value = Target
+            });
+
+            return entity;
+        }
+
+        public Entity CreateAttributeModifier<TAttribute, TOperator>(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity Target, float Value)
+            where TAttribute : struct, IAttributeComponent, IComponentData
+            where TOperator : struct, IAttributeOperator {
+            var entity = Ecb.CreateEntity(jobIndex);
+            var components = AttributeOperatorQueryComponents<TAttribute, TOperator>();
+            for (var i = 0; i < components.Length; i++) {
+                Ecb.AddComponent(jobIndex, entity, components[i]);
+            }
+
+            Ecb.SetComponent(jobIndex, entity, new AttributeModifier<TOperator, TAttribute>()
+            {
+                Value = Value
+            });
+
+            Ecb.SetComponent(jobIndex, entity, new AttributesOwnerComponent()
             {
                 Value = Target
             });

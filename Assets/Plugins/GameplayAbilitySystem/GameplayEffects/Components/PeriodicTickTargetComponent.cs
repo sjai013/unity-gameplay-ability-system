@@ -1,5 +1,5 @@
 /*
- * Created on Mon Nov 04 2019
+ * Created on Thu Dec 12 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -19,13 +19,15 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
+using GameplayAbilitySystem.Common.Components;
 using Unity.Entities;
+
 namespace GameplayAbilitySystem.GameplayEffects.Components {
-    [Serializable]
-    public struct GameplayEffectAttributeEntityComponent : IComponentData {
+    public struct PeriodicTickTargetComponent : IComponentData {
         public Entity Value;
-        public static implicit operator Entity(GameplayEffectAttributeEntityComponent e) { return e.Value; }
-        public static implicit operator GameplayEffectAttributeEntityComponent(Entity e) { return new GameplayEffectAttributeEntityComponent { Value = e }; }
+        public static implicit operator Entity(PeriodicTickTargetComponent e) { return e.Value; }
+        public static implicit operator PeriodicTickTargetComponent(Entity e) { return new PeriodicTickTargetComponent { Value = e }; }
+
+
     }
 }

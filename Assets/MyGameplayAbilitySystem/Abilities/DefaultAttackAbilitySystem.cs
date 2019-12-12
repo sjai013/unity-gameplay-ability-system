@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections;
+using System.Runtime.InteropServices;
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.Abilities.Systems;
 using GameplayAbilitySystem.Abilities.Systems.Generic;
@@ -31,11 +32,13 @@ using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours;
 using MyGameplayAbilitySystem.GameplayEffects.Components;
-using Unity.Collections;
+using MyGameplayAbilitySystem.GameplayEffects.Systems;
 using Unity.Entities;
+using Unity.Burst;
 using Unity.Jobs;
 using UnityEngine;
 using Components = GameplayAbilitySystem.Attributes.Components;
+using GameplayAbilitySystem.Common.Components;
 
 namespace MyGameplayAbilitySystem.Abilities {
 
@@ -53,7 +56,30 @@ namespace MyGameplayAbilitySystem.Abilities {
 
             var cooldownEntity1 = dstManager.CreateEntity(cooldownArchetype1);
             dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity1, actorEntity);
-            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity1, GameplayEffectDurationComponent.Initialise(0.2f, UnityEngine.Time.time));
+            dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity1, GameplayEffectDurationComponent.Initialise(5f, UnityEngine.Time.time));
+
+            var periodicEffectArchetype = new PeriodicTickActionComponent<PeriodicTickDelegate>().CreateArchetype(dstManager);
+            var tickEntity = dstManager.CreateEntity(periodicEffectArchetype);
+            dstManager.SetComponentData<PeriodicTickActionComponent<PeriodicTickDelegate>>(tickEntity,
+                new PeriodicTickActionComponent<PeriodicTickDelegate>()
+                {
+                    Tick = new FunctionPointer<PeriodicTickDelegate>(
+                            Marshal.GetFunctionPointerForDelegate(
+                                (PeriodicTickDelegate)(
+                                    (index, Ecb, entity, parentGameplayEffectEntity) => {
+                                        new TemporaryAttributeModifierTag() { ParentGameplayEffectEntity = parentGameplayEffectEntity }.CreateAttributeModifier<ManaAttributeComponent, Components.Operators.Add>(index, Ecb, entity, -5);
+                                    })))
+                });
+
+            dstManager.SetComponentData<PeriodicTickComponent>(tickEntity, new PeriodicTickComponent()
+            {
+                TickPeriod = 1,
+                TickDurationLeft = 1
+            });
+
+            dstManager.SetComponentData<PeriodicTickTargetComponent>(tickEntity, actorEntity);
+
+            dstManager.SetComponentData<ParentGameplayEffectEntity>(tickEntity, new ParentGameplayEffectEntity(cooldownEntity1));
         }
 
         public void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
@@ -109,7 +135,7 @@ namespace MyGameplayAbilitySystem.Abilities {
             // Check ability state
             var abilityStateComponent = entityManager.GetComponentData<AbilityStateComponent>(grantedAbilityEntity);
 
-            if (abilityStateComponent.Value != 0) yield break;
+            // if (abilityStateComponent.Value != 0) yield break;
             var animator = actorAbilitySystem.GetComponent<Animator>();
             BeginActivateAbility(entityManager, grantedAbilityEntity);
             CreateSourceAttributeModifiers(entityManager, actorAbilitySystem.AbilityOwnerEntity);

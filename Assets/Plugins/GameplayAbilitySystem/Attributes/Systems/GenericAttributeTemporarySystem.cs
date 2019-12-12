@@ -47,7 +47,7 @@ namespace GameplayAbilitySystem.Attributes.Systems {
 
         protected override void OnCreate() {
             base.OnCreate();
-            shouldRunQuery = GetEntityQuery(ComponentType.ReadOnly<PermanentAttributeModifierTag>());
+            shouldRunQuery = GetEntityQuery(ComponentType.ReadOnly<TemporaryAttributeModifierTag>());
         }
 
         [BurstCompile]
@@ -87,7 +87,7 @@ namespace GameplayAbilitySystem.Attributes.Systems {
         }
 
         protected override bool RunSystemThisFrame() {
-            return shouldRunQuery.CalculateEntityCount() > 0;
+            return true;
         }
     }
 }

@@ -20,6 +20,7 @@
  */
 
 using System.Runtime.InteropServices;
+using GameplayAbilitySystem.Common.Components;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using GameplayAbilitySystem.GameplayEffects.Systems;
 using MyGameplayAbilitySystem.GameplayEffects.Systems;
@@ -30,43 +31,28 @@ using Unity.Jobs;
 [assembly: RegisterGenericComponentType(typeof(PeriodicTickActionComponent<PeriodicTickDelegate>))]
 
 namespace MyGameplayAbilitySystem.GameplayEffects.Systems {
-    public delegate void PeriodicTickDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity target);
+    public delegate void PeriodicTickDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity Target, Entity ParentGameplayEffectEntity);
 
     public class BasicPeriodicTickSystem : GameplayEffectTickSystem {
 
         protected override void OnCreate() {
             base.OnCreate();
-            var entity = World.Active.EntityManager.CreateEntity(typeof(PeriodicTickComponent), typeof(PeriodicTickActionComponent<PeriodicTickDelegate>));
-            World.Active.EntityManager.SetName(entity, "Periodic Tick");
-
-            World.Active.EntityManager.SetComponentData<PeriodicTickComponent>(entity, new PeriodicTickComponent
-            {
-                TickPeriod = 1,
-                TickedDuration = 0,
-            });
-
-
-            World.Active.EntityManager.SetComponentData<PeriodicTickActionComponent<PeriodicTickDelegate>>(entity, new PeriodicTickActionComponent<PeriodicTickDelegate>
-            {
-                Tick = new FunctionPointer<PeriodicTickDelegate>(Marshal.GetFunctionPointerForDelegate((PeriodicTickDelegate)
-                ((int index, EntityCommandBuffer.Concurrent Ecb, Entity target) => {
-                    Ecb.CreateEntity(0);
-                })))
-
-            });
         }
 
-        struct TickJob : IJobForEachWithEntity<PeriodicTickComponent, PeriodicTickActionComponent<PeriodicTickDelegate>> {
+        struct TickJob : IJobForEachWithEntity<ParentGameplayEffectEntity, PeriodicTickTargetComponent, PeriodicTickComponent, PeriodicTickActionComponent<PeriodicTickDelegate>> {
             public EntityCommandBuffer.Concurrent Ecb;
-            public void Execute(Entity entity, int index, ref PeriodicTickComponent tick, ref PeriodicTickActionComponent<PeriodicTickDelegate> action) {
-                if (tick.TickedDuration > 0) return;
-                action.Tick.Invoke(index, Ecb, entity);
+            public void Execute(Entity entity, int index, ref ParentGameplayEffectEntity parentGameplayEffectEntity, ref PeriodicTickTargetComponent target, ref PeriodicTickComponent tick, ref PeriodicTickActionComponent<PeriodicTickDelegate> action) {
+                if (tick.TickDurationLeft > 0) return;
+                action.Tick.Invoke(index, Ecb, target, parentGameplayEffectEntity);
             }
         }
         protected override JobHandle Tick(JobHandle inputDeps) {
+            var a = GetComponentDataFromEntity<ParentGameplayEffectEntity>();
             inputDeps = new TickJob
             {
                 Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent()
+
+
             }.Schedule(this, inputDeps);
             return inputDeps;
         }

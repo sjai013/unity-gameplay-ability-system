@@ -21,11 +21,16 @@
 
 using Unity.Entities;
 
-namespace GameplayAbilitySystem.Attributes.Components {
-    public struct ParentGameplayEffectEntity : ISharedComponentData {
+namespace GameplayAbilitySystem.Common.Components {
+    public struct ParentGameplayEffectEntity : IComponentData {
         public Entity Value;
+
+        public ParentGameplayEffectEntity(Entity entity) {
+            Value = entity;
+        }
+
         public static implicit operator Entity(ParentGameplayEffectEntity e) { return e.Value; }
         public static implicit operator ParentGameplayEffectEntity(Entity e) { return new ParentGameplayEffectEntity { Value = e }; }
-
     }
+
 }

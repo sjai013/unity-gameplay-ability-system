@@ -24,6 +24,6 @@ using Unity.Entities;
 namespace GameplayAbilitySystem.GameplayEffects.Components {
     public struct PeriodicTickComponent : IComponentData {
         public float TickPeriod;
-        public float TickedDuration;
+        public float TickDurationLeft;
     }
 }

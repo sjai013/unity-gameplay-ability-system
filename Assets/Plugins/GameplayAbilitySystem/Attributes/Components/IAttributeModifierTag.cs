@@ -27,9 +27,13 @@ namespace GameplayAbilitySystem.Attributes.Components {
             where TAttribute : struct, IAttributeComponent, IComponentData
             where TOperator : struct, IAttributeOperator;
         ComponentType[] AttributeOperatorQueryComponents<TAttribute, TOperator>()
-                where TAttribute : struct, IAttributeComponent, IComponentData
-                where TOperator : struct, IAttributeOperator;
+            where TAttribute : struct, IAttributeComponent, IComponentData
+            where TOperator : struct, IAttributeOperator;
         Entity CreateAttributeModifier<TAttribute, TOperator>(EntityManager entityManager, Entity Target, float Value)
+            where TAttribute : struct, IAttributeComponent, IComponentData
+            where TOperator : struct, IAttributeOperator;
+
+        Entity CreateAttributeModifier<TAttribute, TOperator>(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity Target, float Value)
             where TAttribute : struct, IAttributeComponent, IComponentData
             where TOperator : struct, IAttributeOperator;
     }

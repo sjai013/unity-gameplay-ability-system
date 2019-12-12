@@ -19,11 +19,20 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.Common.Components;
 using Unity.Burst;
 using Unity.Entities;
 
 namespace GameplayAbilitySystem.GameplayEffects.Components {
     public struct PeriodicTickActionComponent<T> : IComponentData {
         public FunctionPointer<T> Tick;
+        public EntityArchetype CreateArchetype(EntityManager entityManager) {
+            return entityManager.CreateArchetype(
+                typeof(PeriodicTickComponent),
+                typeof(PeriodicTickActionComponent<T>),
+                typeof(ParentGameplayEffectEntity),
+                typeof(PeriodicTickTargetComponent)
+            );
+        }
     }
 }

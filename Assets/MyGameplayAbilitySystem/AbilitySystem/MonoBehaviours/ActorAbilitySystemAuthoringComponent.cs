@@ -137,7 +137,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
         /// <param name="abilitySystemEntity"></param>
         private void TestAbilitySystemCooldown<T>(EntityManager dstManager, Entity abilitySystemEntity)
         where T : struct, IAbilityTagComponent {
-            (new T()).CreateCooldownEntities(dstManager, abilitySystemEntity);
+            // (new T()).CreateCooldownEntities(dstManager, abilitySystemEntity);
         }
 
         private void TestAbilityCost<T>(EntityManager dstManager, Entity abilitySystemEntity)

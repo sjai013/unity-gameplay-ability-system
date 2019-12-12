@@ -38,22 +38,23 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
         struct TickJob : IJobForEach<PeriodicTickComponent> {
             public float DeltaTime;
             public void Execute(ref PeriodicTickComponent tickComponent) {
-                tickComponent.TickedDuration -= DeltaTime;
+                tickComponent.TickDurationLeft -= DeltaTime;
             }
         }
 
         [BurstCompile]
         struct TickResetJob : IJobForEach<PeriodicTickComponent> {
             public void Execute(ref PeriodicTickComponent tickComponent) {
-                if (tickComponent.TickedDuration > 0) return;
+                if (tickComponent.TickDurationLeft > 0) return;
                 // Reset the tick duration, taking into account the overflow amount
-                tickComponent.TickedDuration = tickComponent.TickPeriod + tickComponent.TickedDuration;
+                tickComponent.TickDurationLeft = tickComponent.TickPeriod + tickComponent.TickDurationLeft;
             }
         }
 
         protected abstract JobHandle Tick(JobHandle inputDeps);
 
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
+
             inputDeps = new TickJob()
             {
                 DeltaTime = Time.deltaTime

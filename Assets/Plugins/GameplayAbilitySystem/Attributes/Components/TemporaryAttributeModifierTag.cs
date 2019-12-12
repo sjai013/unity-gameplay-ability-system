@@ -19,11 +19,13 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.Common.Components;
 using Unity.Entities;
+using UnityEngine;
 
 namespace GameplayAbilitySystem.Attributes.Components {
     public struct TemporaryAttributeModifierTag : IComponentData, IAttributeModifierTag {
-        public Entity ParentGameplayEffect;
+        public Entity ParentGameplayEffectEntity;
         public EntityArchetype AttributeModifierArchetype<TAttribute, TOperator>(EntityManager entityManager)
             where TAttribute : struct, IAttributeComponent, IComponentData
             where TOperator : struct, IAttributeOperator {
@@ -61,10 +63,32 @@ namespace GameplayAbilitySystem.Attributes.Components {
                 Value = Target
             });
 
-            entityManager.SetSharedComponentData(entity, new ParentGameplayEffectEntity()
+            entityManager.SetComponentData(entity, new ParentGameplayEffectEntity(ParentGameplayEffectEntity));
+            return entity;
+        }
+
+        public Entity CreateAttributeModifier<TAttribute, TOperator>(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity Target, float Value)
+            where TAttribute : struct, IAttributeComponent, IComponentData
+            where TOperator : struct, IAttributeOperator {
+            var entity = Ecb.CreateEntity(jobIndex);
+            var components = AttributeOperatorQueryComponents<TAttribute, TOperator>();
+            for (var i = 0; i < components.Length; i++) {
+                Ecb.AddComponent(jobIndex, entity, components[i]);
+            }
+
+            Ecb.SetComponent(jobIndex, entity, new AttributeModifier<TOperator, TAttribute>()
             {
-                Value = ParentGameplayEffect
+                Value = Value
             });
+
+
+            Ecb.SetComponent(jobIndex, entity, new AttributesOwnerComponent()
+            {
+                Value = Target
+            });
+
+            Ecb.SetComponent(jobIndex, entity, new ParentGameplayEffectEntity(ParentGameplayEffectEntity));
+
             return entity;
         }
     }
