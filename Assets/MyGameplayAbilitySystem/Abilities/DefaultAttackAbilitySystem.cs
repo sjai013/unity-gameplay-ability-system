@@ -30,6 +30,7 @@ using GameplayAbilitySystem.Common.Editor;
 using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours;
+using MyGameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;

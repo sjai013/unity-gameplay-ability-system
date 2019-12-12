@@ -21,4 +21,6 @@
 
 using Unity.Entities;
 
-public struct DefaultAttackAbilityActive : IGameplayEffectTagComponent, IComponentData { }
+namespace MyGameplayAbilitySystem.GameplayEffects.Components {
+    public struct DefaultAttackAbilityActive : IGameplayEffectTagComponent, IComponentData { }
+}

@@ -21,4 +21,6 @@
 
 using Unity.Entities;
 
-public struct Fire1CooldownGameplayEffectComponent: IGameplayEffectTagComponent, IComponentData {}
+namespace MyGameplayAbilitySystem.GameplayEffects.Components {
+    public struct Fire1CooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData { }
+}

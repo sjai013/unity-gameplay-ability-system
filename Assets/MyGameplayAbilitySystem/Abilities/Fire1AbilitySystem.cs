@@ -25,6 +25,7 @@ using GameplayAbilitySystem.Abilities.Systems.Generic;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.Editor;
 using GameplayAbilitySystem.GameplayEffects.Components;
+using MyGameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 namespace MyGameplayAbilitySystem.Abilities {
     [AbilitySystemDisplayName("Fire 1")]
