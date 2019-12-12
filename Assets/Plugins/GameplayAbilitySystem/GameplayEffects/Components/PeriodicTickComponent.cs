@@ -23,7 +23,7 @@ using Unity.Burst;
 using Unity.Entities;
 
 namespace GameplayAbilitySystem.GameplayEffects.Components {
-    public delegate void PeriodicTickDelegate(EntityCommandBuffer.Concurrent Ecb);
+    public delegate void PeriodicTickDelegate(int index, EntityCommandBuffer.Concurrent Ecb, Entity target);
     public struct PeriodicTickComponent : IComponentData {
         public float TickPeriod;
         public float TickedDuration;

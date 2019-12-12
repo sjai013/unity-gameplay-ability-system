@@ -30,7 +30,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
     [UpdateInGroup(typeof(GameplayEffectGroupUpdateEndSystem))]
     public class GameplayEffectTickSystem : JobComponentSystem {
         private BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
-        void TickTestFunction(EntityCommandBuffer.Concurrent Ecb) {
+        void TickTestFunction(int index, EntityCommandBuffer.Concurrent Ecb, Entity target) {
             Ecb.CreateEntity(0);
         }
 
@@ -42,20 +42,20 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
 
             World.Active.EntityManager.SetComponentData<PeriodicTickComponent>(entity, new PeriodicTickComponent
             {
-                TickPeriod = 10,
+                TickPeriod = 1,
                 TickedDuration = 0,
                 Tick = new FunctionPointer<PeriodicTickDelegate>(Marshal.GetFunctionPointerForDelegate((PeriodicTickDelegate)TickTestFunction))
 
             });
         }
 
-        struct Job : IJobForEach<PeriodicTickComponent> {
+        struct Job : IJobForEachWithEntity<PeriodicTickComponent> {
             public EntityCommandBuffer.Concurrent Ecb;
             public float DeltaTime;
-            public void Execute(ref PeriodicTickComponent tickComponent) {
+            public void Execute(Entity entity, int index, ref PeriodicTickComponent tickComponent) {
                 tickComponent.TickedDuration -= DeltaTime;
                 if (tickComponent.TickedDuration <= 0) {
-                    tickComponent.Tick.Invoke(Ecb);
+                    tickComponent.Tick.Invoke(index, Ecb, entity);
                     // Reset the tick duration, taking into account the overflow amount
                     tickComponent.TickedDuration = tickComponent.TickPeriod + tickComponent.TickedDuration;
                 }
