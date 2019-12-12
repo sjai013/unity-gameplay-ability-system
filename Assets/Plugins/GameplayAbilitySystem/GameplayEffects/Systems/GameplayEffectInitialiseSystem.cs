@@ -53,7 +53,6 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
         /// <summary>
         /// Add system state to indicate the gameplay effect is active
         /// </summary>
-        [BurstCompile]
         struct AddSystemStateJob : IJobChunk {
             public EntityCommandBuffer.Concurrent Ecb;
             [ReadOnly] public ArchetypeChunkEntityType EntityType;
@@ -69,7 +68,6 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
         /// <summary>
         /// Remove the system state from gameplay effects, so we can handle cleanup as required
         /// </summary>
-        [BurstCompile]
         struct CleanupEntityJob : IJobChunk {
             public EntityCommandBuffer.Concurrent Ecb;
             [ReadOnly] public ArchetypeChunkEntityType EntityType;

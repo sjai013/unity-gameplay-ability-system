@@ -54,7 +54,7 @@ namespace GameplayAbilitySystem.Attributes.Systems {
                 attributesToRemoveQuery.SetFilter<ParentGameplayEffectEntity>(sharedFilterComponent);
                 EntityManager.DestroyEntity(attributesToRemoveQuery);
             }
-
+            entities.Dispose();
             return inputDeps;
 
         }
