@@ -52,6 +52,13 @@ namespace GameplayAbilitySystem.Attributes.Systems {
                 );
         }
 
+        protected abstract bool RunSystemThisFrame();
+
+        protected override void OnDestroy() {
+            AttributeHashAdd.Dispose();
+            AttributeHashMultiply.Dispose();
+            AttributeHashDivide.Dispose();
+        }
 
 
         /// <summary>
@@ -67,9 +74,14 @@ namespace GameplayAbilitySystem.Attributes.Systems {
             var nEntities = query.CalculateEntityCount();
             var hashCapacity = AttributeHash.Capacity;
             AttributeHash.Clear();
+            if (nEntities == 0) {
+                job = inputDependencies;
+                return;
+            };
             if (hashCapacity < nEntities) { // We need to increase hash capacity
                 AttributeHash.Capacity = (int)(nEntities * 1.1);
             } else if (hashCapacity > nEntities * 4) { // We need to reduce hash capacity
+                AttributeHash.Dispose();
                 AttributeHash = new NativeMultiHashMap<Entity, float>(nEntities, Allocator.Persistent);
             }
             // // AttributeHash = new NativeMultiHashMap<Entity, float>(query.CalculateEntityCount(), Allocator.TempJob);
@@ -84,21 +96,13 @@ namespace GameplayAbilitySystem.Attributes.Systems {
 
 
         protected override JobHandle ScheduleJobs(JobHandle inputDependencies) {
+            if (!RunSystemThisFrame()) return inputDependencies;
             ScheduleAttributeJob<Components.Operators.Add>(ref inputDependencies, ref this.Queries[0], ref AttributeHashAdd, out var addJob);
             ScheduleAttributeJob<Components.Operators.Multiply>(ref inputDependencies, ref this.Queries[1], ref AttributeHashMultiply, out var mulJob);
             ScheduleAttributeJob<Components.Operators.Divide>(ref inputDependencies, ref this.Queries[2], ref AttributeHashDivide, out var divideJob);
             inputDependencies = JobHandle.CombineDependencies(addJob, divideJob, mulJob);
             inputDependencies = ScheduleAttributeCombinerJob(inputDependencies);
             inputDependencies = CleanupJob(inputDependencies);
-
-            // inputDependencies = new AttributeCombinerJob
-            // {
-            //     AddAttributes = AttributeHashAdd,
-            //     DivideAttributes = AttributeHashDivide,
-            //     MultiplyAttributes = AttributeHashMultiply
-            // }.Schedule(this.actorsWithAttributesQuery, inputDependencies);
-
-
             return inputDependencies;
         }
 

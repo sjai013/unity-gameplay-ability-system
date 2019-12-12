@@ -43,6 +43,12 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     [UpdateInGroup(typeof(AttributeCurrentValueGroup))]
     public class GenericAttributeTemporarySystem<TAttributeTag> : GenericAttributeSystem<TAttributeTag, TemporaryAttributeModifierTag>
         where TAttributeTag : struct, IAttributeComponent, IComponentData {
+        private EntityQuery shouldRunQuery;
+
+        protected override void OnCreate() {
+            base.OnCreate();
+            shouldRunQuery = GetEntityQuery(ComponentType.ReadOnly<PermanentAttributeModifierTag>());
+        }
 
         [BurstCompile]
         [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
@@ -78,6 +84,10 @@ namespace GameplayAbilitySystem.Attributes.Systems {
 
         protected override JobHandle CleanupJob(JobHandle inputDeps) {
             return inputDeps;
+        }
+
+        protected override bool RunSystemThisFrame() {
+            return shouldRunQuery.CalculateEntityCount() > 0;
         }
     }
 }

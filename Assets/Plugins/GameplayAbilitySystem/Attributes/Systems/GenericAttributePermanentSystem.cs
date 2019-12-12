@@ -44,18 +44,20 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     public class GenericAttributePermanentSystem<TAttributeTag> : GenericAttributeSystem<TAttributeTag, PermanentAttributeModifierTag>
         where TAttributeTag : struct, IAttributeComponent, IComponentData {
         BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
+        private EntityQuery shouldRunQuery;
 
         protected override void OnCreate() {
             base.OnCreate();
             m_EntityCommandBuffer = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
+            shouldRunQuery = GetEntityQuery(ComponentType.ReadOnly<PermanentAttributeModifierTag>());
         }
 
         [BurstCompile]
         [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
         struct AttributeCombinerJob : IJobForEachWithEntity<TAttributeTag> {
             [ReadOnly] public NativeMultiHashMap<Entity, float> AddAttributes;
-            // [ReadOnly] public NativeMultiHashMap<Entity, float> DivideAttributes;
-            // [ReadOnly] public NativeMultiHashMap<Entity, float> MultiplyAttributes;
+            [ReadOnly] public NativeMultiHashMap<Entity, float> DivideAttributes;
+            [ReadOnly] public NativeMultiHashMap<Entity, float> MultiplyAttributes;
 
             public void Execute(Entity entity, int index, ref TAttributeTag attribute) {
                 var added = SumFromNMHM(entity, AddAttributes);
@@ -91,8 +93,8 @@ namespace GameplayAbilitySystem.Attributes.Systems {
             inputDeps = new AttributeCombinerJob
             {
                 AddAttributes = AttributeHashAdd,
-                // DivideAttributes = AttributeHashDivide,
-                // MultiplyAttributes = AttributeHashMultiply
+                DivideAttributes = AttributeHashDivide,
+                MultiplyAttributes = AttributeHashMultiply
             }.Schedule(this.actorsWithAttributesQuery, inputDeps);
             return inputDeps;
         }
@@ -106,6 +108,10 @@ namespace GameplayAbilitySystem.Attributes.Systems {
 
             m_EntityCommandBuffer.AddJobHandleForProducer(inputDeps);
             return inputDeps;
+        }
+
+        protected override bool RunSystemThisFrame() {
+            return shouldRunQuery.CalculateEntityCount() > 0;
         }
     }
 }
