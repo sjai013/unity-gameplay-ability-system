@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Created on Thu Dec 12 2019
  *
  * The MIT License (MIT)
@@ -19,11 +19,11 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using Unity.Burst;
 using Unity.Entities;
 
 namespace GameplayAbilitySystem.GameplayEffects.Components {
-    public struct PeriodicTickComponent : IComponentData {
-        public float TickPeriod;
-        public float TickedDuration;
+    public struct PeriodicTickActionComponent<T> : IComponentData {
+        public FunctionPointer<T> Tick;
     }
 }

@@ -19,7 +19,6 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System.Runtime.InteropServices;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Burst;
 using Unity.Entities;
@@ -28,46 +27,42 @@ using UnityEngine;
 
 namespace GameplayAbilitySystem.GameplayEffects.Systems {
     [UpdateInGroup(typeof(GameplayEffectGroupUpdateEndSystem))]
-    public class GameplayEffectTickSystem : JobComponentSystem {
-        private BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
-        void TickTestFunction(int index, EntityCommandBuffer.Concurrent Ecb, Entity target) {
-            Ecb.CreateEntity(0);
-        }
+    public abstract class GameplayEffectTickSystem : JobComponentSystem {
+        protected BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
 
         protected override void OnCreate() {
             m_EntityCommandBuffer = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
-            var entity = World.Active.EntityManager.CreateEntity(typeof(PeriodicTickComponent));
-            World.Active.EntityManager.SetName(entity, "Periodic Tick");
-
-
-            World.Active.EntityManager.SetComponentData<PeriodicTickComponent>(entity, new PeriodicTickComponent
-            {
-                TickPeriod = 1,
-                TickedDuration = 0,
-                Tick = new FunctionPointer<PeriodicTickDelegate>(Marshal.GetFunctionPointerForDelegate((PeriodicTickDelegate)TickTestFunction))
-
-            });
         }
 
-        struct Job : IJobForEachWithEntity<PeriodicTickComponent> {
-            public EntityCommandBuffer.Concurrent Ecb;
+        [BurstCompile]
+        struct TickJob : IJobForEach<PeriodicTickComponent> {
             public float DeltaTime;
-            public void Execute(Entity entity, int index, ref PeriodicTickComponent tickComponent) {
+            public void Execute(ref PeriodicTickComponent tickComponent) {
                 tickComponent.TickedDuration -= DeltaTime;
-                if (tickComponent.TickedDuration <= 0) {
-                    tickComponent.Tick.Invoke(index, Ecb, entity);
-                    // Reset the tick duration, taking into account the overflow amount
-                    tickComponent.TickedDuration = tickComponent.TickPeriod + tickComponent.TickedDuration;
-                }
             }
         }
 
+        [BurstCompile]
+        struct TickResetJob : IJobForEach<PeriodicTickComponent> {
+            public void Execute(ref PeriodicTickComponent tickComponent) {
+                if (tickComponent.TickedDuration > 0) return;
+                // Reset the tick duration, taking into account the overflow amount
+                tickComponent.TickedDuration = tickComponent.TickPeriod + tickComponent.TickedDuration;
+            }
+        }
+
+        protected abstract JobHandle Tick(JobHandle inputDeps);
+
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
-            inputDeps = new Job()
+            inputDeps = new TickJob()
             {
-                Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent(),
                 DeltaTime = Time.deltaTime
             }.Schedule(this, inputDeps);
+
+            inputDeps = Tick(inputDeps);
+
+            inputDeps = new TickResetJob { }.Schedule(this, inputDeps);
+
             m_EntityCommandBuffer.AddJobHandleForProducer(inputDeps);
             return inputDeps;
         }
