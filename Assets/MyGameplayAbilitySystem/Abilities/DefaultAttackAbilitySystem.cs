@@ -79,14 +79,14 @@ namespace MyGameplayAbilitySystem.Abilities {
         }
         public void CreateTargetAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
             var attributeEntity = new PermanentAttributeModifierTag()
-                                .CreateAttributeModifier<HealthAttributeComponent, Components.Operators.Add>(dstManager, actorEntity, -0.25f);
+                                .CreateAttributeModifier<HealthAttributeComponent, Components.Operators.Add>(dstManager, actorEntity, -5f);
             // Create a "poison" effect
             Entity poisonEffectEntity = new PoisonGameplayEffectComponent().Instantiate(dstManager, actorEntity, 25f);
 
             var tickEntity = new PeriodicTickActionComponent<PeriodicTickDelegate>()
                                 .SetTickFunction(
                                     ((index, Ecb, entity, parentGameplayEffectEntity) => {
-                                        new PermanentAttributeModifierTag() { }.CreateAttributeModifier<HealthAttributeComponent, Components.Operators.Add>(index, Ecb, entity, -5);
+                                        new PermanentAttributeModifierTag() { }.CreateAttributeModifier<HealthAttributeComponent, Components.Operators.Add>(index, Ecb, entity, -0.5f);
                                     })
                                 )
                                 .CreateEntity(dstManager);
