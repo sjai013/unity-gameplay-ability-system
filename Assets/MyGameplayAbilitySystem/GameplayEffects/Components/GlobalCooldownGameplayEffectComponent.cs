@@ -19,8 +19,21 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 
 namespace MyGameplayAbilitySystem.GameplayEffects.Components {
-    public struct GlobalCooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData { }
+    public struct GlobalCooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {
+        public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
+            var archetype = dstManager.CreateArchetype(
+                                    typeof(GameplayEffectDurationComponent),
+                                    typeof(GameplayEffectTargetComponent),
+                                    this.GetType());
+
+            var entity = dstManager.CreateEntity(archetype);
+            dstManager.SetComponentData<GameplayEffectTargetComponent>(entity, actorEntity);
+            dstManager.SetComponentData<GameplayEffectDurationComponent>(entity, GameplayEffectDurationComponent.Initialise(duration, UnityEngine.Time.time));
+            return entity;
+        }
+    }
 }

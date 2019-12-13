@@ -37,13 +37,18 @@ namespace GameplayAbilitySystem.GameplayEffects.Components {
             );
         }
 
-        public static PeriodicTickActionComponent<T> Instantiate(T d) {
-            return new PeriodicTickActionComponent<T>()
-            {
-                Tick = new FunctionPointer<T>(
+        public Entity CreateEntity(EntityManager dstManager) {
+            var periodicEffectArchetype = PeriodicTickActionComponent<T>.CreateArchetype(dstManager);
+            var tickEntity = dstManager.CreateEntity(periodicEffectArchetype);
+            dstManager.SetComponentData<PeriodicTickActionComponent<T>>(tickEntity, this);
+            return tickEntity;
+        }
+
+        public PeriodicTickActionComponent<T> SetTickFunction(T @delegate) {
+            this.Tick = new FunctionPointer<T>(
                             Marshal.GetFunctionPointerForDelegate(
-                                d))
-            };
+                                @delegate));
+            return this;
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Created on Tue Dec 03 2019
+ * Created on Fri Dec 13 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -19,12 +19,21 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 
 namespace MyGameplayAbilitySystem.GameplayEffects.Components {
-    public struct DefaultAttackAbilityActive : IGameplayEffectTagComponent, IComponentData {
+    public struct PoisonGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {
         public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
-            throw new System.NotImplementedException();
+            var archetype = dstManager.CreateArchetype(
+                                    typeof(GameplayEffectDurationComponent),
+                                    typeof(GameplayEffectTargetComponent),
+                                    this.GetType());
+
+            var effectEntity = dstManager.CreateEntity(archetype);
+            dstManager.SetComponentData<GameplayEffectTargetComponent>(effectEntity, actorEntity);
+            dstManager.SetComponentData<GameplayEffectDurationComponent>(effectEntity, GameplayEffectDurationComponent.Initialise(duration, UnityEngine.Time.time));
+            return effectEntity;
         }
     }
 }

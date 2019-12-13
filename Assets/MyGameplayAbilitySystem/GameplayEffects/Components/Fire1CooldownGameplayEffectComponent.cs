@@ -22,5 +22,9 @@
 using Unity.Entities;
 
 namespace MyGameplayAbilitySystem.GameplayEffects.Components {
-    public struct Fire1CooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData { }
+    public struct Fire1CooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {
+        public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
+            throw new System.NotImplementedException();
+        }
+    }
 }
