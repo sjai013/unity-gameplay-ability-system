@@ -127,14 +127,12 @@ public class ActorCast : MonoBehaviour, ICastActions {
         var ability = GrantedAbilities.Find(x => x.AbilityTag.AbilityIdentifier == abilityId);
         if (ability.AbilityTag == null) return;
 
-        if (ability.AbilityTag is DefaultAttackAbilityTag) {
-            var payload = new DefaultAttackAbilityTag.Payload();
-            payload.ActorAbilitySystem = this.actorAbilitySystem;
-            payload.ActorTransform = this.transform;
-            payload.EntityManager = World.Active.EntityManager;
-            payload.GrantedAbilityEntity = ability.GrantedAbilityEntity;
-            StartCoroutine(ability.AbilityTag.DoAbility(payload));
-        }
+        var payload = new BasicAbilityPayload();
+        payload.ActorAbilitySystem = this.actorAbilitySystem;
+        payload.ActorTransform = this.transform;
+        payload.EntityManager = World.Active.EntityManager;
+        payload.GrantedAbilityEntity = ability.GrantedAbilityEntity;
+        StartCoroutine(ability.AbilityTag.DoAbility(payload));
     }
 
 

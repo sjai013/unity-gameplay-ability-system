@@ -121,7 +121,7 @@ namespace MyGameplayAbilitySystem.Abilities {
         }
 
         public IEnumerator DoAbility(object Payload) {
-            if (Payload is Payload payload) {
+            if (Payload is BasicAbilityPayload payload) {
                 payload.ActorAbilitySystem.StartCoroutine(AbilityActionLogic(payload));
             } else {
                 Debug.LogWarningFormat("The payload passed to {0} does not match the expected payload format.", this.GetType());
@@ -130,7 +130,7 @@ namespace MyGameplayAbilitySystem.Abilities {
             yield return null;
         }
 
-        private IEnumerator AbilityActionLogic(Payload payload) {
+        private IEnumerator AbilityActionLogic(BasicAbilityPayload payload) {
             var entityManager = payload.EntityManager;
             var transform = payload.ActorTransform;
             var actorAbilitySystem = payload.ActorAbilitySystem;
@@ -217,16 +217,7 @@ namespace MyGameplayAbilitySystem.Abilities {
             if (animatorStateInfoNext.IsName(animatorStateName)) animatorStateInfo = animatorStateInfoNext;
             return animatorStateInfo;
         }
-        public class Activation {
 
-        }
-
-        public struct Payload {
-            public EntityManager EntityManager;
-            public Transform ActorTransform;
-            public ActorAbilitySystem ActorAbilitySystem;
-            public Entity GrantedAbilityEntity;
-        }
     }
 
     public class DefaultAttackAbilitySystem {
@@ -261,4 +252,11 @@ namespace MyGameplayAbilitySystem.Abilities {
 
     }
 
+}
+
+public struct BasicAbilityPayload {
+    public EntityManager EntityManager;
+    public Transform ActorTransform;
+    public ActorAbilitySystem ActorAbilitySystem;
+    public Entity GrantedAbilityEntity;
 }

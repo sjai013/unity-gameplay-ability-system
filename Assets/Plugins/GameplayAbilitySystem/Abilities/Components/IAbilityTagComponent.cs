@@ -38,6 +38,7 @@ namespace GameplayAbilitySystem.Abilities.Components {
         void BeginActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity);
         void EndActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity);
 
+
         IEnumerator DoAbility(object Payload);
 
     }
