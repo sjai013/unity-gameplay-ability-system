@@ -58,18 +58,15 @@ namespace MyGameplayAbilitySystem.Abilities {
             dstManager.SetComponentData<GameplayEffectTargetComponent>(cooldownEntity1, actorEntity);
             dstManager.SetComponentData<GameplayEffectDurationComponent>(cooldownEntity1, GameplayEffectDurationComponent.Initialise(5f, UnityEngine.Time.time));
 
-            var periodicEffectArchetype = new PeriodicTickActionComponent<PeriodicTickDelegate>().CreateArchetype(dstManager);
+            var periodicEffectArchetype = PeriodicTickActionComponent<PeriodicTickDelegate>.CreateArchetype(dstManager);
             var tickEntity = dstManager.CreateEntity(periodicEffectArchetype);
             dstManager.SetComponentData<PeriodicTickActionComponent<PeriodicTickDelegate>>(tickEntity,
-                new PeriodicTickActionComponent<PeriodicTickDelegate>()
-                {
-                    Tick = new FunctionPointer<PeriodicTickDelegate>(
-                            Marshal.GetFunctionPointerForDelegate(
-                                (PeriodicTickDelegate)(
-                                    (index, Ecb, entity, parentGameplayEffectEntity) => {
-                                        new TemporaryAttributeModifierTag() { ParentGameplayEffectEntity = parentGameplayEffectEntity }.CreateAttributeModifier<ManaAttributeComponent, Components.Operators.Add>(index, Ecb, entity, -5);
-                                    })))
-                });
+                PeriodicTickActionComponent<PeriodicTickDelegate>.Instantiate(
+                    ((index, Ecb, entity, parentGameplayEffectEntity) => {
+                        new PermanentAttributeModifierTag() { }.CreateAttributeModifier<ManaAttributeComponent, Components.Operators.Add>(index, Ecb, entity, -5);
+                    })
+
+                ));
 
             dstManager.SetComponentData<PeriodicTickComponent>(tickEntity, new PeriodicTickComponent()
             {
