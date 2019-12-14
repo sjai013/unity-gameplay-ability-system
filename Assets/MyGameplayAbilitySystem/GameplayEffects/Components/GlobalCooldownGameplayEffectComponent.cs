@@ -35,5 +35,9 @@ namespace MyGameplayAbilitySystem.GameplayEffects.Components {
             dstManager.SetComponentData<GameplayEffectDurationComponent>(entity, GameplayEffectDurationComponent.Initialise(duration, UnityEngine.Time.time));
             return entity;
         }
+
+        public Entity Instantiate(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity actorEntity, float duration) {
+            throw new System.NotImplementedException();
+        }
     }
 }

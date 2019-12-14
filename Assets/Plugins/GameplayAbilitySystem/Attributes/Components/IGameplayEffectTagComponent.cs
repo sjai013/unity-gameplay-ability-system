@@ -23,4 +23,5 @@ using Unity.Entities;
 
 public interface IGameplayEffectTagComponent {
     Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration);
-  }
+    Entity Instantiate(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity actorEntity, float duration);
+}

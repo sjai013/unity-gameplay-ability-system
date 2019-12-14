@@ -19,11 +19,16 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.Attributes.Components;
+using GameplayAbilitySystem.Attributes.Components.Operators;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 
+
 namespace MyGameplayAbilitySystem.GameplayEffects.Components {
-    public struct PoisonGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {
+    public struct PoisonTickGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {
+        public float Damage;
+        private const float DURATION = -1f;
         public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
             var archetype = dstManager.CreateArchetype(
                                     typeof(GameplayEffectDurationComponent),
@@ -32,12 +37,19 @@ namespace MyGameplayAbilitySystem.GameplayEffects.Components {
 
             var effectEntity = dstManager.CreateEntity(archetype);
             dstManager.SetComponentData<GameplayEffectTargetComponent>(effectEntity, actorEntity);
-            dstManager.SetComponentData<GameplayEffectDurationComponent>(effectEntity, GameplayEffectDurationComponent.Initialise(duration, UnityEngine.Time.time));
+            // We use a negative duration to signif y that this gameplay effect should expire straight away
+            dstManager.SetComponentData<GameplayEffectDurationComponent>(effectEntity, GameplayEffectDurationComponent.Initialise(DURATION, UnityEngine.Time.time));
+            new PermanentAttributeModifierTag() { }.CreateAttributeModifier<HealthAttributeComponent, Add>(dstManager, actorEntity, Damage);
             return effectEntity;
         }
 
         public Entity Instantiate(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity actorEntity, float duration) {
-            throw new System.NotImplementedException();
+            var entity = Ecb.CreateEntity(jobIndex);
+            Ecb.AddComponent<GameplayEffectDurationComponent>(jobIndex, entity, GameplayEffectDurationComponent.Initialise(DURATION, 0f));
+            Ecb.AddComponent<GameplayEffectTargetComponent>(jobIndex, entity, actorEntity);
+            Ecb.AddComponent(jobIndex, entity, this.GetType());
+            new PermanentAttributeModifierTag() { }.CreateAttributeModifier<HealthAttributeComponent, Add>(jobIndex, Ecb, actorEntity, Damage);
+            return entity;
         }
     }
 }

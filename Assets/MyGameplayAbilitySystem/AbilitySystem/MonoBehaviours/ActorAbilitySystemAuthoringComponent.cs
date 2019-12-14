@@ -26,6 +26,8 @@ using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Attributes.ScriptableObjects;
 using GameplayAbilitySystem.Common.Components;
 using MyGameplayAbilitySystem.Abilities;
+using MyGameplayAbilitySystem.Abilities.DefaultAttack;
+using MyGameplayAbilitySystem.Abilities.Fire1;
 using Unity.Entities;
 using UnityEngine;
 

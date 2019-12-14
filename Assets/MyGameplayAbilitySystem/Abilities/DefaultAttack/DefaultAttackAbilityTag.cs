@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created on Mon Nov 04 2019
  *
  * The MIT License (MIT)
@@ -19,29 +19,20 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using System;
 using System.Collections;
-using System.Runtime.InteropServices;
 using GameplayAbilitySystem.Abilities.Components;
-using GameplayAbilitySystem.Abilities.Systems;
-using GameplayAbilitySystem.Abilities.Systems.Generic;
-using GameplayAbilitySystem.AbilitySystem.Enums;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.Editor;
-using GameplayAbilitySystem.ExtensionMethods;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours;
 using MyGameplayAbilitySystem.GameplayEffects.Components;
 using MyGameplayAbilitySystem.GameplayEffects.Systems;
 using Unity.Entities;
-using Unity.Burst;
-using Unity.Jobs;
 using UnityEngine;
 using Components = GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.Components;
 
-namespace MyGameplayAbilitySystem.Abilities {
-
+namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
     [AbilitySystemDisplayName("Default Attack Ability")]
     public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
         private const string AnimationStartTriggerName = "DoSwingAttack";
@@ -86,7 +77,7 @@ namespace MyGameplayAbilitySystem.Abilities {
             var tickEntity = new PeriodicTickActionComponent<PeriodicTickDelegate>()
                                 .SetTickFunction(
                                     ((index, Ecb, entity, parentGameplayEffectEntity) => {
-                                        new PermanentAttributeModifierTag() { }.CreateAttributeModifier<HealthAttributeComponent, Components.Operators.Add>(index, Ecb, entity, -0.5f);
+                                        new PoisonTickGameplayEffectComponent(){Damage = -1f}.Instantiate(index, Ecb, entity, -1f);
                                     })
                                 )
                                 .CreateEntity(dstManager);
@@ -220,43 +211,4 @@ namespace MyGameplayAbilitySystem.Abilities {
 
     }
 
-    public class DefaultAttackAbilitySystem {
-        public class AbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
-            protected override ComponentType[] CooldownEffects =>
-                new ComponentType[] {
-                    ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>()
-                };
-
-        }
-
-        public class AbilityAvailabilitySystem : AbilityAvailabilitySystem<DefaultAttackAbilityTag> {
-            // private EntityQuery m_Query;
-            // protected override void OnCreate() {
-            //     this.m_Query = GetEntityQuery(ComponentType.ReadOnly<DefaultAttackAbilityActive>(), ComponentType.ReadWrite<AbilityStateComponent>());
-            // }
-
-            [RequireComponentTag(typeof(DefaultAttackAbilityActive))]
-            struct Job : IJobForEach<AbilityStateComponent> {
-                public void Execute(ref AbilityStateComponent abilityState) {
-                    abilityState |= (int)AbilityStates.ACTIVE;
-                }
-            }
-            protected override JobHandle UpdateAbilityAvailability(JobHandle inputDeps) {
-                // Check for existence of AbilityActive tag
-                inputDeps = inputDeps.ScheduleJob(new Job(), this);
-                return inputDeps;
-            }
-        }
-
-        public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> { }
-
-    }
-
-}
-
-public struct BasicAbilityPayload {
-    public EntityManager EntityManager;
-    public Transform ActorTransform;
-    public ActorAbilitySystem ActorAbilitySystem;
-    public Entity GrantedAbilityEntity;
 }

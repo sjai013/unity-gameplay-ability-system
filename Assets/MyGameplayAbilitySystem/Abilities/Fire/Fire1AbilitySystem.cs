@@ -1,5 +1,5 @@
 /*
- * Created on Fri Dec 13 2019
+ * Created on Mon Nov 04 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -19,25 +19,19 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using GameplayAbilitySystem.GameplayEffects.Components;
+using GameplayAbilitySystem.Abilities.Systems.Generic;
+using MyGameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
+namespace MyGameplayAbilitySystem.Abilities.Fire1 {
+    public class Fire1AbilitySystem {
+        public class AbilityCooldownSystem : GenericAbilityCooldownSystem<Fire1AbilityTag> {
+            protected override ComponentType[] CooldownEffects => new ComponentType[] {
+                ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>()
+                ,ComponentType.ReadOnly<Fire1CooldownGameplayEffectComponent>()
+                };
 
-namespace MyGameplayAbilitySystem.GameplayEffects.Components {
-    public struct PoisonGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {
-        public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
-            var archetype = dstManager.CreateArchetype(
-                                    typeof(GameplayEffectDurationComponent),
-                                    typeof(GameplayEffectTargetComponent),
-                                    this.GetType());
-
-            var effectEntity = dstManager.CreateEntity(archetype);
-            dstManager.SetComponentData<GameplayEffectTargetComponent>(effectEntity, actorEntity);
-            dstManager.SetComponentData<GameplayEffectDurationComponent>(effectEntity, GameplayEffectDurationComponent.Initialise(duration, UnityEngine.Time.time));
-            return effectEntity;
         }
-
-        public Entity Instantiate(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity actorEntity, float duration) {
-            throw new System.NotImplementedException();
-        }
+        public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<Fire1AbilityTag> { }
     }
+
 }

@@ -21,13 +21,12 @@
 
 using System.Collections;
 using GameplayAbilitySystem.Abilities.Components;
-using GameplayAbilitySystem.Abilities.Systems.Generic;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.Editor;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using MyGameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
-namespace MyGameplayAbilitySystem.Abilities {
+namespace MyGameplayAbilitySystem.Abilities.Fire1 {
     [AbilitySystemDisplayName("Fire 1")]
     public struct Fire1AbilityTag : IAbilityTagComponent, IComponentData {
         public int AbilityIdentifier => 2;
@@ -94,16 +93,6 @@ namespace MyGameplayAbilitySystem.Abilities {
         public void EndActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity) {
             throw new System.NotImplementedException();
         }
-    }
-    public class Fire1AbilitySystem {
-        public class AbilityCooldownSystem : GenericAbilityCooldownSystem<Fire1AbilityTag> {
-            protected override ComponentType[] CooldownEffects => new ComponentType[] {
-                ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>()
-                ,ComponentType.ReadOnly<Fire1CooldownGameplayEffectComponent>()
-                };
-
-        }
-        public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<Fire1AbilityTag> { }
     }
 
 }

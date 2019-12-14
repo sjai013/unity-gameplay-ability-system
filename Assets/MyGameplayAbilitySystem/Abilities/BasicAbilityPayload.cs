@@ -1,5 +1,5 @@
 /*
- * Created on Mon Nov 26 2019
+ * Created on Mon Nov 04 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -19,16 +19,13 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours;
 using Unity.Entities;
+using UnityEngine;
 
-namespace MyGameplayAbilitySystem.GameplayEffects.Components {
-    public struct Fire1CooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {
-        public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
-            throw new System.NotImplementedException();
-        }
-
-        public Entity Instantiate(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity actorEntity, float duration) {
-            throw new System.NotImplementedException();
-        }
-    }
+public struct BasicAbilityPayload {
+    public EntityManager EntityManager;
+    public Transform ActorTransform;
+    public ActorAbilitySystem ActorAbilitySystem;
+    public Entity GrantedAbilityEntity;
 }

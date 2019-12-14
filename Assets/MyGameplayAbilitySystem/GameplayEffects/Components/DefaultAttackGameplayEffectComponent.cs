@@ -26,5 +26,9 @@ namespace MyGameplayAbilitySystem.GameplayEffects.Components {
         public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
             throw new System.NotImplementedException();
         }
+
+        public Entity Instantiate(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity actorEntity, float duration) {
+            throw new System.NotImplementedException();
+        }
     }
 }

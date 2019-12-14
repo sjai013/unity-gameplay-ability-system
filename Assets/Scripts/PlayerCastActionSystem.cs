@@ -23,6 +23,7 @@ using System.Collections;
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.AbilitySystem.Components;
 using MyGameplayAbilitySystem.Abilities;
+using MyGameplayAbilitySystem.Abilities.DefaultAttack;
 using MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours;
 using Unity.Entities;
 using Unity.Mathematics;

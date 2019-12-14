@@ -21,6 +21,7 @@
 
 using System.Collections;
 using MyGameplayAbilitySystem.Abilities;
+using MyGameplayAbilitySystem.Abilities.DefaultAttack;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Playables;
