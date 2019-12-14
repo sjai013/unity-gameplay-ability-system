@@ -36,6 +36,7 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
     [AbilitySystemDisplayName("Default Attack Ability")]
     public struct DefaultAttackAbilityTag : IAbilityTagComponent, IComponentData {
         private const string AnimationStartTriggerName = "DoSwingAttack";
+        private const string swingStateName = "Weapon.Swing";
 
         public int AbilityIdentifier => 1;
 
@@ -77,7 +78,7 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
             var tickEntity = new PeriodicTickActionComponent<PeriodicTickDelegate>()
                                 .SetTickFunction(
                                     ((index, Ecb, entity, parentGameplayEffectEntity) => {
-                                        new PoisonTickGameplayEffectComponent(){Damage = -1f}.Instantiate(index, Ecb, entity, -1f);
+                                        new PoisonTickGameplayEffectComponent() { Damage = -1f }.Instantiate(index, Ecb, entity, -1f);
                                     })
                                 )
                                 .CreateEntity(dstManager);
@@ -139,13 +140,12 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
             var animatorLayerIndex = animator.GetLayerIndex(animatorLayerName);
 
             // Get animator state info
-            var weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
+            var weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, swingStateName);
 
             animator.SetTrigger(AnimationStartTriggerName);
             // Wait to reach the "Swing" state
-            while (!weaponLayerAnimatorStateInfo.IsName(animatorStateName)) {
+            while (!IsInOrEnteringAnimatorState(animator, animatorLayerIndex, swingStateName)) {
                 yield return null;
-                weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
             }
 
             // In the swing state, check for a collision between this hitbox and any hurtbox
@@ -156,9 +156,8 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
 
 
             // Once we're about 35% through the animation, allow hit to trigger
-            while (weaponLayerAnimatorStateInfo.normalizedTime < 0.35f) {
+            while (GetAnimatorStateInfo(animator, animatorLayerIndex, swingStateName).normalizedTime < 0.35f) {
                 yield return null;
-                weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
             }
 
             void HitTriggered(object sender, ColliderEventArgs e) {
@@ -172,9 +171,8 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
             }
 
             // Wait for hitTriggered to become true, or animation to complete
-            while (weaponLayerAnimatorStateInfo.IsName("Weapon.Swing") && hitTarget == null) {
+            while (IsInOrEnteringAnimatorState(animator, animatorLayerIndex, swingStateName) && hitTarget == null) {
                 yield return new WaitForFixedUpdate();
-                weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
             }
 
             // If we get to here trigger return to idle state
@@ -186,9 +184,8 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
 
             }
             // Get target entity
-            while (weaponLayerAnimatorStateInfo.IsName("Weapon.Swing")) {
+            while (IsInOrEnteringAnimatorState(animator, animatorLayerIndex, swingStateName)) {
                 yield return new WaitForFixedUpdate();
-                weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, animatorStateName);
             }
 
             animator.ResetTrigger("ReturnWeaponToIdle");
@@ -207,6 +204,10 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
             var animatorStateInfoNext = animator.GetNextAnimatorStateInfo(layerIndex);
             if (animatorStateInfoNext.IsName(animatorStateName)) animatorStateInfo = animatorStateInfoNext;
             return animatorStateInfo;
+        }
+
+        bool IsInOrEnteringAnimatorState(Animator animator, int layerIndex, string animatorStateName) {
+            return GetAnimatorStateInfo(animator, layerIndex,animatorStateName).IsName(animatorStateName);
         }
 
     }

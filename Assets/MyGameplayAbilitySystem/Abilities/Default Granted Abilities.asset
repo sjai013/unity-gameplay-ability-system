@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Default Granted Abilities
   m_EditorClassIdentifier: 
   Components:
-  - MyGameplayAbilitySystem.Abilities.DefaultAttackAbilityTag, Assembly-CSharp, Version=0.0.0.0,
+  - MyGameplayAbilitySystem.Abilities.Fire1.Fire1AbilityTag, Assembly-CSharp, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
-  - MyGameplayAbilitySystem.Abilities.Fire1AbilityTag, Assembly-CSharp, Version=0.0.0.0,
-    Culture=neutral, PublicKeyToken=null
+  - MyGameplayAbilitySystem.Abilities.DefaultAttack.DefaultAttackAbilityTag, Assembly-CSharp,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
