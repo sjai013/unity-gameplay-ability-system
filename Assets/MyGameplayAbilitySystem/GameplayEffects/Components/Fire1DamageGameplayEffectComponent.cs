@@ -1,5 +1,5 @@
 /*
- * Created on Mon Nov 26 2019
+ * Created on Sun Dec 15 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -19,11 +19,15 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.Attributes.Components;
+using GameplayAbilitySystem.Attributes.Components.Operators;
 using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 
 namespace MyGameplayAbilitySystem.GameplayEffects.Components {
-    public struct Fire1CooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {
+    public struct Fire1DamageGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {
+        public float Damage;
+        private const float DURATION = -1f;
         public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
             var archetype = dstManager.CreateArchetype(
                                     typeof(GameplayEffectDurationComponent),
@@ -32,7 +36,8 @@ namespace MyGameplayAbilitySystem.GameplayEffects.Components {
 
             var entity = dstManager.CreateEntity(archetype);
             dstManager.SetComponentData<GameplayEffectTargetComponent>(entity, actorEntity);
-            dstManager.SetComponentData<GameplayEffectDurationComponent>(entity, GameplayEffectDurationComponent.Initialise(duration, UnityEngine.Time.time));
+            dstManager.SetComponentData<GameplayEffectDurationComponent>(entity, GameplayEffectDurationComponent.Initialise(DURATION, UnityEngine.Time.time));
+            new PermanentAttributeModifierTag() { }.CreateAttributeModifier<HealthAttributeComponent, Add>(dstManager, actorEntity, Damage);
             return entity;
         }
 

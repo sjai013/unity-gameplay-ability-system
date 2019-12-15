@@ -1,5 +1,5 @@
 /*
- * Created on Mon Nov 04 2019
+ * Created on Sun Dec 15 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -23,9 +23,10 @@ using MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours;
 using Unity.Entities;
 using UnityEngine;
 
-public struct BasicAbilityPayload {
+public struct BasicRangeAbilityPayload {
     public EntityManager EntityManager;
     public Transform ActorTransform;
     public ActorAbilitySystem ActorAbilitySystem;
     public Entity GrantedAbilityEntity;
+    public GameObject AbilityPrefab;
 }

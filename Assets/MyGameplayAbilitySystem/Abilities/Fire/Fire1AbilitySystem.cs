@@ -19,9 +19,15 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.Abilities.Components;
+using GameplayAbilitySystem.Abilities.Systems;
 using GameplayAbilitySystem.Abilities.Systems.Generic;
+using GameplayAbilitySystem.AbilitySystem.Enums;
+using GameplayAbilitySystem.ExtensionMethods;
 using MyGameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
+using Unity.Jobs;
+
 namespace MyGameplayAbilitySystem.Abilities.Fire1 {
     public class Fire1AbilitySystem {
         public class AbilityCooldownSystem : GenericAbilityCooldownSystem<Fire1AbilityTag> {
@@ -30,6 +36,20 @@ namespace MyGameplayAbilitySystem.Abilities.Fire1 {
                 ,ComponentType.ReadOnly<Fire1CooldownGameplayEffectComponent>()
                 };
 
+        }
+
+        public class AbilityAvailabilitySystem : AbilityAvailabilitySystem<Fire1AbilityTag> {
+            [RequireComponentTag(typeof(Fire1AbilityActive))]
+            struct Job : IJobForEach<AbilityStateComponent> {
+                public void Execute(ref AbilityStateComponent abilityState) {
+                    abilityState |= (int)AbilityStates.ACTIVE;
+                }
+            }
+            protected override JobHandle UpdateAbilityAvailability(JobHandle inputDeps) {
+                // Check for existence of AbilityActive tag
+                inputDeps = inputDeps.ScheduleJob(new Job(), this);
+                return inputDeps;
+            }
         }
         public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<Fire1AbilityTag> { }
     }

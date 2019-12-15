@@ -1,5 +1,5 @@
 /*
- * Created on Mon Nov 26 2019
+ * Created on Sun Dec 15 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -19,21 +19,12 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using GameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 
 namespace MyGameplayAbilitySystem.GameplayEffects.Components {
-    public struct Fire1CooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData {
+    public struct Fire1AbilityActive : IGameplayEffectTagComponent, IComponentData {
         public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
-            var archetype = dstManager.CreateArchetype(
-                                    typeof(GameplayEffectDurationComponent),
-                                    typeof(GameplayEffectTargetComponent),
-                                    this.GetType());
-
-            var entity = dstManager.CreateEntity(archetype);
-            dstManager.SetComponentData<GameplayEffectTargetComponent>(entity, actorEntity);
-            dstManager.SetComponentData<GameplayEffectDurationComponent>(entity, GameplayEffectDurationComponent.Initialise(duration, UnityEngine.Time.time));
-            return entity;
+            throw new System.NotImplementedException();
         }
 
         public Entity Instantiate(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity actorEntity, float duration) {

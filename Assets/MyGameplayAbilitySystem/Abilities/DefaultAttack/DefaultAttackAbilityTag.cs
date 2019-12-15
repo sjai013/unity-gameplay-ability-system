@@ -31,6 +31,7 @@ using Unity.Entities;
 using UnityEngine;
 using Components = GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.Components;
+using System;
 
 namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
     [AbilitySystemDisplayName("Default Attack Ability")]
@@ -39,6 +40,8 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
         private const string swingStateName = "Weapon.Swing";
 
         public int AbilityIdentifier => 1;
+
+        public object EmptyPayload => new BasicMeleeAbilityPayload();
 
         public void CreateCooldownEntities(EntityManager dstManager, Entity actorEntity) {
             Entity cooldownEntity1 = new GlobalCooldownGameplayEffectComponent().Instantiate(dstManager, actorEntity, 2.5f);
@@ -113,7 +116,7 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
         }
 
         public IEnumerator DoAbility(object Payload) {
-            if (Payload is BasicAbilityPayload payload) {
+            if (Payload is BasicMeleeAbilityPayload payload) {
                 payload.ActorAbilitySystem.StartCoroutine(AbilityActionLogic(payload));
             } else {
                 Debug.LogWarningFormat("The payload passed to {0} does not match the expected payload format.", this.GetType());
@@ -122,7 +125,7 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
             yield return null;
         }
 
-        private IEnumerator AbilityActionLogic(BasicAbilityPayload payload) {
+        private IEnumerator AbilityActionLogic(BasicMeleeAbilityPayload payload) {
             var entityManager = payload.EntityManager;
             var transform = payload.ActorTransform;
             var actorAbilitySystem = payload.ActorAbilitySystem;
@@ -132,13 +135,15 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
 
             if (abilityStateComponent.Value != 0) yield break;
             var animator = actorAbilitySystem.GetComponent<Animator>();
-            BeginActivateAbility(entityManager, grantedAbilityEntity);
-            CreateSourceAttributeModifiers(entityManager, actorAbilitySystem.AbilityOwnerEntity);
             var animatorLayerName = "Weapon";
             var animatorStateName = animatorLayerName + ".Swing";
             var animatorStateFullHash = Animator.StringToHash(animatorStateName);
             var animatorLayerIndex = animator.GetLayerIndex(animatorLayerName);
 
+            // If we aren't in idle, then do nothing
+            if (!animator.GetCurrentAnimatorStateInfo(animatorLayerIndex).IsName("Idle")) yield break;
+            BeginActivateAbility(entityManager, grantedAbilityEntity);
+            CreateSourceAttributeModifiers(entityManager, actorAbilitySystem.AbilityOwnerEntity);
             // Get animator state info
             var weaponLayerAnimatorStateInfo = GetAnimatorStateInfo(animator, animatorLayerIndex, swingStateName);
 

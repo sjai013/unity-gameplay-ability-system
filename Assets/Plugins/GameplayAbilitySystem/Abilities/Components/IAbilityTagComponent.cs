@@ -37,7 +37,7 @@ namespace GameplayAbilitySystem.Abilities.Components {
 
         void BeginActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity);
         void EndActivateAbility(EntityManager dstManager, Entity grantedAbilityEntity);
-
+        object EmptyPayload {get;}
 
         IEnumerator DoAbility(object Payload);
 

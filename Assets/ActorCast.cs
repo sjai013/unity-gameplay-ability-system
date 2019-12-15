@@ -25,6 +25,8 @@ public class ActorCast : MonoBehaviour, ICastActions {
 
     public List<int> CastAbilityButtonMap = new List<int>();
 
+    public GameObject Fire1Prefab;
+
     List<Entity> GrantedAbilityEntities;
     List<(IAbilityTagComponent AbilityTag, ComponentType ComponentType, Entity GrantedAbilityEntity)> GrantedAbilities;
 
@@ -126,13 +128,25 @@ public class ActorCast : MonoBehaviour, ICastActions {
         // Find this ability in the GrantedAbilities array
         var ability = GrantedAbilities.Find(x => x.AbilityTag.AbilityIdentifier == abilityId);
         if (ability.AbilityTag == null) return;
+        var untypedPayload = ability.AbilityTag.EmptyPayload;
+        switch (untypedPayload) {
+            case BasicMeleeAbilityPayload payload:
+                payload.ActorAbilitySystem = this.actorAbilitySystem;
+                payload.ActorTransform = this.transform;
+                payload.EntityManager = World.Active.EntityManager;
+                payload.GrantedAbilityEntity = ability.GrantedAbilityEntity;
+                StartCoroutine(ability.AbilityTag.DoAbility(payload));
+                break;
+            case BasicRangeAbilityPayload payload:
+                payload.ActorAbilitySystem = this.actorAbilitySystem;
+                payload.ActorTransform = this.transform;
+                payload.EntityManager = World.Active.EntityManager;
+                payload.GrantedAbilityEntity = ability.GrantedAbilityEntity;
+                payload.AbilityPrefab = Fire1Prefab;
+                StartCoroutine(ability.AbilityTag.DoAbility(payload));
+                break;
+        }
 
-        var payload = new BasicAbilityPayload();
-        payload.ActorAbilitySystem = this.actorAbilitySystem;
-        payload.ActorTransform = this.transform;
-        payload.EntityManager = World.Active.EntityManager;
-        payload.GrantedAbilityEntity = ability.GrantedAbilityEntity;
-        StartCoroutine(ability.AbilityTag.DoAbility(payload));
     }
 
 
