@@ -39,7 +39,7 @@ namespace GameplayAbilitySystem.Abilities.Systems.Generic {
 
         [ExcludeComponent(typeof(AbilityIdentifierComponent))]
         [RequireComponentTag(typeof(AbilitySystemActorTransformComponent), typeof(AbilityOwnerComponent), typeof(AbilityCooldownComponent))]
-        struct Job : IJobForEachWithEntity<T> {
+        struct SystemJob : IJobForEachWithEntity<T> {
             public EntityCommandBuffer.Concurrent Ecb;
             public int AbilityIdentifier;
             public void Execute(Entity entity, int index, [ReadOnly] ref T _) {
@@ -48,7 +48,7 @@ namespace GameplayAbilitySystem.Abilities.Systems.Generic {
         }
 
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
-            inputDeps = new Job()
+            inputDeps = new SystemJob()
             {
                 Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent(),
                 AbilityIdentifier = AbilityIdentifier

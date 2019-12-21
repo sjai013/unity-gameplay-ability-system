@@ -82,7 +82,7 @@ public class ActorCast : MonoBehaviour, ICastActions {
 
         GetAllAbilities();
         // Get list of grantedAbility entities
-        GetGrantedAbilities(World.Active.EntityManager);
+        GetGrantedAbilities(World.DefaultGameObjectInjectionWorld.EntityManager);
     }
 
     void GetAllAbilities() {
@@ -133,14 +133,14 @@ public class ActorCast : MonoBehaviour, ICastActions {
             case BasicMeleeAbilityPayload payload:
                 payload.ActorAbilitySystem = this.actorAbilitySystem;
                 payload.ActorTransform = this.transform;
-                payload.EntityManager = World.Active.EntityManager;
+                payload.EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
                 payload.GrantedAbilityEntity = ability.GrantedAbilityEntity;
                 StartCoroutine(ability.AbilityTag.DoAbility(payload));
                 break;
             case BasicRangeAbilityPayload payload:
                 payload.ActorAbilitySystem = this.actorAbilitySystem;
                 payload.ActorTransform = this.transform;
-                payload.EntityManager = World.Active.EntityManager;
+                payload.EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
                 payload.GrantedAbilityEntity = ability.GrantedAbilityEntity;
                 payload.AbilityPrefab = Fire1Prefab;
                 StartCoroutine(ability.AbilityTag.DoAbility(payload));

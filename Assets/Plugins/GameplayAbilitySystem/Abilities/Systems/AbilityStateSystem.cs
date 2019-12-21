@@ -41,13 +41,13 @@ namespace GameplayAbilitySystem.Abilities.Systems {
     [UpdateInGroup(typeof(AbilityUpdateInitialiseSystemGroup))]
     public class ResetAbilityStates : JobComponentSystem {
 
-        struct Job : IJobForEach<AbilityStateComponent> {
+        struct SystemJob : IJobForEach<AbilityStateComponent> {
             public void Execute(ref AbilityStateComponent state) {
                 state = (int)AbilityStates.READY;
             }
         }
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
-            inputDeps = new Job().Schedule(this, inputDeps);
+            inputDeps = new SystemJob().Schedule(this, inputDeps);
             return inputDeps;
         }
     }

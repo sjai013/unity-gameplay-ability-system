@@ -52,14 +52,14 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
             // }
 
             [RequireComponentTag(typeof(DefaultAttackAbilityActive))]
-            struct Job : IJobForEach<AbilityStateComponent> {
+            struct SystemJob : IJobForEach<AbilityStateComponent> {
                 public void Execute(ref AbilityStateComponent abilityState) {
                     abilityState |= (int)AbilityStates.ACTIVE;
                 }
             }
             protected override JobHandle UpdateAbilityAvailability(JobHandle inputDeps) {
                 // Check for existence of AbilityActive tag
-                inputDeps = inputDeps.ScheduleJob(new Job(), this);
+                inputDeps = inputDeps.ScheduleJob(new SystemJob(), this);
                 return inputDeps;
             }
         }

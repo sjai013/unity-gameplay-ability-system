@@ -43,7 +43,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
         protected override JobHandle OnUpdate(JobHandle inputDependencies) {
             var job = new GameplayEffectDurationUpdateSystemJob
             {
-                deltaTime = Time.deltaTime
+                deltaTime = Time.DeltaTime
             };
 
             // Now that the job is set up, schedule it to be run. 

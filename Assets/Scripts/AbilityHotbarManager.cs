@@ -35,10 +35,10 @@ public class AbilityHotbarManager : MonoBehaviour {
     public List<int> AbilityIdentifiers;
 
     void Start() {
-        World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityOwnerEntity = AbilityCharacter.AbilityOwnerEntity;
-        World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityButtons = AbilityButtons;
-        World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityIdentifiers = AbilityIdentifiers;
-        World.Active.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityIconMaps = AbilityIconMaps.AbilityIconMaps;
+        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityOwnerEntity = AbilityCharacter.AbilityOwnerEntity;
+        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityButtons = AbilityButtons;
+        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityIdentifiers = AbilityIdentifiers;
+        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<AbilityHotbarUpdateSystem>().AbilityIconMaps = AbilityIconMaps.AbilityIconMaps;
     }
 }
 
@@ -76,9 +76,9 @@ public class AbilityHotbarUpdateSystem : ComponentSystem {
             }
 
 
-            if (World.Active.EntityManager.HasComponent<AbilityCooldownComponent>(GrantedAbilityEntities[i])) {
-                var abilityCooldown = World.Active.EntityManager.GetComponentData<AbilityCooldownComponent>(GrantedAbilityEntities[i]);
-                var abilityState = World.Active.EntityManager.GetComponentData<AbilityStateComponent>(GrantedAbilityEntities[i]);
+            if (World.DefaultGameObjectInjectionWorld.EntityManager.HasComponent<AbilityCooldownComponent>(GrantedAbilityEntities[i])) {
+                var abilityCooldown = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<AbilityCooldownComponent>(GrantedAbilityEntities[i]);
+                var abilityState = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<AbilityStateComponent>(GrantedAbilityEntities[i]);
                 UpdateButton(i, abilityCooldown.Value.NominalDuration, abilityCooldown.Value.RemainingTime, abilityState > 0);
             }
 

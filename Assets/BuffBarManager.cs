@@ -13,9 +13,9 @@ public class BuffBarManager : MonoBehaviour {
     public ActorAbilitySystem AbilitySystem;
     // Start is called before the first frame update
     void Start() {
-        World.Active.GetOrCreateSystem<BuffBarUpdateSystem>().EffectsComponentsToShow = EffectsToShow.ComponentTypes.ToArray();
-        World.Active.GetOrCreateSystem<BuffBarUpdateSystem>().Player = AbilitySystem.AbilityOwnerEntity;
-        World.Active.GetOrCreateSystem<BuffBarUpdateSystem>().BuffIcons = BuffIcons;
+        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BuffBarUpdateSystem>().EffectsComponentsToShow = EffectsToShow.ComponentTypes.ToArray();
+        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BuffBarUpdateSystem>().Player = AbilitySystem.AbilityOwnerEntity;
+        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BuffBarUpdateSystem>().BuffIcons = BuffIcons;
     }
 
     // Update is called once per frame

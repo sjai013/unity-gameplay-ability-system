@@ -78,8 +78,8 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
                 Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent(),
                 ExpiredGameplayEffects = ExpiredGameplayEffects
             }.Schedule(attributesToRemoveQuery, inputDeps);
-
             inputDeps = ExpiredGameplayEffects.Dispose(inputDeps);
+            m_EntityCommandBuffer.AddJobHandleForProducer(inputDeps);
             // For each gameplay effect that is pending removal, cleanup all associated attribute entities
             // var parentEntities = gameplayEffectsPendingRemovalQuery.CalculateEntityCount();
             // if (parentEntities <= 0) return inputDeps;

@@ -57,7 +57,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
 
             inputDeps = new TickJob()
             {
-                DeltaTime = Time.deltaTime
+                DeltaTime = Time.DeltaTime
             }.Schedule(this, inputDeps);
 
             inputDeps = Tick(inputDeps);
