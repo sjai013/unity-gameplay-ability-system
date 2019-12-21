@@ -20,6 +20,7 @@
  */
 
 using GameplayAbilitySystem.GameplayEffects.Components;
+using GameplayAbilitySystem.GameplayEffects.Interfaces;
 using Unity.Entities;
 
 namespace MyGameplayAbilitySystem.GameplayEffects.Components {

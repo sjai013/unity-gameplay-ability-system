@@ -19,9 +19,6 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-using Unity.Entities;
-
-public interface IGameplayEffectTagComponent {
-    Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration);
-    Entity Instantiate(int jobIndex, EntityCommandBuffer.Concurrent Ecb, Entity actorEntity, float duration);
+namespace GameplayAbilitySystem.GameplayEffects.Interfaces {
+    public interface IBuff {}
 }
