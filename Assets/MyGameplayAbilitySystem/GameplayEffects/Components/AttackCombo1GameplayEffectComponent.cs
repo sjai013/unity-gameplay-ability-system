@@ -1,5 +1,5 @@
-﻿/*
- * Created on Mon Nov 04 2019
+/*
+ * Created on Sat Dec 21 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -25,8 +25,8 @@ using GameplayAbilitySystem.GameplayEffects.Interfaces;
 using Unity.Entities;
 
 namespace MyGameplayAbilitySystem.GameplayEffects.Components {
-    [AbilitySystemDisplayName("Global Cooldown")]
-    public struct GlobalCooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData, IBuff {
+    [AbilitySystemDisplayName("Attack Combo 1")]
+    public struct AttackCombo1GameplayEffectComponent : IGameplayEffectTagComponent, IComponentData, IBuff {
         public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
             var archetype = dstManager.CreateArchetype(
                                     typeof(GameplayEffectDurationComponent),

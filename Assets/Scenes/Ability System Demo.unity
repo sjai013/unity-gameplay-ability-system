@@ -729,6 +729,7 @@ GameObject:
   - component: {fileID: 351111857}
   - component: {fileID: 351111859}
   - component: {fileID: 351111858}
+  - component: {fileID: 351111860}
   m_Layer: 5
   m_Name: GameEffects
   m_TagString: Untagged
@@ -794,6 +795,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &351111860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351111856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2d0ab7c99a06034689612ec98ae3408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BuffsToShow: {fileID: 11400000, guid: f60747ab0d3eab446a614df69501a2a1, type: 2}
 --- !u!1001 &381492119
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1727,7 +1741,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17160
+  m_Name: pb_Mesh19808
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1958,7 +1972,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: NaN, y: 0, z: 6.92e-43, w: 0}
+  m_BoundingSphereOverride: {x: 1.7753217e+28, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0

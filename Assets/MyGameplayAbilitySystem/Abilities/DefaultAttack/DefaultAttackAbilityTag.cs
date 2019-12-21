@@ -44,7 +44,7 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
         public object EmptyPayload => new BasicMeleeAbilityPayload();
 
         public void CreateCooldownEntities(EntityManager dstManager, Entity actorEntity) {
-            Entity cooldownEntity1 = new GlobalCooldownGameplayEffectComponent().Instantiate(dstManager, actorEntity, 2.5f);
+
 
             var tickEntity = new PeriodicTickActionComponent<PeriodicTickDelegate>()
                                 .SetTickFunction(
@@ -60,7 +60,13 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
                 TickDurationLeft = 1
             });
             dstManager.SetComponentData<PeriodicTickTargetComponent>(tickEntity, actorEntity);
+
+            Entity cooldownEntity1 = new GlobalCooldownGameplayEffectComponent().Instantiate(dstManager, actorEntity, 1f);
             dstManager.SetComponentData<ParentGameplayEffectEntity>(tickEntity, new ParentGameplayEffectEntity(cooldownEntity1));
+
+            Entity cooldownEntity2 = new AttackCombo1GameplayEffectComponent().Instantiate(dstManager, actorEntity, 1.5f);
+            dstManager.SetComponentData<ParentGameplayEffectEntity>(tickEntity, new ParentGameplayEffectEntity(cooldownEntity2));
+
         }
 
         public void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
@@ -212,7 +218,7 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
         }
 
         bool IsInOrEnteringAnimatorState(Animator animator, int layerIndex, string animatorStateName) {
-            return GetAnimatorStateInfo(animator, layerIndex,animatorStateName).IsName(animatorStateName);
+            return GetAnimatorStateInfo(animator, layerIndex, animatorStateName).IsName(animatorStateName);
         }
 
     }
