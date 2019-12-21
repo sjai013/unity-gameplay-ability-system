@@ -27,14 +27,18 @@ using Unity.Entities;
 namespace MyGameplayAbilitySystem.GameplayEffects.Components {
     [AbilitySystemDisplayName("Attack Combo 1")]
     public struct AttackCombo1GameplayEffectComponent : IGameplayEffectTagComponent, IComponentData, IBuff {
+        public int BuffIndex => 2;
+
         public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
             var archetype = dstManager.CreateArchetype(
                                     typeof(GameplayEffectDurationComponent),
                                     typeof(GameplayEffectTargetComponent),
+                                    typeof(GameplayEffectBuffIndex),
                                     this.GetType());
 
             var entity = dstManager.CreateEntity(archetype);
             dstManager.SetComponentData<GameplayEffectTargetComponent>(entity, actorEntity);
+            dstManager.SetComponentData<GameplayEffectBuffIndex>(entity, BuffIndex);
             dstManager.SetComponentData<GameplayEffectDurationComponent>(entity, GameplayEffectDurationComponent.Initialise(duration, UnityEngine.Time.time));
             return entity;
         }

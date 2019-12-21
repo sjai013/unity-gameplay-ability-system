@@ -1,5 +1,5 @@
 /*
- * Created on Mon Nov 04 2019
+ * Created on Sat Dec 21 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -19,8 +19,13 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace GameplayAbilitySystem.GameplayEffects.Interfaces {
-    public interface IBuff {
-        int BuffIndex {get;}
+using System;
+using Unity.Entities;
+namespace GameplayAbilitySystem.GameplayEffects.Components {
+    [Serializable]
+    public struct GameplayEffectBuffIndex : IComponentData {
+        public int Value;
+        public static implicit operator int(GameplayEffectBuffIndex e) { return e.Value; }
+        public static implicit operator GameplayEffectBuffIndex(int e) { return new GameplayEffectBuffIndex { Value = e }; }
     }
 }

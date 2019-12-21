@@ -27,14 +27,18 @@ using Unity.Entities;
 namespace MyGameplayAbilitySystem.GameplayEffects.Components {
     [AbilitySystemDisplayName("Global Cooldown")]
     public struct GlobalCooldownGameplayEffectComponent : IGameplayEffectTagComponent, IComponentData, IBuff {
+        public int BuffIndex => 1;
+
         public Entity Instantiate(EntityManager dstManager, Entity actorEntity, float duration) {
             var archetype = dstManager.CreateArchetype(
                                     typeof(GameplayEffectDurationComponent),
                                     typeof(GameplayEffectTargetComponent),
+                                    typeof(GameplayEffectBuffIndex),
                                     this.GetType());
 
             var entity = dstManager.CreateEntity(archetype);
             dstManager.SetComponentData<GameplayEffectTargetComponent>(entity, actorEntity);
+            dstManager.SetComponentData<GameplayEffectBuffIndex>(entity, BuffIndex);
             dstManager.SetComponentData<GameplayEffectDurationComponent>(entity, GameplayEffectDurationComponent.Initialise(duration, UnityEngine.Time.time));
             return entity;
         }
