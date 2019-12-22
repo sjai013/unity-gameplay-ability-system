@@ -779,7 +779,7 @@ GameObject:
   - component: {fileID: 351111858}
   - component: {fileID: 351111860}
   m_Layer: 5
-  m_Name: GameEffects
+  m_Name: BuffBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2046,7 +2046,8 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0.000000003962441, z: 7.48e-43, w: 7.22e-43}
+  m_BoundingSphereOverride: {x: -2.3404263e-24, y: 2.3937171e-21, z: -3.0590932e+31,
+    w: NaN}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0

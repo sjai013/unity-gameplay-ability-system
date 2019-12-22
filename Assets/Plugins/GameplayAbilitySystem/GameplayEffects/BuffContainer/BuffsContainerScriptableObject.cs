@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Common.ScriptableObjects;
 using GameplayAbilitySystem.GameplayEffects.Interfaces;
@@ -30,6 +31,19 @@ using UnityEngine;
 namespace GameplayAbilitySystem.Attributes.ScriptableObjects {
     [CreateAssetMenu(fileName = "BuffsContainer", menuName = "Gameplay Ability System/GameplayEffects/Buffs Container")]
     public class BuffsContainerScriptableObject : AbstractComponentTypeSelectionScriptableObject<IBuff> {
+        public List<int> CachedBuffIndices = null;
+        public List<int> GetIndices() {
+            // If we have already computed the indices, use those
+            if (CachedBuffIndices != null && CachedBuffIndices.Count > 0) return CachedBuffIndices;
+
+            // Get the buff index for each ComponentType.
+            // We need to use reflection to create a new type
+            // Then cast it as an IBuff, and read the IBuff property.
+            var componentTypes = ComponentTypes;
+            var buffIndices = ComponentTypes.Select(x => ((IBuff)(Activator.CreateInstance(x.GetManagedType()))).BuffIndex).ToList();
+            CachedBuffIndices = buffIndices;
+            return buffIndices;
+        }
 
     }
 }

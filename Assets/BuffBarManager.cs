@@ -13,11 +13,15 @@ public class BuffBarManager : MonoBehaviour {
     public BuffsContainerScriptableObject EffectsToShow;
     public List<GameplayTagStatusBarButton> BuffIcons;
     public ActorAbilitySystem AbilitySystem;
+    public HashSet<ComponentType> ComponentTypes { get; private set; }
+    public HashSet<int> Buffs { get; private set; }
+    private EntityQuery Query;
+
     // Start is called before the first frame update
     void Start() {
-        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BuffBarUpdateSystem>().EffectsComponentsToShow = EffectsToShow.ComponentTypes.ToArray();
-        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BuffBarUpdateSystem>().Player = AbilitySystem.AbilityOwnerEntity;
-        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BuffBarUpdateSystem>().BuffIcons = BuffIcons;
+        this.ComponentTypes = new HashSet<ComponentType>(EffectsToShow.ComponentTypes);
+        this.Buffs = new HashSet<int>(EffectsToShow.GetIndices());
+        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BuffBarUpdateSystem>().RegisterBuffBar(this);
     }
 
     // Update is called once per frame
@@ -27,80 +31,77 @@ public class BuffBarManager : MonoBehaviour {
 }
 
 public class BuffBarUpdateSystem : JobComponentSystem {
-    public ComponentType[] EffectsComponentsToShow;
-    public Entity Player;
     EntityQuery m_Query;
-    public List<GameplayTagStatusBarButton> BuffIcons;
-    protected override void OnStartRunning() {
+    private Dictionary<Entity, List<BuffBarManager>> BuffBars = new Dictionary<Entity, List<BuffBarManager>>();
+    public void RegisterBuffBar(BuffBarManager buffBarManager) {
+        // Add the manager to container
+        if (!BuffBars.TryGetValue(buffBarManager.AbilitySystem.AbilityOwnerEntity, out var buffBarsForPlayer)) {
+            buffBarsForPlayer = new List<BuffBarManager>();
+            BuffBars.Add(buffBarManager.AbilitySystem.AbilityOwnerEntity, buffBarsForPlayer);
+        }
+        buffBarsForPlayer.Add(buffBarManager);
+    }
+
+    public void UnregisterBuffBar(BuffBarManager buffBarManager) {
+        // Remove the manager from container
+        if (BuffBars.TryGetValue(buffBarManager.AbilitySystem.AbilityOwnerEntity, out var buffBars)) {
+            buffBars.Remove(buffBarManager);
+        }
+    }
+
+    protected override void OnCreate() {
         m_Query = GetEntityQuery(
             new EntityQueryDesc
             {
-                All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectDurationComponent>(), ComponentType.ReadOnly<GameplayEffectTargetComponent>() },
-                Any = EffectsComponentsToShow
+                All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectDurationComponent>(), ComponentType.ReadOnly<GameplayEffectTargetComponent>(), ComponentType.ReadOnly<GameplayEffectBuffIndex>() },
             }
         );
     }
-
-
-    protected void OnUpdate() {
-        var entities = m_Query.ToEntityArray(Allocator.TempJob);
-        var targets = m_Query.ToComponentDataArray<GameplayEffectTargetComponent>(Allocator.TempJob);
-        var durations = m_Query.ToComponentDataArray<GameplayEffectDurationComponent>(Allocator.TempJob);
-        List<GameplayEffectDurationComponent> cooldowns = new List<GameplayEffectDurationComponent>();
-        for (var i = 0; i < targets.Length; i++) {
-            if (targets[i] == Player) {
-                cooldowns.Add(durations[i].Value);
-            }
-        }
-
-        entities.Dispose();
-        targets.Dispose();
-        durations.Dispose();
-
-        // Sort list of cooldowns based on the nominal duration (reverse ordering)
-        cooldowns.Sort((x, y) => x.Value.NominalDuration.CompareTo(y.Value.NominalDuration) * -1);
-
-        // Set cooldowns
-        for (var i = 0; i < cooldowns.Count; i++) {
-            BuffIcons[i].CooldownOverlay.fillAmount = cooldowns[i].Value.RemainingTime / cooldowns[i].Value.NominalDuration;
-        }
-        // Reset all other images to 0
-        for (var i = cooldowns.Count; i < BuffIcons.Count; i++) {
-            BuffIcons[i].CooldownOverlay.fillAmount = 0;
-        }
-        // Update buffs bar with cooldowns
-    }
-
     struct EffectBuffTuple : IComparable<EffectBuffTuple> {
         public GameplayEffectDurationComponent DurationComponent;
         public GameplayEffectBuffIndex BuffComponent;
-
         public int CompareTo(EffectBuffTuple other) {
             return DurationComponent.Value.NominalDuration < other.DurationComponent.Value.NominalDuration ? 1 : -1;
         }
     }
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
-        Entity Player = this.Player;
-        NativeList<EffectBuffTuple> buffDurations = new NativeList<EffectBuffTuple>(100, Allocator.Temp);
-        inputDeps.Complete();
-        Entities
+        NativeMultiHashMap<Entity, EffectBuffTuple> buffDurations = new NativeMultiHashMap<Entity, EffectBuffTuple>(m_Query.CalculateEntityCount(), Allocator.TempJob);
+        var buffDurationsConcurrent = buffDurations.AsParallelWriter();
+        // inputDeps.Complete();
+        inputDeps = Entities
             .ForEach((in GameplayEffectDurationComponent duration, in GameplayEffectTargetComponent target, in GameplayEffectBuffIndex buffIndex) => {
-                if (target == Player) {
-                    buffDurations.Add(new EffectBuffTuple { BuffComponent = buffIndex, DurationComponent = duration });
+                buffDurationsConcurrent.Add(target, new EffectBuffTuple { BuffComponent = buffIndex, DurationComponent = duration });
+            })
+            .WithStoreEntityQueryInField(ref m_Query)
+            .Schedule(inputDeps);
+
+        inputDeps.Complete();
+        // For every player that we need to worry about
+        foreach (var buffBarManager in BuffBars) {
+            NativeList<EffectBuffTuple> buffDurationTuple = new NativeList<EffectBuffTuple>(Allocator.Temp);
+            // Get all items in the NMHM that have the same key
+            if (buffDurations.TryGetFirstValue(buffBarManager.Key, out var effectBuffTuple, out var it)) {
+                buffDurationTuple.Add(effectBuffTuple);
+
+                while (buffDurations.TryGetNextValue(out effectBuffTuple, ref it)) {
+                    buffDurationTuple.Add(effectBuffTuple);
                 }
-            }).Run();
+            }
+            buffDurationTuple.Sort<EffectBuffTuple>();
+            for (var iManager = 0; iManager < buffBarManager.Value.Count; iManager++) {
+                for (var i = 0; i < buffDurationTuple.Length; i++) {
+                    buffBarManager.Value[iManager].BuffIcons[i].CooldownOverlay.fillAmount = buffDurationTuple[i].DurationComponent.Value.RemainingTime / buffDurationTuple[i].DurationComponent.Value.NominalDuration;
+                }
+                // Reset all other images to 0
+                for (var i = buffDurationTuple.Length; i < buffBarManager.Value[iManager].BuffIcons.Count; i++) {
+                    buffBarManager.Value[iManager].BuffIcons[i].CooldownOverlay.fillAmount = 0;
+                }
+            }
 
-        buffDurations.Sort<EffectBuffTuple>();
-
+            buffDurationTuple.Dispose();
+        }
 
         // Set cooldowns
-        for (var i = 0; i < buffDurations.Length; i++) {
-            BuffIcons[i].CooldownOverlay.fillAmount = buffDurations[i].DurationComponent.Value.RemainingTime / buffDurations[i].DurationComponent.Value.NominalDuration;
-        }
-        // Reset all other images to 0
-        for (var i = buffDurations.Length; i < BuffIcons.Count; i++) {
-            BuffIcons[i].CooldownOverlay.fillAmount = 0;
-        }
 
         buffDurations.Dispose();
 
