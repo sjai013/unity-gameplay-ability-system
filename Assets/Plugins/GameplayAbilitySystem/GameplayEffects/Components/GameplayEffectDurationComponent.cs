@@ -27,6 +27,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Components {
     [Serializable]
     public struct GameplayEffectDurationComponent : IComponentData {
         public TimeRemainingComponent Value;
+        public float PercentRemaining { get => Value.RemainingTime / Value.NominalDuration; }
 
         public static implicit operator TimeRemainingComponent(GameplayEffectDurationComponent e) { return e.Value; }
         public static implicit operator GameplayEffectDurationComponent(TimeRemainingComponent e) { return new GameplayEffectDurationComponent { Value = e }; }

@@ -22,9 +22,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace MyGameplayAbilitySystem.Common.ScriptableObjects {
-
-    [CreateAssetMenu(fileName = "AbilityIconMap", menuName = "Gameplay Ability System/Abilities/Icon Map")]
-    public class AbilityIconMapScriptableObject : ScriptableObject {
-        public List<AbilityIconMap> AbilityIconMaps;
+    [CreateAssetMenu(fileName = "BuffIconMap", menuName = "Gameplay Ability System/Buffs/Icon Map")]
+    public class BuffIconMapScriptableObject : ScriptableObject {
+        public List<BuffIconMap> BuffIconMaps;
     }
 }

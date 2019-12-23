@@ -63,10 +63,6 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
 
             Entity cooldownEntity1 = new GlobalCooldownGameplayEffectComponent().Instantiate(dstManager, actorEntity, 1f);
             dstManager.SetComponentData<ParentGameplayEffectEntity>(tickEntity, new ParentGameplayEffectEntity(cooldownEntity1));
-
-            Entity cooldownEntity2 = new AttackCombo1GameplayEffectComponent().Instantiate(dstManager, actorEntity, 1.5f);
-            dstManager.SetComponentData<ParentGameplayEffectEntity>(tickEntity, new ParentGameplayEffectEntity(cooldownEntity2));
-
         }
 
         public void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity) {
@@ -192,6 +188,7 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
                 animator.SetTrigger("ReturnWeaponToIdle");
                 // Once we are no longer in the swing animation, commit the ability
                 CreateCooldownEntities(entityManager, actorAbilitySystem.AbilityOwnerEntity);
+                Entity cooldownEntity2 = new AttackCombo1GameplayEffectComponent().Instantiate(entityManager, actorAbilitySystem.AbilityOwnerEntity, 1.5f);
 
             }
             // Get target entity
