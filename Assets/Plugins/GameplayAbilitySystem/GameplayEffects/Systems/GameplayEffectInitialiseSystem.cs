@@ -27,7 +27,9 @@ using Unity.Entities;
 using Unity.Jobs;
 
 namespace GameplayAbilitySystem.GameplayEffects.Systems {
-    public struct GameplayEffectActivatedSystemStateComponent : ISystemStateComponentData { }
+    public struct GameplayEffectActivatedSystemStateComponent : ISystemStateComponentData {
+        public Entity TargetValue;
+    }
 
     [UpdateInGroup(typeof(GameplayEffectGroupUpdateBeginSystem))]
     public class GameplayEffectInitialiseSystem : JobComponentSystem {
@@ -43,6 +45,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
                 All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectTargetComponent>() },
                 None = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectActivatedSystemStateComponent>() }
             });
+
             m_RemoveSystemState = GetEntityQuery(new EntityQueryDesc()
             {
                 All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectActivatedSystemStateComponent>() },
@@ -53,21 +56,28 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
         /// <summary>
         /// Add system state to indicate the gameplay effect is active
         /// </summary>
+        [BurstCompile]
         struct AddSystemStateJob : IJobChunk {
             public EntityCommandBuffer.Concurrent Ecb;
             [ReadOnly] public ArchetypeChunkEntityType EntityType;
+            [ReadOnly] public ArchetypeChunkComponentType<GameplayEffectTargetComponent> Targets;
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex) {
                 var chunkEntities = chunk.GetNativeArray(EntityType);
+                var targetComponentChunk = chunk.GetNativeArray(Targets);
                 for (var i = 0; i < chunk.Count; i++) {
                     var Entity = chunkEntities[i];
-                    Ecb.AddComponent<GameplayEffectActivatedSystemStateComponent>(i, Entity);
+                    var targetComponent = targetComponentChunk[i];
+                    Ecb.AddComponent<GameplayEffectActivatedSystemStateComponent>(i, Entity, new GameplayEffectActivatedSystemStateComponent { TargetValue = targetComponent });
                 }
             }
         }
 
+
         /// <summary>
         /// Remove the system state from gameplay effects, so we can handle cleanup as required
         /// </summary>
+
+        [BurstCompile]
         struct CleanupEntityJob : IJobChunk {
             public EntityCommandBuffer.Concurrent Ecb;
             [ReadOnly] public ArchetypeChunkEntityType EntityType;
@@ -80,18 +90,84 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
             }
         }
 
+        /// <summary>
+        /// Appends this GameplayEffect to the actor's dynamic buffer
+        /// </summary>
+        [BurstCompile]
+        struct AppendGameplayEffectToActorBuffer : IJob {
+            public BufferFromEntity<GameplayEffectBufferElement> bufferFromEntity;
+
+            [DeallocateOnJobCompletion]
+            public NativeArray<GameplayEffectTargetComponent> targetComponents;
+
+            [DeallocateOnJobCompletion]
+            public NativeArray<Entity> entities;
+
+            public void Execute() {
+                for (var i = 0; i < entities.Length; i++) {
+                    bufferFromEntity[targetComponents[i]].Add(entities[i]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes this GameplayEffect from the actor's dynamic buffer
+        /// </summary>
+        struct RemoveGameplayEffectFromActorBuffer : IJob {
+            public BufferFromEntity<GameplayEffectBufferElement> bufferFromEntity;
+
+            [DeallocateOnJobCompletion]
+            public NativeArray<GameplayEffectActivatedSystemStateComponent> targetComponents;
+
+            [DeallocateOnJobCompletion]
+            public NativeArray<Entity> entities;
+            public void Execute() {
+                for (var i = 0; i < entities.Length; i++) {
+                    // Get the dynamic buffer on the actor
+                    var buffer = bufferFromEntity[targetComponents[i].TargetValue];
+
+                    // Look through the buffer and remove all instances of this effect
+                    for (var j = buffer.Length - 1; j >= 0; j--) {
+                        if (buffer[j].Value == entities[i]) {
+                            buffer.RemoveAt(j);
+                        }
+                    }
+                }
+            }
+        }
+
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
-            inputDeps = new AddSystemStateJob
+            var inputDeps1 = new AddSystemStateJob
             {
                 Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent(),
                 EntityType = GetArchetypeChunkEntityType(),
+                Targets = GetArchetypeChunkComponentType<GameplayEffectTargetComponent>()
             }.Schedule(m_AddSystemState, inputDeps);
 
-            inputDeps = new CleanupEntityJob
+            var inputDeps2 = new CleanupEntityJob
             {
                 Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent(),
                 EntityType = GetArchetypeChunkEntityType(),
             }.Schedule(m_RemoveSystemState, inputDeps);
+
+            inputDeps = JobHandle.CombineDependencies(inputDeps, inputDeps1, inputDeps2);
+
+            inputDeps = new RemoveGameplayEffectFromActorBuffer
+            {
+                bufferFromEntity = GetBufferFromEntity<GameplayEffectBufferElement>(),
+                entities = m_RemoveSystemState.ToEntityArray(Allocator.TempJob),
+                targetComponents = m_RemoveSystemState.ToComponentDataArray<GameplayEffectActivatedSystemStateComponent>(Allocator.TempJob)
+
+            }.Schedule(inputDeps);
+
+            inputDeps = new AppendGameplayEffectToActorBuffer
+            {
+                bufferFromEntity = GetBufferFromEntity<GameplayEffectBufferElement>(),
+                entities = m_AddSystemState.ToEntityArray(Allocator.TempJob),
+                targetComponents = m_AddSystemState.ToComponentDataArray<GameplayEffectTargetComponent>(Allocator.TempJob)
+            }.Schedule(inputDeps);
+
+
             m_EntityCommandBuffer.AddJobHandleForProducer(inputDeps);
             return inputDeps;
         }

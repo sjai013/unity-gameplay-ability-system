@@ -25,6 +25,7 @@ using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Attributes.ScriptableObjects;
 using GameplayAbilitySystem.Common.Components;
+using GameplayAbilitySystem.GameplayEffects.Components;
 using MyGameplayAbilitySystem.Abilities;
 using MyGameplayAbilitySystem.Abilities.DefaultAttack;
 using MyGameplayAbilitySystem.Abilities.Fire1;
@@ -121,6 +122,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
 
             // Add tag component to indicate that this entity represents an actor with attributes
             attributeTypes.Add(typeof(AbilitySystemActorTransformComponent));
+            attributeTypes.Add(typeof(GameplayEffectBufferElement));
             var attributeArchetype = entityManager.CreateArchetype(attributeTypes.ToArray());
             // Create a new entity for this actor
             var abilitySystemAttributesEntity = entityManager.CreateEntity(attributeArchetype);
