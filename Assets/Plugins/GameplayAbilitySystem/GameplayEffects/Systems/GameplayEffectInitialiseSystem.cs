@@ -28,7 +28,7 @@ using Unity.Jobs;
 
 namespace GameplayAbilitySystem.GameplayEffects.Systems {
     public struct GameplayEffectActivatedSystemStateComponent : ISystemStateComponentData {
-        public Entity TargetActor;
+        public Entity TargetEntity;
     }
 
     [UpdateInGroup(typeof(GameplayEffectGroupUpdateBeginSystem))]
@@ -67,7 +67,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
                 for (var i = 0; i < chunk.Count; i++) {
                     var Entity = chunkEntities[i];
                     var targetComponent = targetComponentChunk[i];
-                    Ecb.AddComponent<GameplayEffectActivatedSystemStateComponent>(i, Entity, new GameplayEffectActivatedSystemStateComponent { TargetActor = targetComponent });
+                    Ecb.AddComponent<GameplayEffectActivatedSystemStateComponent>(i, Entity, new GameplayEffectActivatedSystemStateComponent { TargetEntity = targetComponent });
                 }
             }
         }
@@ -124,7 +124,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
             public void Execute() {
                 for (var i = 0; i < entities.Length; i++) {
                     // Get the dynamic buffer on the actor
-                    var buffer = bufferFromEntity[targetComponents[i].TargetActor];
+                    var buffer = bufferFromEntity[targetComponents[i].TargetEntity];
 
                     // Look through the buffer and remove all instances of this effect
                     for (var j = buffer.Length - 1; j >= 0; j--) {
