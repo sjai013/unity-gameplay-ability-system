@@ -25,17 +25,14 @@ using Unity.Entities;
 using Unity.Jobs;
 
 namespace GameplayAbilitySystem.Attributes.Systems {
-    public struct AttributeModificationActivatedSystemStateComponent<T> : ISystemStateComponentData {
+    public struct AttributeModificationActivatedSystemStateComponent<TModifierTag, TAttribute> : ISystemStateComponentData {
         public Entity TargetEntity;
     }
 
-    public class TemporaryttributeInitialiseSystem : AttributeInitialisationSystem<TemporaryAttributeModifierTag> { }
-    public class PermanentAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag> { }
-
-
-    [UpdateInGroup(typeof(AttributeSystemGroup))]
-    public abstract class AttributeInitialisationSystem<T> : JobComponentSystem
-    where T : struct, IComponentData, IAttributeModifierTag {
+    [UpdateInGroup(typeof(AttributeGroupUpdateBeginSystem))]
+    public abstract class AttributeInitialisationSystem<TModifierTag, TAttribute> : JobComponentSystem
+    where TModifierTag : struct, IComponentData, IAttributeModifierTag
+    where TAttribute : struct, IComponentData, IAttributeComponent {
         private BeginSimulationEntityCommandBufferSystem m_EntityCommandBuffer;
         private EntityQuery m_AddSystemState;
         private EntityQuery m_RemoveSystemState;
@@ -45,46 +42,92 @@ namespace GameplayAbilitySystem.Attributes.Systems {
             m_EntityCommandBuffer = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
             m_AddSystemState = GetEntityQuery(new EntityQueryDesc()
             {
-                All = new ComponentType[] { ComponentType.ReadOnly<AttributesOwnerComponent>(), ComponentType.ReadOnly<T>() },
-                None = new ComponentType[] { ComponentType.ReadOnly<AttributeModificationActivatedSystemStateComponent<T>>() }
+                All = new ComponentType[] { ComponentType.ReadOnly<AttributesOwnerComponent>(), ComponentType.ReadOnly<TModifierTag>(), ComponentType.ReadOnly<AttributeComponentTag<TAttribute>>() },
+                None = new ComponentType[] { ComponentType.ReadOnly<AttributeModificationActivatedSystemStateComponent<TModifierTag, TAttribute>>() }
             });
 
             m_RemoveSystemState = GetEntityQuery(new EntityQueryDesc()
             {
-                All = new ComponentType[] { ComponentType.ReadOnly<AttributeModificationActivatedSystemStateComponent<T>>() },
+                All = new ComponentType[] { ComponentType.ReadOnly<AttributeModificationActivatedSystemStateComponent<TModifierTag, TAttribute>>() },
                 None = new ComponentType[] { ComponentType.ReadOnly<AttributesOwnerComponent>() }
             });
         }
 
-        struct AddSystemStateComponent : IJobForEachWithEntity<AttributesOwnerComponent, T> {
+        struct AddSystemStateComponent : IJobForEachWithEntity<AttributesOwnerComponent, TModifierTag> {
             public EntityCommandBuffer.Concurrent Ecb;
 
-            public void Execute(Entity entity, int index, [ReadOnly] ref AttributesOwnerComponent owner, [ReadOnly] ref T attributeModifierType) {
-                Ecb.AddComponent(index, entity, new AttributeModificationActivatedSystemStateComponent<T> { TargetEntity = owner });
+            public void Execute(Entity entity, int index, [ReadOnly] ref AttributesOwnerComponent owner, [ReadOnly] ref TModifierTag attributeModifierType) {
+                Ecb.AddComponent(index, entity, new AttributeModificationActivatedSystemStateComponent<TModifierTag, TAttribute> { TargetEntity = owner });
             }
         }
 
-        struct RemoveSystemStateComponent : IJobForEachWithEntity<AttributeModificationActivatedSystemStateComponent<T>> {
+        struct RemoveSystemStateComponent : IJobForEachWithEntity<AttributeModificationActivatedSystemStateComponent<TModifierTag, TAttribute>> {
             public EntityCommandBuffer.Concurrent Ecb;
-            public void Execute(Entity entity, int index, ref AttributeModificationActivatedSystemStateComponent<T> c0) {
-                Ecb.RemoveComponent<AttributeModificationActivatedSystemStateComponent<T>>(index, entity);
+            public void Execute(Entity entity, int index, ref AttributeModificationActivatedSystemStateComponent<TModifierTag, TAttribute> c0) {
+                Ecb.RemoveComponent<AttributeModificationActivatedSystemStateComponent<TModifierTag, TAttribute>>(index, entity);
 
+            }
+        }
+
+        struct AddElementToDynamicBuffer : IJob {
+            public BufferFromEntity<AttributeBufferElement<TModifierTag, TAttribute>> bufferFromEntity;
+
+            [DeallocateOnJobCompletion]
+            public NativeArray<AttributesOwnerComponent> ownerComponents;
+
+            [DeallocateOnJobCompletion]
+            public NativeArray<Entity> entities;
+            public void Execute() {
+                for (var i = 0; i < entities.Length; i++) {
+                    bufferFromEntity[ownerComponents[i]].Add(entities[i]);
+                }
+            }
+        }
+
+        struct RemoveElementFromDynamicBuffer : IJob {
+            public BufferFromEntity<AttributeBufferElement<TModifierTag, TAttribute>> bufferFromEntity;
+
+            [DeallocateOnJobCompletion]
+            public NativeArray<AttributeModificationActivatedSystemStateComponent<TModifierTag, TAttribute>> systemStateComponents;
+
+            [DeallocateOnJobCompletion]
+            public NativeArray<Entity> entities;
+            public void Execute() {
+                for (var i = 0; i < entities.Length; i++) {
+                    // Get the dynamic buffer on the actor
+                    var buffer = bufferFromEntity[systemStateComponents[i].TargetEntity];
+                    // Look through the buffer and remove all instances of this effect
+                    for (var j = buffer.Length - 1; j >= 0; j--) {
+                        if (buffer[j].Value == entities[i]) {
+                            buffer.RemoveAt(j);
+                        }
+                    }
+                }
             }
         }
 
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
             // Entity has just been created.  Add the system state component
-            inputDeps = new AddSystemStateComponent { Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent() }.Schedule(m_AddSystemState, inputDeps);
-            inputDeps = new RemoveSystemStateComponent { Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent() }.Schedule(m_RemoveSystemState, inputDeps);
+            var inputDeps1 = new AddSystemStateComponent { Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent() }.Schedule(m_AddSystemState, inputDeps);
+            var inputDeps2 = new RemoveSystemStateComponent { Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent() }.Schedule(m_RemoveSystemState, inputDeps);
+            inputDeps = JobHandle.CombineDependencies(inputDeps, inputDeps1, inputDeps2);
 
-            // Entity has just been destroyed.  Remove the system state component.
-            // inputDeps = Entities
-            //     .WithNone<AttributesOwnerComponent>()
-            //     .WithAll<AttributeModificationActivatedSystemStateComponent>()
-            //     .ForEach((Entity attributeEntity, int entityInQueryIndex) => {
-            //         Ecb.RemoveComponent<AttributeModificationActivatedSystemStateComponent>(entityInQueryIndex, attributeEntity);
-            //     })
-            //     .Schedule(inputDeps);
+            inputDeps.Complete();
+            inputDeps = new RemoveElementFromDynamicBuffer
+            {
+                bufferFromEntity = GetBufferFromEntity<AttributeBufferElement<TModifierTag, TAttribute>>(),
+                entities = m_RemoveSystemState.ToEntityArray(Allocator.TempJob),
+                systemStateComponents = m_RemoveSystemState.ToComponentDataArray<AttributeModificationActivatedSystemStateComponent<TModifierTag, TAttribute>>(Allocator.TempJob)
+
+            }.Schedule(inputDeps);
+
+            inputDeps = new AddElementToDynamicBuffer
+            {
+                bufferFromEntity = GetBufferFromEntity<AttributeBufferElement<TModifierTag, TAttribute>>(),
+                entities = m_AddSystemState.ToEntityArray(Allocator.TempJob),
+                ownerComponents = m_AddSystemState.ToComponentDataArray<AttributesOwnerComponent>(Allocator.TempJob)
+            }.Schedule(inputDeps);
+
 
             // Add attribute modification pointer to actor
 

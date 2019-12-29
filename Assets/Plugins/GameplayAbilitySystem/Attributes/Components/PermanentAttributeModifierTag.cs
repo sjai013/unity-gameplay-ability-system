@@ -21,7 +21,6 @@
 
 using GameplayAbilitySystem.Attributes.Systems;
 using Unity.Entities;
-[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<GameplayAbilitySystem.Attributes.Components.PermanentAttributeModifierTag>))]
 
 namespace GameplayAbilitySystem.Attributes.Components {
     public struct PermanentAttributeModifierTag : IComponentData, IAttributeModifierTag {

@@ -94,7 +94,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
         /// Appends this GameplayEffect to the actor's dynamic buffer
         /// </summary>
         [BurstCompile]
-        struct AppendGameplayEffectToActorBuffer : IJob {
+        struct AddElementToDynamicBuffer : IJob {
             public BufferFromEntity<GameplayEffectBufferElement> bufferFromEntity;
 
             [DeallocateOnJobCompletion]
@@ -113,7 +113,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
         /// <summary>
         /// Removes this GameplayEffect from the actor's dynamic buffer
         /// </summary>
-        struct RemoveGameplayEffectFromActorBuffer : IJob {
+        struct RemoveElementFromDynamicBuffer : IJob {
             public BufferFromEntity<GameplayEffectBufferElement> bufferFromEntity;
 
             [DeallocateOnJobCompletion]
@@ -152,7 +152,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
 
             inputDeps = JobHandle.CombineDependencies(inputDeps, inputDeps1, inputDeps2);
 
-            inputDeps = new RemoveGameplayEffectFromActorBuffer
+            inputDeps = new RemoveElementFromDynamicBuffer
             {
                 bufferFromEntity = GetBufferFromEntity<GameplayEffectBufferElement>(),
                 entities = m_RemoveSystemState.ToEntityArray(Allocator.TempJob),
@@ -160,7 +160,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
 
             }.Schedule(inputDeps);
 
-            inputDeps = new AppendGameplayEffectToActorBuffer
+            inputDeps = new AddElementToDynamicBuffer
             {
                 bufferFromEntity = GetBufferFromEntity<GameplayEffectBufferElement>(),
                 entities = m_AddSystemState.ToEntityArray(Allocator.TempJob),

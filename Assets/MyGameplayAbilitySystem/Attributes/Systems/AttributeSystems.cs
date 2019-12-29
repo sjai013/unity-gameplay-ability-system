@@ -21,6 +21,32 @@
 
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Attributes.Systems;
+using Unity.Entities;
+
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<TemporaryAttributeModifierTag, HealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<TemporaryAttributeModifierTag, ManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<TemporaryAttributeModifierTag, MaxHealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<TemporaryAttributeModifierTag, MaxManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<TemporaryAttributeModifierTag, CharacterLevelAttributeComponent>))]
+
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<PermanentAttributeModifierTag, HealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<PermanentAttributeModifierTag, ManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<PermanentAttributeModifierTag, MaxHealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<PermanentAttributeModifierTag, MaxManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<PermanentAttributeModifierTag, CharacterLevelAttributeComponent>))]
+
+[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<TemporaryAttributeModifierTag, HealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<TemporaryAttributeModifierTag, ManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<TemporaryAttributeModifierTag, MaxHealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<TemporaryAttributeModifierTag, MaxManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<TemporaryAttributeModifierTag, CharacterLevelAttributeComponent>))]
+
+[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<PermanentAttributeModifierTag, HealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<PermanentAttributeModifierTag, ManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<PermanentAttributeModifierTag, MaxHealthAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<PermanentAttributeModifierTag, MaxManaAttributeComponent>))]
+[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<PermanentAttributeModifierTag, CharacterLevelAttributeComponent>))]
+
 namespace MyGameplayAbilitySystem.Attributes.Systems {
 
     public class HealthAttributePermanentSystem : GenericAttributePermanentSystem<HealthAttributeComponent> { }
@@ -34,6 +60,18 @@ namespace MyGameplayAbilitySystem.Attributes.Systems {
     public class MaxHealthAttributeTemporarySystem : GenericAttributeTemporarySystem<MaxHealthAttributeComponent> { }
     public class MaxManaAttributeTemporarySystem : GenericAttributeTemporarySystem<MaxManaAttributeComponent> { }
     public class CharacterLevelAttributeTemporarySystem : GenericAttributeTemporarySystem<CharacterLevelAttributeComponent> { }
+
+    public class PermanentHealthAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag, HealthAttributeComponent> { }
+    public class PermanentManaAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag, ManaAttributeComponent> { }
+    public class PermanentMaxHealthAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag, MaxHealthAttributeComponent> { }
+    public class PermanentMaxManaAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag, MaxManaAttributeComponent> { }
+    public class PermanentCharacterLevelAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag, CharacterLevelAttributeComponent> { }
+
+    public class TemporaryHealthAttributeInitialiseSystem : AttributeInitialisationSystem<TemporaryAttributeModifierTag, HealthAttributeComponent> { }
+    public class TemporaryManaAttributeInitialiseSystem : AttributeInitialisationSystem<TemporaryAttributeModifierTag, ManaAttributeComponent> { }
+    public class TemporaryMaxHealthAttributeInitialiseSystem : AttributeInitialisationSystem<TemporaryAttributeModifierTag, MaxHealthAttributeComponent> { }
+    public class TemporaryMaxManaAttributeInitialiseSystem : AttributeInitialisationSystem<TemporaryAttributeModifierTag, MaxManaAttributeComponent> { }
+    public class TemporaryCharacterLevelAttributeInitialiseSystem : AttributeInitialisationSystem<TemporaryAttributeModifierTag, CharacterLevelAttributeComponent> { }
 
 
 }

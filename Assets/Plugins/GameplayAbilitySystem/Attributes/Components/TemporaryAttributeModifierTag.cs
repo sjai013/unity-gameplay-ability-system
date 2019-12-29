@@ -25,8 +25,6 @@ using GameplayAbilitySystem.Common.Components;
 using Unity.Entities;
 using UnityEngine;
 
-[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<GameplayAbilitySystem.Attributes.Components.TemporaryAttributeModifierTag>))]
-
 namespace GameplayAbilitySystem.Attributes.Components {
     public struct TemporaryAttributeModifierTag : IComponentData, IAttributeModifierTag {
         public Entity ParentGameplayEffectEntity;

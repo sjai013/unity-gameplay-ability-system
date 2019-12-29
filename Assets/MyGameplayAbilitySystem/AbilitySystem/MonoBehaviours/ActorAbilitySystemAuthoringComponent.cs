@@ -19,6 +19,7 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System;
 using System.Collections.Generic;
 using GameplayAbilitySystem.Abilities.Components;
 using GameplayAbilitySystem.AbilitySystem.Components;
@@ -116,8 +117,15 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
         private Entity CreateAttributeEntities(Entity entity, EntityManager entityManager) {
             // Get reference to character attribute component on script, and list of attributes
             var attributeTypes = new List<ComponentType>();
+            Type genericAttributeBufferElement = typeof(AttributeBufferElement<,>);
             if (Attributes != null && Attributes.Components != null) {
                 attributeTypes = Attributes.ComponentTypes;
+                for (var i = 0; i < Attributes.ComponentTypes.Count; i++) {
+                    var permanentBufferType = genericAttributeBufferElement.MakeGenericType(typeof(PermanentAttributeModifierTag), Attributes.ComponentTypes[i].GetManagedType());
+                    var temporaryBufferType = genericAttributeBufferElement.MakeGenericType(typeof(TemporaryAttributeModifierTag), Attributes.ComponentTypes[i].GetManagedType());
+                    attributeTypes.Add(permanentBufferType);
+                    attributeTypes.Add(temporaryBufferType);
+                }
             }
 
             // Add tag component to indicate that this entity represents an actor with attributes
@@ -157,7 +165,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
         public static void CreateAttributeOperEntities(EntityManager EntityManager, Entity ActorEntity) {
             var random = new Unity.Mathematics.Random((uint)ActorEntity.Index);
             for (var i = 0; i < 5; i++) {
-                new PermanentAttributeModifierTag().CreateAttributeModifier<TAttribute, TOper>(EntityManager, ActorEntity, random.NextFloat(0,50));
+                new PermanentAttributeModifierTag().CreateAttributeModifier<TAttribute, TOper>(EntityManager, ActorEntity, random.NextFloat(0, 50));
             }
         }
     }

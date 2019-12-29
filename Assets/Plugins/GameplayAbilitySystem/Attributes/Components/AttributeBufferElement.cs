@@ -1,5 +1,5 @@
-﻿/*
- * Created on Mon Nov 04 2019
+/*
+ * Created on Sun Dec 29 2019
  *
  * The MIT License (MIT)
  * Copyright (c) 2019 Sahil Jain
@@ -20,22 +20,13 @@
  */
 
 using Unity.Entities;
-using GameplayAbilitySystem.Attributes.Components;
-using Operators = GameplayAbilitySystem.Attributes.Components.Operators;
-using UnityEngine;
-using GameplayAbilitySystem.Common.Editor;
-
-[assembly: RegisterGenericComponentType(typeof(AttributeComponentTag<HealthAttributeComponent>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Add, HealthAttributeComponent>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Multiply, HealthAttributeComponent>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeModifier<Operators.Divide, HealthAttributeComponent>))]
 
 namespace GameplayAbilitySystem.Attributes.Components {
-    [AbilitySystemDisplayName("Health")]
-    public struct HealthAttributeComponent : IComponentData, IAttributeComponent {
-        public float _baseValue;
-        public float _currentValue;
-        public float BaseValue { get => _baseValue; set => _baseValue = value; }
-        public float CurrentValue { get => _currentValue; set => _currentValue = value; }
+    public struct AttributeBufferElement<TModifierTag, TAttribute> : IBufferElementData
+    where TModifierTag : struct, IAttributeModifierTag, IComponentData
+    where TAttribute : struct, IAttributeComponent, IComponentData {
+        public Entity Value;
+        public static implicit operator Entity(AttributeBufferElement<TModifierTag, TAttribute> e) { return e.Value; }
+        public static implicit operator AttributeBufferElement<TModifierTag, TAttribute>(Entity e) { return new AttributeBufferElement<TModifierTag, TAttribute> { Value = e }; }
     }
 }
