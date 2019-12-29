@@ -33,13 +33,13 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
 
     [UpdateInGroup(typeof(GameplayEffectGroupUpdateBeginSystem))]
     public class GameplayEffectInitialiseSystem : JobComponentSystem {
-        private BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
+        private BeginSimulationEntityCommandBufferSystem m_EntityCommandBuffer;
         private EntityQuery m_AddSystemState;
         private EntityQuery m_RemoveSystemState;
 
         public EntityQuery GameplayEffectsPendingRemovalQuery => m_RemoveSystemState;
         protected override void OnCreate() {
-            m_EntityCommandBuffer = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
+            m_EntityCommandBuffer = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
             m_AddSystemState = GetEntityQuery(new EntityQueryDesc()
             {
                 All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectTargetComponent>() },

@@ -22,6 +22,8 @@
 using System;
 using System.Collections.Generic;
 using GameplayAbilitySystem.GameplayEffects.Components;
+using GameplayAbilitySystem.GameplayEffects.Systems;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -62,31 +64,54 @@ public class BuffBarUpdateSystem : JobComponentSystem {
             return DurationComponent.Value.NominalDuration < other.DurationComponent.Value.NominalDuration ? 1 : -1;
         }
     }
-    protected override JobHandle OnUpdate(JobHandle inputDeps) {
-        if (m_Query.CalculateEntityCount() == 0) { }
-        NativeMultiHashMap<Entity, EffectBuffTuple> buffDurations = new NativeMultiHashMap<Entity, EffectBuffTuple>(m_Query.CalculateEntityCount(), Allocator.TempJob);
-        var buffDurationsConcurrent = buffDurations.AsParallelWriter();
-        // inputDeps.Complete();
-        inputDeps = Entities
-            .ForEach((in GameplayEffectDurationComponent duration, in GameplayEffectTargetComponent target, in GameplayEffectBuffIndex buffIndex) => {
-                buffDurationsConcurrent.Add(target, new EffectBuffTuple { BuffComponent = buffIndex, DurationComponent = duration });
-            })
-            .WithStoreEntityQueryInField(ref m_Query)
-            .Schedule(inputDeps);
 
-        inputDeps.Complete();
-        // For every player that we need to worry about
-        foreach (var buffBarManager in BuffBars) {
-            NativeList<EffectBuffTuple> buffDurationTuple = new NativeList<EffectBuffTuple>(Allocator.Temp);
-            // Get all items in the NMHM that have the same key
-            if (buffDurations.TryGetFirstValue(buffBarManager.Key, out var effectBuffTuple, out var it)) {
-                buffDurationTuple.Add(effectBuffTuple);
 
-                while (buffDurations.TryGetNextValue(out effectBuffTuple, ref it)) {
-                    buffDurationTuple.Add(effectBuffTuple);
-                }
+    [BurstCompile]
+    struct UpdateJob : IJob {
+
+        [ReadOnly]
+        public DynamicBuffer<GameplayEffectBufferElement> GEBuffer;
+        [ReadOnly]
+        public ComponentDataFromEntity<GameplayEffectDurationComponent> DurationComponents;
+        [ReadOnly]
+        public ComponentDataFromEntity<GameplayEffectTargetComponent> TargetComponents;
+        [ReadOnly]
+        public ComponentDataFromEntity<GameplayEffectBuffIndex> BuffIndexComponents;
+
+        public NativeArray<EffectBuffTuple> BuffDurationTuple;
+        public Entity ActorEntity;
+
+        public void Execute() {
+            for (var i = 0; i < GEBuffer.Length; i++) {
+                var GEEntity = GEBuffer[i];
+                BuffDurationTuple[i] = new EffectBuffTuple
+                {
+                    BuffComponent = BuffIndexComponents[GEEntity],
+                    DurationComponent = DurationComponents[GEEntity]
+                };
             }
-            buffDurationTuple.Sort<EffectBuffTuple>();
+            BuffDurationTuple.Sort<EffectBuffTuple>();
+        }
+    }
+    protected override JobHandle OnUpdate(JobHandle inputDeps) {
+        // Get reference to the dynamic buffer containing the GE entities
+        var GEBuffer = GetBufferFromEntity<GameplayEffectBufferElement>(true);
+        var DurationComponents = GetComponentDataFromEntity<GameplayEffectDurationComponent>(true);
+        var TargetComponents = GetComponentDataFromEntity<GameplayEffectTargetComponent>(true);
+        var BuffIndexComponents = GetComponentDataFromEntity<GameplayEffectBuffIndex>(true);
+        foreach (var buffBarManager in BuffBars) {
+            var buffer = GEBuffer[buffBarManager.Key];
+            var buffDurationTuple = new NativeArray<EffectBuffTuple>(buffer.Length, Allocator.TempJob);
+            var job = new UpdateJob
+            {
+                ActorEntity = buffBarManager.Key,
+                BuffDurationTuple = buffDurationTuple,
+                BuffIndexComponents = BuffIndexComponents,
+                DurationComponents = DurationComponents,
+                TargetComponents = TargetComponents,
+                GEBuffer = buffer
+            }.Schedule(inputDeps);
+            job.Complete();
             for (var iManager = 0; iManager < buffBarManager.Value.Count; iManager++) {
                 // Do safety and sanity checks, to make sure this GameObject is worth updating
                 if (buffBarManager.Value == null) continue;
@@ -110,16 +135,11 @@ public class BuffBarUpdateSystem : JobComponentSystem {
                     managerGameObject.BuffUIObject[i].ImageIcon.color = Color.clear;
                 }
             }
-
             buffDurationTuple.Dispose();
         }
-
-        // Set cooldowns
-
-        buffDurations.Dispose();
-
         return inputDeps;
     }
+
 }
 
 
