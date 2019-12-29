@@ -19,7 +19,9 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using GameplayAbilitySystem.Attributes.Systems;
 using Unity.Entities;
+[assembly: RegisterGenericComponentType(typeof(AttributeModificationActivatedSystemStateComponent<GameplayAbilitySystem.Attributes.Components.PermanentAttributeModifierTag>))]
 
 namespace GameplayAbilitySystem.Attributes.Components {
     public struct PermanentAttributeModifierTag : IComponentData, IAttributeModifierTag {
