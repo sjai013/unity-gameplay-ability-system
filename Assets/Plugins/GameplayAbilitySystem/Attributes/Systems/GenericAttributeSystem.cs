@@ -31,6 +31,13 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     public abstract class GenericAttributeSystem<TAttributeTag, TAttributeModifierTag> : AttributeModificationSystem<TAttributeTag>
         where TAttributeTag : struct, IAttributeComponent, IComponentData
         where TAttributeModifierTag : IAttributeModifierTag, new() {
+
+        /// <summary>
+        /// This is the list of queries that are use
+        /// </summary>
+        protected EntityQuery[] Queries = new EntityQuery[3];
+        protected EntityQuery actorsWithAttributesQuery;
+
         protected NativeMultiHashMap<Entity, float> AttributeHashAdd = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
         protected NativeMultiHashMap<Entity, float> AttributeHashMultiply = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
         protected NativeMultiHashMap<Entity, float> AttributeHashDivide = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);

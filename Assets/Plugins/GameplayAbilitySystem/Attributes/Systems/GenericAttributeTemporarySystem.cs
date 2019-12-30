@@ -25,6 +25,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using Unity.Mathematics;
 
 namespace GameplayAbilitySystem.Attributes.Systems {
     /// <summary>
@@ -41,53 +42,59 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     /// </summary>
     /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
     [UpdateInGroup(typeof(AttributeCurrentValueGroup))]
-    public class GenericAttributeTemporarySystem<TAttributeTag> : GenericAttributeSystem<TAttributeTag, TemporaryAttributeModifierTag>
+    public class GenericAttributeTemporarySystem<TAttributeTag> : AttributeModificationSystem<TAttributeTag>
         where TAttributeTag : struct, IAttributeComponent, IComponentData {
-        private EntityQuery shouldRunQuery;
 
         protected override void OnCreate() {
             base.OnCreate();
-            shouldRunQuery = GetEntityQuery(ComponentType.ReadOnly<TemporaryAttributeModifierTag>());
         }
 
         [BurstCompile]
-        [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
-        struct AttributeCombinerJob : IJobForEachWithEntity<TAttributeTag> {
-            [ReadOnly] public NativeMultiHashMap<Entity, float> AddAttributes;
-            [ReadOnly] public NativeMultiHashMap<Entity, float> DivideAttributes;
-            [ReadOnly] public NativeMultiHashMap<Entity, float> MultiplyAttributes;
+        struct AttributeCombinerJob2 : IJobForEachWithEntity_EBC<AttributeBufferElement<TemporaryAttributeModifierTag, TAttributeTag>, TAttributeTag> {
+            [ReadOnly]
+            public ComponentDataFromEntity<AttributeModifier<Components.Operators.Add, TAttributeTag>> Add_CDFE;
+            [ReadOnly]
+            public ComponentDataFromEntity<AttributeModifier<Components.Operators.Multiply, TAttributeTag>> Mul_CDFE;
+            [ReadOnly]
+            public ComponentDataFromEntity<AttributeModifier<Components.Operators.Divide, TAttributeTag>> Div_CDFE;
 
-            public void Execute(Entity entity, int index, ref TAttributeTag attribute) {
-                var added = SumFromNMHM(entity, AddAttributes);
-                var multiplied = SumFromNMHM(entity, MultiplyAttributes);
-                var divided = SumFromNMHM(entity, DivideAttributes);
+            public void Execute(Entity entity, int index, [ReadOnly] DynamicBuffer<AttributeBufferElement<TemporaryAttributeModifierTag, TAttributeTag>> attributeBuffer, ref TAttributeTag attribute) {
+                var added = 0f;
+                var multiplied = 0f;
+                var divided = 0f;
+                for (var i = 0; i < attributeBuffer.Length; i++) {
+                    var attributeEntity = attributeBuffer[i].Value;
+                    if (Add_CDFE.HasComponent(attributeEntity)) {
+                        added += Add_CDFE[attributeEntity];
+                    }
 
+                    if (Div_CDFE.HasComponent(attributeEntity)) {
+                        added += Div_CDFE[attributeEntity];
+                    }
+
+                    if (Mul_CDFE.HasComponent(attributeEntity)) {
+                        added += Mul_CDFE[attributeEntity];
+                    }
+                }
                 attribute.CurrentValue = added + attribute.BaseValue * (1 + multiplied - divided);
             }
-            private float SumFromNMHM(Entity entity, NativeMultiHashMap<Entity, float> values) {
-                values.TryGetFirstValue(entity, out var sum, out var multiplierIt);
-                while (values.TryGetNextValue(out var tempSum, ref multiplierIt)) {
-                    sum += tempSum;
-                }
-                return sum;
-            }
         }
-        protected override JobHandle ScheduleAttributeCombinerJob(JobHandle inputDeps) {
-            inputDeps = new AttributeCombinerJob
+
+        protected override JobHandle ScheduleJobs(JobHandle inputDeps) {
+            // inputDeps = new AttributeCombinerJob
+            // {
+            //     AddAttributes = AttributeHashAdd,
+            //     DivideAttributes = AttributeHashDivide,
+            //     MultiplyAttributes = AttributeHashMultiply
+            // }.Schedule(this.actorsWithAttributesQuery, inputDeps);
+            inputDeps = new AttributeCombinerJob2
             {
-                AddAttributes = AttributeHashAdd,
-                DivideAttributes = AttributeHashDivide,
-                MultiplyAttributes = AttributeHashMultiply
-            }.Schedule(this.actorsWithAttributesQuery, inputDeps);
+                Add_CDFE = GetComponentDataFromEntity<AttributeModifier<Components.Operators.Add, TAttributeTag>>(true),
+                Mul_CDFE = GetComponentDataFromEntity<AttributeModifier<Components.Operators.Multiply, TAttributeTag>>(true),
+                Div_CDFE = GetComponentDataFromEntity<AttributeModifier<Components.Operators.Divide, TAttributeTag>>(true)
+            }.Schedule(this, inputDeps);
             return inputDeps;
         }
 
-        protected override JobHandle CleanupJob(JobHandle inputDeps) {
-            return inputDeps;
-        }
-
-        protected override bool RunSystemThisFrame() {
-            return true;
-        }
     }
 }

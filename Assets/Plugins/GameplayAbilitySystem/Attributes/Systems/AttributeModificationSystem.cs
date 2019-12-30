@@ -36,12 +36,6 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     public abstract class AttributeModificationSystem<TAttribute> : JobComponentSystem
     where TAttribute : struct, IAttributeComponent, IComponentData {
 
-        /// <summary>
-        /// This is the list of queries that are use
-        /// </summary>
-        protected EntityQuery[] Queries = new EntityQuery[3];
-        protected EntityQuery actorsWithAttributesQuery;
-
         protected override JobHandle OnUpdate(JobHandle inputDependencies) {
             inputDependencies = ScheduleJobs(inputDependencies);
             return inputDependencies;

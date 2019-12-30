@@ -61,12 +61,6 @@ namespace MyGameplayAbilitySystem.Attributes.Systems {
     public class MaxManaAttributeTemporarySystem : GenericAttributeTemporarySystem<MaxManaAttributeComponent> { }
     public class CharacterLevelAttributeTemporarySystem : GenericAttributeTemporarySystem<CharacterLevelAttributeComponent> { }
 
-    public class PermanentHealthAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag, HealthAttributeComponent> { }
-    public class PermanentManaAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag, ManaAttributeComponent> { }
-    public class PermanentMaxHealthAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag, MaxHealthAttributeComponent> { }
-    public class PermanentMaxManaAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag, MaxManaAttributeComponent> { }
-    public class PermanentCharacterLevelAttributeInitialiseSystem : AttributeInitialisationSystem<PermanentAttributeModifierTag, CharacterLevelAttributeComponent> { }
-
     public class TemporaryHealthAttributeInitialiseSystem : AttributeInitialisationSystem<TemporaryAttributeModifierTag, HealthAttributeComponent> { }
     public class TemporaryManaAttributeInitialiseSystem : AttributeInitialisationSystem<TemporaryAttributeModifierTag, ManaAttributeComponent> { }
     public class TemporaryMaxHealthAttributeInitialiseSystem : AttributeInitialisationSystem<TemporaryAttributeModifierTag, MaxHealthAttributeComponent> { }

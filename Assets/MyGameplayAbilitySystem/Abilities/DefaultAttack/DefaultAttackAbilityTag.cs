@@ -49,20 +49,22 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
             var tickEntity = new PeriodicTickActionComponent<PeriodicTickDelegate>()
                                 .SetTickFunction(
                                     ((index, Ecb, entity, parentGameplayEffectEntity) => {
-                                        new PermanentAttributeModifierTag() { }.CreateAttributeModifier<ManaAttributeComponent, Components.Operators.Add>(index, Ecb, entity, -5);
+                                        new PermanentAttributeModifierTag() { }.CreateAttributeModifier<ManaAttributeComponent, Components.Operators.Add>(index, Ecb, entity, 0.1f);
                                     })
                                 )
                                 .CreateEntity(dstManager);
 
             dstManager.SetComponentData<PeriodicTickComponent>(tickEntity, new PeriodicTickComponent()
             {
-                TickPeriod = 1,
+                TickPeriod = 0.2f,
                 TickDurationLeft = 1
             });
             dstManager.SetComponentData<PeriodicTickTargetComponent>(tickEntity, actorEntity);
 
             Entity cooldownEntity1 = new GlobalCooldownGameplayEffectComponent().Instantiate(dstManager, actorEntity, 1f);
             dstManager.SetComponentData<ParentGameplayEffectEntity>(tickEntity, new ParentGameplayEffectEntity(cooldownEntity1));
+
+            new TemporaryAttributeModifierTag() { ParentGameplayEffectEntity = cooldownEntity1 }.CreateAttributeModifier<ManaAttributeComponent, Components.Operators.Add>(dstManager, actorEntity, -5);
         }
 
         public void CreateSourceAttributeModifiers(EntityManager dstManager, Entity actorEntity) {

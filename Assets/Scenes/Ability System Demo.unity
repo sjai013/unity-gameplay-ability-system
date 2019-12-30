@@ -5364,7 +5364,7 @@ MonoBehaviour:
   m_TurnSmoothing: 10
   m_TiltMax: 50
   m_TiltMin: 10
-  m_LockCursor: 1
+  m_LockCursor: 0
   m_VerticalAutoReturn: 0
   m_LookAngle: 2164.483
   m_TiltAngle: 41.249985
