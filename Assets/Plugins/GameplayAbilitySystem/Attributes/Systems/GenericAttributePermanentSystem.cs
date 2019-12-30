@@ -20,6 +20,7 @@
  */
 
 using GameplayAbilitySystem.Attributes.Components;
+using GameplayAbilitySystem.Attributes.Jobs;
 using GameplayAbilitySystem.Common.Components;
 using Unity.Burst;
 using Unity.Collections;
@@ -41,13 +42,39 @@ namespace GameplayAbilitySystem.Attributes.Systems {
     /// </summary>
     /// <typeparam name="TAttribute">The attribute this system modifies</typeparam>
     [UpdateInGroup(typeof(AttributeBaseValueGroup))]
-    public class GenericAttributePermanentSystem<TAttributeTag> : GenericAttributeSystem<TAttributeTag, PermanentAttributeModifierTag>
+    public abstract class GenericAttributePermanentSystem<TAttributeTag> : AttributeModificationSystem<TAttributeTag>
         where TAttributeTag : struct, IAttributeComponent, IComponentData {
+
+        /// <summary>
+        /// This is the list of queries that are use
+        /// </summary>
+        protected EntityQuery[] Queries = new EntityQuery[3];
+        protected EntityQuery actorsWithAttributesQuery;
+
+        protected NativeMultiHashMap<Entity, float> AttributeHashAdd = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
+        protected NativeMultiHashMap<Entity, float> AttributeHashMultiply = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
+        protected NativeMultiHashMap<Entity, float> AttributeHashDivide = new NativeMultiHashMap<Entity, float>(0, Allocator.Persistent);
+
         BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
         private EntityQuery shouldRunQuery;
 
         protected override void OnCreate() {
             base.OnCreate();
+            var attributeModifierTag = new PermanentAttributeModifierTag();
+            this.Queries[0] = GetEntityQuery(
+                  attributeModifierTag.AttributeOperatorQueryComponents<TAttributeTag, Components.Operators.Add>()
+              );
+            this.Queries[1] = GetEntityQuery(
+                attributeModifierTag.AttributeOperatorQueryComponents<TAttributeTag, Components.Operators.Multiply>()
+            );
+            this.Queries[2] = GetEntityQuery(
+                attributeModifierTag.AttributeOperatorQueryComponents<TAttributeTag, Components.Operators.Divide>()
+            );
+
+            this.actorsWithAttributesQuery = GetEntityQuery(
+                ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(),
+                ComponentType.ReadWrite<TAttributeTag>()
+                );
             m_EntityCommandBuffer = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
             shouldRunQuery = GetEntityQuery(ComponentType.ReadOnly<PermanentAttributeModifierTag>());
         }
@@ -89,7 +116,40 @@ namespace GameplayAbilitySystem.Attributes.Systems {
             }
         }
 
-        protected override JobHandle ScheduleAttributeCombinerJob(JobHandle inputDeps) {
+        /// <summary>
+        /// Schedules an attribute job
+        /// </summary>
+        /// <param name="inputDependencies">JobHandle</param>
+        /// <param name="query">The EntityQuery used for filtering group</param>
+        /// <param name="AttributeHash">Attribute MultiHashMap mapping entity to attribute value</param>
+        /// <param name="job">Returned job handle</param>
+        /// <typeparam name="TOper">The type of operator for this attribute job</typeparam>
+        private void ScheduleAttributeJob<TOper>(ref JobHandle inputDependencies, ref EntityQuery query, ref NativeMultiHashMap<Entity, float> AttributeHash, out JobHandle job)
+        where TOper : struct, IAttributeOperator, IComponentData {
+            var nEntities = query.CalculateEntityCount();
+            var hashCapacity = AttributeHash.Capacity;
+            AttributeHash.Clear();
+            if (nEntities == 0) {
+                job = inputDependencies;
+                return;
+            };
+            if (hashCapacity < nEntities) { // We need to increase hash capacity
+                AttributeHash.Capacity = (int)(nEntities * 1.1);
+            } else if (hashCapacity > nEntities * 4) { // We need to reduce hash capacity
+                AttributeHash.Dispose();
+                AttributeHash = new NativeMultiHashMap<Entity, float>(nEntities, Allocator.Persistent);
+            }
+            // // AttributeHash = new NativeMultiHashMap<Entity, float>(query.CalculateEntityCount(), Allocator.TempJob);
+            inputDependencies = new GetAttributeValuesJob_Sum<TOper, TAttributeTag>
+            {
+                owners = GetArchetypeChunkComponentType<AttributesOwnerComponent>(false),
+                attributeModifiers = GetArchetypeChunkComponentType<AttributeModifier<TOper, TAttributeTag>>(false),
+                AttributeModifierValues = AttributeHash.AsParallelWriter()
+            }.Schedule(query, inputDependencies);
+            job = inputDependencies;
+        }
+
+        protected JobHandle ScheduleAttributeCombinerJob(JobHandle inputDeps) {
             inputDeps = new AttributeCombinerJob
             {
                 AddAttributes = AttributeHashAdd,
@@ -99,8 +159,19 @@ namespace GameplayAbilitySystem.Attributes.Systems {
             return inputDeps;
         }
 
+        protected override JobHandle ScheduleJobs(JobHandle inputDependencies) {
+            if (!RunSystemThisFrame()) return inputDependencies;
+            ScheduleAttributeJob<Components.Operators.Add>(ref inputDependencies, ref this.Queries[0], ref AttributeHashAdd, out var addJob);
+            ScheduleAttributeJob<Components.Operators.Multiply>(ref inputDependencies, ref this.Queries[1], ref AttributeHashMultiply, out var mulJob);
+            ScheduleAttributeJob<Components.Operators.Divide>(ref inputDependencies, ref this.Queries[2], ref AttributeHashDivide, out var divideJob);
+            inputDependencies = JobHandle.CombineDependencies(addJob, divideJob, mulJob);
+            inputDependencies = ScheduleAttributeCombinerJob(inputDependencies);
+            inputDependencies = CleanupJob(inputDependencies);
+            return inputDependencies;
+        }
 
-        protected override JobHandle CleanupJob(JobHandle inputDeps) {
+
+        protected JobHandle CleanupJob(JobHandle inputDeps) {
             inputDeps = new AttributeDestructionJob
             {
                 Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent(),
@@ -110,8 +181,14 @@ namespace GameplayAbilitySystem.Attributes.Systems {
             return inputDeps;
         }
 
-        protected override bool RunSystemThisFrame() {
+        protected bool RunSystemThisFrame() {
             return shouldRunQuery.CalculateEntityCount() > 0;
+        }
+
+        protected override void OnDestroy() {
+            AttributeHashAdd.Dispose();
+            AttributeHashMultiply.Dispose();
+            AttributeHashDivide.Dispose();
         }
     }
 }
