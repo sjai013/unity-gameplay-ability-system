@@ -41,12 +41,6 @@ using Unity.Entities;
 [assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<TemporaryAttributeModifierTag, MaxManaAttributeComponent>))]
 [assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<TemporaryAttributeModifierTag, CharacterLevelAttributeComponent>))]
 
-[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<PermanentAttributeModifierTag, HealthAttributeComponent>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<PermanentAttributeModifierTag, ManaAttributeComponent>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<PermanentAttributeModifierTag, MaxHealthAttributeComponent>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<PermanentAttributeModifierTag, MaxManaAttributeComponent>))]
-[assembly: RegisterGenericComponentType(typeof(AttributeBufferElement<PermanentAttributeModifierTag, CharacterLevelAttributeComponent>))]
-
 namespace MyGameplayAbilitySystem.Attributes.Systems {
 
     public class HealthAttributePermanentSystem : GenericAttributePermanentSystem<HealthAttributeComponent> { }
