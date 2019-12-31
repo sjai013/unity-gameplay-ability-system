@@ -121,9 +121,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
             if (Attributes != null && Attributes.Components != null) {
                 attributeTypes = Attributes.ComponentTypes;
                 for (var i = 0; i < Attributes.ComponentTypes.Count; i++) {
-                    var permanentBufferType = genericAttributeBufferElement.MakeGenericType(typeof(PermanentAttributeModifierTag), Attributes.ComponentTypes[i].GetManagedType());
                     var temporaryBufferType = genericAttributeBufferElement.MakeGenericType(typeof(TemporaryAttributeModifierTag), Attributes.ComponentTypes[i].GetManagedType());
-                    attributeTypes.Add(permanentBufferType);
                     attributeTypes.Add(temporaryBufferType);
                 }
             }

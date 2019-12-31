@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: PlayerBuffBar
   m_EditorClassIdentifier: 
   Components:
+  - MyGameplayAbilitySystem.GameplayEffects.Components.Fire1CooldownGameplayEffectComponent,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - MyGameplayAbilitySystem.GameplayEffects.Components.GlobalCooldownGameplayEffectComponent,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - MyGameplayAbilitySystem.GameplayEffects.Components.AttackCombo1GameplayEffectComponent,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  CachedBuffIndices: 0100000002000000
