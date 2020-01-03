@@ -29,34 +29,8 @@ using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
 
-[AlwaysUpdateSystem]
-public class BuffBarUpdateSystem : JobComponentSystem {
-    EntityQuery m_Query;
-    private Dictionary<Entity, List<BuffBarManager>> BuffBars = new Dictionary<Entity, List<BuffBarManager>>();
-    public void RegisterBuffBar(BuffBarManager buffBarManager) {
-        // Add the manager to container
-        if (!BuffBars.TryGetValue(buffBarManager.AbilitySystem.AbilityOwnerEntity, out var buffBarsForPlayer)) {
-            buffBarsForPlayer = new List<BuffBarManager>();
-            BuffBars.Add(buffBarManager.AbilitySystem.AbilityOwnerEntity, buffBarsForPlayer);
-        }
-        buffBarsForPlayer.Add(buffBarManager);
-    }
+public class BuffBarUpdateSystem2 : ComponentSystem {
 
-    public void UnregisterBuffBar(BuffBarManager buffBarManager) {
-        // Remove the manager from container
-        if (BuffBars.TryGetValue(buffBarManager.AbilitySystem.AbilityOwnerEntity, out var buffBars)) {
-            buffBars.Remove(buffBarManager);
-        }
-    }
-
-    protected override void OnCreate() {
-        m_Query = GetEntityQuery(
-            new EntityQueryDesc
-            {
-                All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectDurationComponent>(), ComponentType.ReadOnly<GameplayEffectTargetComponent>(), ComponentType.ReadOnly<GameplayEffectBuffIndex>() },
-            }
-        );
-    }
     struct EffectBuffTuple : IComparable<EffectBuffTuple> {
         public GameplayEffectDurationComponent DurationComponent;
         public GameplayEffectBuffIndex BuffComponent;
@@ -65,81 +39,49 @@ public class BuffBarUpdateSystem : JobComponentSystem {
         }
     }
 
+    protected override void OnUpdate() {
+        var GEBufferFromEntity = GetBufferFromEntity<GameplayEffectBufferElement>(true);
+        var DurationComponents = GetComponentDataFromEntity<GameplayEffectDurationComponent>(true);
+        var BuffIndexComponents = GetComponentDataFromEntity<GameplayEffectBuffIndex>(true);
 
-    [BurstCompile]
-    struct UpdateJob : IJob {
+        Entities.ForEach<BuffBarManager>((BuffBarManager buffBarManager) => {
+            // Get a reference to the DynamicBuffer
+            var GEBuffer = GEBufferFromEntity[buffBarManager.AbilitySystem.AbilityOwnerEntity];
 
-        [ReadOnly]
-        public DynamicBuffer<GameplayEffectBufferElement> GEBuffer;
-        [ReadOnly]
-        public ComponentDataFromEntity<GameplayEffectDurationComponent> DurationComponents;
-        [ReadOnly]
-        public ComponentDataFromEntity<GameplayEffectTargetComponent> TargetComponents;
-        [ReadOnly]
-        public ComponentDataFromEntity<GameplayEffectBuffIndex> BuffIndexComponents;
-
-        public NativeArray<EffectBuffTuple> BuffDurationTuple;
-        public Entity ActorEntity;
-
-        public void Execute() {
-            for (var i = 0; i < GEBuffer.Length; i++) {
-                var GEEntity = GEBuffer[i];
-                BuffDurationTuple[i] = new EffectBuffTuple
+            // Create an array to hold the durations
+            var BuffDurationTuple = new NativeArray<EffectBuffTuple>(GEBuffer.Length, Allocator.Temp);
+            for (var GEBufferIndex = 0; GEBufferIndex < GEBuffer.Length; GEBufferIndex++) {
+                var GEEntity = GEBuffer[GEBufferIndex];
+                var durationComponent = DurationComponents[GEEntity];
+                var buffIndexComponent = BuffIndexComponents[GEEntity];
+                BuffDurationTuple[GEBufferIndex] = new EffectBuffTuple
                 {
                     BuffComponent = BuffIndexComponents[GEEntity],
                     DurationComponent = DurationComponents[GEEntity]
                 };
             }
-            BuffDurationTuple.Sort<EffectBuffTuple>();
-        }
-    }
-    protected override JobHandle OnUpdate(JobHandle inputDeps) {
-        // Get reference to the dynamic buffer containing the GE entities
-        var GEBuffer = GetBufferFromEntity<GameplayEffectBufferElement>(true);
-        var DurationComponents = GetComponentDataFromEntity<GameplayEffectDurationComponent>(true);
-        var TargetComponents = GetComponentDataFromEntity<GameplayEffectTargetComponent>(true);
-        var BuffIndexComponents = GetComponentDataFromEntity<GameplayEffectBuffIndex>(true);
-        foreach (var buffBarManager in BuffBars) {
-            var buffer = GEBuffer[buffBarManager.Key];
-            var buffDurationTuple = new NativeArray<EffectBuffTuple>(buffer.Length, Allocator.TempJob);
-            var job = new UpdateJob
-            {
-                ActorEntity = buffBarManager.Key,
-                BuffDurationTuple = buffDurationTuple,
-                BuffIndexComponents = BuffIndexComponents,
-                DurationComponents = DurationComponents,
-                TargetComponents = TargetComponents,
-                GEBuffer = buffer
-            }.Schedule(inputDeps);
-            job.Complete();
-            for (var iManager = 0; iManager < buffBarManager.Value.Count; iManager++) {
-                // Do safety and sanity checks, to make sure this GameObject is worth updating
-                if (buffBarManager.Value == null) continue;
-                if (!buffBarManager.Value[iManager].enabled) continue;
 
-                var managerGameObject = buffBarManager.Value[iManager];
-                for (var i = 0; i < buffDurationTuple.Length; i++) {
-                    managerGameObject.BuffUIObject[i].CooldownOverlay.fillAmount = buffDurationTuple[i].DurationComponent.PercentRemaining;
-                    if (managerGameObject.BuffIconForIdentifier.TryGetValue(buffDurationTuple[i].BuffComponent.Value, out var buffIcon)) {
-                        managerGameObject.BuffUIObject[i].ImageIcon.sprite = buffIcon.Sprite;
-                        managerGameObject.BuffUIObject[i].ImageIcon.color = buffIcon.SpriteColor;
-                    } else {
-                        managerGameObject.BuffUIObject[i].ImageIcon.sprite = null;
-                        managerGameObject.BuffUIObject[i].ImageIcon.color = Color.clear;
-                    }
-                }
-                // Reset all other images to 0
-                for (var i = buffDurationTuple.Length; i < buffBarManager.Value[iManager].BuffUIObject.Count; i++) {
-                    managerGameObject.BuffUIObject[i].CooldownOverlay.fillAmount = 0;
-                    managerGameObject.BuffUIObject[i].ImageIcon.sprite = null;
-                    managerGameObject.BuffUIObject[i].ImageIcon.color = Color.clear;
+            //Sort, so we can display in a specified order
+            BuffDurationTuple.Sort<EffectBuffTuple>();
+
+            // Update the buff bar icons
+            // Do safety and sanity checks, to make sure this GameObject is worth updating
+            for (var i = 0; i < BuffDurationTuple.Length; i++) {
+                buffBarManager.BuffUIObject[i].CooldownOverlay.fillAmount = BuffDurationTuple[i].DurationComponent.PercentRemaining;
+                if (buffBarManager.BuffIconForIdentifier.TryGetValue(BuffDurationTuple[i].BuffComponent.Value, out var buffIcon)) {
+                    buffBarManager.BuffUIObject[i].ImageIcon.sprite = buffIcon.Sprite;
+                    buffBarManager.BuffUIObject[i].ImageIcon.color = buffIcon.SpriteColor;
+                } else {
+                    buffBarManager.BuffUIObject[i].ImageIcon.sprite = null;
+                    buffBarManager.BuffUIObject[i].ImageIcon.color = Color.clear;
                 }
             }
-            buffDurationTuple.Dispose();
-        }
-        return inputDeps;
+            // Reset all other images to 0
+            for (var i = BuffDurationTuple.Length; i < buffBarManager.BuffUIObject.Count; i++) {
+                buffBarManager.BuffUIObject[i].CooldownOverlay.fillAmount = 0;
+                buffBarManager.BuffUIObject[i].ImageIcon.sprite = null;
+                buffBarManager.BuffUIObject[i].ImageIcon.color = Color.clear;
+            }
+        });
     }
-
 }
-
-
