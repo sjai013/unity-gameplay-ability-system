@@ -29,7 +29,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
 
-public class BuffBarUpdateSystem2 : ComponentSystem {
+public class BuffBarUpdateSystem : ComponentSystem {
 
     struct EffectBuffTuple : IComparable<EffectBuffTuple> {
         public GameplayEffectDurationComponent DurationComponent;
