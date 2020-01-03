@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using GameplayAbilitySystem.Abilities.Components;
+using GameplayAbilitySystem.Abilities.Systems;
 using GameplayAbilitySystem.AbilitySystem.Components;
 using GameplayAbilitySystem.Attributes.Components;
 using GameplayAbilitySystem.Attributes.ScriptableObjects;
@@ -57,7 +58,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
         private GrantedAbilitiesScriptableObject GrantedAbilities;
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            var abilityOwnerEntity = CreateAttributeEntities(entity, dstManager);
+            var abilityOwnerEntity = CreateActorAbilitySystemEntities(entity, dstManager);
             var abilitySystemGrantedAbilityEntity = CreateGrantedAbilityEntities(entity, dstManager, abilityOwnerEntity);
 
             var actorAbilitySystem = transform.GetComponent<ActorAbilitySystem>();
@@ -114,7 +115,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
             return entities;
         }
 
-        private Entity CreateAttributeEntities(Entity entity, EntityManager entityManager) {
+        private Entity CreateActorAbilitySystemEntities(Entity entity, EntityManager entityManager) {
             // Get reference to character attribute component on script, and list of attributes
             var attributeTypes = new List<ComponentType>();
             Type genericAttributeBufferElement = typeof(AttributeBufferElement<,>);
@@ -129,6 +130,7 @@ namespace MyGameplayAbilitySystem.AbilitySystem.MonoBehaviours {
             // Add tag component to indicate that this entity represents an actor with attributes
             attributeTypes.Add(typeof(AbilitySystemActorTransformComponent));
             attributeTypes.Add(typeof(GameplayEffectBufferElement));
+            attributeTypes.Add(typeof(GrantedAbilityBufferElement));
             var attributeArchetype = entityManager.CreateArchetype(attributeTypes.ToArray());
             // Create a new entity for this actor
             var abilitySystemAttributesEntity = entityManager.CreateEntity(attributeArchetype);

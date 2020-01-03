@@ -33,16 +33,22 @@ using Unity.Entities;
 using Unity.Burst;
 using Unity.Jobs;
 using UnityEngine;
+using GameplayAbilitySystem.GameplayEffects.Components;
 
 namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
 
     public class DefaultAttackAbilitySystem {
-        public class AbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
-            protected override ComponentType[] CooldownEffects =>
-                new ComponentType[] {
-                    ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>()
-                };
-
+        [UpdateInGroup(typeof(AbilityUpdateSystemGroup))]
+        public class AbilityCooldownSystem : JobComponentSystem {
+            protected override JobHandle OnUpdate(JobHandle inputDeps) {
+                inputDeps = Entities.ForEach((in DynamicBuffer<GameplayEffectBufferElement> gameplayEffectBuffer) => {
+                    // for (var i = 0; i < gameplayEffectBuffer.Length; i++) {
+                    //     var gameplayEffectEntity = gameplayEffectBuffer[i].Value;
+                    // }
+                })
+                .Schedule(inputDeps);
+                return inputDeps;
+            }
         }
 
         public class AbilityAvailabilitySystem : AbilityAvailabilitySystem<DefaultAttackAbilityTag> {

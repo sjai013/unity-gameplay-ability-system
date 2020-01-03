@@ -64,8 +64,6 @@ namespace GameplayAbilitySystem.Abilities.Systems.Generic {
             GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(), ComponentType.ReadOnly<AbilityOwnerComponent>(), ComponentType.ReadOnly<T>(), ComponentType.ReadWrite<AbilityCooldownComponent>(), ComponentType.ReadWrite<AbilityStateComponent>());
         }
 
-
-
         protected override JobHandle CooldownJobs(JobHandle inputDeps) {
             NativeMultiHashMap<Entity, AbilityCooldownComponent> Cooldowns = new NativeMultiHashMap<Entity, AbilityCooldownComponent>(CooldownEffectsQuery.CalculateEntityCount() * 2 + GrantedAbilityQuery.CalculateEntityCount(), Allocator.TempJob);
 

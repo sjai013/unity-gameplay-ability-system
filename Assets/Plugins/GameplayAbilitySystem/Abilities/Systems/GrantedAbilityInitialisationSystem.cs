@@ -1,8 +1,8 @@
 /*
- * Created on Wed Dec 11 2019
+ * Created on Wed Jan 01 2020
  *
  * The MIT License (MIT)
- * Copyright (c) 2019 Sahil Jain
+ * Copyright (c) 2020 Sahil Jain
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,19 +20,25 @@
  */
 
 
-using GameplayAbilitySystem.GameplayEffects.Components;
+using GameplayAbilitySystem.AbilitySystem.Components;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 
-namespace GameplayAbilitySystem.GameplayEffects.Systems {
-    public struct GameplayEffectActivatedSystemStateComponent : ISystemStateComponentData {
-        public Entity TargetEntity;
+namespace GameplayAbilitySystem.Abilities.Systems {
+
+    public struct GrantedAbilityBufferElement : IBufferElementData {
+        public Entity Value;
+        public static implicit operator Entity(GrantedAbilityBufferElement e) { return e.Value; }
+        public static implicit operator GrantedAbilityBufferElement(Entity e) { return new GrantedAbilityBufferElement { Value = e }; }
     }
 
-    [UpdateInGroup(typeof(GameplayEffectGroupUpdateBeginSystem))]
-    public class GameplayEffectInitialiseSystem : JobComponentSystem {
+    public class GrantedAbilityInitialisationSystem : JobComponentSystem {
+        public struct GrantedAbilitySystemStateComponent : ISystemStateComponentData {
+            public Entity Owner;
+        }
+
         private BeginSimulationEntityCommandBufferSystem m_EntityCommandBuffer;
         private EntityQuery m_AddSystemState;
         private EntityQuery m_RemoveSystemState;
@@ -42,40 +48,32 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
             m_EntityCommandBuffer = World.GetOrCreateSystem<BeginSimulationEntityCommandBufferSystem>();
             m_AddSystemState = GetEntityQuery(new EntityQueryDesc()
             {
-                All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectTargetComponent>(), ComponentType.ReadOnly<GameplayEffectBuffIndex>() },
-                None = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectActivatedSystemStateComponent>() }
+                All = new ComponentType[] { ComponentType.ReadOnly<AbilityOwnerComponent>() },
+                None = new ComponentType[] { ComponentType.ReadOnly<GrantedAbilitySystemStateComponent>() }
             });
 
             m_RemoveSystemState = GetEntityQuery(new EntityQueryDesc()
             {
-                All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectActivatedSystemStateComponent>() },
-                None = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectTargetComponent>() }
+                All = new ComponentType[] { ComponentType.ReadOnly<GrantedAbilitySystemStateComponent>() },
+                None = new ComponentType[] { ComponentType.ReadOnly<AbilityOwnerComponent>() }
             });
         }
 
-        /// <summary>
-        /// Add system state to indicate the gameplay effect is active
-        /// </summary>
         [BurstCompile]
         struct AddSystemStateJob : IJobChunk {
             public EntityCommandBuffer.Concurrent Ecb;
             [ReadOnly] public ArchetypeChunkEntityType EntityType;
-            [ReadOnly] public ArchetypeChunkComponentType<GameplayEffectTargetComponent> Targets;
+            [ReadOnly] public ArchetypeChunkComponentType<AbilityOwnerComponent> Targets;
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex) {
                 var chunkEntities = chunk.GetNativeArray(EntityType);
                 var targetComponentChunk = chunk.GetNativeArray(Targets);
                 for (var i = 0; i < chunk.Count; i++) {
                     var Entity = chunkEntities[i];
                     var targetComponent = targetComponentChunk[i];
-                    Ecb.AddComponent<GameplayEffectActivatedSystemStateComponent>(i, Entity, new GameplayEffectActivatedSystemStateComponent { TargetEntity = targetComponent });
+                    Ecb.AddComponent<GrantedAbilitySystemStateComponent>(i, Entity, new GrantedAbilitySystemStateComponent { Owner = targetComponent });
                 }
             }
         }
-
-
-        /// <summary>
-        /// Remove the system state from gameplay effects, so we can handle cleanup as required
-        /// </summary>
 
         [BurstCompile]
         struct CleanupEntityJob : IJobChunk {
@@ -85,7 +83,7 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
                 var chunkEntities = chunk.GetNativeArray(EntityType);
                 for (var i = 0; i < chunk.Count; i++) {
                     var Entity = chunkEntities[i];
-                    Ecb.RemoveComponent<GameplayEffectActivatedSystemStateComponent>(i, Entity);
+                    Ecb.RemoveComponent<GrantedAbilitySystemStateComponent>(i, Entity);
                 }
             }
         }
@@ -95,23 +93,17 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
         /// </summary>
         [BurstCompile]
         struct AddElementToDynamicBuffer : IJob {
-            public BufferFromEntity<GameplayEffectBufferElement> bufferFromEntity;
+            public BufferFromEntity<GrantedAbilityBufferElement> bufferFromEntity;
 
             [DeallocateOnJobCompletion]
-            public NativeArray<GameplayEffectTargetComponent> targetComponents;
-            [DeallocateOnJobCompletion]
-            public NativeArray<GameplayEffectBuffIndex> buffComponents;
+            public NativeArray<AbilityOwnerComponent> targetComponents;
 
             [DeallocateOnJobCompletion]
-            public NativeArray<Entity> gameplayEffectEntity;
+            public NativeArray<Entity> entities;
 
             public void Execute() {
-                for (var i = 0; i < gameplayEffectEntity.Length; i++) {
-                    bufferFromEntity[targetComponents[i]].Add(new GameplayEffectBufferElement
-                    {
-                        Index = buffComponents[i],
-                        Value = gameplayEffectEntity[i]
-                    });
+                for (var i = 0; i < entities.Length; i++) {
+                    bufferFromEntity[targetComponents[i]].Add(entities[i]);
                 }
             }
         }
@@ -120,17 +112,17 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
         /// Removes this GameplayEffect from the actor's dynamic buffer
         /// </summary>
         struct RemoveElementFromDynamicBuffer : IJob {
-            public BufferFromEntity<GameplayEffectBufferElement> bufferFromEntity;
+            public BufferFromEntity<GrantedAbilityBufferElement> bufferFromEntity;
 
             [DeallocateOnJobCompletion]
-            public NativeArray<GameplayEffectActivatedSystemStateComponent> targetComponents;
+            public NativeArray<GrantedAbilitySystemStateComponent> targetComponents;
 
             [DeallocateOnJobCompletion]
             public NativeArray<Entity> entities;
             public void Execute() {
                 for (var i = 0; i < entities.Length; i++) {
                     // Get the dynamic buffer on the actor
-                    var buffer = bufferFromEntity[targetComponents[i].TargetEntity];
+                    var buffer = bufferFromEntity[targetComponents[i].Owner];
 
                     // Look through the buffer and remove all instances of this effect
                     for (var j = buffer.Length - 1; j >= 0; j--) {
@@ -141,13 +133,12 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
                 }
             }
         }
-
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
             var inputDeps1 = new AddSystemStateJob
             {
                 Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent(),
                 EntityType = GetArchetypeChunkEntityType(),
-                Targets = GetArchetypeChunkComponentType<GameplayEffectTargetComponent>()
+                Targets = GetArchetypeChunkComponentType<AbilityOwnerComponent>()
             }.Schedule(m_AddSystemState, inputDeps);
 
             var inputDeps2 = new CleanupEntityJob
@@ -160,18 +151,17 @@ namespace GameplayAbilitySystem.GameplayEffects.Systems {
 
             inputDeps = new RemoveElementFromDynamicBuffer
             {
-                bufferFromEntity = GetBufferFromEntity<GameplayEffectBufferElement>(),
+                bufferFromEntity = GetBufferFromEntity<GrantedAbilityBufferElement>(),
                 entities = m_RemoveSystemState.ToEntityArray(Allocator.TempJob),
-                targetComponents = m_RemoveSystemState.ToComponentDataArray<GameplayEffectActivatedSystemStateComponent>(Allocator.TempJob)
+                targetComponents = m_RemoveSystemState.ToComponentDataArray<GrantedAbilitySystemStateComponent>(Allocator.TempJob)
 
             }.Schedule(inputDeps);
 
             inputDeps = new AddElementToDynamicBuffer
             {
-                bufferFromEntity = GetBufferFromEntity<GameplayEffectBufferElement>(),
-                gameplayEffectEntity = m_AddSystemState.ToEntityArray(Allocator.TempJob),
-                targetComponents = m_AddSystemState.ToComponentDataArray<GameplayEffectTargetComponent>(Allocator.TempJob),
-                buffComponents = m_AddSystemState.ToComponentDataArray<GameplayEffectBuffIndex>(Allocator.TempJob)
+                bufferFromEntity = GetBufferFromEntity<GrantedAbilityBufferElement>(),
+                entities = m_AddSystemState.ToEntityArray(Allocator.TempJob),
+                targetComponents = m_AddSystemState.ToComponentDataArray<AbilityOwnerComponent>(Allocator.TempJob)
             }.Schedule(inputDeps);
 
 

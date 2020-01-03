@@ -778,6 +778,7 @@ GameObject:
   - component: {fileID: 351111859}
   - component: {fileID: 351111858}
   - component: {fileID: 351111860}
+  - component: {fileID: 351111861}
   m_Layer: 5
   m_Name: BuffBar
   m_TagString: Untagged
@@ -871,6 +872,19 @@ MonoBehaviour:
   - {fileID: 62876546}
   BuffIconMaps: {fileID: 11400000, guid: 136b28b6a8ad4bb4a9dc96462cc5e381, type: 2}
   AbilitySystem: {fileID: 1388016095}
+--- !u!114 &351111861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351111856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 1
 --- !u!1001 &381492119
 PrefabInstance:
   m_ObjectHideFlags: 0

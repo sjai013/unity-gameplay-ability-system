@@ -24,6 +24,7 @@ using Unity.Entities;
 namespace GameplayAbilitySystem.GameplayEffects.Components {
     public struct GameplayEffectBufferElement : IBufferElementData {
         public Entity Value;
+        public int Index;
         public static implicit operator Entity(GameplayEffectBufferElement e) { return e.Value; }
         public static implicit operator GameplayEffectBufferElement(Entity e) { return new GameplayEffectBufferElement { Value = e }; }
     }

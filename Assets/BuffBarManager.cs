@@ -47,7 +47,6 @@ public class BuffBarManager : MonoBehaviour {
             var iconMap = BuffIconMaps.BuffIconMaps[i];
             BuffIconForIdentifier[iconMap.BuffIdentifier] = iconMap;
         }
-        World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<BuffBarUpdateSystem>().RegisterBuffBar(this);
     }
 
     // Update is called once per frame
