@@ -36,105 +36,18 @@ using UnityEngine;
 namespace GameplayAbilitySystem.Abilities.Systems.Generic {
     public struct NullComponent : IComponentData { }
 
-    [UpdateInGroup(typeof(AbilityUpdateSystemGroup))]
-    public abstract class GenericAbilityCooldownSystem<T> : AbilityCooldownSystem<T>
-    where T : struct, IAbilityTagComponent, IComponentData {
+    [UpdateInGroup(typeof(AbilityUpdateEndSystemGroup))]
+    public class AbilityCooldownStateUpdate : JobComponentSystem {
+        protected override JobHandle OnUpdate(JobHandle inputDeps) {
+            inputDeps = Entities.ForEach((ref AbilityStateComponent state, in AbilityCooldownComponent cooldown) => {
+                int flag = math.select(0, (int)AbilityStates.ON_COOLDOWN, cooldown.Value.RemainingTime > 0);
+                state |= flag;
+            })
+            .Schedule(inputDeps);
 
-        protected EntityQuery CooldownEffectsQuery;
-        protected EntityQuery GrantedAbilityQuery;
-
-        /// <summary>
-        /// The ability has these cooldowns.
-        /// </summary>
-        /// <value></value>
-        protected abstract ComponentType[] CooldownEffects { get; }
-
-        protected override void OnCreate() {
-            InitialiseQueries();
-        }
-
-        protected void InitialiseQueries() {
-
-            EntityQueryDesc _cooldownQueryDesc = new EntityQueryDesc
-            {
-                All = new ComponentType[] { ComponentType.ReadOnly<GameplayEffectDurationComponent>(), ComponentType.ReadOnly<GameplayEffectTargetComponent>() },
-                Any = CooldownEffects.Length == 0 ? new ComponentType[] { typeof(NullComponent) } : CooldownEffects,
-            };
-            CooldownEffectsQuery = GetEntityQuery(_cooldownQueryDesc);
-            GrantedAbilityQuery = GetEntityQuery(ComponentType.ReadOnly<AbilitySystemActorTransformComponent>(), ComponentType.ReadOnly<AbilityOwnerComponent>(), ComponentType.ReadOnly<T>(), ComponentType.ReadWrite<AbilityCooldownComponent>(), ComponentType.ReadWrite<AbilityStateComponent>());
-        }
-
-        protected override JobHandle CooldownJobs(JobHandle inputDeps) {
-            NativeMultiHashMap<Entity, AbilityCooldownComponent> Cooldowns = new NativeMultiHashMap<Entity, AbilityCooldownComponent>(CooldownEffectsQuery.CalculateEntityCount() * 2 + GrantedAbilityQuery.CalculateEntityCount(), Allocator.TempJob);
-
-            // Collect all effects which act as cooldowns for this ability
-            var job1 = new GatherCooldownGameplayEffectsJob { AbilityCooldowns = Cooldowns.AsParallelWriter() };
-            var job2 = new GatherLongestCooldownPerEntity { AbilityCooldowns = Cooldowns };
-            var stateUpdateJob = new AbilityStateUpdateJob();
-            inputDeps = inputDeps
-                        .ScheduleJob(job1, CooldownEffectsQuery)
-                        .ScheduleJob(job2, GrantedAbilityQuery)
-                        .ScheduleJob(stateUpdateJob, this)
-                        ;
-
-            Cooldowns.Dispose(inputDeps);
             return inputDeps;
         }
 
-        /// <summary>
-        /// Gather all cooldown effects for this ability
-        /// </summary>
-        [BurstCompile]
-        protected struct GatherCooldownGameplayEffectsJob : IJobForEach<GameplayEffectTargetComponent, GameplayEffectDurationComponent> {
-            public NativeMultiHashMap<Entity, AbilityCooldownComponent>.ParallelWriter AbilityCooldowns;
-            public void Execute([ReadOnly] ref GameplayEffectTargetComponent targetComponent, [ReadOnly] ref GameplayEffectDurationComponent durationComponent) {
-                AbilityCooldowns.Add(targetComponent, durationComponent.Value);
-            }
-        }
 
-        /// <summary>
-        /// Get the longest cooldown for the ability for each entity
-        /// </summary>
-        [BurstCompile]
-        [RequireComponentTag(typeof(AbilitySystemActorTransformComponent))]
-        protected struct GatherLongestCooldownPerEntity : IJobForEach<T, AbilityCooldownComponent, AbilityOwnerComponent> {
-            [ReadOnly] public NativeMultiHashMap<Entity, AbilityCooldownComponent> AbilityCooldowns;
-            public void Execute([ReadOnly]ref T abilityTagComponent, [WriteOnly] ref AbilityCooldownComponent cooldown, [ReadOnly] ref AbilityOwnerComponent ownerComponent) {
-                cooldown.Value = GetMaxFromNMHP(ownerComponent, AbilityCooldowns);
-            }
-
-            private AbilityCooldownComponent GetMaxFromNMHP(Entity entity, NativeMultiHashMap<Entity, AbilityCooldownComponent> values) {
-                if (!values.TryGetFirstValue(entity, out var longestCooldownComponent, out var multiplierIt)) {
-                    // If there are no active cooldowns for this actor, then use a default.
-                    longestCooldownComponent = new AbilityCooldownComponent();
-                }
-
-                while (values.TryGetNextValue(out var tempLongestCooldownComponent, ref multiplierIt)) {
-                    var tDiff = tempLongestCooldownComponent.Value.RemainingTime - longestCooldownComponent.Value.RemainingTime;
-                    var newPercentRemaining = tempLongestCooldownComponent.Value.RemainingTime / tempLongestCooldownComponent.Value.NominalDuration;
-                    var oldPercentRemaining = longestCooldownComponent.Value.RemainingTime / longestCooldownComponent.Value.NominalDuration;
-
-                    // If the duration currently being evaluated has more time remaining than the previous one,
-                    // use this as the cooldown.
-                    // If the durations are the same, then use the one which has the longer nominal time.
-                    // E.g. if we have two abilities, one with a nominal duration of 10s and 2s respectively,
-                    // but both have 1s remaining, then the "main" cooldown should be the 10s cooldown.
-                    if (tDiff > 0) {
-                        longestCooldownComponent = tempLongestCooldownComponent;
-                    } else if (tDiff == 0 && tempLongestCooldownComponent.Value.NominalDuration > longestCooldownComponent.Value.NominalDuration) {
-                        longestCooldownComponent = tempLongestCooldownComponent;
-                    }
-                }
-                return longestCooldownComponent;
-            }
-        }
-
-        [BurstCompile]
-        public struct AbilityStateUpdateJob : IJobForEach<AbilityCooldownComponent, AbilityStateComponent> {
-            public void Execute([ReadOnly] ref AbilityCooldownComponent cooldown, ref AbilityStateComponent state) {
-                int flag = math.select(0, (int)AbilityStates.ON_COOLDOWN, cooldown.Value.RemainingTime > 0);
-                state |= flag;
-            }
-        }
     }
 }

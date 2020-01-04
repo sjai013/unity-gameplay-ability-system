@@ -43,5 +43,14 @@ namespace GameplayAbilitySystem.GameplayEffects.Components {
                 }
             };
         }
+
+        public static bool operator >(GameplayEffectDurationComponent a, GameplayEffectDurationComponent b) {
+            return a.Value.RemainingTime > b.Value.RemainingTime || (a.Value.RemainingTime == b.Value.RemainingTime && a.Value.NominalDuration > b.Value.NominalDuration);
+        }
+
+        public static bool operator <(GameplayEffectDurationComponent b, GameplayEffectDurationComponent a) {
+            return a.Value.RemainingTime > b.Value.RemainingTime || (a.Value.RemainingTime == b.Value.RemainingTime && a.Value.NominalDuration > b.Value.NominalDuration);
+        }
+
     }
 }

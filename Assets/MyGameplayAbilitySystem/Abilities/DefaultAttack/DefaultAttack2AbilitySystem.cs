@@ -37,34 +37,34 @@ using UnityEngine;
 namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
 
     public class DefaultAttack2AbilitySystem {
-        public class AbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
-            protected override ComponentType[] CooldownEffects =>
-                new ComponentType[] {
-                    ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>()
-                };
+        // public class AbilityCooldownSystem : GenericAbilityCooldownSystem<DefaultAttackAbilityTag> {
+        //     protected override ComponentType[] CooldownEffects =>
+        //         new ComponentType[] {
+        //             ComponentType.ReadOnly<GlobalCooldownGameplayEffectComponent>()
+        //         };
 
-        }
+        // }
 
-        public class AbilityAvailabilitySystem : AbilityAvailabilitySystem<DefaultAttackAbilityTag> {
-            // private EntityQuery m_Query;
-            // protected override void OnCreate() {
-            //     this.m_Query = GetEntityQuery(ComponentType.ReadOnly<DefaultAttackAbilityActive>(), ComponentType.ReadWrite<AbilityStateComponent>());
-            // }
+        // public class AbilityAvailabilitySystem : AbilityAvailabilitySystem<DefaultAttackAbilityTag> {
+        //     // private EntityQuery m_Query;
+        //     // protected override void OnCreate() {
+        //     //     this.m_Query = GetEntityQuery(ComponentType.ReadOnly<DefaultAttackAbilityActive>(), ComponentType.ReadWrite<AbilityStateComponent>());
+        //     // }
 
-            [RequireComponentTag(typeof(DefaultAttackAbilityActive))]
-            struct SystemJob : IJobForEach<AbilityStateComponent> {
-                public void Execute(ref AbilityStateComponent abilityState) {
-                    abilityState |= (int)AbilityStates.ACTIVE;
-                }
-            }
-            protected override JobHandle UpdateAbilityAvailability(JobHandle inputDeps) {
-                // Check for existence of AbilityActive tag
-                inputDeps = inputDeps.ScheduleJob(new SystemJob(), this);
-                return inputDeps;
-            }
-        }
+        //     [RequireComponentTag(typeof(DefaultAttackAbilityActive))]
+        //     struct SystemJob : IJobForEach<AbilityStateComponent> {
+        //         public void Execute(ref AbilityStateComponent abilityState) {
+        //             abilityState |= (int)AbilityStates.ACTIVE;
+        //         }
+        //     }
+        //     protected override JobHandle UpdateAbilityAvailability(JobHandle inputDeps) {
+        //         // Check for existence of AbilityActive tag
+        //         inputDeps = inputDeps.ScheduleJob(new SystemJob(), this);
+        //         return inputDeps;
+        //     }
+        // }
 
-        public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> { }
+        // public class AssignAbilityIdentifierSystem : GenericAssignAbilityIdentifierSystem<DefaultAttackAbilityTag> { }
 
     }
 
