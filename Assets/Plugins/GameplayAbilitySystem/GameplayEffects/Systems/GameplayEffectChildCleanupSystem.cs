@@ -31,17 +31,12 @@ using UnityEngine;
 namespace GameplayAbilitySystem.GameplayEffects.Systems {
     [UpdateInGroup(typeof(GameplayEffectGroupUpdateEndSystem))]
     public class GameplayEffectChildCleanupSystem : JobComponentSystem {
-        EntityQuery attributesToRemoveQuery;
         EntityQuery gameplayEffectsPendingRemovalQuery;
         BeginInitializationEntityCommandBufferSystem m_EntityCommandBuffer;
 
         protected override void OnCreate() {
             m_EntityCommandBuffer = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem>();
-            attributesToRemoveQuery = GetEntityQuery(ComponentType.ReadOnly<ParentGameplayEffectEntity>());
         }
-
-        internal struct Empty { }
-
 
         protected override JobHandle OnUpdate(JobHandle inputDeps) {
             var Ecb = m_EntityCommandBuffer.CreateCommandBuffer().ToConcurrent();
