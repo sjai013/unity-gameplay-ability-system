@@ -59,10 +59,8 @@ namespace MyGameplayAbilitySystem.Abilities.DefaultAttack {
                         // Check if entity has any of the cooldown components
                         if (Cooldown1DurationComponents.HasComponent(gameplayEffectEntity) && Cooldown1TagComponents.HasComponent(gameplayEffectEntity)) {
                             var durationComponent = Cooldown1DurationComponents[gameplayEffectEntity];
-                            // Cooldown selection logic:
-                            // 1. Effect with the longest remaining duration is always the ability's cooldown remaining duration
-                            // 2. If two effects have the same remaining duration, then the effect with the longest period is the ability's cooldown duration
-                            bool thisEffectIsLongest = durationComponent > abilityCooldownDuration;
+
+                            bool thisEffectIsLongest = durationComponent.Value > abilityCooldownDuration.Value;
                             abilityCooldownDuration.Value.RemainingTime = math.select(abilityCooldownDuration.Value.RemainingTime, durationComponent.Value.RemainingTime, thisEffectIsLongest);
                             abilityCooldownDuration.Value.NominalDuration = math.select(abilityCooldownDuration.Value.NominalDuration, durationComponent.Value.NominalDuration, thisEffectIsLongest);
                             abilityCooldownDuration.Value.WorldStartTime = math.select(abilityCooldownDuration.Value.WorldStartTime, durationComponent.Value.WorldStartTime, thisEffectIsLongest);

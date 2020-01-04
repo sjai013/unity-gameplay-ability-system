@@ -25,5 +25,19 @@ namespace GameplayAbilitySystem.Common.Components {
         public float RemainingTime;
         public float NominalDuration;
 
+        public static bool operator >(TimeRemainingComponent a, TimeRemainingComponent b) {
+            // Cooldown selection logic:
+            // 1. Effect with the longest remaining duration is always the ability's cooldown remaining duration
+            // 2. If two effects have the same remaining duration, then the effect with the longest period is the ability's cooldown duration
+            return a.RemainingTime > b.RemainingTime || (a.RemainingTime == b.RemainingTime && a.NominalDuration > b.NominalDuration);
+        }
+
+        public static bool operator <(TimeRemainingComponent b, TimeRemainingComponent a) {
+            // Cooldown selection logic:
+            // 1. Effect with the longest remaining duration is always the ability's cooldown remaining duration
+            // 2. If two effects have the same remaining duration, then the effect with the longest period is the ability's cooldown duration
+            return a.RemainingTime > b.RemainingTime || (a.RemainingTime == b.RemainingTime && a.NominalDuration > b.NominalDuration);
+        }
+
     }
 }
