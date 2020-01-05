@@ -29,7 +29,6 @@ using MyGameplayAbilitySystem.GameplayEffects.Components;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace MyGameplayAbilitySystem.Abilities.Fire1 {
     public class Fire1AbilitySystem {
@@ -53,15 +52,12 @@ namespace MyGameplayAbilitySystem.Abilities.Fire1 {
                         var gameplayEffectEntity = gameplayEffectBuffer[i].Value;
                         // Check if entity has any of the cooldown components
                         int cooldownDurationComponentThatHas = 0;
-                        if (Cooldown1TagComponents.HasComponent(gameplayEffectEntity)) {
-                            cooldownDurationComponentThatHas = 1;
-                        } else if (Cooldown2TagComponents.HasComponent(gameplayEffectEntity)) {
-                            cooldownDurationComponentThatHas = 3;
-                        }
-
+                        cooldownDurationComponentThatHas = math.select(1, cooldownDurationComponentThatHas, Cooldown1TagComponents.HasComponent(gameplayEffectEntity));
+                        cooldownDurationComponentThatHas = math.select(2, cooldownDurationComponentThatHas, Cooldown2TagComponents.HasComponent(gameplayEffectEntity));
                         if (cooldownDurationComponentThatHas > 0) {
-                            if (!CooldownDurationComponents.HasComponent(gameplayEffectEntity)) continue;
-
+                            if (!CooldownDurationComponents.HasComponent(gameplayEffectEntity)) {
+                                continue;
+                            }
                             var durationComponent = CooldownDurationComponents[gameplayEffectEntity];
 
                             // Cooldown selection logic:
