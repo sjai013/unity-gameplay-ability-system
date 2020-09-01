@@ -1,0 +1,4 @@
+com.unity.postprocessing@2.0.9-preview
+com.unity.cinemachine@2.2.0
+com.unity.probuilder@3.0.9
+com.unity.textmeshpro@1.2.4

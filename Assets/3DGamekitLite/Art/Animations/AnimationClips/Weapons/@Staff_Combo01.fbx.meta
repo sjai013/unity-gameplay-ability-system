@@ -1,0 +1,141 @@
+fileFormatVersion: 2
+guid: db21481ab80b79044941866818bbd8e6
+timeCreated: 1497454785
+licenseType: Store
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Staff_Body
+    100004: Staff_Rigged_WIP01:Staff_Bottom_Attach
+    100006: Staff_Rigged_WIP01:Staff_Joint1
+    100008: Staff_Rigged_WIP01:Staff_Joint2
+    100010: Staff_Rigged_WIP01:Staff_Joint3
+    100012: Staff_Rigged_WIP01:Staff_Joint4
+    100014: Staff_Rigged_WIP01:Staff_JointEnd
+    100016: Staff_Rigged_WIP01:Staff_LeftHand_Attach
+    100018: Staff_Rigged_WIP01:Staff_RightHand_Attach
+    100020: Staff_Rigged_WIP01:Staff_Stone_Attach
+    100022: Staff_Rigged_WIP01:Staff_Top_Attach
+    100024: Staff_Skeleton
+    100026: Staff_Bottom_Attach
+    100028: Staff_Joint1
+    100030: Staff_Joint2
+    100032: Staff_Joint3
+    100034: Staff_Joint4
+    100036: Staff_JointEnd
+    100038: Staff_LeftHand_Attach
+    100040: Staff_RightHand_Attach
+    100042: Staff_Stone_Attach
+    100044: Staff_Top_Attach
+    400000: //RootNode
+    400002: Staff_Body
+    400004: Staff_Rigged_WIP01:Staff_Bottom_Attach
+    400006: Staff_Rigged_WIP01:Staff_Joint1
+    400008: Staff_Rigged_WIP01:Staff_Joint2
+    400010: Staff_Rigged_WIP01:Staff_Joint3
+    400012: Staff_Rigged_WIP01:Staff_Joint4
+    400014: Staff_Rigged_WIP01:Staff_JointEnd
+    400016: Staff_Rigged_WIP01:Staff_LeftHand_Attach
+    400018: Staff_Rigged_WIP01:Staff_RightHand_Attach
+    400020: Staff_Rigged_WIP01:Staff_Stone_Attach
+    400022: Staff_Rigged_WIP01:Staff_Top_Attach
+    400024: Staff_Skeleton
+    400026: Staff_Bottom_Attach
+    400028: Staff_Joint1
+    400030: Staff_Joint2
+    400032: Staff_Joint3
+    400034: Staff_Joint4
+    400036: Staff_JointEnd
+    400038: Staff_LeftHand_Attach
+    400040: Staff_RightHand_Attach
+    400042: Staff_Stone_Attach
+    400044: Staff_Top_Attach
+    4300000: Staff_Body
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Staff_Body
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Staff_Rigged_WIP01_Staff_Mat
+    second: {fileID: 2100000, guid: 0e974c7294e486e4cb42482e61c0c4de, type: 2}
+  materials:
+    importMaterials: 0
+    materialName: 1
+    materialSearch: 2
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 0
+  importAnimation: 1
+  copyAvatar: 1
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: Staff_RightHand_Attach
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: ffae9263bd1a66245bd2bad16f271364,
+    type: 3}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

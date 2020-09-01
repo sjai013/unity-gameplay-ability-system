@@ -1,0 +1,163 @@
+fileFormatVersion: 2
+guid: ffae9263bd1a66245bd2bad16f271364
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Root
+    100004: Skeleton
+    100006: Staff
+    100008: Staff 1
+    100010: StaffJoint1
+    100012: StaffJoint2
+    100014: StaffJoint3
+    100016: StaffJoint4
+    100018: StaffJointEnd
+    100020: Staff_BottomLocator
+    100022: Staff_GemLocator
+    100024: Staff_Joint1
+    100026: Staff_Joint2
+    100028: Staff_Joint3
+    100030: Staff_Joint4
+    100032: Staff_JointEnd
+    100034: Staff_LeftHandLocator
+    100036: Staff_RightHandLocator
+    100038: Staff_Skeleton
+    100040: Staff_TopLocator
+    100042: Staff_Body
+    100044: Staff_Bottom_Attach
+    100046: Staff_LeftHand_Attach
+    100048: Staff_RightHand_Attach
+    100050: Staff_Stone_Attach
+    100052: Staff_Top_Attach
+    400000: //RootNode
+    400002: Root
+    400004: Skeleton
+    400006: Staff
+    400008: Staff 1
+    400010: StaffJoint1
+    400012: StaffJoint2
+    400014: StaffJoint3
+    400016: StaffJoint4
+    400018: StaffJointEnd
+    400020: Staff_BottomLocator
+    400022: Staff_GemLocator
+    400024: Staff_Joint1
+    400026: Staff_Joint2
+    400028: Staff_Joint3
+    400030: Staff_Joint4
+    400032: Staff_JointEnd
+    400034: Staff_LeftHandLocator
+    400036: Staff_RightHandLocator
+    400038: Staff_Skeleton
+    400040: Staff_TopLocator
+    400042: Staff_Body
+    400044: Staff_Bottom_Attach
+    400046: Staff_LeftHand_Attach
+    400048: Staff_RightHand_Attach
+    400050: Staff_Stone_Attach
+    400052: Staff_Top_Attach
+    2300000: //RootNode
+    2300002: Staff
+    3300000: //RootNode
+    3300002: Staff
+    4300000: Staff
+    4300002: Staff_Body
+    9500000: //RootNode
+    13700000: Staff
+    13700002: Staff_Body
+    2186277476908879412: ImportLogs
+    2186277476908879414: ImportLogs
+    2186277476908879416: ImportLogs
+    2186277476908879418: ImportLogs
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Staff_Mat
+    second: {fileID: 2100000, guid: 0e974c7294e486e4cb42482e61c0c4de, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 2
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 180
+    normalImportMode: 1
+    tangentImportMode: 3
+    normalCalculationMode: 1
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97933d85c6acddc4bb95f77ca8cc0280, type: 3}
+  m_Name: EnglishInformationPoints
+  m_EditorClassIdentifier: 
+  language: English
+  phrases:
+  - key: EX_ACID
+    value: The Acid Prefab uses a Box Collider set to 'Trigger' to check when Ellen
+      has fallen into it. The DeathVolume component will then force Ellen to respawn
+      at her latest checkpoint
+  - key: EX_PAD
+    value: 'This pressure pad uses the ''Send on Trigger Enter'' component to open
+      the door when Ellen enters the pad''s box collider. Once the pad is triggered,
+      it uses the GameCommandReceiver to tell the door''s SimpleTranslator component
+      to activate. '
+  - key: EX_SWTCH
+    value: This single switch is another example of 'Send on Trigger Enter' being
+      used to open a door. The connection between the switch and the door is shown
+      in the Scene View.
+  - key: EX_SWTCHS
+    value: Multiple switches are used with the Gameplay Counter component to activate
+      a GameObject in the scene
+  - key: EX_BOX
+    value: These boxes use the 'OnDeath' event of the Damageable component to spawn
+      particles and smaller phsyics-enabled cubes
+  - key: EX_MOVPLAT
+    value: This moving platform uses the SimpleTranslator component. Start and End
+      points are shown as gizmos in the scene view to easily customise the start and
+      end positions
+  - key: EX_ENEMY
+    value: Chomper likes to bite and Spitter will attack from range. You can easily
+      make changes to their behaviour using their Chomper and Spitter components!
+  - key: PP_SIDE
+    value: I'm not heavy enough to press this... Looks like I'll have to use the box
+      above!
+  - key: SWTCH_HOUSE
+    value: It's locked... Maybe one of the boxes will have a key inside...
+  - key: BOX_PCKUP
+    value: A key! This should come in handy!
+  - key: END
+    value: The treasure is finally mine!

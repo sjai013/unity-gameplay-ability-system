@@ -1,0 +1,55 @@
+This asset is governed by the Asset Store EULA; however, the following components are governed by the licenses indicated below:
+
+A. Cinemachine
+
+Unity Companion Cinemachine Code License 1.0
+
+Copyright © 2017 Unity Technologies ApS
+
+
+
+B. Rajdhani Font
+
+SIL Open Font License, Version 1.1.
+
+Copyright (c) 2014, Indian Type Foundry (info@indiantypefoundry.com).
+This license is also available with a FAQ at:
+http://scripts.sil.org/OFL
+
+
+
+C. Emoji One
+
+Premium License Agreement Version 1.6
+
+Copyright © EmojiOne Inc. 2018
+
+
+
+D. Roboto Font
+
+ Apache License Version 2.0
+
+Copyright © Google 2012
+
+
+
+E. Web-GL Noise
+
+copyright notice
+
+Copyright (C) 2011 by Ashima Arts (Simplex noise)
+Copyright (C) 2011-2016 by Stefan Gustavson (Classic noise and others)
+
+
+
+F. Textures
+
+Found in Polybrush/Example/Example Textures.
+
+CC0 1.0 Universal (CC0 1.0)
+
+Grass: https://opengameart.org/node/8011
+Ground: https://opengameart.org/node/7556
+Sand: https://opengameart.org/node/7998
+Dirt: https://opengameart.org/node/8009

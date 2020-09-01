@@ -1,0 +1,469 @@
+fileFormatVersion: 2
+guid: ab5bda48f8799bb4f84ab060e69f60a7
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Body
+    100004: Core
+    100006: Root
+    100008: Skeleton
+    100010: Chest
+    100012: Hips
+    100014: Interior1
+    100016: Interior2
+    100018: Left_AnteriorHand
+    100020: Left_AnteriorIndex1
+    100022: Left_AnteriorIndexEnd
+    100024: Left_AnteriorLowerLeg
+    100026: Left_AnteriorMiddle2
+    100028: Left_AnteriorMiddleEnd
+    100030: Left_AnteriorPinky1
+    100032: Left_AnteriorPinkyEnd
+    100034: Left_AnteriorUpperLeg
+    100036: Left_Eye
+    100038: Left_FrontFeather1
+    100040: Left_FrontFeather2
+    100042: Left_FrontFeather3
+    100044: Left_FrontFeatherEnd
+    100046: Left_MiddleFeather1
+    100048: Left_MiddleFeather2
+    100050: Left_MiddleFeather3
+    100052: Left_MiddleFeatherEnd
+    100054: Left_Mouth
+    100056: Left_Nostril
+    100058: Left_NostrilEnd
+    100060: Left_PosteriorHand
+    100062: Left_PosteriorIndex
+    100064: Left_PosteriorIndexEnd
+    100066: Left_PosteriorLowerLeg
+    100068: Left_PosteriorMiddle
+    100070: Left_PosteriorMiddleEnd
+    100072: Left_PosteriorPinky
+    100074: Left_PosteriorPinkyEnd
+    100076: Left_PosteriorUpperLeg
+    100078: Left_RearFeather1
+    100080: Left_RearFeather2
+    100082: Left_RearFeather3
+    100084: Left_RearFeatherEnd
+    100086: Left_UpperMouth1
+    100088: Left_UpperMouth2
+    100090: LeftLowerMouth1
+    100092: LeftLowerMouth2
+    100094: LowerMouth
+    100096: LowerMouthEnd
+    100098: Right_AnteriorHand
+    100100: Right_AnteriorIndex1
+    100102: Right_AnteriorIndexEnd
+    100104: Right_AnteriorLowerLeg
+    100106: Right_AnteriorMiddle1
+    100108: Right_AnteriorMiddleEnd
+    100110: Right_AnteriorPinky1
+    100112: Right_AnteriorPinkyEnd
+    100114: Right_AnteriorUpperLeg
+    100116: Right_Eye
+    100118: Right_FrontFeather1
+    100120: Right_FrontFeather2
+    100122: Right_FrontFeather3
+    100124: Right_FrontFeatherEnd
+    100126: Right_MiddleFeather1
+    100128: Right_MiddleFeather2
+    100130: Right_MiddleFeather3
+    100132: Right_MiddleFeatherEnd
+    100134: Right_Mouth
+    100136: Right_Nostril
+    100138: Right_NostrilEnd
+    100140: Right_PosteriorHand
+    100142: Right_PosteriorIndex
+    100144: Right_PosteriorIndexEnd
+    100146: Right_PosteriorLowerLeg
+    100148: Right_PosteriorMiddle
+    100150: Right_PosteriorMiddleEnd
+    100152: Right_PosteriorPinky
+    100154: Right_PosteriorPinkyEnd
+    100156: Right_PosteriorUpperLeg
+    100158: Right_RearFeather1
+    100160: Right_RearFeather2
+    100162: Right_RearFeather3
+    100164: Right_RearFeatherEnd
+    100166: Right_UpperMouth1
+    100168: Right_UpperMouth2
+    100170: RightLowerMouth1
+    100172: RightLowerMouth2
+    100174: Stalk1
+    100176: Stalk2
+    100178: Stalk3
+    100180: Stalk4
+    100182: Tail1
+    100184: Tail3
+    100186: TailEnd
+    100188: TailI2
+    100190: Tongue1
+    100192: Tongue2
+    100194: Tongue3
+    100196: TongueEnd
+    100198: Upper_Mouth
+    100200: Upper_MouthEnd
+    400000: //RootNode
+    400002: Body
+    400004: Core
+    400006: Root
+    400008: Skeleton
+    400010: Chest
+    400012: Hips
+    400014: Interior1
+    400016: Interior2
+    400018: Left_AnteriorHand
+    400020: Left_AnteriorIndex1
+    400022: Left_AnteriorIndexEnd
+    400024: Left_AnteriorLowerLeg
+    400026: Left_AnteriorMiddle2
+    400028: Left_AnteriorMiddleEnd
+    400030: Left_AnteriorPinky1
+    400032: Left_AnteriorPinkyEnd
+    400034: Left_AnteriorUpperLeg
+    400036: Left_Eye
+    400038: Left_FrontFeather1
+    400040: Left_FrontFeather2
+    400042: Left_FrontFeather3
+    400044: Left_FrontFeatherEnd
+    400046: Left_MiddleFeather1
+    400048: Left_MiddleFeather2
+    400050: Left_MiddleFeather3
+    400052: Left_MiddleFeatherEnd
+    400054: Left_Mouth
+    400056: Left_Nostril
+    400058: Left_NostrilEnd
+    400060: Left_PosteriorHand
+    400062: Left_PosteriorIndex
+    400064: Left_PosteriorIndexEnd
+    400066: Left_PosteriorLowerLeg
+    400068: Left_PosteriorMiddle
+    400070: Left_PosteriorMiddleEnd
+    400072: Left_PosteriorPinky
+    400074: Left_PosteriorPinkyEnd
+    400076: Left_PosteriorUpperLeg
+    400078: Left_RearFeather1
+    400080: Left_RearFeather2
+    400082: Left_RearFeather3
+    400084: Left_RearFeatherEnd
+    400086: Left_UpperMouth1
+    400088: Left_UpperMouth2
+    400090: LeftLowerMouth1
+    400092: LeftLowerMouth2
+    400094: LowerMouth
+    400096: LowerMouthEnd
+    400098: Right_AnteriorHand
+    400100: Right_AnteriorIndex1
+    400102: Right_AnteriorIndexEnd
+    400104: Right_AnteriorLowerLeg
+    400106: Right_AnteriorMiddle1
+    400108: Right_AnteriorMiddleEnd
+    400110: Right_AnteriorPinky1
+    400112: Right_AnteriorPinkyEnd
+    400114: Right_AnteriorUpperLeg
+    400116: Right_Eye
+    400118: Right_FrontFeather1
+    400120: Right_FrontFeather2
+    400122: Right_FrontFeather3
+    400124: Right_FrontFeatherEnd
+    400126: Right_MiddleFeather1
+    400128: Right_MiddleFeather2
+    400130: Right_MiddleFeather3
+    400132: Right_MiddleFeatherEnd
+    400134: Right_Mouth
+    400136: Right_Nostril
+    400138: Right_NostrilEnd
+    400140: Right_PosteriorHand
+    400142: Right_PosteriorIndex
+    400144: Right_PosteriorIndexEnd
+    400146: Right_PosteriorLowerLeg
+    400148: Right_PosteriorMiddle
+    400150: Right_PosteriorMiddleEnd
+    400152: Right_PosteriorPinky
+    400154: Right_PosteriorPinkyEnd
+    400156: Right_PosteriorUpperLeg
+    400158: Right_RearFeather1
+    400160: Right_RearFeather2
+    400162: Right_RearFeather3
+    400164: Right_RearFeatherEnd
+    400166: Right_UpperMouth1
+    400168: Right_UpperMouth2
+    400170: RightLowerMouth1
+    400172: RightLowerMouth2
+    400174: Stalk1
+    400176: Stalk2
+    400178: Stalk3
+    400180: Stalk4
+    400182: Tail1
+    400184: Tail3
+    400186: TailEnd
+    400188: TailI2
+    400190: Tongue1
+    400192: Tongue2
+    400194: Tongue3
+    400196: TongueEnd
+    400198: Upper_Mouth
+    400200: Upper_MouthEnd
+    4300000: Body
+    7400000: ChomperIdle
+    7400002: Cooldown
+    9500000: //RootNode
+    13700000: Body
+  externalObjects: {}
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: ChomperIdle
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 1266
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.31155777
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.32160804
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.40837538
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.41792297
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.41825855
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.49664953
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.52847606
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.54053617
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6319937
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.66432166
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.68676746
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.7020103
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.95293176
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.97688437
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9944722
+        functionName: PlayStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
+      - time: 0.397878
+        functionName: Grunt
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.530504
+        functionName: Grunt
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Cooldown
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 0
+  importAnimation: 1
+  copyAvatar: 1
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: Root
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2732fe64dd2799f439fb845921df626b,
+    type: 3}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
