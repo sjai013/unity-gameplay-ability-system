@@ -56,7 +56,7 @@ namespace MyGameplayAbilitySystem
         protected override void OnCreate()
         {
             base.OnCreate();
-            Test();
+            //Test();
         }
 
         protected override void RaiseEvents(int _nAttributes, int nEntities, NativeArray<Entity> modifiedAttributesEntities_ByEntity, NativeArray<AttributeBufferElement> modifiedAttributesOld_ByEntity, NativeArray<AttributeBufferElement> modifiedAttributesNew_ByEntity)

@@ -84,6 +84,13 @@ namespace GameplayAbilitySystem.AttributeSystem.Systems
             attributeModifierArray.Dispose(this.Dependency);
         }
 
+        /// <summary>
+        /// Gather the required entities, and store in a long 1-dimensional array <see cref="attributeModiierArray">
+        /// </summary>
+        /// <param name="_nAttributes">Number of attributes to consider</param>
+        /// <param name="_nOperators">Number of operators (+, -, *) to consider</param>
+        /// <param name="maxArrayLength">Total max length, as a function of total entities, number of attributes, number of operators</param>
+        /// <param name="attributeModifierArray">Output array containing 1-dimensional array of all attributes</param>
         protected virtual void GatherAttributesJob(int _nAttributes, int _nOperators, int maxArrayLength, NativeArray<float> attributeModifierArray)
         {
             Entities
@@ -137,6 +144,7 @@ namespace GameplayAbilitySystem.AttributeSystem.Systems
                 //.WithoutBurst()
                 .ForEach((Entity entity, int entityInQueryIndex, ref DynamicBuffer<AttributeBufferElement> attributeBuffer, in DynamicBuffer<AttributeModifierBufferElement> attributeModifierBuffer) =>
                 {
+                    if (attributeModifierBuffer.Length == 0) return;
                     var entityOffset = _nAttributes * _nOperators * entityInQueryIndex;
 
                     /******* ATTRIBUTE ID *******/
