@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using GameplayAbilitySystem.AttributeSystem.Components;
 using GameplayAbilitySystem.AttributeSystem.Systems;
 using Unity.Collections;
 using Unity.Entities;
