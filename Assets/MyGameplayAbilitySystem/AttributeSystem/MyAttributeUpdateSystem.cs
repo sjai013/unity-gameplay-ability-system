@@ -1,69 +1,187 @@
+using System.Runtime.CompilerServices;
 using GameplayAbilitySystem.AttributeSystem.Components;
 using GameplayAbilitySystem.AttributeSystem.Systems;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
+using Unity.Mathematics;
 
 namespace MyGameplayAbilitySystem
 {
-    public class MyAttributeUpdateSystem : AttributeUpdateSystem
+    public struct AttributeValues : IAttributeData, IComponentData
     {
+        public PlayerAttributes<uint> BaseValue;
+        public PlayerAttributes<uint> CurrentValue;
+    }
 
-        private void Test()
+    public struct MyGameplayAttributeModifier : IBufferElementData, IGameplayAttributeModifier<AttributeModifierValues>
+    {
+        public half Value;
+        public EPlayerAttribute Attribute;
+        public EAttributeModifierOperator Operator;
+        ref PlayerAttributes<float> GetAttributeCollection(ref AttributeModifierValues attributeModifier)
         {
-            this.nAttributes = 5;
-
-            var em = this.EntityManager;
-            var archetype = em.CreateArchetype(
-                typeof(AttributeBufferElement),
-                typeof(AttributeModifierBufferElement)
-            );
-
-            var entityCount = 5000;
-
-            var entities = new NativeArray<Entity>(entityCount, Allocator.Temp);
-            em.CreateEntity(archetype, entities);
-            var startWorldTime = Time.ElapsedTime;
-            Unity.Mathematics.Random random = new Unity.Mathematics.Random(1);
-            for (int i = 0; i < entities.Length; i++)
+            switch (Operator)
             {
-                var attributeBuffer = em.GetBuffer<AttributeBufferElement>(entities[i]);
-                var attributeModifierBuffer = em.GetBuffer<AttributeModifierBufferElement>(entities[i]);
-
-                attributeBuffer.Add(new AttributeBufferElement() { Value = new AttributeData { BaseValue = 100, CurrentValue = 100 } });
-                attributeBuffer.Add(new AttributeBufferElement() { Value = new AttributeData { BaseValue = 100, CurrentValue = 100 } });
-                attributeBuffer.Add(new AttributeBufferElement() { Value = new AttributeData { BaseValue = 20, CurrentValue = 20 } });
-                attributeBuffer.Add(new AttributeBufferElement() { Value = new AttributeData { BaseValue = 20, CurrentValue = 20 } });
-                attributeBuffer.Add(new AttributeBufferElement() { Value = new AttributeData { BaseValue = 5, CurrentValue = 5 } });
-
-                for (var j = 0; j < nOperators; j++)
-                {
-                    for (var k = 0; k < this.nAttributes; k++)
-                    {
-                        var randFloat1 = random.NextFloat(0, 1);
-                        attributeModifierBuffer.Add(new AttributeModifierBufferElement() { AttributeId = k, ModifierValue = randFloat1, OperatorId = j });
-                    }
-                }
+                case EAttributeModifierOperator.Add:
+                    return ref attributeModifier.AddValue;
+                case EAttributeModifierOperator.Multiply:
+                    return ref attributeModifier.DivideValue;
+                case EAttributeModifierOperator.Divide:
+                    return ref attributeModifier.MultiplyValue;
+                default:
+                    return ref attributeModifier.AddValue;
             }
-
-            ActorAttributeChanged[entities[0]].OnEvent += (o, e) =>
-            {
-                //Debug.Log(e.NewAttribute.Length);
-            };
-
-            entities.Dispose();
         }
 
+        public void UpdateAttribute(ref AttributeModifierValues attributeModifier)
+        {
+
+            ref var attributeGroup = ref GetAttributeCollection(ref attributeModifier);
+
+            switch (Attribute)
+            {
+                case EPlayerAttribute.Health:
+                    attributeGroup.Health += Value;
+                    break;
+                case EPlayerAttribute.MaxHealth:
+                    attributeGroup.MaxHealth += Value;
+                    break;
+                case EPlayerAttribute.Mana:
+                    attributeGroup.Mana += Value;
+                    break;
+                case EPlayerAttribute.MaxMana:
+                    attributeGroup.MaxMana += Value;
+                    break;
+                case EPlayerAttribute.Speed:
+                    attributeGroup.Speed += Value;
+                    break;
+                default:
+                    return;
+            }
+
+        }
+    }
+
+
+
+    public enum EPlayerAttribute
+    {
+        Health, MaxHealth, Mana, MaxMana, Speed
+    }
+
+    public enum EAttributeModifierOperator
+    {
+        Add, Multiply, Divide
+    }
+
+
+    public struct AttributeModifierValues : IAttributeModifier, IComponentData
+    {
+        public PlayerAttributes<float> AddValue;
+        public PlayerAttributes<float> MultiplyValue;
+        public PlayerAttributes<float> DivideValue;
+    }
+
+    public struct PlayerAttributes<T>
+    where T : struct
+    {
+        public T Health;
+        public T MaxHealth;
+        public T Mana;
+        public T MaxMana;
+        public T Speed;
+    }
+
+
+    public struct PlayerAttributesJob : IAttributeExecute<AttributeValues, AttributeModifierValues>
+    {
+        public void Execute(NativeArray<AttributeValues> attributeValuesChunk, NativeArray<AttributeModifierValues> attributeModifiersChunk)
+        {
+            for (var i = 0; i < attributeValuesChunk.Length; i++)
+            {
+                var attributeValues = attributeValuesChunk[i];
+                var attributeModifierValues = attributeModifiersChunk[i];
+                attributeValues.CurrentValue.Health = ModifyValues(attributeValues.BaseValue.Health, attributeModifierValues.AddValue.Health, attributeModifierValues.MultiplyValue.Health, attributeModifierValues.DivideValue.Health);
+                attributeValues.CurrentValue.MaxHealth = ModifyValues(attributeValues.BaseValue.MaxHealth, attributeModifierValues.AddValue.MaxHealth, attributeModifierValues.MultiplyValue.MaxHealth, attributeModifierValues.DivideValue.MaxHealth);
+                attributeValues.CurrentValue.Mana = ModifyValues(attributeValues.BaseValue.Mana, attributeModifierValues.AddValue.Mana, attributeModifierValues.MultiplyValue.Mana, attributeModifierValues.DivideValue.Mana);
+                attributeValues.CurrentValue.MaxMana = ModifyValues(attributeValues.BaseValue.MaxMana, attributeModifierValues.AddValue.MaxMana, attributeModifierValues.MultiplyValue.MaxMana, attributeModifierValues.DivideValue.MaxMana);
+                attributeValues.CurrentValue.Speed = ModifyValues(attributeValues.BaseValue.Speed, attributeModifierValues.AddValue.Speed, attributeModifierValues.MultiplyValue.Speed, attributeModifierValues.DivideValue.Speed);
+
+                attributeValuesChunk[i] = attributeValues;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static uint ModifyValues(uint Base, float Add, float Multiply, float Divide)
+        {
+            return (uint)(((Base + Add) * (Multiply + 1)) / (Divide + 1));
+        }
+    }
+
+    public class MyAttributeUpdateSystem : AttributeUpdateSystem<AttributeValues, AttributeModifierValues, PlayerAttributesJob>
+    {
         protected override void OnCreate()
         {
             base.OnCreate();
-            //Test();
-        }
 
-        protected override void RaiseEvents(int _nAttributes, int nEntities, NativeArray<Entity> modifiedAttributesEntities_ByEntity, NativeArray<AttributeBufferElement> modifiedAttributesOld_ByEntity, NativeArray<AttributeBufferElement> modifiedAttributesNew_ByEntity)
+            var archetype = EntityManager.CreateArchetype(typeof(AttributeValues), typeof(AttributeModifierValues));
+            for (var i = 0; i < 100; i++)
+            {
+                var entity = EntityManager.CreateEntity(archetype);
+                SetComponent(entity, new AttributeValues()
+                {
+                    BaseValue = new PlayerAttributes<uint> { Health = 100, Mana = 10, MaxHealth = 100, MaxMana = 10, Speed = 5 }
+                });
+
+                SetComponent(entity, new AttributeModifierValues()
+                {
+                    AddValue = new PlayerAttributes<float> { Health = 10.0f, Mana = 5f },
+                    MultiplyValue = new PlayerAttributes<float> { Health = 0.25f, Mana = 0.5f }
+                });
+
+            }
+        }
+    }
+}
+
+public class NativeStreamTestSystem : SystemBase
+{
+    protected override void OnUpdate()
+    {
+        var stream = new NativeStream(5, Allocator.TempJob);
+        var writeTransforms = new WriteTransforms { writer = stream.AsWriter() }.Schedule(5, 64);
+        var handleResult = new HandleResult { reader = stream.AsReader() }.Schedule(5, 64, writeTransforms);
+        stream.Dispose(handleResult);
+    }
+
+    struct WriteTransforms : IJobParallelFor
+    {
+        public NativeStream.Writer writer;
+        public void Execute(int index)
         {
-
+            writer.BeginForEachIndex(index);
+            writer.Write<int>(index);
+            writer.Write<int>(2 * index);
+            writer.Write<int>(3 * index);
+            writer.Write<int>(4 * index);
+            writer.Write<int>(5 * index);
+            writer.EndForEachIndex();
         }
+    }
 
+    struct HandleResult : IJobParallelFor
+    {
+        public NativeStream.Reader reader;
 
+        public void Execute(int index)
+        {
+            int count = reader.BeginForEachIndex(index);
+            for (int i = 0; i != count; i++)
+            {
+                var value = reader.Read<int>();
+            }
+            reader.EndForEachIndex();
+        }
     }
 }
