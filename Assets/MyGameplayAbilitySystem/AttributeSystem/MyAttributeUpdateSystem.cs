@@ -10,50 +10,50 @@ namespace MyGameplayAbilitySystem
 {
     public struct AttributeValues : IAttributeData, IComponentData
     {
-        public PlayerAttributes<uint> BaseValue;
-        public PlayerAttributes<uint> CurrentValue;
+        public MyPlayerAttributes<uint> BaseValue;
+        public MyPlayerAttributes<uint> CurrentValue;
     }
 
-    public struct MyGameplayAttributeModifier : IBufferElementData, IGameplayAttributeModifier<AttributeModifierValues>
+    public struct MyGameplayAttributeModifier : IBufferElementData, IGameplayAttributeModifier<MyAttributeModifierValues>
     {
         public half Value;
-        public EPlayerAttribute Attribute;
-        public EAttributeModifierOperator Operator;
-        ref PlayerAttributes<float> GetAttributeCollection(ref AttributeModifierValues attributeModifier)
+        public EMyPlayerAttribute Attribute;
+        public EMyAttributeModifierOperator Operator;
+        ref MyPlayerAttributes<float> GetAttributeCollection(ref MyAttributeModifierValues attributeModifier)
         {
             switch (Operator)
             {
-                case EAttributeModifierOperator.Add:
+                case EMyAttributeModifierOperator.Add:
                     return ref attributeModifier.AddValue;
-                case EAttributeModifierOperator.Multiply:
+                case EMyAttributeModifierOperator.Multiply:
                     return ref attributeModifier.DivideValue;
-                case EAttributeModifierOperator.Divide:
+                case EMyAttributeModifierOperator.Divide:
                     return ref attributeModifier.MultiplyValue;
                 default:
                     return ref attributeModifier.AddValue;
             }
         }
 
-        public void UpdateAttribute(ref AttributeModifierValues attributeModifier)
+        public void UpdateAttribute(ref MyAttributeModifierValues attributeModifier)
         {
 
             ref var attributeGroup = ref GetAttributeCollection(ref attributeModifier);
 
             switch (Attribute)
             {
-                case EPlayerAttribute.Health:
+                case EMyPlayerAttribute.Health:
                     attributeGroup.Health += Value;
                     break;
-                case EPlayerAttribute.MaxHealth:
+                case EMyPlayerAttribute.MaxHealth:
                     attributeGroup.MaxHealth += Value;
                     break;
-                case EPlayerAttribute.Mana:
+                case EMyPlayerAttribute.Mana:
                     attributeGroup.Mana += Value;
                     break;
-                case EPlayerAttribute.MaxMana:
+                case EMyPlayerAttribute.MaxMana:
                     attributeGroup.MaxMana += Value;
                     break;
-                case EPlayerAttribute.Speed:
+                case EMyPlayerAttribute.Speed:
                     attributeGroup.Speed += Value;
                     break;
                 default:
@@ -63,27 +63,25 @@ namespace MyGameplayAbilitySystem
         }
     }
 
-
-
-    public enum EPlayerAttribute
+    public enum EMyPlayerAttribute
     {
         Health, MaxHealth, Mana, MaxMana, Speed
     }
 
-    public enum EAttributeModifierOperator
+    public enum EMyAttributeModifierOperator
     {
         Add, Multiply, Divide
     }
 
 
-    public struct AttributeModifierValues : IAttributeModifier, IComponentData
+    public struct MyAttributeModifierValues : IAttributeModifier, IComponentData
     {
-        public PlayerAttributes<float> AddValue;
-        public PlayerAttributes<float> MultiplyValue;
-        public PlayerAttributes<float> DivideValue;
+        public MyPlayerAttributes<float> AddValue;
+        public MyPlayerAttributes<float> MultiplyValue;
+        public MyPlayerAttributes<float> DivideValue;
     }
 
-    public struct PlayerAttributes<T>
+    public struct MyPlayerAttributes<T>
     where T : struct
     {
         public T Health;
@@ -94,9 +92,9 @@ namespace MyGameplayAbilitySystem
     }
 
 
-    public struct PlayerAttributesJob : IAttributeExecute<AttributeValues, AttributeModifierValues>
+    public struct MyPlayerAttributesJob : IAttributeExecute<AttributeValues, MyAttributeModifierValues>
     {
-        public void Execute(NativeArray<AttributeValues> attributeValuesChunk, NativeArray<AttributeModifierValues> attributeModifiersChunk)
+        public void Execute(NativeArray<AttributeValues> attributeValuesChunk, NativeArray<MyAttributeModifierValues> attributeModifiersChunk)
         {
             for (var i = 0; i < attributeValuesChunk.Length; i++)
             {
@@ -119,25 +117,25 @@ namespace MyGameplayAbilitySystem
         }
     }
 
-    public class MyAttributeUpdateSystem : AttributeUpdateSystem<AttributeValues, AttributeModifierValues, PlayerAttributesJob>
+    public class MyAttributeUpdateSystem : AttributeUpdateSystem<AttributeValues, MyAttributeModifierValues, MyPlayerAttributesJob>
     {
         protected override void OnCreate()
         {
             base.OnCreate();
 
-            var archetype = EntityManager.CreateArchetype(typeof(AttributeValues), typeof(AttributeModifierValues));
+            var archetype = EntityManager.CreateArchetype(typeof(AttributeValues), typeof(MyAttributeModifierValues));
             for (var i = 0; i < 100; i++)
             {
                 var entity = EntityManager.CreateEntity(archetype);
                 SetComponent(entity, new AttributeValues()
                 {
-                    BaseValue = new PlayerAttributes<uint> { Health = 100, Mana = 10, MaxHealth = 100, MaxMana = 10, Speed = 5 }
+                    BaseValue = new MyPlayerAttributes<uint> { Health = 100, Mana = 10, MaxHealth = 100, MaxMana = 10, Speed = 5 }
                 });
 
-                SetComponent(entity, new AttributeModifierValues()
+                SetComponent(entity, new MyAttributeModifierValues()
                 {
-                    AddValue = new PlayerAttributes<float> { Health = 10.0f, Mana = 5f },
-                    MultiplyValue = new PlayerAttributes<float> { Health = 0.25f, Mana = 0.5f }
+                    AddValue = new MyPlayerAttributes<float> { Health = 10.0f, Mana = 5f },
+                    MultiplyValue = new MyPlayerAttributes<float> { Health = 0.25f, Mana = 0.5f }
                 });
 
             }
