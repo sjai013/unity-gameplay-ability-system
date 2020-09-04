@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using GameplayAbilitySystem.AttributeSystem.Systems;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -7,89 +8,166 @@ using Unity.Mathematics;
 
 namespace MyGameplayAbilitySystem
 {
-    public struct AttributeValues : IAttributeData, IComponentData
-    {
-        public MyPlayerAttributes<uint> BaseValue;
-        public MyPlayerAttributes<uint> CurrentValue;
-    }
 
-    public struct MyGameplayAttributeModifier : IBufferElementData, IGameplayAttributeModifier<MyAttributeModifierValues>
+    public class AttributeModifierCollectorSystem : SystemBase
+    // where T1 : struct, ICompnentData, IGameplayAttributeModifier<T2>
+    // where T2 : struct, IComponentData, IAttributeModifier
     {
-        public half Value;
-        public EMyPlayerAttribute Attribute;
-        public EMyAttributeModifierOperator Operator;
-        ref MyPlayerAttributes<float> GetAttributeCollection(ref MyAttributeModifierValues attributeModifier)
+        private EntityQuery m_AttributeModifiers;
+        private EntityQuery m_AttributesGroup;
+        protected override void OnCreate()
         {
-            switch (Operator)
+            m_AttributeModifiers = GetEntityQuery(typeof(MyGameplayAttributeModifier));
+            m_AttributesGroup = GetEntityQuery(typeof(MyAttributeModifierValues));
+        }
+        protected override void OnUpdate()
+        {
+
+            // 1. Gather all attribute modifier components
+            // EITHER:
+            // 2a. Modify value of TAttributeModifier component to reflect the mods
+            // OR
+            // 2b. Keep those values in memory (NativeStream, NativeMultiHashMap, w/e), and apply directly to attributes
+            //NativeHashMap<Entity, MyGameplayAttributeModifier> a = new NativeHashMap<Entity, MyGameplayAttributeModifier>(m_AttributeModifiers.CalculateEntityCount(), Allocator.TempJob);
+            NativeMultiHashMap<Entity, MyGameplayAttributeModifier> b = new NativeMultiHashMap<Entity, MyGameplayAttributeModifier>(m_AttributeModifiers.CalculateEntityCount(), Allocator.TempJob);
+            var j = new AJob()
             {
-                case EMyAttributeModifierOperator.Add:
-                    return ref attributeModifier.AddValue;
-                case EMyAttributeModifierOperator.Multiply:
-                    return ref attributeModifier.DivideValue;
-                case EMyAttributeModifierOperator.Divide:
-                    return ref attributeModifier.MultiplyValue;
-                default:
-                    return ref attributeModifier.AddValue;
+                attributeWriter = b.AsParallelWriter(),
+                GameplayAttributeModifierHandle = GetComponentTypeHandle<MyGameplayAttributeModifier>(true),
+                GameplayEffectContextHandle = GetComponentTypeHandle<GameplayEffectContext>(true)
+            };
+
+            Dependency = j.ScheduleParallel(m_AttributeModifiers, Dependency);
+            Dependency = new BJob()
+            {
+                AttributeModifierValuesHandle = GetComponentTypeHandle<MyAttributeModifierValues>(false),
+                attributesGroup = b,
+                entitiesHandle = GetEntityTypeHandle()
+            }.Schedule(m_AttributesGroup, Dependency);
+
+
+
+            // Now write to the attributes
+
+
+            b.Dispose(Dependency);
+        }
+
+        struct AJob : IJobChunk
+        {
+            public NativeMultiHashMap<Entity, MyGameplayAttributeModifier>.ParallelWriter attributeWriter;
+            [ReadOnly] public ComponentTypeHandle<MyGameplayAttributeModifier> GameplayAttributeModifierHandle;
+            [ReadOnly] public ComponentTypeHandle<GameplayEffectContext> GameplayEffectContextHandle;
+
+            public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
+            {
+                var attributeModifierChunk = chunk.GetNativeArray(GameplayAttributeModifierHandle);
+                var gameplayEffectContextChunk = chunk.GetNativeArray(GameplayEffectContextHandle);
+                for (var i = 0; i < chunk.Count; i++)
+                {
+                    var attributeModifier = attributeModifierChunk[i];
+                    var gameplayEffectContext = gameplayEffectContextChunk[i];
+
+                    attributeWriter.Add(gameplayEffectContext.Target, attributeModifier);
+                }
+
             }
         }
 
-        public void UpdateAttribute(ref MyAttributeModifierValues attributeModifier)
+        [BurstCompile]
+        struct BJob : IJobChunk
         {
+            public ComponentTypeHandle<MyAttributeModifierValues> AttributeModifierValuesHandle;
+            [ReadOnly] public NativeMultiHashMap<Entity, MyGameplayAttributeModifier> attributesGroup;
 
-            ref var attributeGroup = ref GetAttributeCollection(ref attributeModifier);
-
-            switch (Attribute)
+            [ReadOnly] public EntityTypeHandle entitiesHandle;
+            public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
-                case EMyPlayerAttribute.Health:
-                    attributeGroup.Health += Value;
-                    break;
-                case EMyPlayerAttribute.MaxHealth:
-                    attributeGroup.MaxHealth += Value;
-                    break;
-                case EMyPlayerAttribute.Mana:
-                    attributeGroup.Mana += Value;
-                    break;
-                case EMyPlayerAttribute.MaxMana:
-                    attributeGroup.MaxMana += Value;
-                    break;
-                case EMyPlayerAttribute.Speed:
-                    attributeGroup.Speed += Value;
-                    break;
-                default:
-                    return;
-            }
+                var attributeModifierValuesChunk = chunk.GetNativeArray(AttributeModifierValuesHandle);
+                var entityChunk = chunk.GetNativeArray(entitiesHandle);
 
+                for (var i = 0; i < chunk.Count; i++)
+                {
+                    var entity = entityChunk[i];
+                    MyAttributeModifierValues attributeModifierValue = new MyAttributeModifierValues();
+                    if (attributesGroup.TryGetFirstValue(entity, out var modifier, out var iterator))
+                    {
+                        modifier.UpdateAttribute(ref attributeModifierValue);
+                        while (attributesGroup.TryGetNextValue(out modifier, ref iterator))
+                        {
+                            modifier.UpdateAttribute(ref attributeModifierValue);
+                        }
+                    }
+
+                    attributeModifierValuesChunk[i] = attributeModifierValue;
+
+                }
+
+            }
+        }
+
+        [BurstCompile]
+        struct CJob : IJob
+        {
+            public NativeArray<Entity> entities;
+            public NativeArray<MyGameplayAttributeModifier> attributeModifiers;
+
+            [NativeDisableParallelForRestriction]
+            public ComponentDataFromEntity<MyAttributeModifierValues> PlayerAttributeModifiersFromEntity;
+
+            public void Execute()
+            {
+                for (var i = 0; i < entities.Length; i++)
+                {
+                    var entity = entities[i];
+                    var modifier = attributeModifiers[i];
+                    var playerModifier = PlayerAttributeModifiersFromEntity[entity];
+
+                    modifier.UpdateAttribute(ref playerModifier);
+                    PlayerAttributeModifiersFromEntity[entity] = playerModifier;
+                }
+            }
         }
     }
 
-    public enum EMyPlayerAttribute
+    public class MyAttributeUpdateSystem : AttributeUpdateSystem<AttributeValues, MyAttributeModifierValues, MyPlayerAttributesJob>
     {
-        Health, MaxHealth, Mana, MaxMana, Speed
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            var rand = new Random(1);
+            // Create dummy entities for testing
+            var attributeArchetype = EntityManager.CreateArchetype(typeof(AttributeValues), typeof(MyAttributeModifierValues));
+            var attributeModifierArchetype = EntityManager.CreateArchetype(typeof(GameplayEffectContext), typeof(MyGameplayAttributeModifier));
+            for (var i = 0; i < 100; i++)
+            {
+                var entity = EntityManager.CreateEntity(attributeArchetype);
+                SetComponent(entity, new AttributeValues()
+                {
+                    BaseValue = new MyPlayerAttributes<uint> { Health = 100, Mana = 10, MaxHealth = 100, MaxMana = 10, Speed = 5 }
+                });
+
+                for (var j = 0; j < 100; j++)
+                {
+                    var modifierEntity = EntityManager.CreateEntity(attributeModifierArchetype);
+                    SetComponent(modifierEntity, new GameplayEffectContext()
+                    {
+                        Source = entity,
+                        Target = entity
+                    });
+                    SetComponent(modifierEntity, new MyGameplayAttributeModifier()
+                    {
+                        Attribute = (EMyPlayerAttribute)(rand.NextInt(0, 5)),
+                        Operator = (EMyAttributeModifierOperator)(rand.NextInt(1, 1)),
+                        Value = (half)rand.NextFloat(0, 10)
+                    });
+                }
+
+            }
+
+        }
+
     }
-
-    public enum EMyAttributeModifierOperator
-    {
-        Add, Multiply, Divide
-    }
-
-
-    public struct MyAttributeModifierValues : IAttributeModifier, IComponentData
-    {
-        public MyPlayerAttributes<float> AddValue;
-        public MyPlayerAttributes<float> MultiplyValue;
-        public MyPlayerAttributes<float> DivideValue;
-    }
-
-    public struct MyPlayerAttributes<T>
-    where T : struct
-    {
-        public T Health;
-        public T MaxHealth;
-        public T Mana;
-        public T MaxMana;
-        public T Speed;
-    }
-
 
     public struct MyPlayerAttributesJob : IAttributeExecute<AttributeValues, MyAttributeModifierValues>
     {
@@ -113,31 +191,6 @@ namespace MyGameplayAbilitySystem
         static uint ModifyValues(uint Base, float Add, float Multiply, float Divide)
         {
             return (uint)(((Base + Add) * (Multiply + 1)) / (Divide + 1));
-        }
-    }
-
-    public class MyAttributeUpdateSystem : AttributeUpdateSystem<AttributeValues, MyAttributeModifierValues, MyPlayerAttributesJob>
-    {
-        protected override void OnCreate()
-        {
-            base.OnCreate();
-
-            var archetype = EntityManager.CreateArchetype(typeof(AttributeValues), typeof(MyAttributeModifierValues));
-            for (var i = 0; i < 100; i++)
-            {
-                var entity = EntityManager.CreateEntity(archetype);
-                SetComponent(entity, new AttributeValues()
-                {
-                    BaseValue = new MyPlayerAttributes<uint> { Health = 100, Mana = 10, MaxHealth = 100, MaxMana = 10, Speed = 5 }
-                });
-
-                SetComponent(entity, new MyAttributeModifierValues()
-                {
-                    AddValue = new MyPlayerAttributes<float> { Health = 10.0f, Mana = 5f },
-                    MultiplyValue = new MyPlayerAttributes<float> { Health = 0.25f, Mana = 0.5f }
-                });
-
-            }
         }
     }
 }

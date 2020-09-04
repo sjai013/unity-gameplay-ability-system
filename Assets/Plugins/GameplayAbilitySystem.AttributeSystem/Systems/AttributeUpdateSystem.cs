@@ -10,30 +10,22 @@ namespace GameplayAbilitySystem.AttributeSystem.Systems
     where TAttributeModifier : struct, IComponentData, IAttributeModifier
     where TJobExecutable : struct, IAttributeExecute<TComponentData, TAttributeModifier>
     {
-        private EntityQuery m_Query;
+        private EntityQuery m_Attributes;
 
         protected override void OnCreate()
         {
-            m_Query = GetEntityQuery(typeof(TComponentData));
+            m_Attributes = GetEntityQuery(typeof(TComponentData));
         }
 
         protected override void OnUpdate()
         {
-            // 1. Gather all attribute modifier components
-            // EITHER:
-            // 2a. Modify value of TAttributeModifier component to reflect the mods
-            // OR
-            // 2b. Keep those values in memory (NativeStream, NativeMultiHashMap, w/e), and apply directly to attributes
-            NativeHashMap<Entity, TAttributeModifier> a = new NativeHashMap<Entity, TAttributeModifier>(m_Query.CalculateEntityCount(), Allocator.TempJob);
-
-
             var sumAttributes = new AttributeUpdateJob()
             {
                 AttributeDataHandle = GetComponentTypeHandle<TComponentData>(false),
                 AttributeModifierDataHandle = GetComponentTypeHandle<TAttributeModifier>(true),
                 Executable = default
             };
-            this.Dependency = sumAttributes.ScheduleParallel(m_Query, this.Dependency);
+            this.Dependency = sumAttributes.ScheduleParallel(m_Attributes, this.Dependency);
         }
 
         [BurstCompile]
