@@ -14,10 +14,16 @@ namespace MyGameplayAbilitySystem
         protected override void OnCreate()
         {
             base.OnCreate();
-            var rand = new Random(1);
             // Create dummy entities for testing
             var attributeArchetype = EntityManager.CreateArchetype(typeof(AttributeValues), typeof(MyAttributeModifierValues));
             var attributeModifierArchetype = EntityManager.CreateArchetype(typeof(GameplayEffectContext), typeof(MyGameplayAttributeModifier));
+            CreateTestEntities(attributeArchetype, attributeModifierArchetype);
+        }
+
+        private void CreateTestEntities(EntityArchetype attributeArchetype, EntityArchetype attributeModifierArchetype)
+        {
+            var rand = new Random(1);
+
             for (var i = 0; i < 100; i++)
             {
                 var entity = EntityManager.CreateEntity(attributeArchetype);
