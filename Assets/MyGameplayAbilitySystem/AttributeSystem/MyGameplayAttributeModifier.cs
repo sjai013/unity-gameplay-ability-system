@@ -1,15 +1,9 @@
-using GameplayAbilitySystem.AttributeSystem.Systems;
+using GameplayAbilitySystem.AttributeSystem.Components;
 using Unity.Entities;
 using Unity.Mathematics;
 
 namespace MyGameplayAbilitySystem
 {
-    public struct GameplayEffectContext : IComponentData
-    {
-        public Entity Target;
-        public Entity Source;
-    }
-
     public struct MyGameplayAttributeModifier : IComponentData, IGameplayAttributeModifier<MyAttributeModifierValues>
     {
         public half Value;

@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using GameplayAbilitySystem.AttributeSystem.Systems;
+using GameplayAbilitySystem.AttributeSystem.Components;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -8,129 +9,7 @@ using Unity.Mathematics;
 
 namespace MyGameplayAbilitySystem
 {
-
-    public class AttributeModifierCollectorSystem : SystemBase
-    // where T1 : struct, ICompnentData, IGameplayAttributeModifier<T2>
-    // where T2 : struct, IComponentData, IAttributeModifier
-    {
-        private EntityQuery m_AttributeModifiers;
-        private EntityQuery m_AttributesGroup;
-        protected override void OnCreate()
-        {
-            m_AttributeModifiers = GetEntityQuery(typeof(MyGameplayAttributeModifier));
-            m_AttributesGroup = GetEntityQuery(typeof(MyAttributeModifierValues));
-        }
-        protected override void OnUpdate()
-        {
-
-            // 1. Gather all attribute modifier components
-            // EITHER:
-            // 2a. Modify value of TAttributeModifier component to reflect the mods
-            // OR
-            // 2b. Keep those values in memory (NativeStream, NativeMultiHashMap, w/e), and apply directly to attributes
-            //NativeHashMap<Entity, MyGameplayAttributeModifier> a = new NativeHashMap<Entity, MyGameplayAttributeModifier>(m_AttributeModifiers.CalculateEntityCount(), Allocator.TempJob);
-            NativeMultiHashMap<Entity, MyGameplayAttributeModifier> b = new NativeMultiHashMap<Entity, MyGameplayAttributeModifier>(m_AttributeModifiers.CalculateEntityCount(), Allocator.TempJob);
-            var j = new AJob()
-            {
-                attributeWriter = b.AsParallelWriter(),
-                GameplayAttributeModifierHandle = GetComponentTypeHandle<MyGameplayAttributeModifier>(true),
-                GameplayEffectContextHandle = GetComponentTypeHandle<GameplayEffectContext>(true)
-            };
-
-            Dependency = j.ScheduleParallel(m_AttributeModifiers, Dependency);
-            Dependency = new BJob()
-            {
-                AttributeModifierValuesHandle = GetComponentTypeHandle<MyAttributeModifierValues>(false),
-                attributesGroup = b,
-                entitiesHandle = GetEntityTypeHandle()
-            }.Schedule(m_AttributesGroup, Dependency);
-
-
-
-            // Now write to the attributes
-
-
-            b.Dispose(Dependency);
-        }
-
-        struct AJob : IJobChunk
-        {
-            public NativeMultiHashMap<Entity, MyGameplayAttributeModifier>.ParallelWriter attributeWriter;
-            [ReadOnly] public ComponentTypeHandle<MyGameplayAttributeModifier> GameplayAttributeModifierHandle;
-            [ReadOnly] public ComponentTypeHandle<GameplayEffectContext> GameplayEffectContextHandle;
-
-            public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
-            {
-                var attributeModifierChunk = chunk.GetNativeArray(GameplayAttributeModifierHandle);
-                var gameplayEffectContextChunk = chunk.GetNativeArray(GameplayEffectContextHandle);
-                for (var i = 0; i < chunk.Count; i++)
-                {
-                    var attributeModifier = attributeModifierChunk[i];
-                    var gameplayEffectContext = gameplayEffectContextChunk[i];
-
-                    attributeWriter.Add(gameplayEffectContext.Target, attributeModifier);
-                }
-
-            }
-        }
-
-        [BurstCompile]
-        struct BJob : IJobChunk
-        {
-            public ComponentTypeHandle<MyAttributeModifierValues> AttributeModifierValuesHandle;
-            [ReadOnly] public NativeMultiHashMap<Entity, MyGameplayAttributeModifier> attributesGroup;
-
-            [ReadOnly] public EntityTypeHandle entitiesHandle;
-            public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
-            {
-                var attributeModifierValuesChunk = chunk.GetNativeArray(AttributeModifierValuesHandle);
-                var entityChunk = chunk.GetNativeArray(entitiesHandle);
-
-                for (var i = 0; i < chunk.Count; i++)
-                {
-                    var entity = entityChunk[i];
-                    MyAttributeModifierValues attributeModifierValue = new MyAttributeModifierValues();
-                    if (attributesGroup.TryGetFirstValue(entity, out var modifier, out var iterator))
-                    {
-                        modifier.UpdateAttribute(ref attributeModifierValue);
-                        while (attributesGroup.TryGetNextValue(out modifier, ref iterator))
-                        {
-                            modifier.UpdateAttribute(ref attributeModifierValue);
-                        }
-                    }
-
-                    attributeModifierValuesChunk[i] = attributeModifierValue;
-
-                }
-
-            }
-        }
-
-        [BurstCompile]
-        struct CJob : IJob
-        {
-            public NativeArray<Entity> entities;
-            public NativeArray<MyGameplayAttributeModifier> attributeModifiers;
-
-            [NativeDisableParallelForRestriction]
-            public ComponentDataFromEntity<MyAttributeModifierValues> PlayerAttributeModifiersFromEntity;
-
-            public void Execute()
-            {
-                for (var i = 0; i < entities.Length; i++)
-                {
-                    var entity = entities[i];
-                    var modifier = attributeModifiers[i];
-                    var playerModifier = PlayerAttributeModifiersFromEntity[entity];
-
-                    modifier.UpdateAttribute(ref playerModifier);
-                    PlayerAttributeModifiersFromEntity[entity] = playerModifier;
-                }
-            }
-        }
-    }
-
-    public class MyAttributeUpdateSystem : AttributeUpdateSystem<AttributeValues, MyAttributeModifierValues, MyPlayerAttributesJob>
+    public class MyAttributeUpdateSystem : AttributeUpdateSystem<AttributeValues, MyAttributeModifierValues, MyPlayerAttributesJob, MyGameplayAttributeModifier>
     {
         protected override void OnCreate()
         {
@@ -164,9 +43,7 @@ namespace MyGameplayAbilitySystem
                 }
 
             }
-
         }
-
     }
 
     public struct MyPlayerAttributesJob : IAttributeExecute<AttributeValues, MyAttributeModifierValues>
