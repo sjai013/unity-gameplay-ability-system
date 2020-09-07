@@ -2,10 +2,12 @@ using Unity.Collections;
 
 namespace GameplayAbilitySystem.AttributeSystem.Components
 {
-    public interface IAttributeExecute<TAttribute, TAttributeModifier>
+    public interface IAttributeExecute<TAttribute, TInstantAttributeModifier, TDurationalAttributeModifier>
     where TAttribute : struct, IAttributeData
-    where TAttributeModifier : struct, IAttributeModifier
+    where TInstantAttributeModifier : struct, IAttributeModifier
+    where TDurationalAttributeModifier : struct, IAttributeModifier
     {
-        void Execute(NativeArray<TAttribute> arg0, NativeArray<TAttributeModifier> arg1);
+        void CalculateInstant(NativeArray<TAttribute> arg0, NativeArray<TInstantAttributeModifier> arg1);
+        void CalculateDurational(NativeArray<TAttribute> arg0, NativeArray<TDurationalAttributeModifier> arg1);
     }
 }

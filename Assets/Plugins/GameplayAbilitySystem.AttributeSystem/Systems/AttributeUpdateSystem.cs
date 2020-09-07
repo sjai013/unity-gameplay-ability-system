@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using System.Dynamic;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using GameplayAbilitySystem.AttributeSystem.Components;
@@ -6,114 +7,78 @@ using UnityEngine;
 
 namespace GameplayAbilitySystem.AttributeSystem.Systems
 {
-    public class AttributeUpdateSystem<TComponentData, TAttributeModifier, TJobExecutable, TGameplayAttributesModifier> : SystemBase
-    where TComponentData : struct, IComponentData, IAttributeData
-    where TAttributeModifier : struct, IComponentData, IAttributeModifier
-    where TJobExecutable : struct, IAttributeExecute<TComponentData, TAttributeModifier>
-    where TGameplayAttributesModifier : struct, IComponentData, IGameplayAttributeModifier<TAttributeModifier>
+    [UpdateInGroup(typeof(AttributeUpdateSystemGroup))]
+    [UpdateBefore(typeof(AttributeModifierCollectionSystem<,,>))]
+    public class AttributeUpdateSystem<TAttributeValues, TInstantAttributeModifier, TDurationalAttributeModifier, TJobExecutable> : SystemBase
+    where TAttributeValues : struct, IComponentData, IAttributeData
+    where TDurationalAttributeModifier : struct, IComponentData, IAttributeModifier
+    where TInstantAttributeModifier : struct, IComponentData, IAttributeModifier
+    where TJobExecutable : struct, IAttributeExecute<TAttributeValues, TInstantAttributeModifier, TDurationalAttributeModifier>
     {
-        private EntityQuery m_Attributes;
-        private EntityQuery m_AttributeModifiers;
-        private EntityQuery m_AttributesGroup;
+        public static Entity CreatePlayerEntity(EntityManager dstManager, TAttributeValues defaultAttributes)
+        {
+            var attributeArchetype = dstManager.CreateArchetype(typeof(TAttributeValues), typeof(TDurationalAttributeModifier), typeof(TInstantAttributeModifier));
+            var entity = dstManager.CreateEntity(attributeArchetype);
+            dstManager.SetComponentData(entity, defaultAttributes);
+            return entity;
+        }
+        private EntityQuery m_InstantAttribute;
+        private EntityQuery m_DurationAttribute;
 
         protected override void OnCreate()
         {
-            m_Attributes = GetEntityQuery(typeof(TComponentData));
-            m_AttributeModifiers = GetEntityQuery(typeof(TGameplayAttributesModifier));
-            m_AttributesGroup = GetEntityQuery(typeof(TAttributeModifier));
+            m_InstantAttribute = GetEntityQuery(typeof(TAttributeValues), typeof(TInstantAttributeModifier));
+            m_DurationAttribute = GetEntityQuery(typeof(TAttributeValues), typeof(TDurationalAttributeModifier));
         }
 
         protected override void OnUpdate()
         {
-            var sumAttributes = new AttributeUpdateJob()
+            var durationalAttributes = new DurationalAttributeUpdateJob()
             {
-                AttributeDataHandle = GetComponentTypeHandle<TComponentData>(false),
-                AttributeModifierDataHandle = GetComponentTypeHandle<TAttributeModifier>(true),
+                AttributeDataHandle = GetComponentTypeHandle<TAttributeValues>(false),
+                DurationalAttributeModifierDataHandle = GetComponentTypeHandle<TDurationalAttributeModifier>(true),
                 Executable = default
             };
-            Dependency = sumAttributes.ScheduleParallel(m_Attributes, Dependency);
 
-            NativeMultiHashMap<Entity, TGameplayAttributesModifier> AttributeModifiersNMHM = new NativeMultiHashMap<Entity, TGameplayAttributesModifier>(m_AttributeModifiers.CalculateEntityCount(), Allocator.TempJob);
-            var CollectAttributeModifiersJob = new CollectAllAttributeModifiers()
+            var instantAttributes = new InstantAttributeUpdateJob()
             {
-                AttributeModifiersNMHMWriter = AttributeModifiersNMHM.AsParallelWriter(),
-                GameplayAttributeModifierHandle = GetComponentTypeHandle<TGameplayAttributesModifier>(true),
-                GameplayEffectContextHandle = GetComponentTypeHandle<GameplayEffectContext>(true)
+                AttributeDataHandle = GetComponentTypeHandle<TAttributeValues>(false),
+                InstantAttributeModifierDataHandle = GetComponentTypeHandle<TInstantAttributeModifier>(true),
+                Executable = default
             };
 
-            Dependency = CollectAttributeModifiersJob.ScheduleParallel(m_AttributeModifiers, Dependency);
-            Dependency = new MapAttributeModificationsToPlayer()
-            {
-                AttributeModifierValuesHandle = GetComponentTypeHandle<TAttributeModifier>(false),
-                AttributeModifierCollection = AttributeModifiersNMHM,
-                EntitiesHandle = GetEntityTypeHandle()
-            }.Schedule(m_AttributesGroup, Dependency);
-            // Now write to the attributes
-            AttributeModifiersNMHM.Dispose(Dependency);
+            Dependency = instantAttributes.ScheduleParallel(m_InstantAttribute, Dependency);
+            Dependency = durationalAttributes.ScheduleParallel(m_DurationAttribute, Dependency);
+
         }
 
         [BurstCompile]
-        struct AttributeUpdateJob : IJobChunk
+        struct DurationalAttributeUpdateJob : IJobChunk
         {
             public TJobExecutable Executable;
-            public ComponentTypeHandle<TComponentData> AttributeDataHandle;
-            [ReadOnly]
-            public ComponentTypeHandle<TAttributeModifier> AttributeModifierDataHandle;
+            public ComponentTypeHandle<TAttributeValues> AttributeDataHandle;
+            [ReadOnly] public ComponentTypeHandle<TDurationalAttributeModifier> DurationalAttributeModifierDataHandle;
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
-                var attributeValuesChunk = chunk.GetNativeArray(AttributeDataHandle);
-                var attributeModifiersChunk = chunk.GetNativeArray(AttributeModifierDataHandle);
-                Executable.Execute(attributeValuesChunk, attributeModifiersChunk);
-            }
-
-        }
-
-        struct CollectAllAttributeModifiers : IJobChunk
-        {
-            public NativeMultiHashMap<Entity, TGameplayAttributesModifier>.ParallelWriter AttributeModifiersNMHMWriter;
-            [ReadOnly] public ComponentTypeHandle<TGameplayAttributesModifier> GameplayAttributeModifierHandle;
-            [ReadOnly] public ComponentTypeHandle<GameplayEffectContext> GameplayEffectContextHandle;
-            public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
-            {
-                var attributeModifierChunk = chunk.GetNativeArray(GameplayAttributeModifierHandle);
-                var gameplayEffectContextChunk = chunk.GetNativeArray(GameplayEffectContextHandle);
-                for (var i = 0; i < chunk.Count; i++)
-                {
-                    var attributeModifier = attributeModifierChunk[i];
-                    var gameplayEffectContext = gameplayEffectContextChunk[i];
-                    AttributeModifiersNMHMWriter.Add(gameplayEffectContext.Target, attributeModifier);
-                }
-
+                NativeArray<TAttributeValues> attributeValuesChunk = chunk.GetNativeArray(AttributeDataHandle);
+                NativeArray<TDurationalAttributeModifier> durationalAttributeModifiersChunk = chunk.GetNativeArray(DurationalAttributeModifierDataHandle);
+                Executable.CalculateDurational(attributeValuesChunk, durationalAttributeModifiersChunk);
             }
         }
 
         [BurstCompile]
-        struct MapAttributeModificationsToPlayer : IJobChunk
+        struct InstantAttributeUpdateJob : IJobChunk
         {
-            public ComponentTypeHandle<TAttributeModifier> AttributeModifierValuesHandle;
-            [ReadOnly] public NativeMultiHashMap<Entity, TGameplayAttributesModifier> AttributeModifierCollection;
-            [ReadOnly] public EntityTypeHandle EntitiesHandle;
+            public TJobExecutable Executable;
+            public ComponentTypeHandle<TAttributeValues> AttributeDataHandle;
+            [ReadOnly] public ComponentTypeHandle<TInstantAttributeModifier> InstantAttributeModifierDataHandle;
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
-                var attributeModifierValuesChunk = chunk.GetNativeArray(AttributeModifierValuesHandle);
-                var entityChunk = chunk.GetNativeArray(EntitiesHandle);
-
-                for (var i = 0; i < chunk.Count; i++)
-                {
-                    var entity = entityChunk[i];
-                    TAttributeModifier attributeModifierValue = new TAttributeModifier();
-                    if (AttributeModifierCollection.TryGetFirstValue(entity, out var modifier, out var iterator))
-                    {
-                        modifier.UpdateAttribute(ref attributeModifierValue);
-                        while (AttributeModifierCollection.TryGetNextValue(out modifier, ref iterator))
-                        {
-                            modifier.UpdateAttribute(ref attributeModifierValue);
-                        }
-                    }
-                    attributeModifierValuesChunk[i] = attributeModifierValue;
-                }
-
+                NativeArray<TAttributeValues> attributeValuesChunk = chunk.GetNativeArray(AttributeDataHandle);
+                NativeArray<TInstantAttributeModifier> instantAttributeModifiersChunk = chunk.GetNativeArray(InstantAttributeModifierDataHandle);
+                Executable.CalculateInstant(attributeValuesChunk, instantAttributeModifiersChunk);
             }
         }
+
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using Gamekit3D.Message;
 using UnityEngine.Serialization;
+using Unity.Entities;
+using MyGameplayAbilitySystem;
+using Unity.Mathematics;
 
 namespace Gamekit3D
 {
@@ -24,7 +27,32 @@ namespace Gamekit3D
         public float hitForwardRotation = 360.0f;
 
         public bool isInvulnerable { get; set; }
-        public int currentHitPoints { get; private set; }
+
+        private int m_currentHitPoints;
+        public int currentHitPoints
+        {
+            get
+            {
+                return (int)(dstManager.GetComponentData<AttributeValues>(this.attributeEntity).CurrentValue.Health);
+
+            }
+            private set
+            {
+                MyInstantAttributeUpdateSystem.CreateAttributeModifier(dstManager,
+                    new MyInstantGameplayAttributeModifier()
+                    {
+                        Attribute = EMyPlayerAttribute.Health,
+                        Operator = EMyAttributeModifierOperator.Add,
+                        Value = (half)(-1)
+                    },
+                    new GameplayAbilitySystem.AttributeSystem.Components.GameplayEffectContextComponent()
+                    {
+                        Source = Entity.Null,
+                        Target = this.attributeEntity
+                    }
+                    );
+            }
+        }
 
         public UnityEvent OnDeath, OnReceiveDamage, OnHitWhileInvulnerable, OnBecomeVulnerable, OnResetDamage;
 
@@ -35,10 +63,20 @@ namespace Gamekit3D
         protected float m_timeSinceLastHit = 0.0f;
         protected Collider m_Collider;
 
+        private Entity attributeEntity;
+        private EntityManager dstManager;
+
         System.Action schedule;
 
         void Start()
         {
+            MyPlayerAttributeAuthoringScript attributeAuthoringScript = GetComponent<MyPlayerAttributeAuthoringScript>();
+            // if (attributeAuthoringScript != null)
+            // {
+            attributeEntity = GetComponent<MyPlayerAttributeAuthoringScript>().attributeEntity;
+            this.dstManager = GetComponent<MyPlayerAttributeAuthoringScript>().dstManager;
+            // }
+
             ResetDamage();
             m_Collider = GetComponent<Collider>();
         }
@@ -68,6 +106,7 @@ namespace Gamekit3D
         public void SetColliderState(bool enabled)
         {
             m_Collider.enabled = enabled;
+
         }
 
         public void ApplyDamage(DamageMessage data)
@@ -94,7 +133,7 @@ namespace Gamekit3D
                 return;
 
             isInvulnerable = true;
-            currentHitPoints -= data.amount;
+            currentHitPoints -= currentHitPoints - data.amount;
 
             if (currentHitPoints <= 0)
                 schedule += OnDeath.Invoke; //This avoid race condition when objects kill each other.
@@ -117,7 +156,9 @@ namespace Gamekit3D
                 schedule();
                 schedule = null;
             }
+
         }
+
 
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
@@ -137,7 +178,6 @@ namespace Gamekit3D
             forward = Quaternion.AngleAxis(-hitAngle * 0.5f, transform.up) * forward;
             UnityEditor.Handles.DrawSolidArc(transform.position, transform.up, forward, hitAngle, 1.0f);
         }
-#endif
     }
-
+#endif
 }
