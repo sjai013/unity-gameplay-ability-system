@@ -28,29 +28,12 @@ namespace Gamekit3D
 
         public bool isInvulnerable { get; set; }
 
-        private int m_currentHitPoints;
         public int currentHitPoints
         {
             get
             {
                 return (int)(dstManager.GetComponentData<AttributeValues>(this.attributeEntity).CurrentValue.Health);
 
-            }
-            private set
-            {
-                MyInstantAttributeUpdateSystem.CreateAttributeModifier(dstManager,
-                    new MyInstantGameplayAttributeModifier()
-                    {
-                        Attribute = EMyPlayerAttribute.Health,
-                        Operator = EMyAttributeModifierOperator.Add,
-                        Value = (half)(-1)
-                    },
-                    new GameplayAbilitySystem.AttributeSystem.Components.GameplayEffectContextComponent()
-                    {
-                        Source = Entity.Null,
-                        Target = this.attributeEntity
-                    }
-                    );
             }
         }
 
@@ -97,7 +80,9 @@ namespace Gamekit3D
 
         public void ResetDamage()
         {
-            currentHitPoints = maxHitPoints;
+            var defaultAttributes = new MyPlayerAttributes<uint>() { Health = (uint)maxHitPoints, MaxHealth = (uint)maxHitPoints };
+            // Delete existing attribute entity and create new one
+            var attributeEntity = MyAttributeUpdateSystem.CreatePlayerEntity(dstManager, new AttributeValues() { BaseValue = defaultAttributes });
             isInvulnerable = false;
             m_timeSinceLastHit = 0.0f;
             OnResetDamage.Invoke();
@@ -133,7 +118,18 @@ namespace Gamekit3D
                 return;
 
             isInvulnerable = true;
-            currentHitPoints -= currentHitPoints - data.amount;
+            MyInstantAttributeUpdateSystem.CreateAttributeModifier(dstManager, new MyInstantGameplayAttributeModifier()
+            {
+                Attribute = EMyPlayerAttribute.Health,
+                Operator = EMyAttributeModifierOperator.Add,
+                Value = (half)(-data.amount)
+            }, new GameplayAbilitySystem.AttributeSystem.Components.GameplayEffectContextComponent()
+            {
+                Source = Entity.Null,
+                Target = this.attributeEntity
+            });
+
+            //            currentHitPoints -= currentHitPoints - data.amount;
 
             if (currentHitPoints <= 0)
                 schedule += OnDeath.Invoke; //This avoid race condition when objects kill each other.
