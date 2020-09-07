@@ -82,7 +82,9 @@ namespace Gamekit3D
         {
             var defaultAttributes = new MyPlayerAttributes<uint>() { Health = (uint)maxHitPoints, MaxHealth = (uint)maxHitPoints };
             // Delete existing attribute entity and create new one
-            var attributeEntity = MyAttributeUpdateSystem.CreatePlayerEntity(dstManager, new AttributeValues() { BaseValue = defaultAttributes });
+            var newAttributeEntity = MyAttributeUpdateSystem.CreatePlayerEntity(dstManager, new AttributeValues() { BaseValue = defaultAttributes });
+            dstManager.DestroyEntity(attributeEntity);
+            this.attributeEntity = newAttributeEntity;
             isInvulnerable = false;
             m_timeSinceLastHit = 0.0f;
             OnResetDamage.Invoke();
