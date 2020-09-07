@@ -42,14 +42,27 @@ namespace Gamekit3D
             }
         }
 
+        public void Update()
+        {
+            if (representedDamageable != null)
+            {
+                SetHitPointUI(representedDamageable.currentHitPoints);
+            }
+        }
+
         public void ChangeHitPointUI(Damageable damageable)
+        {
+            SetHitPointUI(damageable.currentHitPoints);
+        }
+
+        public void SetHitPointUI(int hp)
         {
             if (m_HealthIconAnimators == null)
                 return;
 
             for (int i = 0; i < m_HealthIconAnimators.Length; i++)
             {
-                m_HealthIconAnimators[i].SetBool(m_HashActivePara, damageable.currentHitPoints > i + 1);
+                m_HealthIconAnimators[i].SetBool(m_HashActivePara, hp >= i + 1);
             }
         }
     }

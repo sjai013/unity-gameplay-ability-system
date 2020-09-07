@@ -27,15 +27,9 @@ namespace Gamekit3D
         public float hitForwardRotation = 360.0f;
 
         public bool isInvulnerable { get; set; }
+        private int m_currentHitPoints { get; set; }
+        public int currentHitPoints { get { return m_currentHitPoints; } }
 
-        public int currentHitPoints
-        {
-            get
-            {
-                return (int)(dstManager.GetComponentData<AttributeValues>(this.attributeEntity).CurrentValue.Health);
-
-            }
-        }
 
         public UnityEvent OnDeath, OnReceiveDamage, OnHitWhileInvulnerable, OnBecomeVulnerable, OnResetDamage;
 
@@ -48,6 +42,8 @@ namespace Gamekit3D
 
         private Entity attributeEntity;
         private EntityManager dstManager;
+        private List<DamageMessage> damageMessagesToAction = new List<DamageMessage>();
+        private bool wasDamaged = false;
 
         System.Action schedule;
 
@@ -66,6 +62,8 @@ namespace Gamekit3D
 
         void Update()
         {
+            m_currentHitPoints = (int)(dstManager.GetComponentData<AttributeValues>(this.attributeEntity).CurrentValue.Health);
+
             if (isInvulnerable)
             {
                 m_timeSinceLastHit += Time.deltaTime;
@@ -76,14 +74,45 @@ namespace Gamekit3D
                     OnBecomeVulnerable.Invoke();
                 }
             }
+
+            // This logic is to delay the processing of hp checks by a frame, since the
+            // attribute update logic runs after one frame
+            if (wasDamaged)
+            {
+                wasDamaged = false;
+                for (var j = 0; j < damageMessagesToAction.Count; j++)
+                {
+                    var data = damageMessagesToAction[j];
+                    if (currentHitPoints <= 0)
+                        schedule += OnDeath.Invoke; //This avoid race condition when objects kill each other.
+                    else
+                        OnReceiveDamage.Invoke();
+
+                    var messageType = currentHitPoints <= 0 ? MessageType.DEAD : MessageType.DAMAGED;
+
+                    for (var i = 0; i < onDamageMessageReceivers.Count; ++i)
+                    {
+                        var receiver = onDamageMessageReceivers[i] as IMessageReceiver;
+                        receiver.OnReceiveMessage(messageType, this, data);
+                    }
+                }
+                damageMessagesToAction.Clear();
+            }
+
+            if (damageMessagesToAction.Count > 0)
+            {
+                wasDamaged = true;
+            }
+
         }
 
         public void ResetDamage()
         {
-            var defaultAttributes = new MyPlayerAttributes<uint>() { Health = (uint)maxHitPoints, MaxHealth = (uint)maxHitPoints };
-            // Delete existing attribute entity and create new one
-            var newAttributeEntity = MyAttributeUpdateSystem.CreatePlayerEntity(dstManager, new AttributeValues() { BaseValue = defaultAttributes });
-            dstManager.DestroyEntity(attributeEntity);
+
+            MyPlayerAttributeAuthoringScript attributeAuthoringScript = GetComponent<MyPlayerAttributeAuthoringScript>();
+
+            var newAttributeEntity = attributeAuthoringScript.InitialiseAttributeEntity(dstManager);
+            dstManager.DestroyEntity(this.attributeEntity);
             this.attributeEntity = newAttributeEntity;
             isInvulnerable = false;
             m_timeSinceLastHit = 0.0f;
@@ -131,20 +160,10 @@ namespace Gamekit3D
                 Target = this.attributeEntity
             });
 
-            //            currentHitPoints -= currentHitPoints - data.amount;
+            damageMessagesToAction.Add(data);
 
-            if (currentHitPoints <= 0)
-                schedule += OnDeath.Invoke; //This avoid race condition when objects kill each other.
-            else
-                OnReceiveDamage.Invoke();
 
-            var messageType = currentHitPoints <= 0 ? MessageType.DEAD : MessageType.DAMAGED;
 
-            for (var i = 0; i < onDamageMessageReceivers.Count; ++i)
-            {
-                var receiver = onDamageMessageReceivers[i] as IMessageReceiver;
-                receiver.OnReceiveMessage(messageType, this, data);
-            }
         }
 
         void LateUpdate()

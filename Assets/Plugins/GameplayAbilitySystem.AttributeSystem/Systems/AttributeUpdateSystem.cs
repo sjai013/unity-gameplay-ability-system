@@ -15,6 +15,7 @@ namespace GameplayAbilitySystem.AttributeSystem.Systems
     where TInstantAttributeModifier : struct, IComponentData, IAttributeModifier
     where TJobExecutable : struct, IAttributeExecute<TAttributeValues, TInstantAttributeModifier, TDurationalAttributeModifier>
     {
+        EndSimulationEntityCommandBufferSystem m_EndSimulationEcbSystem;
         public static Entity CreatePlayerEntity(EntityManager dstManager, TAttributeValues defaultAttributes)
         {
             var attributeArchetype = dstManager.CreateArchetype(typeof(TAttributeValues), typeof(TDurationalAttributeModifier), typeof(TInstantAttributeModifier));
@@ -22,6 +23,7 @@ namespace GameplayAbilitySystem.AttributeSystem.Systems
             dstManager.SetComponentData(entity, defaultAttributes);
             return entity;
         }
+
         private EntityQuery m_InstantAttribute;
         private EntityQuery m_DurationAttribute;
 
@@ -29,6 +31,7 @@ namespace GameplayAbilitySystem.AttributeSystem.Systems
         {
             m_InstantAttribute = GetEntityQuery(typeof(TAttributeValues), typeof(TInstantAttributeModifier));
             m_DurationAttribute = GetEntityQuery(typeof(TAttributeValues), typeof(TDurationalAttributeModifier));
+            m_EndSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
         protected override void OnUpdate()
