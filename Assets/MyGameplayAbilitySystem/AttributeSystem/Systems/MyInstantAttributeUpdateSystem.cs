@@ -7,5 +7,6 @@ namespace MyGameplayAbilitySystem
     [UpdateBefore(typeof(MyDurationalAttributeUpdateSystem))]
     public class MyInstantAttributeUpdateSystem
         : AttributeModifierCollectionSystem<MyInstantAttributeModifierValues, MyInstantGameplayAttributeModifier, InstantAttributeModifierComponentTag>
-    { }
+    {
+    }
 }

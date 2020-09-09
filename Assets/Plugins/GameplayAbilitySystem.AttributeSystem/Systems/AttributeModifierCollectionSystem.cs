@@ -32,21 +32,29 @@ namespace GameplayAbilitySystem.AttributeSystem.Systems
 
         protected override void OnUpdate()
         {
+            if (m_AttributeModifiers.CalculateEntityCount() == 0)
+            {
+                Dependency = new ResetAttributeModificationsForPlayer()
+                {
+                    AttributeModifierValuesHandle = GetComponentTypeHandle<TAttributeModifier>(false),
+                    EntitiesHandle = GetEntityTypeHandle()
+                }.ScheduleParallel(m_AttributesGroup, Dependency);
+                return;
+            }
+
             NativeMultiHashMap<Entity, TGameplayAttributesModifier> AttributeModifiersNMHM = new NativeMultiHashMap<Entity, TGameplayAttributesModifier>(m_AttributeModifiers.CalculateEntityCount(), Allocator.TempJob);
-            var CollectAttributeModifiersJob = new CollectAllAttributeModifiers()
+            Dependency = new CollectAllAttributeModifiers()
             {
                 AttributeModifiersNMHMWriter = AttributeModifiersNMHM.AsParallelWriter(),
                 GameplayAttributeModifierHandle = GetComponentTypeHandle<TGameplayAttributesModifier>(true),
                 GameplayEffectContextHandle = GetComponentTypeHandle<GameplayEffectContextComponent>(true)
-            };
-
-            Dependency = CollectAttributeModifiersJob.ScheduleParallel(m_AttributeModifiers, Dependency);
+            }.ScheduleParallel(m_AttributeModifiers, Dependency);
             Dependency = new MapAttributeModificationsToPlayer()
             {
                 AttributeModifierValuesHandle = GetComponentTypeHandle<TAttributeModifier>(false),
                 AttributeModifierCollection = AttributeModifiersNMHM,
                 EntitiesHandle = GetEntityTypeHandle()
-            }.Schedule(m_AttributesGroup, Dependency);
+            }.ScheduleParallel(m_AttributesGroup, Dependency);
             // Now write to the attributes
             AttributeModifiersNMHM.Dispose(Dependency);
         }
@@ -97,6 +105,22 @@ namespace GameplayAbilitySystem.AttributeSystem.Systems
                     attributeModifierValuesChunk[i] = attributeModifierValue;
                 }
 
+            }
+        }
+
+        [BurstCompile]
+        struct ResetAttributeModificationsForPlayer : IJobChunk
+        {
+            public ComponentTypeHandle<TAttributeModifier> AttributeModifierValuesHandle;
+            [ReadOnly] public EntityTypeHandle EntitiesHandle;
+            public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
+            {
+                var attributeModifierValuesChunk = chunk.GetNativeArray(AttributeModifierValuesHandle);
+                for (var i = 0; i < chunk.Count; i++)
+                {
+                    TAttributeModifier attributeModifierValue = new TAttributeModifier();
+                    attributeModifierValuesChunk[i] = attributeModifierValue;
+                }
             }
         }
 

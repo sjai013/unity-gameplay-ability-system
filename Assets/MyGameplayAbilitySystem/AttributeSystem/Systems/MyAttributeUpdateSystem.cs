@@ -74,11 +74,8 @@ namespace MyGameplayAbilitySystem
                 attributeValues.CurrentValue.Mana = ModifyValues(attributeValues.BaseValue.Mana, attributeModifierValues.AddValue.Mana, attributeModifierValues.MultiplyValue.Mana, attributeModifierValues.DivideValue.Mana);
                 attributeValues.CurrentValue.MaxMana = ModifyValues(attributeValues.BaseValue.MaxMana, attributeModifierValues.AddValue.MaxMana, attributeModifierValues.MultiplyValue.MaxMana, attributeModifierValues.DivideValue.MaxMana);
                 attributeValues.CurrentValue.Speed = ModifyValues(attributeValues.BaseValue.Speed, attributeModifierValues.AddValue.Speed, attributeModifierValues.MultiplyValue.Speed, attributeModifierValues.DivideValue.Speed);
-
+                ClampAttributes(ref attributeValues.CurrentValue);
                 attributeValuesChunk[i] = attributeValues;
-
-                // Zero the modifiers after applying.  They will be recalculated next frame.
-                //attributeModifierValues = new MyDurationalAttributeModifierValues();
             }
         }
         public void CalculateInstant(NativeArray<AttributeValues> attributeValuesChunk, NativeArray<MyInstantAttributeModifierValues> attributeModifiersChunk)
@@ -92,11 +89,8 @@ namespace MyGameplayAbilitySystem
                 attributeValues.BaseValue.Mana = ModifyValues(attributeValues.BaseValue.Mana, attributeModifierValues.AddValue.Mana, attributeModifierValues.MultiplyValue.Mana, attributeModifierValues.DivideValue.Mana);
                 attributeValues.BaseValue.MaxMana = ModifyValues(attributeValues.BaseValue.MaxMana, attributeModifierValues.AddValue.MaxMana, attributeModifierValues.MultiplyValue.MaxMana, attributeModifierValues.DivideValue.MaxMana);
                 attributeValues.BaseValue.Speed = ModifyValues(attributeValues.BaseValue.Speed, attributeModifierValues.AddValue.Speed, attributeModifierValues.MultiplyValue.Speed, attributeModifierValues.DivideValue.Speed);
-
+                ClampAttributes(ref attributeValues.BaseValue);
                 attributeValuesChunk[i] = attributeValues;
-
-                // Zero out the value after applying.  They will be recalculated next frame.
-                // attributeModifierValues = new MyInstantAttributeModifierValues();
             }
         }
 
@@ -104,6 +98,16 @@ namespace MyGameplayAbilitySystem
         static uint ModifyValues(uint Base, float Add, float Multiply, float Divide)
         {
             return (uint)(((Base + Add) * (Multiply + 1)) / (Divide + 1));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static void ClampAttributes(ref MyPlayerAttributes<uint> Attributes)
+        {
+            Attributes.MaxHealth = math.max(0, Attributes.MaxHealth);
+            Attributes.MaxMana = math.max(0, Attributes.MaxMana);
+            Attributes.Speed = math.max(0, Attributes.Speed);
+            Attributes.Health = math.clamp(Attributes.Health, 0, Attributes.MaxHealth);
+            Attributes.Mana = math.clamp(Attributes.Mana, 0, Attributes.MaxMana);
         }
     }
 
