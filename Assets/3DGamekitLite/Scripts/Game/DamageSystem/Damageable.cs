@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 using Unity.Entities;
 using MyGameplayAbilitySystem;
 using Unity.Mathematics;
+using GameplayAbilitySystem.AbilitySystem.GameplayEffects.Components;
+using GameplayAbilitySystem.AttributeSystem.Components;
 
 namespace Gamekit3D
 {
@@ -160,6 +162,22 @@ namespace Gamekit3D
                 Target = this.attributeEntity
             });
 
+            // Create a poison effect, that does 1 damage every 1s tick
+            var poisonEntity = dstManager.CreateEntity(typeof(PoisonGameplayEffect), typeof(DurationStateComponent), typeof(TimeDurationComponent), typeof(GameplayEffectContextComponent));
+            dstManager.SetComponentData(poisonEntity, new PoisonGameplayEffect()
+            {
+                DamagePerTick = 1f
+            });
+
+            dstManager.SetComponentData(poisonEntity, new GameplayEffectContextComponent()
+            {
+                Target = this.attributeEntity,
+                Source = Entity.Null
+            });
+
+            dstManager.SetComponentData(poisonEntity, TimeDurationComponent.New(1f, 10f));
+
+            //PoisonGameplayEffect e, DurationStateComponent durationState, GameplayEffectContextComponent context
             damageMessagesToAction.Add(data);
 
 

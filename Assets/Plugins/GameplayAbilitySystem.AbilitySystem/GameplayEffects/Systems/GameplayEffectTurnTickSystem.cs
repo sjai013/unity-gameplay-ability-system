@@ -31,13 +31,24 @@ namespace GameplayAbilitySystem.AbilitySystem.GameplayEffects.Systems
             var tickEvents = ScheduledTicks.AsParallelWriter();
 
             Entities
-                .ForEach((int entityInQueryIndex, Entity entity, ref TurnDurationComponent durationComponent) =>
+                .ForEach((int entityInQueryIndex, Entity entity, ref TurnDurationComponent durationComponent, ref DurationStateComponent state) =>
                 {
                     if (durationComponent.Tick())
                     {
                         tickEvents.Enqueue(entity);
-                        ecb.DestroyEntity(entityInQueryIndex, entity);
+                        state.MarkTick();
                     }
+                    else
+                    {
+                        state.State &= ~(EDurationState.TICKED_THIS_FRAME);
+                    }
+
+                    if (durationComponent.IsExpired())
+                    {
+                        ecb.DestroyEntity(entityInQueryIndex, entity);
+                        state.MarkExpired();
+                    }
+
                 })
                 .WithBurst()
                 .ScheduleParallel();

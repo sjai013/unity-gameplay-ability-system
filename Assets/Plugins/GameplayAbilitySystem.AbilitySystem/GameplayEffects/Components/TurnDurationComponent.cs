@@ -1,11 +1,13 @@
 using System.Runtime.CompilerServices;
 using Unity.Entities;
 
-namespace GameplayAbilitySystem.AbilitySystem.GameplayEffects.Components {
+namespace GameplayAbilitySystem.AbilitySystem.GameplayEffects.Components
+{
     /// <summary>
     /// Represents ticking in whole intervals (like turns in a turn-based game)
     /// </summary>
-    public struct TurnDurationComponent : IComponentData {
+    public struct TurnDurationComponent : ITickComponent, IComponentData
+    {
         public int Period;
         public int Duration;
         public int ElapsedPeriod;
@@ -22,7 +24,8 @@ namespace GameplayAbilitySystem.AbilitySystem.GameplayEffects.Components {
         {
             ElapsedPeriod += step;
             ElapsedDuration += step;
-            if (ElapsedPeriod >= Period) {
+            if (ElapsedPeriod >= Period)
+            {
                 // Decrement the period to reset it. 
                 // Keep the time offset, so we can compensate for
                 // time drifts
@@ -31,6 +34,17 @@ namespace GameplayAbilitySystem.AbilitySystem.GameplayEffects.Components {
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Checks if this gameplay effect has expired
+        /// </summary>
+        /// <returns></returns>
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsExpired()
+        {
+            return ElapsedDuration >= Duration;
         }
     }
 }

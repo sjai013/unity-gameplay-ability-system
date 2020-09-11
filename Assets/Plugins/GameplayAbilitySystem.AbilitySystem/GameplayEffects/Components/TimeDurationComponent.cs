@@ -6,7 +6,7 @@ namespace GameplayAbilitySystem.AbilitySystem.GameplayEffects.Components
     /// <summary>
     /// Represents real-time ticks
     /// </summary>
-    public struct TimeDurationComponent : IComponentData
+    public struct TimeDurationComponent : ITickComponent, IComponentData
     {
         public float Period;
         public float Duration;
@@ -36,6 +36,11 @@ namespace GameplayAbilitySystem.AbilitySystem.GameplayEffects.Components
             return false;
         }
 
+        /// <summary>
+        /// Checks if this gameplay effect has expired
+        /// </summary>
+        /// <returns></returns>
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsExpired()
         {
@@ -51,5 +56,7 @@ namespace GameplayAbilitySystem.AbilitySystem.GameplayEffects.Components
                 Duration = duration
             };
         }
+
+
     }
 }

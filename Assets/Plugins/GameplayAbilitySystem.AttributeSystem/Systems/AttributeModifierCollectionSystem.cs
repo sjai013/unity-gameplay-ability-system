@@ -13,9 +13,13 @@ namespace GameplayAbilitySystem.AttributeSystem.Systems
     where TGameplayAttributesModifier : struct, IComponentData, IGameplayAttributeModifier<TAttributeModifier>
     where TComponentTag : struct, IComponentData
     {
+        public static EntityArchetype CreateModifierArchetype(EntityManager dstManager)
+        {
+            return dstManager.CreateArchetype(typeof(TGameplayAttributesModifier), typeof(GameplayEffectContextComponent), typeof(TComponentTag));
+        }
         public static Entity CreateAttributeModifier(EntityManager dstManager, TGameplayAttributesModifier modifier, GameplayEffectContextComponent context)
         {
-            var attributeArchetype = dstManager.CreateArchetype(typeof(TGameplayAttributesModifier), typeof(GameplayEffectContextComponent), typeof(TComponentTag));
+            var attributeArchetype = CreateModifierArchetype(dstManager);
             var entity = dstManager.CreateEntity(attributeArchetype);
             dstManager.SetComponentData(entity, modifier);
             dstManager.SetComponentData(entity, context);
