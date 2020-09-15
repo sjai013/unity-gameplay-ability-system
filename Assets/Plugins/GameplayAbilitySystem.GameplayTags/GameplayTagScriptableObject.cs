@@ -40,12 +40,24 @@ namespace GamplayAbilitySystem.GameplayTags
 
     public class GameplayTagIdAssigner
     {
-        [MenuItem("Assets/Test")]
-        private static void Test()
+        [MenuItem("Assets/Generate Tag IDs")]
+        private static void GenerateTagIDs()
         {
-            GameplayTagScriptableObject[] selectedAsset = Selection.GetFiltered<GameplayTagScriptableObject>(SelectionMode.DeepAssets);
             if (!EditorUtility.DisplayDialog("Auto Generate Gameplay Tag ID?", "Auto generate IDs for all GameplayTag assets in this folder/subfolders?", "OK", "Cancel"))
                 return;
+
+            // Assign name of SO to internal string for debugging
+            GameplayTagScriptableObject[] selectedAsset = Selection.GetFiltered<GameplayTagScriptableObject>(SelectionMode.DeepAssets);
+            foreach (var asset in selectedAsset)
+            {
+                if (asset.GameplayTagString == "")
+                {
+                    asset.GameplayTagString = asset.name;
+                }
+            }
+
+            // Order by name
+            selectedAsset = selectedAsset.OrderBy(x => x.GameplayTagString).ToArray();
 
             List<List<string>> Tags = new List<List<string>>() { new List<string>(), new List<string>(), new List<string>(), new List<string>() };
             foreach (GameplayTagScriptableObject obj in selectedAsset)
