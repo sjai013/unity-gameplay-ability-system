@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,7 +24,7 @@ namespace GamplayAbilitySystem.GameplayTags
         public struct GameplayTag
         {
             [FieldOffset(0)]
-            private int Id;
+            private uint Id;
 
             [FieldOffset(0)]
             public byte L0;
@@ -35,7 +37,23 @@ namespace GamplayAbilitySystem.GameplayTags
 
             [FieldOffset(3)]
             public byte L3;
+
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public bool IsEqualTo(GameplayTag other)
+            {
+                // Apply bitmask based on this
+                // e.g. for A.B.C.D, this A matches other A.*
+                var mask = 0xFFFFFFFF;
+                mask &= L3 == 0 ? 0xFFFFFF00 : 0xFFFFFFFF;
+                mask &= L2 == 0 ? 0xFFFF0000 : 0xFFFFFFFF;
+                mask &= L1 == 0 ? 0xFF000000 : 0xFFFFFFFF;
+                mask &= L0 == 0 ? 0x00000000 : 0xFFFFFFFF;
+                return (mask & other.Id) == Id;
+            }
         }
+
+
     }
 
     public class GameplayTagIdAssigner
@@ -43,7 +61,7 @@ namespace GamplayAbilitySystem.GameplayTags
         [MenuItem("Assets/Generate Tag IDs")]
         private static void GenerateTagIDs()
         {
-            if (!EditorUtility.DisplayDialog("Auto Generate Gameplay Tag ID?", "Auto generate IDs for all GameplayTag assets in this folder/subfolders?", "OK", "Cancel"))
+            if (!EditorUtility.DisplayDialog("Auto Generate Gameplay Tag ID?", "Auto generate IDs for all GameplayTag assets in this folder and all subfolders?", "OK", "Cancel"))
                 return;
 
             // Assign name of SO to internal string for debugging

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 797e3ad23baf5464b82e8bdf3bbf6dd8, type: 3}
   m_Name: MyGame.Damage.Magic
   m_EditorClassIdentifier: 
+  GameplayTagString: MyGame.Damage.Magic
   Tag:
     L0: 1
     L1: 1
