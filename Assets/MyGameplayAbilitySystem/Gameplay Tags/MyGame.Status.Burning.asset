@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 797e3ad23baf5464b82e8bdf3bbf6dd8, type: 3}
   m_Name: MyGame.Status.Burning
   m_EditorClassIdentifier: 
+  GameplayTagString: 
   Tag:
     L0: 0
     L1: 0
