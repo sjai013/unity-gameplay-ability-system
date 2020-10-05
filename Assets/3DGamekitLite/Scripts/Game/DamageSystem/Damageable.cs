@@ -177,11 +177,7 @@ namespace Gamekit3D
 
             dstManager.SetComponentData(poisonEntity, TimeDurationComponent.New(1f, 10f));
 
-            //PoisonGameplayEffect e, DurationStateComponent durationState, GameplayEffectContextComponent context
             damageMessagesToAction.Add(data);
-
-
-
         }
 
         void LateUpdate()
