@@ -13,11 +13,11 @@ namespace GameplayAbilitySystem.AbilitySystem.GameplayEffects.Systems
         {
             m_EndSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
             ScheduledTicks = new NativeQueue<Entity>(Allocator.Persistent);
-            for (var i = 0; i < 10000; i++)
-            {
-                var entity = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(TimeDurationComponent), typeof(DurationStateComponent));
-                SetComponent(entity, TimeDurationComponent.New(1f, 20f));
-            }
+            // for (var i = 0; i < 10000; i++)
+            // {
+            //     var entity = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(TimeDurationComponent), typeof(DurationStateComponent));
+            //     SetComponent(entity, TimeDurationComponent.New(1f, 20f));
+            // }
         }
 
         protected override void OnUpdate()

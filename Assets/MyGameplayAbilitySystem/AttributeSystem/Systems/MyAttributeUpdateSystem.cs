@@ -111,44 +111,4 @@ namespace MyGameplayAbilitySystem
         }
     }
 
-    public class NativeStreamTestSystem : SystemBase
-    {
-        protected override void OnUpdate()
-        {
-            var stream = new NativeStream(5, Allocator.TempJob);
-            var writeTransforms = new WriteTransforms { writer = stream.AsWriter() }.Schedule(5, 64);
-            var handleResult = new HandleResult { reader = stream.AsReader() }.Schedule(5, 64, writeTransforms);
-            stream.Dispose(handleResult);
-        }
-
-        struct WriteTransforms : IJobParallelFor
-        {
-            public NativeStream.Writer writer;
-            public void Execute(int index)
-            {
-                writer.BeginForEachIndex(index);
-                writer.Write<int>(index);
-                writer.Write<int>(2 * index);
-                writer.Write<int>(3 * index);
-                writer.Write<int>(4 * index);
-                writer.Write<int>(5 * index);
-                writer.EndForEachIndex();
-            }
-        }
-
-        struct HandleResult : IJobParallelFor
-        {
-            public NativeStream.Reader reader;
-
-            public void Execute(int index)
-            {
-                int count = reader.BeginForEachIndex(index);
-                for (int i = 0; i != count; i++)
-                {
-                    var value = reader.Read<int>();
-                }
-                reader.EndForEachIndex();
-            }
-        }
-    }
 }
