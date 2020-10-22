@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 797e3ad23baf5464b82e8bdf3bbf6dd8, type: 3}
-  m_Name: MyGame.Status.Poisoned
+  m_Name: MyGame.Status.Poison
   m_EditorClassIdentifier: 
-  GameplayTagString: 
+  GameplayTagString: MyGame.Status.Poisoned
   Tag:
-    L0: 0
-    L1: 0
-    L2: 0
+    L0: 1
+    L1: 2
+    L2: 4
     L3: 0
