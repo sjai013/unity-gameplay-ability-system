@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.sjai013.attributesystem": {
+      "version": "file:com.sjai013.attributesystem",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.addressables": {
       "version": "1.16.16",
       "depth": 0,

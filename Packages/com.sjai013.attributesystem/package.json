@@ -1,0 +1,18 @@
+{
+  "name": "com.sjai013.attributesystem",
+  "version": "0.1.0",
+  "displayName": "Attribute System",
+  "description": "A framework for managing character attributes",
+  "unity": "2020.3",
+  "unityRelease": "0f1",
+  "keywords": [
+    "gas",
+    "ugas"
+  ],
+  "author": {
+    "name": "Sahil Jain",
+    "email": "sjai013.ece@gmail.com",
+    "url": "https://www.github.com/sjai013"
+  },
+  "type": "library"
+}

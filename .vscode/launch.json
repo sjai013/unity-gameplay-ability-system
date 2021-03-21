@@ -7,7 +7,7 @@
         {
             "name": "Unity Editor",
             "type": "unity",
-            "path": "/d:/Repos/Ability System/Library/EditorInstance.json",
+            "path": "/d:/Repos/UnityGameplayAbilitySystem/Library/EditorInstance.json",
             "request": "launch"
         },
         {
