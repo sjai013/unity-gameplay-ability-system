@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.sjai013.abilitysystem": {
+      "version": "file:com.sjai013.abilitysystem",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.sjai013.attributesystem": "",
+        "com.sjai013.gameplaytag": ""
+      }
+    },
     "com.sjai013.attributesystem": {
       "version": "file:com.sjai013.attributesystem",
       "depth": 0,
