@@ -2144,6 +2144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1811571462}
   - component: {fileID: 1811571463}
+  - component: {fileID: 1811571466}
   - component: {fileID: 1811571464}
   - component: {fileID: 1811571465}
   m_Layer: 0
@@ -2217,6 +2218,20 @@ MonoBehaviour:
   attributeUI: {fileID: 1089562525}
   currentAttribute: {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
   maxAttribute: {fileID: 11400000, guid: 753e6c0a861909d479de96ef8b205b07, type: 2}
+--- !u!114 &1811571466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811571461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1425312ee2f5e4da3ab46a2724a3d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttributeSystem: {fileID: 1811571463}
+  AppliedGameplayEffects: []
 --- !u!1 &1904166338
 GameObject:
   m_ObjectHideFlags: 0

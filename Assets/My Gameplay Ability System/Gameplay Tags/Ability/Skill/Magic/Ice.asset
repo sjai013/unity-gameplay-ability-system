@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80835d05472de084c8df2d7964b6d4b8, type: 3}
   m_Name: Ice
   m_EditorClassIdentifier: 
-  _parent: {fileID: 11400000, guid: 796438ec5d04b034cb1eab0fe6969cdb, type: 2}
+  _parent: {fileID: 11400000}
