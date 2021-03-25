@@ -2232,6 +2232,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttributeSystem: {fileID: 1811571463}
   AppliedGameplayEffects: []
+  Test: {fileID: 11400000, guid: 7e015791d2fdea047829efe0e6fa6126, type: 2}
+  Level: 0
 --- !u!1 &1904166338
 GameObject:
   m_ObjectHideFlags: 0

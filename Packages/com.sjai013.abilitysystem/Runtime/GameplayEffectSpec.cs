@@ -30,6 +30,7 @@ namespace AbilitySystem
             {
                 this.GameplayEffect.gameplayEffect.Modifiers[i].ModifierMagnitude.Initialise(this);
             }
+            this.Level = Level;
         }
 
         public GameplayEffectSpec SetTarget(AbilitySystemCharacter target)

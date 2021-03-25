@@ -56,6 +56,16 @@ namespace AttributeSystem.Components
             return false;
         }
 
+        public void SetAttributeBaseValue(AttributeScriptableObject attribute, float value)
+        {
+            // If dictionary is stale, rebuild it
+            var attributeCache = GetAttributeCache();
+            if (!attributeCache.TryGetValue(attribute, out var index)) return;
+            var attributeValue = AttributeValues[index];
+            attributeValue.BaseValue = value;
+            AttributeValues[index] = attributeValue;
+        }
+
         /// <summary>
         /// Sets value of an attribute.  Note that the out value is a copy of the struct, so modifying it
         /// does not modify the original attribute
@@ -75,7 +85,7 @@ namespace AttributeSystem.Components
             {
                 // Get a copy of the attribute value struct
                 value = AttributeValues[index];
-                value.Modifier.Combine(modifier);
+                value.Modifier = value.Modifier.Combine(modifier);
 
                 // Structs are copied by value, so the modified attribute needs to be reassigned to the array
                 AttributeValues[index] = value;
@@ -121,6 +131,16 @@ namespace AttributeSystem.Components
 
             // Update attribute cache
             GetAttributeCache();
+        }
+
+        public void ResetAttributeModifiers()
+        {
+            for (var i = 0; i < this.AttributeValues.Count; i++)
+            {
+                var attributeValue = this.AttributeValues[i];
+                attributeValue.Modifier = default;
+                this.AttributeValues[i] = attributeValue;
+            }
         }
 
         private void InitialiseAttributeValues()
