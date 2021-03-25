@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using AttributeSystem.Authoring;
 using AttributeSystem.Components;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace AbilitySystem.ModifierMagnitude
 {
     [CreateAssetMenu(menuName = "Gameplay Ability System/Gameplay Effect/Modifier Magnitude/Attribute Backed")]
     public class AttributeBackedModifierMagnitude : ModifierMagnitudeScriptableObject
     {
+
+
         [SerializeField]
         private AnimationCurve ScalingFunction;
 
@@ -20,29 +23,27 @@ namespace AbilitySystem.ModifierMagnitude
 
         [SerializeField]
         private ECaptureAttributeWhen CaptureAttributeWhen;
-        private AttributeValue? AttributeValue = null;
+
 
         public override void Initialise(GameplayEffectSpec spec)
         {
-            AttributeValue = null;
-            if (CaptureAttributeWhen == ECaptureAttributeWhen.OnCreation && CaptureAttributeFrom == ECaptureAttributeFrom.Source)
-            {
-                spec.Source.AttributeSystem.GetAttributeValue(CaptureAttributeWhich, out var sourceAttributeValue);
-                this.AttributeValue = sourceAttributeValue;
-            }
+            spec.Source.AttributeSystem.GetAttributeValue(CaptureAttributeWhich, out var sourceAttributeValue);
+            spec.SourceCapturedAttribute = sourceAttributeValue;
         }
+
         public override float? CalculateMagnitude(GameplayEffectSpec spec)
         {
-            if (CaptureAttributeWhen == ECaptureAttributeWhen.OnApplication || AttributeValue == null)
-            {
-                AttributeValue = CaptureAttribute(spec);
-            }
 
-            return ScalingFunction.Evaluate(AttributeValue.GetValueOrDefault().CurrentValue);
+            return ScalingFunction.Evaluate(GetCapturedAttribute(spec).GetValueOrDefault().CurrentValue);
         }
 
-        private AttributeValue? CaptureAttribute(GameplayEffectSpec spec)
+        private AttributeValue? GetCapturedAttribute(GameplayEffectSpec spec)
         {
+            if (CaptureAttributeWhen == ECaptureAttributeWhen.OnApplication && CaptureAttributeFrom == ECaptureAttributeFrom.Source)
+            {
+                return spec.SourceCapturedAttribute;
+            }
+
             switch (CaptureAttributeFrom)
             {
                 case ECaptureAttributeFrom.Source:

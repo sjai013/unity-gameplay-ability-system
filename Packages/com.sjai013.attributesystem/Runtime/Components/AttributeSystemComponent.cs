@@ -62,10 +62,9 @@ namespace AttributeSystem.Components
         /// </summary>
         /// <param name="attribute">Attribute to set</param>
         /// <param name="modifierType">How to modify the attribute</param>
-        /// <param name="modifierValue">Amount to modify</param>
         /// <param name="value">Copy of newly modified attribute</param>
         /// <returns>True, if attribute was found.</returns>
-        public bool SetAttributeValue(AttributeScriptableObject attribute, AttributeModifier modifier, float modifierValue, out AttributeValue value)
+        public bool ModifyAttributeValue(AttributeScriptableObject attribute, AttributeModifier modifier, out AttributeValue value)
         {
             // If dictionary is stale, rebuild it
             var attributeCache = GetAttributeCache();
