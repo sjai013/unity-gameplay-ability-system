@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AbilitySystem.Authoring
 {
-    [CreateAssetMenu(menuName = "Gameplay Ability System/Gameplay Effect")]
+    [CreateAssetMenu(menuName = "Gameplay Ability System/Gameplay Effect Definition")]
     public class GameplayEffectScriptableObject : ScriptableObject
     {
         [SerializeField]

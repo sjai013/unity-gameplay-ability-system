@@ -19,7 +19,7 @@ namespace AbilitySystem
         public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
         public List<(GameplayEffectSpec spec, (AttributeScriptableObject attribute, AttributeModifier modifier)[] modifiers)> AppliedGameplayEffects = new List<(GameplayEffectSpec spec, (AttributeScriptableObject attribute, AttributeModifier modifier)[] modifiers)>();
 
-        public GameplayEffectScriptableObject[] InitialAttributeValues;
+        public GameplayEffectScriptableObject[] InitialGE;
         public GameplayEffectScriptableObject Test;
         public float Level;
 
@@ -27,7 +27,7 @@ namespace AbilitySystem
         /// Applies the gameplay effect spec to self
         /// </summary>
         /// <param name="spec">GameplayEffectSpec to apply</param>
-        public void ApplyGameplayEffectToSelf(GameplayEffectSpec spec)
+        public void ApplyGameplayEffect(GameplayEffectSpec spec)
         {
             switch (spec.GameplayEffect.gameplayEffect.DurationPolicy)
             {
@@ -91,13 +91,23 @@ namespace AbilitySystem
             AppliedGameplayEffects.Add((spec, modifiersToApply.ToArray()));
         }
 
-        public GameplayEffectSpec MakeOutgoingSpec(GameplayEffectScriptableObject GameplayEffect, int level = 1)
+        public GameplayEffectSpec MakeOutgoingSpec(GameplayEffectScriptableObject GameplayEffect, float level = 1f)
         {
             return new GameplayEffectSpec(
                 GameplayEffect: GameplayEffect,
                 Source: this,
                 Duration: GameplayEffect.gameplayEffect.Duration,
                 Level: level);
+        }
+
+        public void InitialiseAttributes()
+        {
+            this.AttributeSystem.ResetAll();
+            for (var i = 0; i < this.InitialGE.Length; i++)
+            {
+                var spec = MakeOutgoingSpec(this.InitialGE[i], (int)this.Level);
+                this.ApplyGameplayEffect(spec);
+            }
         }
 
         void UpdateAttributeSystem()
@@ -112,6 +122,11 @@ namespace AbilitySystem
                 }
             }
         }
+
+        void Start()
+        {
+            InitialiseAttributes();
+        }
         void Update()
         {
             // Reset all attributes to 0
@@ -124,7 +139,7 @@ namespace AbilitySystem
             if (GUI.Button(new Rect(10, 70, 50, 30), "Click"))
             {
                 var geSpec = MakeOutgoingSpec(this.Test, level: (int)this.Level);
-                ApplyGameplayEffectToSelf(geSpec);
+                ApplyGameplayEffect(geSpec);
             }
         }
 

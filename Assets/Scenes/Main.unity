@@ -1886,7 +1886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be76e5f14cfee674cb30b491fb72b09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boost: 3.5
+  boost: 7.100001
   positionLerpTime: 0.2
   mouseSensitivityCurve:
     serializedVersion: 2
@@ -2230,10 +2230,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c1425312ee2f5e4da3ab46a2724a3d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttributeSystem: {fileID: 1811571463}
-  AppliedGameplayEffects: []
+  _attributeSystem: {fileID: 1811571463}
+  InitialAttributeValues:
+  - {fileID: 11400000, guid: 17afea3a38f6b3145a1849c2c4dce447, type: 2}
   Test: {fileID: 11400000, guid: 7e015791d2fdea047829efe0e6fa6126, type: 2}
-  Level: 0
+  Level: 5
 --- !u!1 &1904166338
 GameObject:
   m_ObjectHideFlags: 0

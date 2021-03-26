@@ -133,6 +133,16 @@ namespace AttributeSystem.Components
             GetAttributeCache();
         }
 
+        public void ResetAll()
+        {
+            for (var i = 0; i < this.AttributeValues.Count; i++)
+            {
+                var defaultAttribute = new AttributeValue();
+                defaultAttribute.Attribute = this.AttributeValues[i].Attribute;
+                this.AttributeValues[i] = defaultAttribute;
+            }
+        }
+
         public void ResetAttributeModifiers()
         {
             for (var i = 0; i < this.AttributeValues.Count; i++)
