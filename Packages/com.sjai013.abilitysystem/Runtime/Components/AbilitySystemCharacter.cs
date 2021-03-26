@@ -123,6 +123,23 @@ namespace AbilitySystem
             }
         }
 
+        void TickGameplayEffects()
+        {
+            for (var i = 0; i < this.AppliedGameplayEffects.Count; i++)
+            {
+                var ge = this.AppliedGameplayEffects[i].spec;
+                if (ge.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration)
+                {
+                    ge.Tick(Time.deltaTime);
+                }
+            }
+        }
+
+        void CleanGameplayEffects()
+        {
+            this.AppliedGameplayEffects.RemoveAll(x => x.spec.Duration <= 0);
+        }
+
         void Start()
         {
             InitialiseAttributes();
@@ -132,6 +149,9 @@ namespace AbilitySystem
             // Reset all attributes to 0
             this.AttributeSystem.ResetAttributeModifiers();
             UpdateAttributeSystem();
+
+            TickGameplayEffects();
+            CleanGameplayEffects();
         }
 
         void OnGUI()

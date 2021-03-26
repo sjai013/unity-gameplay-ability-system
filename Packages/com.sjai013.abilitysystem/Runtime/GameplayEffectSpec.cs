@@ -31,6 +31,7 @@ namespace AbilitySystem
                 this.GameplayEffect.gameplayEffect.Modifiers[i].ModifierMagnitude.Initialise(this);
             }
             this.Level = Level;
+            this.Duration = Duration;
         }
 
         public GameplayEffectSpec SetTarget(AbilitySystemCharacter target)
@@ -42,6 +43,12 @@ namespace AbilitySystem
         public GameplayEffectSpec SetDuration(float duration)
         {
             this.Duration = duration;
+            return this;
+        }
+
+        public GameplayEffectSpec Tick(float deltaTime)
+        {
+            this.Duration -= deltaTime;
             return this;
         }
 
