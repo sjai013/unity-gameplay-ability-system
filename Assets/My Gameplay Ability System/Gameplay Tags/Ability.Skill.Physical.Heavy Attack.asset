@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80835d05472de084c8df2d7964b6d4b8, type: 3}
-  m_Name: Heavy Attack
+  m_Name: Ability.Skill.Physical.Heavy Attack
   m_EditorClassIdentifier: 
   _parent: {fileID: 11400000, guid: 327bd6aaeed34d048972a5cf3d8c7b57, type: 2}

@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80835d05472de084c8df2d7964b6d4b8, type: 3}
-  m_Name: Magic
+  m_Name: Character.Stats
   m_EditorClassIdentifier: 
-  _parent: {fileID: 11400000, guid: 49995ee186211b94ebd244fe432a4a0f, type: 2}
+  _parent: {fileID: 11400000, guid: ca33c2ffefc4202408a92c5c9441aa89, type: 2}

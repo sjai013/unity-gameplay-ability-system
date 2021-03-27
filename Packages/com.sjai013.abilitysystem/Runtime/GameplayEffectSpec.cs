@@ -22,7 +22,12 @@ namespace AbilitySystem
         public AbilitySystemCharacter Target { get; private set; }
         public AttributeValue? SourceCapturedAttribute = null;
 
-        public GameplayEffectSpec(GameplayEffectScriptableObject GameplayEffect, AbilitySystemCharacter Source, float Duration = 0, float Level = 1)
+        public static GameplayEffectSpec CreateNew(GameplayEffectScriptableObject GameplayEffect, AbilitySystemCharacter Source, float Level = 1)
+        {
+            return new GameplayEffectSpec(GameplayEffect, Source, Level);
+        }
+
+        private GameplayEffectSpec(GameplayEffectScriptableObject GameplayEffect, AbilitySystemCharacter Source, float Level = 1)
         {
             this.GameplayEffect = GameplayEffect;
             this.Source = Source;
@@ -31,7 +36,7 @@ namespace AbilitySystem
                 this.GameplayEffect.gameplayEffect.Modifiers[i].ModifierMagnitude.Initialise(this);
             }
             this.Level = Level;
-            this.Duration = Duration;
+            this.Duration = this.GameplayEffect.gameplayEffect.DurationModifier.CalculateMagnitude(this).GetValueOrDefault() * this.GameplayEffect.gameplayEffect.DurationMultiplier;
         }
 
         public GameplayEffectSpec SetTarget(AbilitySystemCharacter target)
@@ -45,7 +50,6 @@ namespace AbilitySystem
             this.Duration = duration;
             return this;
         }
-
         public GameplayEffectSpec Tick(float deltaTime)
         {
             this.Duration -= deltaTime;

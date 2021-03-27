@@ -5,44 +5,97 @@ using System.Linq;
 using AbilitySystem.Authoring;
 using AttributeSystem.Authoring;
 using AttributeSystem.Components;
+using GameplayTag.Authoring;
 using UnityEngine;
 
 
 namespace AbilitySystem
 {
-
-
     public class AbilitySystemCharacter : MonoBehaviour
     {
         [SerializeField]
-        private AttributeSystemComponent _attributeSystem;
+        AttributeSystemComponent _attributeSystem;
         public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
-        public List<(GameplayEffectSpec spec, (AttributeScriptableObject attribute, AttributeModifier modifier)[] modifiers)> AppliedGameplayEffects = new List<(GameplayEffectSpec spec, (AttributeScriptableObject attribute, AttributeModifier modifier)[] modifiers)>();
-
-        public GameplayEffectScriptableObject[] InitialGE;
+        List<GameplayEffectContainer> AppliedGameplayEffects = new List<GameplayEffectContainer>();
+        public GameplayEffectScriptableObject StartingStats;
         public GameplayEffectScriptableObject Test;
         public float Level;
 
         /// <summary>
         /// Applies the gameplay effect spec to self
         /// </summary>
-        /// <param name="spec">GameplayEffectSpec to apply</param>
-        public void ApplyGameplayEffect(GameplayEffectSpec spec)
+        /// <param name="geSpec">GameplayEffectSpec to apply</param>
+        public bool ApplyGameplayEffect(GameplayEffectSpec geSpec)
         {
-            switch (spec.GameplayEffect.gameplayEffect.DurationPolicy)
+            bool tagRequirementsOK = CheckTagRequirementsMet(geSpec);
+
+            if (tagRequirementsOK == false) return false;
+
+
+            switch (geSpec.GameplayEffect.gameplayEffect.DurationPolicy)
             {
                 case EDurationPolicy.HasDuration:
                 case EDurationPolicy.Infinite:
-                    ApplyDurationalGameplayEffect(spec);
-                    return;
-                case EDurationPolicy.Instant:
-                    ApplyInstantGameplayEffect(spec);
+                    ApplyDurationalGameplayEffect(geSpec);
                     break;
+                case EDurationPolicy.Instant:
+                    ApplyInstantGameplayEffect(geSpec);
+                    return true;
             }
 
+            return true;
+        }
+        public GameplayEffectSpec MakeOutgoingSpec(GameplayEffectScriptableObject GameplayEffect, float level = 1f)
+        {
+            return GameplayEffectSpec.CreateNew(
+                GameplayEffect: GameplayEffect,
+                Source: this,
+                Level: level);
         }
 
-        private void ApplyInstantGameplayEffect(GameplayEffectSpec spec)
+        public void InitialiseAttributes()
+        {
+            this.AttributeSystem.ResetAll();
+            var spec = MakeOutgoingSpec(this.StartingStats, (int)this.Level);
+            this.ApplyGameplayEffect(spec);
+        }
+
+
+        bool CheckTagRequirementsMet(GameplayEffectSpec geSpec)
+        {
+            bool bApplyGE = true;
+
+            /// Build temporary list of all gametags currently applied
+            var appliedTags = new List<GameplayTagScriptableObject>();
+            for (var i = 0; i < AppliedGameplayEffects.Count; i++)
+            {
+                appliedTags.AddRange(AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffectTags.GrantedTags);
+            }
+
+            // Every tag in the ApplicationTagRequirements.RequireTags needs to be in the character tags list
+            // In other words, if any tag in ApplicationTagRequirements.RequireTags is not present, requirement is not met
+            for (var i = 0; i < geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.RequireTags.Length; i++)
+            {
+                if (!appliedTags.Contains(geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.RequireTags[i]))
+                {
+                    return false;
+                }
+            }
+
+            // No tag in the ApplicationTagRequirements.IgnoreTags must in the character tags list
+            // In other words, if any tag in ApplicationTagRequirements.IgnoreTags is present, requirement is not met
+            for (var i = 0; i < geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.IgnoreTags.Length; i++)
+            {
+                if (appliedTags.Contains(geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.IgnoreTags[i]))
+                {
+                    return false;
+                }
+            }
+
+            return bApplyGE;
+        }
+
+        void ApplyInstantGameplayEffect(GameplayEffectSpec spec)
         {
             for (var i = 0; i < spec.GameplayEffect.gameplayEffect.Modifiers.Length; i++)
             {
@@ -66,9 +119,9 @@ namespace AbilitySystem
                 this.AttributeSystem.SetAttributeBaseValue(attribute, attributeValue.BaseValue);
             }
         }
-        private void ApplyDurationalGameplayEffect(GameplayEffectSpec spec)
+        void ApplyDurationalGameplayEffect(GameplayEffectSpec spec)
         {
-            var modifiersToApply = new List<(AttributeScriptableObject attribute, AttributeModifier modifier)>();
+            var modifiersToApply = new List<GameplayEffectContainer.ModifierContainer>();
             for (var i = 0; i < spec.GameplayEffect.gameplayEffect.Modifiers.Length; i++)
             {
                 var modifier = spec.GameplayEffect.gameplayEffect.Modifiers[i];
@@ -86,28 +139,9 @@ namespace AbilitySystem
                         attributeModifier.Override = magnitude;
                         break;
                 }
-                modifiersToApply.Add((modifier.Attribute, attributeModifier));
+                modifiersToApply.Add(new GameplayEffectContainer.ModifierContainer() { Attribute = modifier.Attribute, Modifier = attributeModifier });
             }
-            AppliedGameplayEffects.Add((spec, modifiersToApply.ToArray()));
-        }
-
-        public GameplayEffectSpec MakeOutgoingSpec(GameplayEffectScriptableObject GameplayEffect, float level = 1f)
-        {
-            return new GameplayEffectSpec(
-                GameplayEffect: GameplayEffect,
-                Source: this,
-                Duration: GameplayEffect.gameplayEffect.Duration,
-                Level: level);
-        }
-
-        public void InitialiseAttributes()
-        {
-            this.AttributeSystem.ResetAll();
-            for (var i = 0; i < this.InitialGE.Length; i++)
-            {
-                var spec = MakeOutgoingSpec(this.InitialGE[i], (int)this.Level);
-                this.ApplyGameplayEffect(spec);
-            }
+            AppliedGameplayEffects.Add(new GameplayEffectContainer() { spec = spec, modifiers = modifiersToApply.ToArray() });
         }
 
         void UpdateAttributeSystem()
@@ -118,7 +152,7 @@ namespace AbilitySystem
                 for (var m = 0; m < modifiers.Length; m++)
                 {
                     var modifier = modifiers[m];
-                    AttributeSystem.ModifyAttributeValue(modifier.attribute, modifier.modifier, out _);
+                    AttributeSystem.ModifyAttributeValue(modifier.Attribute, modifier.Modifier, out _);
                 }
             }
         }
@@ -163,5 +197,21 @@ namespace AbilitySystem
             }
         }
 
+    }
+}
+
+
+namespace AbilitySystem
+{
+    public class GameplayEffectContainer
+    {
+        public GameplayEffectSpec spec;
+        public ModifierContainer[] modifiers;
+
+        public class ModifierContainer
+        {
+            public AttributeScriptableObject Attribute;
+            public AttributeModifier Modifier;
+        }
     }
 }
