@@ -1,4 +1,6 @@
-﻿- [Gameplay Ability System for Unity](#gameplay-ability-system-for-unity)
+﻿# Table of Contents
+- [Table of Contents](#table-of-contents)
+- [Gameplay Ability System for Unity](#gameplay-ability-system-for-unity)
   - [Attribute System](#attribute-system)
   - [Gameplay Tags](#gameplay-tags)
   - [Ability System](#ability-system)
