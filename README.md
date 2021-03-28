@@ -54,7 +54,7 @@ This project contains the following attributes (see `Assets/My Gameplay Ability 
 2. Agility
 3. Intelligence
 
-All other attributes derive from these, using instances of `LinearDerivedAttributeScriptableObject` ((see `Assets/My Gameplay Ability System/Attributes/Derived`)):
+All other attributes derive from these, using instances of `LinearDerivedAttributeScriptableObject` (see `Assets/My Gameplay Ability System/Attributes/Derived`):
 1. Armour
 2. Attack Speed
 3. Health Regen
