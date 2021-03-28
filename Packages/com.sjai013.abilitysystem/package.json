@@ -1,0 +1,23 @@
+{
+  "name": "com.sjai013.abilitysystem",
+  "version": "0.1.0",
+  "displayName": "Gameplay Ability System",
+  "description": "A unified framework for developing ability-based games",
+  "unity": "2020.3",
+  "unityRelease": "0f1",
+  "keywords": [
+    "gas",
+    "ugas",
+    "ability system"
+  ],
+  "author": {
+    "name": "Sahil Jain",
+    "email": "sjai013.ece@gmail.com",
+    "url": "https://www.github.com/sjai013"
+  },
+  "type": "library",
+  "dependencies": {
+    "com.sjai013.attributesystem": "",
+    "com.sjai013.gameplaytag": ""
+  }
+}

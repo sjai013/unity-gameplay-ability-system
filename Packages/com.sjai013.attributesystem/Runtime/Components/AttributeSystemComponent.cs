@@ -56,16 +56,25 @@ namespace AttributeSystem.Components
             return false;
         }
 
+        public void SetAttributeBaseValue(AttributeScriptableObject attribute, float value)
+        {
+            // If dictionary is stale, rebuild it
+            var attributeCache = GetAttributeCache();
+            if (!attributeCache.TryGetValue(attribute, out var index)) return;
+            var attributeValue = AttributeValues[index];
+            attributeValue.BaseValue = value;
+            AttributeValues[index] = attributeValue;
+        }
+
         /// <summary>
         /// Sets value of an attribute.  Note that the out value is a copy of the struct, so modifying it
         /// does not modify the original attribute
         /// </summary>
         /// <param name="attribute">Attribute to set</param>
         /// <param name="modifierType">How to modify the attribute</param>
-        /// <param name="modifierValue">Amount to modify</param>
         /// <param name="value">Copy of newly modified attribute</param>
         /// <returns>True, if attribute was found.</returns>
-        public bool SetAttributeValue(AttributeScriptableObject attribute, AttributeModifier modifier, float modifierValue, out AttributeValue value)
+        public bool ModifyAttributeValue(AttributeScriptableObject attribute, AttributeModifier modifier, out AttributeValue value)
         {
             // If dictionary is stale, rebuild it
             var attributeCache = GetAttributeCache();
@@ -76,7 +85,7 @@ namespace AttributeSystem.Components
             {
                 // Get a copy of the attribute value struct
                 value = AttributeValues[index];
-                value.Modifier.Combine(modifier);
+                value.Modifier = value.Modifier.Combine(modifier);
 
                 // Structs are copied by value, so the modified attribute needs to be reassigned to the array
                 AttributeValues[index] = value;
@@ -124,6 +133,26 @@ namespace AttributeSystem.Components
             GetAttributeCache();
         }
 
+        public void ResetAll()
+        {
+            for (var i = 0; i < this.AttributeValues.Count; i++)
+            {
+                var defaultAttribute = new AttributeValue();
+                defaultAttribute.Attribute = this.AttributeValues[i].Attribute;
+                this.AttributeValues[i] = defaultAttribute;
+            }
+        }
+
+        public void ResetAttributeModifiers()
+        {
+            for (var i = 0; i < this.AttributeValues.Count; i++)
+            {
+                var attributeValue = this.AttributeValues[i];
+                attributeValue.Modifier = default;
+                this.AttributeValues[i] = attributeValue;
+            }
+        }
+
         private void InitialiseAttributeValues()
         {
             this.AttributeValues = new List<AttributeValue>();
@@ -143,18 +172,12 @@ namespace AttributeSystem.Components
             }
         }
 
-        private void UpdateCurrentAttributeValues()
+        public void UpdateCurrentAttributeValues()
         {
             for (var i = 0; i < this.AttributeValues.Count; i++)
             {
                 var _attribute = this.AttributeValues[i];
-                _attribute.CurrentValue = _attribute.BaseValue * (_attribute.Modifier.Multiply + 1) + (_attribute.Modifier.Add);
-
-                if (_attribute.Modifier.Override != 0)
-                {
-                    _attribute.CurrentValue = _attribute.Modifier.Override;
-                }
-                this.AttributeValues[i] = _attribute;
+                this.AttributeValues[i] = _attribute.Attribute.CalculateCurrentAttributeValue(_attribute, this.AttributeValues);
             }
         }
 
