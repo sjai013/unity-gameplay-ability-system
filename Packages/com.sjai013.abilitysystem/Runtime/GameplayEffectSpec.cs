@@ -36,7 +36,10 @@ namespace AbilitySystem
                 this.GameplayEffect.gameplayEffect.Modifiers[i].ModifierMagnitude.Initialise(this);
             }
             this.Level = Level;
-            this.Duration = this.GameplayEffect.gameplayEffect.DurationModifier.CalculateMagnitude(this).GetValueOrDefault() * this.GameplayEffect.gameplayEffect.DurationMultiplier;
+            if (this.GameplayEffect.gameplayEffect.DurationModifier)
+            {
+                this.Duration = this.GameplayEffect.gameplayEffect.DurationModifier.CalculateMagnitude(this).GetValueOrDefault() * this.GameplayEffect.gameplayEffect.DurationMultiplier;
+            }
         }
 
         public GameplayEffectSpec SetTarget(AbilitySystemCharacter target)

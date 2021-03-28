@@ -57,14 +57,4 @@ namespace AbilitySystem.ModifierMagnitude
             }
         }
     }
-
-    public enum ECaptureAttributeFrom
-    {
-        Source, Target
-    }
-
-    public enum ECaptureAttributeWhen
-    {
-        OnCreation, OnApplication
-    }
 }

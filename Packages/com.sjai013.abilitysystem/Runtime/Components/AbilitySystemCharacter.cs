@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using AbilitySystem.Authoring;
 using AttributeSystem.Authoring;
 using AttributeSystem.Components;
@@ -14,10 +11,11 @@ namespace AbilitySystem
     public class AbilitySystemCharacter : MonoBehaviour
     {
         [SerializeField]
-        AttributeSystemComponent _attributeSystem;
+        protected AttributeSystemComponent _attributeSystem;
         public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
         List<GameplayEffectContainer> AppliedGameplayEffects = new List<GameplayEffectContainer>();
-        public GameplayEffectScriptableObject StartingStats;
+
+        [SerializeField] protected GameplayEffectScriptableObject[] InitialGameplayEffects;
         public GameplayEffectScriptableObject Test;
         public float Level;
 
@@ -25,7 +23,7 @@ namespace AbilitySystem
         /// Applies the gameplay effect spec to self
         /// </summary>
         /// <param name="geSpec">GameplayEffectSpec to apply</param>
-        public bool ApplyGameplayEffect(GameplayEffectSpec geSpec)
+        public bool ApplyGameplayEffectSpecToSelf(GameplayEffectSpec geSpec)
         {
             bool tagRequirementsOK = CheckTagRequirementsMet(geSpec);
 
@@ -56,8 +54,13 @@ namespace AbilitySystem
         public void InitialiseAttributes()
         {
             this.AttributeSystem.ResetAll();
-            var spec = MakeOutgoingSpec(this.StartingStats, (int)this.Level);
-            this.ApplyGameplayEffect(spec);
+            for (var i = 0; i < this.InitialGameplayEffects.Length; i++)
+            {
+                var spec = MakeOutgoingSpec(this.InitialGameplayEffects[i], (int)this.Level);
+                this.ApplyGameplayEffectSpecToSelf(spec);
+                AttributeSystem.UpdateCurrentAttributeValues();
+                this.UpdateAttributeSystem();
+            }
         }
 
 
@@ -146,6 +149,9 @@ namespace AbilitySystem
 
         void UpdateAttributeSystem()
         {
+            // Set Current Value to Base Value (default position if there are no GE affecting that atribute)
+
+
             for (var i = 0; i < AppliedGameplayEffects.Count; i++)
             {
                 var modifiers = AppliedGameplayEffects[i].modifiers;
@@ -193,7 +199,7 @@ namespace AbilitySystem
             if (GUI.Button(new Rect(10, 70, 50, 30), "Click"))
             {
                 var geSpec = MakeOutgoingSpec(this.Test, level: (int)this.Level);
-                ApplyGameplayEffect(geSpec);
+                ApplyGameplayEffectSpecToSelf(geSpec);
             }
         }
 

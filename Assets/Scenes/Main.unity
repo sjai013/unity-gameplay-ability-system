@@ -673,14 +673,66 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: d8f80b5d9d2f81d44b94af9465c11bb8, type: 2}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: cf3932c16a7bd2a4d8e3436ce00a0993, type: 2}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 753e6c0a861909d479de96ef8b205b07, type: 2}
     - target: {fileID: 1811571464, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: attributeUI
       value: 
       objectReference: {fileID: 117905172}
+    - target: {fileID: 1811571464, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: maxAttribute
+      value: 
+      objectReference: {fileID: 11400000, guid: cf3932c16a7bd2a4d8e3436ce00a0993, type: 2}
+    - target: {fileID: 1811571464, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: currentAttribute
+      value: 
+      objectReference: {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
     - target: {fileID: 1811571465, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: attributeUI
       value: 
       objectReference: {fileID: 1089562525}
+    - target: {fileID: 1811571466, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1811571466, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: InitialGameplayEffects.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1811571466, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: InitialGameplayEffects.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 17afea3a38f6b3145a1849c2c4dce447, type: 2}
+    - target: {fileID: 1811571466, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: InitialGameplayEffects.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0b7e867416ae21a4b88314dd5b344b3e, type: 2}
+    - target: {fileID: 1811571466, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: InitialGameplayEffects.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0b7e867416ae21a4b88314dd5b344b3e, type: 2}
     - target: {fileID: 1924159670, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: m_Camera
       value: 
@@ -1873,7 +1925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be76e5f14cfee674cb30b491fb72b09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boost: 7.100001
+  boost: 15.5
   positionLerpTime: 0.2
   mouseSensitivityCurve:
     serializedVersion: 2

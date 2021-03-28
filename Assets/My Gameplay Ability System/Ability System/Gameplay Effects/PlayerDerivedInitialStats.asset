@@ -10,21 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36fd283322353ff42b30cd679073251e, type: 3}
-  m_Name: PlayerInitialStats
+  m_Name: PlayerDerivedInitialStats
   m_EditorClassIdentifier: 
   gameplayEffect:
-    DurationPolicy: 0
+    DurationPolicy: 1
     DurationModifier: {fileID: 11400000, guid: 0b551bc4820c08a4a8990465c89bc3b6, type: 2}
     DurationMultiplier: 5
     Modifiers:
     - Attribute: {fileID: 11400000, guid: d8f80b5d9d2f81d44b94af9465c11bb8, type: 2}
       ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: 0b551bc4820c08a4a8990465c89bc3b6, type: 2}
-      Multiplier: 5
-    - Attribute: {fileID: 11400000, guid: 753e6c0a861909d479de96ef8b205b07, type: 2}
-      ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: 0b551bc4820c08a4a8990465c89bc3b6, type: 2}
-      Multiplier: 2
+      ModifierMagnitude: {fileID: 11400000, guid: edd5be7b048d9ca4fa350e6d6db3dad0, type: 2}
+      Multiplier: 1
     ConditionalGameplayEffects: []
   gameplayEffectTags:
     AssetTag: {fileID: 11400000, guid: 44e8420754d35d04e8d42484dc67efc7, type: 2}

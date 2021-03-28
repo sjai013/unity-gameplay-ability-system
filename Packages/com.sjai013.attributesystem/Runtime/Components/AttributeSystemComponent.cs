@@ -172,18 +172,12 @@ namespace AttributeSystem.Components
             }
         }
 
-        private void UpdateCurrentAttributeValues()
+        public void UpdateCurrentAttributeValues()
         {
             for (var i = 0; i < this.AttributeValues.Count; i++)
             {
                 var _attribute = this.AttributeValues[i];
-                _attribute.CurrentValue = _attribute.BaseValue * (_attribute.Modifier.Multiply + 1) + (_attribute.Modifier.Add);
-
-                if (_attribute.Modifier.Override != 0)
-                {
-                    _attribute.CurrentValue = _attribute.Modifier.Override;
-                }
-                this.AttributeValues[i] = _attribute;
+                this.AttributeValues[i] = _attribute.Attribute.CalculateCurrentAttributeValue(_attribute, this.AttributeValues);
             }
         }
 
