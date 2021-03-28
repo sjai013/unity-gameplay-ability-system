@@ -81,7 +81,7 @@ Abilities, at some point of their execution, create `Gameplay Effects`, which ar
 ### 1.2.4. Gameplay Effects
 `Gameplay Effects` (GE) are at the heart of the ability system.  They are created through the `Create/Gameplay Ability System/Gameplay Effect Definition` asset menu.
 
-![A brand new GE](/images/new-ge-inspector.png)
+![A brand new GE](/Images/new-ge-inspector.png)
 
 When creating a new GE, the following data needs to be defined:
 
@@ -105,7 +105,7 @@ A custom scriptable object inheriting from `ModifierMagnitudeScriptableObject` c
 #### 1.2.4.2. Modifiers
 The `Modifiers` collection defines what attributes this GE modifies, and how it modifies them.
 
-![GE Modifiers](/images/ge-modifiers-collection.png)
+![GE Modifiers](/Images/ge-modifiers-collection.png)
 
 The `Attribute` property defines what attributes this modifier affects.  The `Modifier Operator` property, which can be one of `Add`, `Multiply`, or `Override`, determines how this modifier interacts with other modifiers on this attribute.  The `Modifier Magnitude` property is used to calculate the magnitude of the effect, which is then multiplied by the `Multiplier` to give the final modification value:
 ```
