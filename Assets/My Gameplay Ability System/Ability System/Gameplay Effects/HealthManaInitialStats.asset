@@ -23,7 +23,7 @@ MonoBehaviour:
       Multiplier: 1
     - Attribute: {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
       ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: edd5be7b048d9ca4fa350e6d6db3dad0, type: 2}
+      ModifierMagnitude: {fileID: 11400000, guid: 13075ce34a622e14e878ba5d797f4a8d, type: 2}
       Multiplier: 1
     ConditionalGameplayEffects: []
   gameplayEffectTags:

@@ -675,28 +675,52 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: Attributes.Array.size
-      value: 5
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: Attributes.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: d8f80b5d9d2f81d44b94af9465c11bb8, type: 2}
+      objectReference: {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
     - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: Attributes.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: cf3932c16a7bd2a4d8e3436ce00a0993, type: 2}
+      objectReference: {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
     - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: Attributes.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
+      objectReference: {fileID: 11400000, guid: d8f80b5d9d2f81d44b94af9465c11bb8, type: 2}
     - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: Attributes.Array.data[3]
       value: 
-      objectReference: {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
+      objectReference: {fileID: 11400000, guid: 3ce2a99b106e64a47b45c843d2023c61, type: 2}
     - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: Attributes.Array.data[4]
       value: 
-      objectReference: {fileID: 11400000, guid: 753e6c0a861909d479de96ef8b205b07, type: 2}
+      objectReference: {fileID: 11400000, guid: cabbe4b11d3faac4da33b2385bef4e99, type: 2}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: cf3932c16a7bd2a4d8e3436ce00a0993, type: 2}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: bf20a9d06eed6004297abf0a847e7233, type: 2}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: e4cb81d22dc975743b8b7c50404340ac, type: 2}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7f0b22c98070f0e4486d6301cbddea39, type: 2}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7fc05bea92e9b904eaec715841e623cf, type: 2}
+    - target: {fileID: 1811571463, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: Attributes.Array.data[10]
+      value: 
+      objectReference: {fileID: 11400000, guid: 03d5684a54c36e74c80f4a584d691c19, type: 2}
     - target: {fileID: 1811571464, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: attributeUI
       value: 
@@ -713,6 +737,10 @@ PrefabInstance:
       propertyPath: attributeUI
       value: 
       objectReference: {fileID: 1089562525}
+    - target: {fileID: 1811571465, guid: beb9e839b531a744c877a785deeaa302, type: 3}
+      propertyPath: maxAttribute
+      value: 
+      objectReference: {fileID: 11400000, guid: bf20a9d06eed6004297abf0a847e7233, type: 2}
     - target: {fileID: 1811571466, guid: beb9e839b531a744c877a785deeaa302, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -1925,7 +1953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be76e5f14cfee674cb30b491fb72b09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boost: 15.5
+  boost: 4.700002
   positionLerpTime: 0.2
   mouseSensitivityCurve:
     serializedVersion: 2
