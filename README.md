@@ -7,7 +7,13 @@
     - [Modifiers](#modifiers)
     - [Conditional Gameplay Effects](#conditional-gameplay-effects)
     - [Gameplay Effect Tags](#gameplay-effect-tags)
-- [Updates](#updates)
+      - [Asset Tag](#asset-tag)
+      - [Granted Tags](#granted-tags)
+      - [Ongoing Tag Requirements](#ongoing-tag-requirements)
+      - [Application Tag Requirements](#application-tag-requirements)
+      - [Removal Tag Requirements](#removal-tag-requirements)
+      - [Remove Gameplay Effects With Tag](#remove-gameplay-effects-with-tag)
+    - [Period](#period)
 - [Contributing](#contributing)
 - [License](#license)
 - [Thank You](#thank-you)
@@ -16,7 +22,7 @@ Gameplay Ability System for Unity (or GAS for short) is a Unity framework for cr
 
 This project is heavily inspired by the Unreal Gameplay Ability System, and uses similar terminology, but the implementation is specific to Unity.
 
-There are three main sub-projects here:
+There are three main sub-projects here (TODO: Unity UPM package list):
 1. Attribute System
 2. Gameplay Tags
 3. Ability System and Gameplay Effects
@@ -101,16 +107,34 @@ Effect Magnitude = Modifier Magnitude * Multiplier
 WIP
 
 ### Gameplay Effect Tags
-Tags are used to describe the GE, as well as dictate how it interacts with other GEs.  The `Asset Tag` is used to identify (usually uniquely, but not always) the GE.  The intent is instead of checking if the GE is an instance of some class, we can compare asset tags to determine if any two GE are the same.
+Tags are used to describe the GE, as well as dictate how it interacts with other GEs.  
 
-# Updates
-This is a completely fresh start of the project - the second complete rewrite.  Stay tuned for updates.
+#### Asset Tag
+The `Asset Tag` is used to identify (usually uniquely, but not always) the GE.  The intent is instead of checking if the GE is an instance of some class, we can compare asset tags to determine if any two GE are the same.
+
+#### Granted Tags
+These tags are added to the character *while* the GE is applied.
+
+#### Ongoing Tag Requirements
+These tags determine if the GE is active or temporarily disabled.  For a GE to remain active, all tags in the `Require Tags` collection must be present on the character, and none of the tags in the `Ignore Tags` must be present.
+
+#### Application Tag Requirements
+These tags determine if the GE can be applied or not.  Since `Instant` GE are never applied, these tags only affect `Infinite` and `Durational` GE.  For an `Infinite` or `Durational` GE to be successfully applied, all tags in the `Require Tags` must be present on the character, and none of the tags in the `Ignore Tags` must be present.
+
+#### Removal Tag Requirements
+These tags determine if the GE should be removed prematurely after application.  Since `Instant` GE are never applied, these tags only affect `Infinite` and `Durational` GE.  For an `Infinite` or `Durational` GE to be removed, all tags in the `Require Tags` must be present on the character, and none of the tags in the `Ignore Tags` must be present.
+
+#### Remove Gameplay Effects With Tag
+Any existing GE on the character which have an `Asset Tag` contained in this list are prematurely removed.
+
+### Period
+WIP
 
 # Contributing
 You can contribute to this project by:
 * Posting issues
 * Creating PRs with bug fixes or new features
-* Testing this in your own games and telling us how this can be improved
+* Testing this in your own games and providing feedback
 * Adding to the Wiki
 * Helping with documentation
 * Telling your friends!
