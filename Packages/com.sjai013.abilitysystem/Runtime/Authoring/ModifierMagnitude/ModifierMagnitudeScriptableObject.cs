@@ -10,7 +10,7 @@ namespace AbilitySystem.ModifierMagnitude
         /// Function called when the spec is first initialised (e.g. by the Instigator/Source Ability System)
         /// </summary>
         /// <param name="spec">Gameplay Effect Spec</param>
-        public virtual void Initialise(GameplayEffectSpec spec) { }
+        public abstract void Initialise(GameplayEffectSpec spec);
 
         /// <summary>
         /// Function called when the magnitude is calculated, usually after the target has been assigned

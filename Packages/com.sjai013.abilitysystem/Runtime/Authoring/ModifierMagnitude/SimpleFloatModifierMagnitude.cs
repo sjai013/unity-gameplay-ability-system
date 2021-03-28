@@ -10,10 +10,13 @@ namespace AbilitySystem
     {
         [SerializeField]
         private AnimationCurve ScalingFunction;
+
+        public override void Initialise(GameplayEffectSpec spec)
+        {
+        }
         public override float? CalculateMagnitude(GameplayEffectSpec spec)
         {
             return ScalingFunction.Evaluate(spec.Level);
         }
-
     }
 }

@@ -10,24 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36fd283322353ff42b30cd679073251e, type: 3}
-  m_Name: PlayerDerivedInitialStats
+  m_Name: New Gameplay Effect Scriptable Object
   m_EditorClassIdentifier: 
   gameplayEffect:
-    DurationPolicy: 1
-    DurationModifier: {fileID: 11400000, guid: 0b551bc4820c08a4a8990465c89bc3b6, type: 2}
-    DurationMultiplier: 5
-    Modifiers:
-    - Attribute: {fileID: 11400000, guid: d8f80b5d9d2f81d44b94af9465c11bb8, type: 2}
-      ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: edd5be7b048d9ca4fa350e6d6db3dad0, type: 2}
-      Multiplier: 1
-    - Attribute: {fileID: 11400000, guid: cabbe4b11d3faac4da33b2385bef4e99, type: 2}
-      ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: 13075ce34a622e14e878ba5d797f4a8d, type: 2}
-      Multiplier: 1
+    DurationPolicy: 0
+    DurationModifier: {fileID: 0}
+    DurationMultiplier: 0
+    Modifiers: []
     ConditionalGameplayEffects: []
   gameplayEffectTags:
-    AssetTag: {fileID: 11400000, guid: 44e8420754d35d04e8d42484dc67efc7, type: 2}
+    AssetTag: {fileID: 0}
     GrantedTags: []
     OngoingTagRequirements:
       RequireTags: []
