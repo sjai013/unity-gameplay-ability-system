@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72770d268a79bfa41bc294254a93591f, type: 3}
-  m_Name: ManaRegen
+  m_Name: Mana Regen
   m_EditorClassIdentifier: 
   Name: Mana Regen
   Attribute: {fileID: 11400000, guid: cabbe4b11d3faac4da33b2385bef4e99, type: 2}

@@ -77,10 +77,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Attributes:
-  - {fileID: 11400000, guid: e8c81bfe0848d2443b0d88a5eeb2934f, type: 2}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
   - {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
-  - {fileID: 11400000, guid: 753e6c0a861909d479de96ef8b205b07, type: 2}
+  - {fileID: 0}
   AttributeValues: []
 --- !u!114 &1811571466
 MonoBehaviour:
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attributeSystem: {fileID: 1811571463}
-  StartingStats: {fileID: 11400000, guid: 17afea3a38f6b3145a1849c2c4dce447, type: 2}
+  InitialGameplayEffects: []
   Test: {fileID: 11400000, guid: 7e015791d2fdea047829efe0e6fa6126, type: 2}
   Level: 5
 --- !u!114 &1811571464
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attributeSystemComponent: {fileID: 1811571463}
   attributeUI: {fileID: 0}
-  currentAttribute: {fileID: 11400000, guid: e8c81bfe0848d2443b0d88a5eeb2934f, type: 2}
+  currentAttribute: {fileID: 0}
   maxAttribute: {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
 --- !u!114 &1811571465
 MonoBehaviour:
@@ -129,7 +129,7 @@ MonoBehaviour:
   attributeSystemComponent: {fileID: 1811571463}
   attributeUI: {fileID: 0}
   currentAttribute: {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
-  maxAttribute: {fileID: 11400000, guid: 753e6c0a861909d479de96ef8b205b07, type: 2}
+  maxAttribute: {fileID: 0}
 --- !u!1 &113054913794530298
 GameObject:
   m_ObjectHideFlags: 0

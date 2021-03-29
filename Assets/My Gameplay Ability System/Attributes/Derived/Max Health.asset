@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72770d268a79bfa41bc294254a93591f, type: 3}
-  m_Name: MaxHealth
+  m_Name: Max Health
   m_EditorClassIdentifier: 
   Name: Max Health
   Attribute: {fileID: 11400000, guid: d8f80b5d9d2f81d44b94af9465c11bb8, type: 2}
