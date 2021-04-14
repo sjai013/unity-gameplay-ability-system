@@ -1,5 +1,26 @@
 {
   "dependencies": {
+    "com.sjai013.abilitysystem": {
+      "version": "file:unity-ability-system",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.sjai013.attributesystem": "",
+        "com.sjai013.gameplaytag": ""
+      }
+    },
+    "com.sjai013.attributesystem": {
+      "version": "file:unity-attribute-system",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.sjai013.gameplaytag": {
+      "version": "file:unity-gameplay-tags",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.addressables": {
       "version": "1.16.16",
       "depth": 0,
