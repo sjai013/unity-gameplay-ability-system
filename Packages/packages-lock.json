@@ -1,26 +1,5 @@
 {
   "dependencies": {
-    "com.sjai013.abilitysystem": {
-      "version": "file:com.sjai013.abilitysystem",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.sjai013.attributesystem": "",
-        "com.sjai013.gameplaytag": ""
-      }
-    },
-    "com.sjai013.attributesystem": {
-      "version": "file:com.sjai013.attributesystem",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.sjai013.gameplaytag": {
-      "version": "file:com.sjai013.gameplaytags",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.addressables": {
       "version": "1.16.16",
       "depth": 0,
@@ -203,6 +182,15 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "com.unity.visualeffectgraph": {
+      "version": "10.3.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.shadergraph": "10.3.2"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

@@ -18,23 +18,21 @@ public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerAction
     private Animator mAnimator;
 
     private Vector2 mMovementVector;
-    private bool mMoving;
+    private bool shouldMove;
 
     private CharacterController controller;
     private Transform cameraTransform;
 
-    public void OnFire(InputAction.CallbackContext context)
-    {
-    }
+    [SerializeField]
+    private AbilityController abilityController;
 
-    public void OnLook(InputAction.CallbackContext context)
-    {
-    }
+    private int mAnimator_ShouldMove = Animator.StringToHash("ShouldMove");
+    private int mAnimator_Movement_X = Animator.StringToHash("Movement_X");
+    private int mAnimator_Movement_Y = Animator.StringToHash("Movement_Y");
 
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        //Debug.Log(context.ReadValue<Vector2>());
-    }
+    private bool ability1Released = false;
+    private bool ability2Released = false;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -50,9 +48,10 @@ public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerAction
     void HandleMovement()
     {
         this.isGrounded = this.controller.isGrounded;
-        this.mAnimator.SetBool("Moving", this.mMoving);
-        this.mAnimator.SetFloat("XSpeed", this.mMovementVector.x);
-        this.mAnimator.SetFloat("YSpeed", this.mMovementVector.y);
+        this.mAnimator.SetBool(mAnimator_ShouldMove, this.shouldMove);
+
+        this.mAnimator.SetFloat(this.mAnimator_Movement_X, this.mMovementVector.x);
+        this.mAnimator.SetFloat(this.mAnimator_Movement_Y, this.mMovementVector.y);
 
 
         var movementVector = new Vector3(mMovementVector.x, 0, mMovementVector.y);
@@ -71,15 +70,12 @@ public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerAction
     void CaptureInputs()
     {
         this.mMovementVector = this.playerInput.Player.Move.ReadValue<Vector2>();
-        this.mMoving = true;
+        this.shouldMove = true;
         if (this.mMovementVector.magnitude < 0.2)
         {
             this.mMovementVector = Vector2.zero;
-            this.mMoving = false;
+            this.shouldMove = false;
         }
-
-
-
     }
 
     // Update is called once per frame
@@ -87,5 +83,57 @@ public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerAction
     {
         CaptureInputs();
         HandleMovement();
+        HandleAbilityUse();
+        ResetInputs();
+
+
+    }
+
+    private void HandleAbilityUse()
+    {
+        if (ability1Released)
+        {
+            this.abilityController.UseAbility(0);
+        }
+
+        if (ability2Released)
+        {
+            this.abilityController.UseAbility(1);
+        }
+    }
+
+    private void ResetInputs()
+    {
+        ability1Released = false;
+        ability2Released = false;
+        shouldMove = false;
+        this.mMovementVector = Vector2.zero;
+    }
+
+    public void OnFire1(InputAction.CallbackContext context)
+    {
+        if (context.performed) ability1Released = true;
+    }
+
+    public void OnFire2(InputAction.CallbackContext context)
+    {
+        if (context.performed) ability2Released = true;
+
+    }
+
+    public void OnLook(InputAction.CallbackContext context)
+    {
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        this.mMovementVector = context.ReadValue<Vector2>();
+        this.shouldMove = true;
+        if (this.mMovementVector.magnitude < 0.2)
+        {
+            this.mMovementVector = Vector2.zero;
+
+        }
+
     }
 }

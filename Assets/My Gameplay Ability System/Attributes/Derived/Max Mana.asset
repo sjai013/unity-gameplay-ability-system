@@ -15,4 +15,4 @@ MonoBehaviour:
   Name: Max Mana
   Attribute: {fileID: 11400000, guid: cabbe4b11d3faac4da33b2385bef4e99, type: 2}
   gradient: 12
-  offset: 0
+  offset: 75

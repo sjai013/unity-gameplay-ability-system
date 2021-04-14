@@ -1,0 +1,9 @@
+[submodule "Packages/unity-gameplay-tags"]
+	path = Packages/unity-gameplay-tags
+	url = https://github.com/sjai013/unity-gameplay-tags.git
+[submodule "Packages/unity-attribute-system"]
+	path = Packages/unity-attribute-system
+	url = https://github.com/sjai013/unity-attribute-system.git
+[submodule "Packages/unity-ability-system"]
+	path = Packages/unity-ability-system
+	url = https://github.com/sjai013/unity-ability-system.git

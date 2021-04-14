@@ -15,4 +15,4 @@ MonoBehaviour:
   Name: Armour
   Attribute: {fileID: 11400000, guid: 3ce2a99b106e64a47b45c843d2023c61, type: 2}
   gradient: 0.17
-  offset: 0
+  offset: 4
