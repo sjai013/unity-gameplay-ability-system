@@ -7,3 +7,6 @@
 [submodule "Packages/unity-ability-system"]
 	path = Packages/unity-ability-system
 	url = https://github.com/sjai013/unity-ability-system.git
+[submodule "Packages/-f"]
+	path = Packages/-f
+	url = https://github.com/sjai013/unity-attribute-system.git
