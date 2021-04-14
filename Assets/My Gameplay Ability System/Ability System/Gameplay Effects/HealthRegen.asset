@@ -17,7 +17,7 @@ MonoBehaviour:
     DurationModifier: {fileID: 0}
     DurationMultiplier: 0
     Modifiers:
-    - Attribute: {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
+    - Attribute: {fileID: 11400000, guid: e8c81bfe0848d2443b0d88a5eeb2934f, type: 2}
       ModifierOperator: 0
       ModifierMagnitude: {fileID: 11400000, guid: 960491bbb63a1004dad0ceb512630112, type: 2}
       Multiplier: 1

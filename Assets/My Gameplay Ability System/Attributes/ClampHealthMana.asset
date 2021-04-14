@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ebb050b94be81459b74fd42bac08f0, type: 3}
   m_Name: ClampHealthMana
   m_EditorClassIdentifier: 
-  HealthAttribute: {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
+  HealthAttribute: {fileID: 11400000, guid: e8c81bfe0848d2443b0d88a5eeb2934f, type: 2}
   MaxHealthAttribute: {fileID: 11400000, guid: cf3932c16a7bd2a4d8e3436ce00a0993, type: 2}
   ManaAttribute: {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
   MaxManaAttribute: {fileID: 11400000, guid: bf20a9d06eed6004297abf0a847e7233, type: 2}

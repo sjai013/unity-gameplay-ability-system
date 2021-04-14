@@ -277,7 +277,7 @@ MonoBehaviour:
   AttributeSystemEvents:
   - {fileID: 11400000, guid: aec7834405b71284497bded45fface06, type: 2}
   Attributes:
-  - {fileID: 11400000, guid: 66c8df61fea9407488df5899c5bda693, type: 2}
+  - {fileID: 11400000, guid: e8c81bfe0848d2443b0d88a5eeb2934f, type: 2}
   - {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}
   - {fileID: 11400000, guid: d8f80b5d9d2f81d44b94af9465c11bb8, type: 2}
   - {fileID: 11400000, guid: 3ce2a99b106e64a47b45c843d2023c61, type: 2}
@@ -314,6 +314,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7501879737060083370, guid: f7a307755b709af4fb81972e194eb5f6, type: 3}
+      propertyPath: currentAttribute
+      value: 
+      objectReference: {fileID: 11400000, guid: e8c81bfe0848d2443b0d88a5eeb2934f, type: 2}
     - target: {fileID: 7501879737060083370, guid: f7a307755b709af4fb81972e194eb5f6, type: 3}
       propertyPath: attributeSystemComponent
       value: 
