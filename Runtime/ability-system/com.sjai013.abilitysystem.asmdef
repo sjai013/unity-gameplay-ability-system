@@ -1,0 +1,28 @@
+{
+    "name": "abilitysystem",
+    "rootNamespace": "AbilitySystem",
+    "references": [
+        "GUID:621c7f2dc3c32ac4fbc7947672558ff7",
+        "GUID:8a2d60606350396418cb464978214ea2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.sjai013.gameplaytag",
+            "expression": "",
+            "define": ""
+        },
+        {
+            "name": "com.sjai013.attributesystem",
+            "expression": "",
+            "define": ""
+        }
+    ],
+    "noEngineReferences": false
+}
