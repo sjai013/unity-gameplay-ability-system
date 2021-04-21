@@ -188,6 +188,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -275,7 +276,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttributeSystemEvents:
-  - {fileID: 11400000, guid: aec7834405b71284497bded45fface06, type: 2}
+  - {fileID: 11400000, guid: 0386b15ad00e91449a8dbffa4079363d, type: 2}
+  - {fileID: 11400000, guid: 77bb41da9ec65a54585a4ffc5daa3fdf, type: 2}
   Attributes:
   - {fileID: 11400000, guid: e8c81bfe0848d2443b0d88a5eeb2934f, type: 2}
   - {fileID: 11400000, guid: 8f8b14a27b4879f458889e803445051b, type: 2}

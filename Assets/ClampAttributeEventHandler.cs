@@ -4,33 +4,28 @@ using AttributeSystem.Components;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Gameplay Ability System/Attribute Event Handler/Clamp Attribute")]
-public class ClampHealthManaAttributeEventHandler : AbstractAttributeEventHandler
+public class ClampAttributeEventHandler : AbstractAttributeEventHandler
 {
 
     [SerializeField]
-    private AttributeScriptableObject HealthAttribute;
+    private AttributeScriptableObject PrimaryAttribute;
 
     [SerializeField]
-    private AttributeScriptableObject MaxHealthAttribute;
+    private AttributeScriptableObject MaxAttribute;
 
-    [SerializeField]
-    private AttributeScriptableObject ManaAttribute;
 
-    [SerializeField]
-    private AttributeScriptableObject MaxManaAttribute;
     public override void PreAttributeChange(AttributeSystemComponent attributeSystem, List<AttributeValue> prevAttributeValues, ref List<AttributeValue> currentAttributeValues)
     {
 
         var attributeCacheDict = attributeSystem.mAttributeIndexCache;
-        ClampAttributeToMax(HealthAttribute, MaxHealthAttribute, currentAttributeValues, attributeCacheDict);
-        ClampAttributeToMax(ManaAttribute, MaxManaAttribute, currentAttributeValues, attributeCacheDict);
+        ClampAttributeToMax(PrimaryAttribute, MaxAttribute, currentAttributeValues, attributeCacheDict);
 
     }
 
-    private void ClampAttributeToMax(AttributeScriptableObject PrimaryAttribute, AttributeScriptableObject MaxAttribute, List<AttributeValue> attributeValues, Dictionary<AttributeScriptableObject, int> attributeCacheDict)
+    private void ClampAttributeToMax(AttributeScriptableObject Attribute1, AttributeScriptableObject Attribute2, List<AttributeValue> attributeValues, Dictionary<AttributeScriptableObject, int> attributeCacheDict)
     {
-        if (attributeCacheDict.TryGetValue(PrimaryAttribute, out var primaryAttributeIndex)
-            && attributeCacheDict.TryGetValue(MaxAttribute, out var maxAttributeIndex))
+        if (attributeCacheDict.TryGetValue(Attribute1, out var primaryAttributeIndex)
+            && attributeCacheDict.TryGetValue(Attribute2, out var maxAttributeIndex))
         {
             var primaryAttribute = attributeValues[primaryAttributeIndex];
             var maxAttribute = attributeValues[maxAttributeIndex];
