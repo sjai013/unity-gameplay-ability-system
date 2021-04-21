@@ -2883,18 +2883,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
-    - target: {fileID: 3925800608321998625, guid: d792e4fa972785b43b8f925739544eba, type: 3}
-      propertyPath: AttributeSystemEvents.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3925800608321998625, guid: d792e4fa972785b43b8f925739544eba, type: 3}
-      propertyPath: AttributeSystemEvents.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 0386b15ad00e91449a8dbffa4079363d, type: 2}
-    - target: {fileID: 3925800608321998625, guid: d792e4fa972785b43b8f925739544eba, type: 3}
-      propertyPath: AttributeSystemEvents.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 77bb41da9ec65a54585a4ffc5daa3fdf, type: 2}
     - target: {fileID: 4282686716371936599, guid: d792e4fa972785b43b8f925739544eba, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
