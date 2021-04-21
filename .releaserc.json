@@ -1,0 +1,49 @@
+{
+  "tagFormat": "v${version}",
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "angular"
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "preset": "angular",
+        "changelogFile": "Packages/com.sjai013.abilitysystem/CHANGELOG.md"
+      }
+    ],
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false,
+        "pkgRoot": "Packages/com.sjai013.abilitysystem"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "Packages/com.sjai013.abilitysystem/package.json",
+          "Packages/com.sjai013.abilitysystem/CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    "@semantic-release/github"
+  ],
+  "branches": [
+    "+([0-9])?(.{+([0-9]),x}).x",
+    "main",
+    {
+      "name": "pre",
+      "prerelease": true
+    },
+    {
+      "name": "exp",
+      "prerelease": true
+    }
+  ]
+}

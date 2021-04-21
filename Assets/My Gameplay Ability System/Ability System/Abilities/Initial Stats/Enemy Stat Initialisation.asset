@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60c84324d6a17a647ab8bd8d67e408d1, type: 3}
+  m_Name: Enemy Stat Initialisation
+  m_EditorClassIdentifier: 
+  AbilityName: 
+  AbilityTags:
+    AbilityTag: {fileID: 0}
+    CancelAbilitiesWithTags: []
+    BlockAbilitiesWithTags: []
+    ActivationOwnedTags: []
+    OwnerTags:
+      RequireTags: []
+      IgnoreTags: []
+    SourceTags:
+      RequireTags: []
+      IgnoreTags: []
+    TargetTags:
+      RequireTags: []
+      IgnoreTags: []
+  Cost: {fileID: 0}
+  Cooldown: {fileID: 0}
+  InitialisationGE:
+  - {fileID: 11400000, guid: 382fcc85a897fc14ba07eccce7e534ad, type: 2}
+  - {fileID: 11400000, guid: 0b7e867416ae21a4b88314dd5b344b3e, type: 2}
+  - {fileID: 11400000, guid: 29326a0c3ef6faa4ab9639875b66ba62, type: 2}
+  - {fileID: 11400000, guid: 72a6ec01e78a7cd4084b73e01b1604d0, type: 2}

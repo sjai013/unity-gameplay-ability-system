@@ -1,0 +1,21 @@
+[submodule "Packages/unity-gameplay-tags"]
+	path = Packages/unity-gameplay-tags
+	url = https://github.com/sjai013/unity-gameplay-tags.git
+[submodule "Packages/unity-attribute-system"]
+	path = Packages/unity-attribute-system
+	url = https://github.com/sjai013/unity-attribute-system.git
+[submodule "Packages/unity-ability-system"]
+	path = Packages/unity-ability-system
+	url = https://github.com/sjai013/unity-ability-system.git
+[submodule "Packages/-f"]
+	path = Packages/-f
+	url = https://github.com/sjai013/unity-attribute-system.git
+[submodule "Packages/com.sjai013.attributesystem"]
+	path = Packages/com.sjai013.attributesystem
+	url = https://github.com/sjai013/unity-attribute-system.git
+[submodule "Packages/com.sjai013.gameplaytags"]
+	path = Packages/com.sjai013.gameplaytags
+	url = https://github.com/sjai013/unity-gameplay-tags.git
+[submodule "Packages/com.sjai013.abilitysystem"]
+	path = Packages/com.sjai013.abilitysystem
+	url = https://github.com/sjai013/unity-ability-system.git
