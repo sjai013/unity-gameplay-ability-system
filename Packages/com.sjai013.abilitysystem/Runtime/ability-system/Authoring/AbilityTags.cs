@@ -1,6 +1,7 @@
 using UnityEngine;
 using GameplayTag.Authoring;
 using System;
+using UnityEngine.Serialization;
 
 namespace AbilitySystem.Authoring
 {
@@ -8,9 +9,9 @@ namespace AbilitySystem.Authoring
     public struct AbilityTags
     {
         /// <summary>
-        /// These tags describe the Gameplay Ability
+        /// This tag describes the Gameplay Ability
         /// </summary>
-        [SerializeField] public GameplayTagScriptableObject AbilityTag;
+        [SerializeField] public GameplayTagScriptableObject AssetTag;
 
         /// <summary>
         /// Active Gameplay Abilities (on the same character) that have these tags will be cancelled
