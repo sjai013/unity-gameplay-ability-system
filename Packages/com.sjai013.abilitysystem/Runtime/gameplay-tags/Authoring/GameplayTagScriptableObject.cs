@@ -13,7 +13,8 @@ namespace GameplayTag.Authoring
 
 
         /// <summary>
-        /// Check is this gameplay tag is a descendant of another gameplay tag
+        /// <para>Check is this gameplay tag is a descendant of another gameplay tag.</para>
+        /// By default, only 4 levels of ancestors are searched.
         /// </summary>
         /// <param name="other">Ancestor gameplay tag</param>
         /// <returns>True if this gameplay tag is a descendant of the other gameplay tag</returns>
