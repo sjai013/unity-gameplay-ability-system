@@ -26,7 +26,7 @@ namespace AbilitySystem
         {
             for (var i = GrantedAbilities.Count - 1; i >= 0; i--)
             {
-                if (GrantedAbilities[i].Ability.AbilityTags.AbilityTag == tag)
+                if (GrantedAbilities[i].Ability.AbilityTags.AssetTag == tag)
                 {
                     GrantedAbilities.RemoveAt(i);
                 }
