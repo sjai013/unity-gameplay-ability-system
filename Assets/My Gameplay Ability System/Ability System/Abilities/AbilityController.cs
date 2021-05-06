@@ -31,10 +31,10 @@ public class AbilityController : MonoBehaviour
     {
         for (var i = 0; i < Cooldowns.Length; i++)
         {
-            var durationRemaining = this.abilitySpecs[i].CheckCooldown(out var totalDuration);
-            if (totalDuration > 0)
+            var durationRemaining = this.abilitySpecs[i].CheckCooldown();
+            if (durationRemaining.TotalDuration > 0)
             {
-                var percentRemaining = durationRemaining / totalDuration;
+                var percentRemaining = durationRemaining.TimeRemaining / durationRemaining.TotalDuration;
                 Cooldowns[i].fillAmount = 1 - percentRemaining;
             }
             else
