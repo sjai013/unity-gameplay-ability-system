@@ -65,10 +65,14 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
                 projectileInstance.Target = target;
                 this.Owner.ApplyGameplayEffectSpecToSelf(cdSpec);
                 this.Owner.ApplyGameplayEffectSpecToSelf(costSpec);
-                yield return projectileInstance.TravelToTarget();
+
                 var effectSpec = this.Owner.MakeOutgoingSpec((this.Ability as MyProjectileAbilityScriptableObject).GameplayEffect);
-                target.ApplyGameplayEffectSpecToSelf(effectSpec);
-                Destroy(go.gameObject);
+                projectileInstance.Spec = effectSpec;
+
+                yield return projectileInstance.Spawn();
+                yield return projectileInstance.TravelToTarget();
+                yield return projectileInstance.Despawn();
+
             }
 
             EndAbility();
