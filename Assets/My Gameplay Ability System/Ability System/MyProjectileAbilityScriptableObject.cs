@@ -12,7 +12,7 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
     public GameplayEffectScriptableObject GameplayEffect;
     public override AbstractAbilitySpec CreateSpec(AbilitySystemCharacter owner)
     {
-        var spec = new MyProjectileAbilitySpec(this, owner);
+        var spec = new AbilitySpec(this, owner);
         spec.Level = owner.Level;
         spec.projectile = this.projectile;
         spec.CastPointComponent = owner.GetComponent<CastPointComponent>();
@@ -20,11 +20,11 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
     }
 
 
-    public class MyProjectileAbilitySpec : AbstractAbilitySpec
+    public class AbilitySpec : AbstractAbilitySpec
     {
         public Projectile projectile;
         public CastPointComponent CastPointComponent;
-        public MyProjectileAbilitySpec(AbstractAbilityScriptableObject ability, AbilitySystemCharacter owner) : base(ability, owner)
+        public AbilitySpec(AbstractAbilityScriptableObject ability, AbilitySystemCharacter owner) : base(ability, owner)
         {
 
         }
