@@ -7,7 +7,7 @@
       "dependencies": {}
     },
     "com.unity.cinemachine": {
-      "version": "2.7.2",
+      "version": "2.7.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -28,10 +28,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.5",
+      "version": "3.0.6",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.unity.ext.nunit": "1.0.6"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
@@ -119,6 +121,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.textcore": {
+      "version": "1.0.0-preview.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.textmeshpro": {
       "version": "3.0.4",
       "depth": 0,
@@ -129,7 +138,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.5.2",
+      "version": "1.5.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -148,6 +157,16 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
+    },
+    "com.unity.ui": {
+      "version": "1.0.0-preview.14",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.uielementsnative": "1.0.0",
+        "com.unity.textcore": "1.0.0-preview.2"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
