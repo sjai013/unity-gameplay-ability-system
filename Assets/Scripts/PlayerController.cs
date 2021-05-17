@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerActions
+public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerMovementActions
 {
     [SerializeField]
     private float playerSpeed = 2f;
@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerAction
     {
         playerInput = new DefaultInputActions();
         playerInput.Enable();
-        playerInput.Player.SetCallbacks(this);
+        // playerInput.Player.SetCallbacks(this);
         this.mAnimator = GetComponent<Animator>();
         this.controller = GetComponent<CharacterController>();
         this.cameraTransform = Camera.main.transform;
@@ -69,13 +69,13 @@ public class PlayerController : MonoBehaviour, DefaultInputActions.IPlayerAction
 
     void CaptureInputs()
     {
-        this.mMovementVector = this.playerInput.Player.Move.ReadValue<Vector2>();
-        this.shouldMove = true;
-        if (this.mMovementVector.magnitude < 0.2)
-        {
-            this.mMovementVector = Vector2.zero;
-            this.shouldMove = false;
-        }
+        // this.mMovementVector = this.playerInput.Player.Move.ReadValue<Vector2>();
+        // this.shouldMove = true;
+        // if (this.mMovementVector.magnitude < 0.2)
+        // {
+        //     this.mMovementVector = Vector2.zero;
+        //     this.shouldMove = false;
+        // }
     }
 
     // Update is called once per frame

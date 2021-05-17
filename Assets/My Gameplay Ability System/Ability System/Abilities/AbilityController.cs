@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using AbilitySystem;
 using AbilitySystem.Authoring;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class AbilityController : MonoBehaviour
+public class AbilityController : MonoBehaviour, DefaultInputActions.IPlayerAbilitiesActions
 {
     public AbstractAbilityScriptableObject[] Abilities;
 
@@ -14,6 +15,7 @@ public class AbilityController : MonoBehaviour
 
     private AbstractAbilitySpec[] abilitySpecs;
 
+    private DefaultInputActions playerInput;
     public Image[] Cooldowns;
 
     // Start is called before the first frame update
@@ -24,6 +26,9 @@ public class AbilityController : MonoBehaviour
         this.abilitySystemCharacter.GrantAbility(spec);
         ActivateInitialisationAbilities();
         GrantCastableAbilities();
+        playerInput = new DefaultInputActions();
+        playerInput.PlayerAbilities.SetCallbacks(this);
+        playerInput.PlayerAbilities.Enable();
     }
 
     // Update is called once per frame
@@ -69,5 +74,15 @@ public class AbilityController : MonoBehaviour
     {
         var spec = abilitySpecs[i];
         StartCoroutine(spec.TryActivateAbility());
+    }
+
+    public void OnFire1(InputAction.CallbackContext context)
+    {
+        UseAbility(0);
+    }
+
+    public void OnFire2(InputAction.CallbackContext context)
+    {
+        UseAbility(1);
     }
 }
