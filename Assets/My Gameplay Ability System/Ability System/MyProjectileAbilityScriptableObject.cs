@@ -7,8 +7,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Gameplay Ability System/Abilities/Projectile")]
 public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObject
 {
-    [SerializeField]
     protected Projectile projectile;
+
+    [SerializeField]
+    protected GameObject projectilePrefab;
+
     public GameplayEffectScriptableObject GameplayEffect;
     public override AbstractAbilitySpec CreateSpec(AbilitySystemCharacter owner)
     {
@@ -16,6 +19,7 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
         spec.Level = owner.Level;
         spec.projectile = this.projectile;
         spec.CastPointComponent = owner.GetComponent<CastPointComponent>();
+        this.projectile = projectilePrefab.GetComponent<Projectile>();
         return spec;
     }
 
@@ -44,36 +48,22 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
 
         protected override IEnumerator ActivateAbility()
         {
-            AbilitySystemCharacter target = null;
-
             var cdSpec = this.Owner.MakeOutgoingSpec(this.Ability.Cooldown);
             var costSpec = this.Owner.MakeOutgoingSpec(this.Ability.Cost);
-            // Find enemy in front using raycast and set that as target
-            if (Physics.Raycast(this.CastPointComponent.GetPosition() + new Vector3(0, 0, 1), this.Owner.transform.TransformDirection(Vector3.forward), out var hit, Mathf.Infinity))
-            {
-                Debug.DrawRay(this.CastPointComponent.GetPosition(), this.Owner.transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                target = hit.transform.GetComponent<AbilitySystemCharacter>();
-                if (!target)
-                {
-                    EndAbility();
-                    yield break;
-                }
+            var effectSpec = this.Owner.MakeOutgoingSpec((this.Ability as MyProjectileAbilityScriptableObject).GameplayEffect);
+            this.Owner.ApplyGameplayEffectSpecToSelf(cdSpec);
+            this.Owner.ApplyGameplayEffectSpecToSelf(costSpec);
 
-                var go = Instantiate(this.projectile.gameObject, this.CastPointComponent.GetPosition(), this.CastPointComponent.transform.rotation);
-                var projectileInstance = go.GetComponent<Projectile>();
-                projectileInstance.Source = Owner;
-                projectileInstance.Target = target;
-                this.Owner.ApplyGameplayEffectSpecToSelf(cdSpec);
-                this.Owner.ApplyGameplayEffectSpecToSelf(costSpec);
+            // Fire projectile forwards.  First object hit is the target.
+            var go = Instantiate(this.projectile.gameObject, this.CastPointComponent.GetPosition(), this.CastPointComponent.transform.rotation);
+            var projectileInstance = go.GetComponent<Projectile>();
+            projectileInstance.Source = Owner;
+            projectileInstance.Spec = effectSpec;
 
-                var effectSpec = this.Owner.MakeOutgoingSpec((this.Ability as MyProjectileAbilityScriptableObject).GameplayEffect);
-                projectileInstance.Spec = effectSpec;
+            yield return projectileInstance.Spawn();
+            yield return projectileInstance.TravelForward(this.Owner.transform.forward);
+            yield return projectileInstance.Despawn();
 
-                yield return projectileInstance.Spawn();
-                yield return projectileInstance.TravelToTarget();
-                yield return projectileInstance.Despawn();
-
-            }
 
             EndAbility();
 

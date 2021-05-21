@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityName: Projectile Ice Blast
   AbilityTags:
-    AbilityTag: {fileID: 0}
+    AssetTag: {fileID: 0}
     CancelAbilitiesWithTags: []
     BlockAbilitiesWithTags: []
     ActivationOwnedTags: []
@@ -29,5 +29,5 @@ MonoBehaviour:
       IgnoreTags: []
   Cost: {fileID: 11400000, guid: 938188cd78f053b4f94356d8185a9211, type: 2}
   Cooldown: {fileID: 11400000, guid: 90a183a70b56bba4c89f4aaa7333f8bf, type: 2}
-  projectile: {fileID: 1558687866841498558, guid: 4d7819ee4c942364b9d8464582a5fa27, type: 3}
+  projectilePrefab: {fileID: 5729136828840772945, guid: 4d7819ee4c942364b9d8464582a5fa27, type: 3}
   GameplayEffect: {fileID: 11400000, guid: 55bfbe6a98be171479676955a23cca05, type: 2}

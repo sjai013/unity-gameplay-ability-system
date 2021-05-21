@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 3235481206866283020}
   - component: {fileID: 1558687866841498558}
   - component: {fileID: 6329690413289432728}
+  - component: {fileID: 1247456549}
+  - component: {fileID: 1247456550}
   m_Layer: 0
   m_Name: Ice Projectile
   m_TagString: Untagged
@@ -45,10 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dafcee175cbae9245966f2ffa16273c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  impactPrefab: {fileID: 3016100425369966093, guid: bd54cdf29ab7861478c916a2379a7c0e, type: 3}
   Source: {fileID: 0}
   Target: {fileID: 0}
-  Speed: {x: 10, y: 10, z: 10}
-  Acceleration: {x: 50, y: 50, z: 50}
+  speed: 13
+  rotationVector: {x: 0, y: 0, z: 25}
+  lifetime: 1
 --- !u!95 &6329690413289432728
 Animator:
   serializedVersion: 3
@@ -68,6 +72,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &1247456549
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5729136828840772945}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.73, y: 1.48, z: 4.27}
+  m_Center: {x: 0.24, y: 0, z: 1.5}
+--- !u!54 &1247456550
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5729136828840772945}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!1 &7696715899280406501
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +127,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7696715899280406501}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.68}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0.44}
   m_Children: []
   m_Father: {fileID: 3235481206866283020}

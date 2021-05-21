@@ -2,8 +2,13 @@ using System.Collections;
 using AbilitySystem;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider))]
 public class Projectile : MonoBehaviour
+
 {
+
+    [SerializeField] private GameObject impactPrefab;
+
     [SerializeField]
     public AbilitySystemCharacter Source;
 
@@ -13,35 +18,61 @@ public class Projectile : MonoBehaviour
     public GameplayEffectSpec Spec;
 
     [SerializeField]
-    private Vector3 Speed;
+    private float speed;
 
     [SerializeField]
-    private Vector3 Acceleration;
+    private Vector3 rotationVector;
+
+    [SerializeField]
+    private float lifetime;
+
+    private Collider _collider;
+
+    private Rigidbody _rb;
+
+    private bool hasCollided;
+
+    private void Awake()
+    {
+        this._collider = GetComponent<Collider>();
+        this._rb = GetComponent<Rigidbody>();
+    }
 
     public IEnumerator Spawn()
     {
         yield break;
     }
 
-    public IEnumerator TravelToTarget()
+    public IEnumerator TravelForward(Vector3 forward)
     {
-        Vector3 actualSpeed = Speed;
-        while (Vector3.Distance(Target.transform.position, this.transform.position) > 0.2)
+
+        float time = 0;
+        while (time < lifetime && !hasCollided)
         {
-            transform.LookAt(Target.transform, Vector3.up);
-            // Direction of travel
-            var direction = (Target.transform.position - this.transform.position).normalized;
-            this.transform.position += Vector3.Scale(direction, Speed) * Time.deltaTime;
-            Speed += Acceleration * Time.deltaTime;
-            yield return null;
+            time += Time.deltaTime;
+            var direction = forward.normalized;
+            Quaternion deltaRotation = Quaternion.Euler(rotationVector * Time.fixedDeltaTime);
+            _rb.MoveRotation(_rb.rotation * deltaRotation);
+            _rb.MovePosition(transform.position + transform.forward.normalized * Time.fixedDeltaTime * this.speed);
+            yield return new WaitForFixedUpdate();
         }
 
         yield break;
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        hasCollided = true;
+        if (other.tag == "Enemy")
+        {
+            this.Target = other.GetComponent<AbilitySystemCharacter>();
+        }
+    }
+
     public IEnumerator Despawn()
     {
-        Target.ApplyGameplayEffectSpecToSelf(Spec);
+        if (Target != null) Target.ApplyGameplayEffectSpecToSelf(Spec);
+        Instantiate(this.impactPrefab, transform.position, transform.rotation);
         Destroy(this.gameObject);
         yield break;
     }
