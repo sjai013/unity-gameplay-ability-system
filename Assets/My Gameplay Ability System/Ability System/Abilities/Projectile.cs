@@ -7,9 +7,9 @@ public class Projectile : MonoBehaviour
 
 {
 
-    [SerializeField] private GameObject impactPrefab;
+    [SerializeField] private GameObject impactObject;
+    [SerializeField] private GameObject projectile;
 
-    [SerializeField]
     public AbilitySystemCharacter Source;
 
     [SerializeField]
@@ -40,7 +40,8 @@ public class Projectile : MonoBehaviour
 
     public IEnumerator Spawn()
     {
-        yield break;
+        projectile.SetActive(true);
+        yield return null;
     }
 
     public IEnumerator TravelForward(Vector3 forward)
@@ -72,7 +73,8 @@ public class Projectile : MonoBehaviour
     public IEnumerator Despawn()
     {
         if (Target != null) Target.ApplyGameplayEffectSpecToSelf(Spec);
-        Instantiate(this.impactPrefab, transform.position, transform.rotation);
+        this.impactObject.SetActive(true);
+        this.impactObject.transform.SetParent(null);
         Destroy(this.gameObject);
         yield break;
     }

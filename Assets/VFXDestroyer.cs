@@ -8,6 +8,7 @@ public class VFXDestroyer : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] private VisualEffect vfx;
     [SerializeField] private float minTime;
+    [SerializeField] private float maxTime;
 
     [SerializeField] private float currentTime = 0;
     void Start()
@@ -19,6 +20,6 @@ public class VFXDestroyer : MonoBehaviour
     void Update()
     {
         currentTime += Time.deltaTime;
-        if (vfx.aliveParticleCount <= 0 && currentTime > minTime) Destroy(this.gameObject);
+        if ((vfx.aliveParticleCount <= 0 && currentTime > minTime) || currentTime > maxTime) Destroy(this.gameObject);
     }
 }

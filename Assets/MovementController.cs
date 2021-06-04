@@ -14,17 +14,22 @@ public class MovementController : MonoBehaviour
     private float turnSmoothVelocity;
     private DefaultInputActions playerInput;
 
+    [SerializeField] private Animator animController;
+
+    private int _shouldMoveHash;
+
 
     void Awake()
     {
         playerInput = new DefaultInputActions();
         playerInput.Enable();
+        _shouldMoveHash = Animator.StringToHash("ShouldMove");
     }
     // Update is called once per frame
     void Update()
     {
         var movementVector = CaptureMovementFromInput();
-
+        animController.SetBool(_shouldMoveHash, false);
         if (movementVector.magnitude >= 0.1f)
         {
             float lookAngle = Mathf.Atan2(movementVector.x, movementVector.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
@@ -33,6 +38,8 @@ public class MovementController : MonoBehaviour
 
             Vector3 moveDirection = Quaternion.Euler(0f, lookAngle, 0f).normalized * Vector3.forward;
             controller.Move(moveDirection * speed * Time.deltaTime);
+            animController.SetBool(_shouldMoveHash, true);
+
         }
     }
 

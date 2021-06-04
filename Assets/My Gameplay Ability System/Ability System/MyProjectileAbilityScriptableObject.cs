@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AbilitySystem;
 using AbilitySystem.Authoring;
+using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Gameplay Ability System/Abilities/Projectile")]
@@ -28,9 +29,11 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
     {
         public Projectile projectile;
         public CastPointComponent CastPointComponent;
+        private AnimatorController casterAnimatorController;
+
         public AbilitySpec(AbstractAbilityScriptableObject ability, AbilitySystemCharacter owner) : base(ability, owner)
         {
-
+            casterAnimatorController = owner.GetComponent<AnimatorController>();
         }
 
         public override void CancelAbility()
@@ -53,6 +56,9 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
             var effectSpec = this.Owner.MakeOutgoingSpec((this.Ability as MyProjectileAbilityScriptableObject).GameplayEffect);
             this.Owner.ApplyGameplayEffectSpecToSelf(cdSpec);
             this.Owner.ApplyGameplayEffectSpecToSelf(costSpec);
+
+            // Do casting animation
+
 
             // Fire projectile forwards.  First object hit is the target.
             var go = Instantiate(this.projectile.gameObject, this.CastPointComponent.GetPosition(), this.CastPointComponent.transform.rotation);
