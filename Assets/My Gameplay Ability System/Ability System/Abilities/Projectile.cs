@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using AbilitySystem;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     public AbilitySystemCharacter Target;
 
+    [NonSerialized]
     public GameplayEffectSpec Spec;
 
     [SerializeField]

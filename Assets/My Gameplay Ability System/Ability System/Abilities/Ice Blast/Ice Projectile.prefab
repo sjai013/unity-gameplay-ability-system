@@ -305,12 +305,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   impactObject: {fileID: 731006935591577785}
-  muzzle: {fileID: 1849269767359159859}
   projectile: {fileID: 7696715899280406501}
   Source: {fileID: 0}
   Target: {fileID: 0}
-  speed: 13
-  rotationVector: {x: 0, y: 0, z: 25}
+  speed: 25
+  rotationVector: {x: 0, y: 0, z: 360}
   lifetime: 1
 --- !u!95 &6329690413289432728
 Animator:

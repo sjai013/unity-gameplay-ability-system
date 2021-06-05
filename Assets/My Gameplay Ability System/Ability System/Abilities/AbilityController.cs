@@ -16,19 +16,29 @@ public class AbilityController : MonoBehaviour, DefaultInputActions.IPlayerAbili
     private AbstractAbilitySpec[] abilitySpecs;
 
     private DefaultInputActions playerInput;
+
+    [SerializeField] Animator animatorController;
     public Image[] Cooldowns;
 
-    // Start is called before the first frame update
-    void Start()
+    public Transform[] CastPoint;
+
+    private CastPointComponent castPointComponent;
+
+    void Awake()
     {
         this.abilitySystemCharacter = GetComponent<AbilitySystemCharacter>();
+        this.castPointComponent = GetComponent<CastPointComponent>();
         var spec = Abilities[0].CreateSpec(this.abilitySystemCharacter);
         this.abilitySystemCharacter.GrantAbility(spec);
-        ActivateInitialisationAbilities();
-        GrantCastableAbilities();
         playerInput = new DefaultInputActions();
         playerInput.PlayerAbilities.SetCallbacks(this);
         playerInput.PlayerAbilities.Enable();
+    }
+
+    void Start()
+    {
+        ActivateInitialisationAbilities();
+        GrantCastableAbilities();
     }
 
     // Update is called once per frame
@@ -73,7 +83,16 @@ public class AbilityController : MonoBehaviour, DefaultInputActions.IPlayerAbili
     public void UseAbility(int i)
     {
         var spec = abilitySpecs[i];
-        StartCoroutine(spec.TryActivateAbility());
+        int attackIdx = Random.Range(0, 2);
+        if (spec.CanActivateAbility())
+        {
+            castPointComponent.CastPoint = CastPoint[attackIdx];
+            StartCoroutine(spec.TryActivateAbility());
+            animatorController.SetInteger("AttackIdx", attackIdx);
+            animatorController.SetTrigger("Attack");
+
+        }
+
     }
 
     public void OnFire1(InputAction.CallbackContext context)

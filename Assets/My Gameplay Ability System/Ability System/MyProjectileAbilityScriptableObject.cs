@@ -61,6 +61,8 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
 
 
             // Fire projectile forwards.  First object hit is the target.
+            EndAbility();
+
             var go = Instantiate(this.projectile.gameObject, this.CastPointComponent.GetPosition(), this.CastPointComponent.transform.rotation);
             var projectileInstance = go.GetComponent<Projectile>();
             projectileInstance.Source = Owner;
@@ -71,7 +73,6 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
             yield return projectileInstance.Despawn();
 
 
-            EndAbility();
 
             // Spawn instance of projectile prefab
         }
