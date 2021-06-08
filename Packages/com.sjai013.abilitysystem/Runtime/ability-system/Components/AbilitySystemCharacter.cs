@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using AbilitySystem.Authoring;
 using AttributeSystem.Authoring;
 using AttributeSystem.Components;
 using GameplayTag.Authoring;
+using Unity.Collections;
 using UnityEngine;
 
 
@@ -15,6 +18,8 @@ namespace AbilitySystem
         public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
         public List<GameplayEffectContainer> AppliedGameplayEffects = new List<GameplayEffectContainer>();
         public List<AbstractAbilitySpec> GrantedAbilities = new List<AbstractAbilitySpec>();
+        private Dictionary<GameplayTagScriptableObject, List<GameplayEffectSpec>> GameplayTags = new Dictionary<GameplayTagScriptableObject, List<GameplayEffectSpec>>();
+
         public float Level;
 
         public void GrantAbility(AbstractAbilitySpec spec)
@@ -33,6 +38,45 @@ namespace AbilitySystem
             }
         }
 
+        private int AddGameplayTag(GameplayTagScriptableObject tag, GameplayEffectSpec spec)
+        {
+            // Check if this tag is in the list already, and increment.
+            // If it's not in the list, count will be 0 anyway
+            this.GameplayTags.TryGetValue(tag, out var geList);
+            if (geList == null) geList = new List<GameplayEffectSpec>();
+            geList.Add(spec);
+            this.GameplayTags[tag] = geList;
+            return geList.Count;
+        }
+
+        private int RemoveGameplayTag(GameplayTagScriptableObject tag, GameplayEffectSpec spec)
+        {
+            // Check if this tag is in the list already, and decrement.
+            // If it's not in the list, count will be 0
+            this.GameplayTags.TryGetValue(tag, out var geList);
+            if (geList == null || geList.Count <= 1)
+            {
+                // Not in the list, or only one instance in the list
+                this.GameplayTags.Remove(tag);
+                return 0;
+            }
+            geList.Remove(spec);
+            this.GameplayTags[tag] = geList;
+            return geList.Count;
+        }
+
+        public int GetTagCount(GameplayTagScriptableObject tag)
+        {
+            this.GameplayTags.TryGetValue(tag, out var geList);
+            if (geList == null) return 0;
+            return geList.Count;
+        }
+
+        public List<GameplayEffectSpec> GetAppliedGameplayEffectsForTag(GameplayTagScriptableObject tag)
+        {
+            this.GameplayTags.TryGetValue(tag, out var geList);
+            return geList ?? new List<GameplayEffectSpec>();
+        }
 
         /// <summary>
         /// Applies the gameplay effect spec to self
@@ -44,7 +88,6 @@ namespace AbilitySystem
             bool tagRequirementsOK = CheckTagRequirementsMet(geSpec);
 
             if (tagRequirementsOK == false) return false;
-
 
             switch (geSpec.GameplayEffect.gameplayEffect.DurationPolicy)
             {
@@ -70,18 +113,12 @@ namespace AbilitySystem
 
         bool CheckTagRequirementsMet(GameplayEffectSpec geSpec)
         {
-            /// Build temporary list of all gametags currently applied
-            var appliedTags = new List<GameplayTagScriptableObject>();
-            for (var i = 0; i < AppliedGameplayEffects.Count; i++)
-            {
-                appliedTags.AddRange(AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffectTags.GrantedTags);
-            }
 
             // Every tag in the ApplicationTagRequirements.RequireTags needs to be in the character tags list
             // In other words, if any tag in ApplicationTagRequirements.RequireTags is not present, requirement is not met
             for (var i = 0; i < geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.RequireTags.Length; i++)
             {
-                if (!appliedTags.Contains(geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.RequireTags[i]))
+                if (!GameplayTags.ContainsKey(geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.RequireTags[i]))
                 {
                     return false;
                 }
@@ -91,7 +128,7 @@ namespace AbilitySystem
             // In other words, if any tag in ApplicationTagRequirements.IgnoreTags is present, requirement is not met
             for (var i = 0; i < geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.IgnoreTags.Length; i++)
             {
-                if (appliedTags.Contains(geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.IgnoreTags[i]))
+                if (GameplayTags.ContainsKey(geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.IgnoreTags[i]))
                 {
                     return false;
                 }
@@ -147,6 +184,12 @@ namespace AbilitySystem
                 modifiersToApply.Add(new GameplayEffectContainer.ModifierContainer() { Attribute = modifier.Attribute, Modifier = attributeModifier });
             }
             AppliedGameplayEffects.Add(new GameplayEffectContainer() { spec = spec, modifiers = modifiersToApply.ToArray() });
+
+
+            for (var i = 0; i < spec.GameplayEffect.gameplayEffectTags.GrantedTags.Length; i++)
+            {
+                AddGameplayTag(spec.GameplayEffect.gameplayEffectTags.GrantedTags[i], spec);
+            }
         }
 
         void UpdateAttributeSystem()
@@ -165,9 +208,9 @@ namespace AbilitySystem
             }
         }
 
-        void TickGameplayEffects()
+        void TickGameplayEffectsAndClean()
         {
-            for (var i = 0; i < this.AppliedGameplayEffects.Count; i++)
+            for (var i = this.AppliedGameplayEffects.Count - 1; i >= 0; i--)
             {
                 var ge = this.AppliedGameplayEffects[i].spec;
 
@@ -176,6 +219,16 @@ namespace AbilitySystem
 
                 // Update time remaining.  Stritly, it's only really valid for durational GE, but calculating for infinite GE isn't harmful
                 ge.UpdateRemainingDuration(Time.deltaTime);
+
+                if (ge.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration && ge.DurationRemaining <= 0)
+                {
+                    for (var iTag = 0; iTag < ge.GameplayEffect.gameplayEffectTags.GrantedTags.Length; iTag++)
+                    {
+                        RemoveGameplayTag(ge.GameplayEffect.gameplayEffectTags.GrantedTags[iTag], ge);
+                    }
+                    this.AppliedGameplayEffects.RemoveAt(i);
+                    return;
+                }
 
                 // Tick the periodic component
                 ge.TickPeriodic(Time.deltaTime, out var executePeriodicTick);
@@ -186,20 +239,14 @@ namespace AbilitySystem
             }
         }
 
-        void CleanGameplayEffects()
-        {
-            this.AppliedGameplayEffects.RemoveAll(x => x.spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration && x.spec.DurationRemaining <= 0);
-        }
-
-        void Update()
+        void LateUpdate()
         {
             // Reset all attributes to 0
             this.AttributeSystem.ResetAttributeModifiers();
             UpdateAttributeSystem();
-
-            TickGameplayEffects();
-            CleanGameplayEffects();
+            TickGameplayEffectsAndClean();
         }
+
     }
 }
 
