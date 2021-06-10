@@ -90,31 +90,38 @@ namespace AbilitySystem.Authoring
         public virtual AbilityCooldownTime CheckCooldown()
         {
             float maxDuration = 0;
-            float longestCooldown = 0f;
-
             if (this.Ability.Cooldown == null) return new AbilityCooldownTime();
             var cooldownTags = this.Ability.Cooldown.gameplayEffectTags.GrantedTags;
 
-            for (var i = 0; i < cooldownTags.Length; i++)
+            float longestCooldown = 0f;
+
+            // Check if the cooldown tag is granted to the player, and if so, capture the remaining duration for that tag
+            for (var i = 0; i < this.Owner.AppliedGameplayEffects.Count; i++)
             {
-                var geList = this.Owner.GetAppliedGameplayEffectsForTag(cooldownTags[i]);
-                for (var iList = 0; iList < geList.Count; iList++)
+                var grantedTags = this.Owner.AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
+                for (var iTag = 0; iTag < grantedTags.Length; iTag++)
                 {
-                    // If this is an infinite GE, then return infinite time remaining 
-                    if (geList[iList].GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.Infinite) return new AbilityCooldownTime()
+                    for (var iCooldownTag = 0; iCooldownTag < cooldownTags.Length; iCooldownTag++)
                     {
-                        TimeRemaining = float.MaxValue,
-                        TotalDuration = 0
-                    };
+                        if (grantedTags[iTag] == cooldownTags[iCooldownTag])
+                        {
+                            // If this is an infinite GE, then return null to signify this is on CD
+                            if (this.Owner.AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.Infinite) return new AbilityCooldownTime()
+                            {
+                                TimeRemaining = float.MaxValue,
+                                TotalDuration = 0
+                            };
 
-                    var durationRemaining = geList[iList].DurationRemaining;
+                            var durationRemaining = this.Owner.AppliedGameplayEffects[i].spec.DurationRemaining;
 
-                    if (durationRemaining > longestCooldown)
-                    {
-                        longestCooldown = durationRemaining;
-                        maxDuration = geList[iList].TotalDuration;
+                            if (durationRemaining > longestCooldown)
+                            {
+                                longestCooldown = durationRemaining;
+                                maxDuration = this.Owner.AppliedGameplayEffects[i].spec.TotalDuration;
+                            }
+                        }
+
                     }
-
                 }
             }
 
@@ -188,9 +195,20 @@ namespace AbilitySystem.Authoring
             {
                 var abilityTag = tags[iAbilityTag];
 
-                // If any ability tag isn't found, requirements failed
-                if (asc.GetTagCount(tags[iAbilityTag]) < 1) return false;
-
+                bool requirementPassed = false;
+                for (var iAsc = 0; iAsc < asc.AppliedGameplayEffects.Count; iAsc++)
+                {
+                    GameplayTagScriptableObject[] ascGrantedTags = asc.AppliedGameplayEffects[iAsc].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
+                    for (var iAscTag = 0; iAscTag < ascGrantedTags.Length; iAscTag++)
+                    {
+                        if (ascGrantedTags[iAscTag] == abilityTag)
+                        {
+                            requirementPassed = true;
+                        }
+                    }
+                }
+                // If any ability tag wasn't found, requirements failed
+                if (!requirementPassed) return false;
             }
             return true;
         }
@@ -210,9 +228,20 @@ namespace AbilitySystem.Authoring
             {
                 var abilityTag = tags[iAbilityTag];
 
-                // If any ability tag was found, requirements failed
-                if (asc.GetTagCount(tags[iAbilityTag]) >= 1) return false;
-
+                bool requirementPassed = true;
+                for (var iAsc = 0; iAsc < asc.AppliedGameplayEffects.Count; iAsc++)
+                {
+                    GameplayTagScriptableObject[] ascGrantedTags = asc.AppliedGameplayEffects[iAsc].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
+                    for (var iAscTag = 0; iAscTag < ascGrantedTags.Length; iAscTag++)
+                    {
+                        if (ascGrantedTags[iAscTag] == abilityTag)
+                        {
+                            requirementPassed = false;
+                        }
+                    }
+                }
+                // If any ability tag wasn't found, requirements failed
+                if (!requirementPassed) return false;
             }
             return true;
         }
