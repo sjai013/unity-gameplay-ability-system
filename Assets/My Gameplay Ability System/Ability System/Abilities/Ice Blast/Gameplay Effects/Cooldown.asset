@@ -18,10 +18,27 @@ MonoBehaviour:
     DurationMultiplier: 0.2
     Modifiers: []
     ConditionalGameplayEffects: []
-  gameplayEffectTags:
-    AssetTag: {fileID: 11400000, guid: 37517289c8cfd4440bc243f1b2531811, type: 2}
+  gameplayEffectTagsAuthoring:
+    AssetTag: {fileID: 0}
     GrantedTags:
     - {fileID: 11400000, guid: 37517289c8cfd4440bc243f1b2531811, type: 2}
+    OngoingTagRequirements:
+      RequireTags: []
+      IgnoreTags: []
+    ApplicationTagRequirements:
+      RequireTags: []
+      IgnoreTags: []
+    RemovalTagRequirements:
+      RequireTags: []
+      IgnoreTags: []
+    RemoveGameplayEffectsWithTag: []
+  gameplayEffectTags:
+    AssetTag:
+      Tag: 0
+      Ancestors: 
+    GrantedTags:
+    - Tag: 10034
+      Ancestors: 66270000
     OngoingTagRequirements:
       RequireTags: []
       IgnoreTags: []

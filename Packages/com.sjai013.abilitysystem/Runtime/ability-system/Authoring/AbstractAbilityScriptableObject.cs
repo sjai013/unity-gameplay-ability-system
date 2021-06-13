@@ -42,15 +42,15 @@ namespace AbilitySystem.Authoring
 
         public void OnValidate()
         {
-            this.AbilityTags = ConvertAbilityTags();
+            this.AbilityTags = ConvertTags();
         }
 
-        private TAbilityTags<GameplayTagScriptableObject.GameplayTag> ConvertAbilityTags()
+        private TAbilityTags<GameplayTagScriptableObject.GameplayTag> ConvertTags()
         {
             return new TAbilityTags<GameplayTagScriptableObject.GameplayTag>()
             {
+                AssetTag = AbilityTagsAuthoring.AssetTag?.TagData ?? new GameplayTagScriptableObject.GameplayTag(),
                 ActivationOwnedTags = AbilityTagsAuthoring.ActivationOwnedTags.ToGameplayTagStruct(),
-                AssetTag = AbilityTagsAuthoring.AssetTag.TagData,
                 BlockAbilitiesWithTags = AbilityTagsAuthoring.BlockAbilitiesWithTags.ToGameplayTagStruct(),
                 CancelAbilitiesWithTags = AbilityTagsAuthoring.CancelAbilitiesWithTags.ToGameplayTagStruct(),
                 OwnerTags = new GameplayTagRequireIgnoreContainer<GameplayTagScriptableObject.GameplayTag>()

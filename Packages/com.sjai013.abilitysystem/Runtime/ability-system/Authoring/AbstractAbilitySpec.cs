@@ -198,10 +198,10 @@ namespace AbilitySystem.Authoring
                 bool requirementPassed = false;
                 for (var iAsc = 0; iAsc < asc.AppliedGameplayEffects.Count; iAsc++)
                 {
-                    GameplayTagScriptableObject[] ascGrantedTags = asc.AppliedGameplayEffects[iAsc].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
+                    GameplayTagScriptableObject.GameplayTag[] ascGrantedTags = asc.AppliedGameplayEffects[iAsc].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
                     for (var iAscTag = 0; iAscTag < ascGrantedTags.Length; iAscTag++)
                     {
-                        if (ascGrantedTags[iAscTag].TagData == abilityTag)
+                        if (ascGrantedTags[iAscTag] == abilityTag)
                         {
                             requirementPassed = true;
                         }
@@ -231,10 +231,10 @@ namespace AbilitySystem.Authoring
                 bool requirementPassed = true;
                 for (var iAsc = 0; iAsc < asc.AppliedGameplayEffects.Count; iAsc++)
                 {
-                    GameplayTagScriptableObject[] ascGrantedTags = asc.AppliedGameplayEffects[iAsc].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
+                    GameplayTagScriptableObject.GameplayTag[] ascGrantedTags = asc.AppliedGameplayEffects[iAsc].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
                     for (var iAscTag = 0; iAscTag < ascGrantedTags.Length; iAscTag++)
                     {
-                        if (ascGrantedTags[iAscTag].TagData == abilityTag)
+                        if (ascGrantedTags[iAscTag] == abilityTag)
                         {
                             requirementPassed = false;
                         }

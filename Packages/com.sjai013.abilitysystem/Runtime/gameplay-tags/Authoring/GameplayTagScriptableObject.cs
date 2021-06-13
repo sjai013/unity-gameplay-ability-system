@@ -5,20 +5,15 @@ using UnityEngine;
 using Unity.Mathematics;
 using System;
 using System.Linq;
+using UnityEngine.Serialization;
 
 namespace GameplayTag.Authoring
 {
-
-
     [CreateAssetMenu(menuName = "Gameplay Ability System/Tag")]
     public class GameplayTagScriptableObject : ScriptableObject
     {
-        [SerializeField]
-        private GameplayTagScriptableObject _parent;
-        public GameplayTagScriptableObject Parent { get { return _parent; } }
-
+        [SerializeField] private GameplayTagScriptableObject Parent;
         [SerializeField] private int ancestorsToFind = 4;
-
         public GameplayTag TagData;
 
         /// <summary>

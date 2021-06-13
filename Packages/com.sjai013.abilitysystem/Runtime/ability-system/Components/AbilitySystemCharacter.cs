@@ -71,7 +71,7 @@ namespace AbilitySystem
         bool CheckTagRequirementsMet(GameplayEffectSpec geSpec)
         {
             /// Build temporary list of all gametags currently applied
-            var appliedTags = new List<GameplayTagScriptableObject>();
+            var appliedTags = new List<GameplayTagScriptableObject.GameplayTag>();
             for (var i = 0; i < AppliedGameplayEffects.Count; i++)
             {
                 appliedTags.AddRange(AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffectTags.GrantedTags);
