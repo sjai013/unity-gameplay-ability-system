@@ -4,17 +4,17 @@ using GameplayTag.Authoring;
 namespace AbilitySystem
 {
     [Serializable]
-    public struct GameplayTagRequireIgnoreContainer
+    public struct GameplayTagRequireIgnoreContainer<T>
     {
         /// <summary>
         /// All of these tags must be present
         /// </summary>
-        public GameplayTagScriptableObject[] RequireTags;
+        public T[] RequireTags;
 
         /// <summary>
         /// None of these tags can be present
         /// </summary>
-        public GameplayTagScriptableObject[] IgnoreTags;
+        public T[] IgnoreTags;
     }
 
 }

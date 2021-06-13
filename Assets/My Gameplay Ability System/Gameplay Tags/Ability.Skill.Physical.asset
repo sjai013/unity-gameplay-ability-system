@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: Ability.Skill.Physical
   m_EditorClassIdentifier: 
   _parent: {fileID: 11400000, guid: 49995ee186211b94ebd244fe432a4a0f, type: 2}
+  TagData:
+    Tag: 25794
+    Parent: b8640000b66400000000000000000000

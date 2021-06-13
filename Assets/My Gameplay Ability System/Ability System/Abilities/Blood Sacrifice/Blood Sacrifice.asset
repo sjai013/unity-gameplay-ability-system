@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityName: Ice Blast
   AbilityTags:
-    AbilityTag: {fileID: 11400000, guid: f03eb3d776df7594d93b6d7939cc03b9, type: 2}
+    AssetTag: {fileID: 11400000, guid: f03eb3d776df7594d93b6d7939cc03b9, type: 2}
     CancelAbilitiesWithTags: []
     BlockAbilitiesWithTags: []
     ActivationOwnedTags: []

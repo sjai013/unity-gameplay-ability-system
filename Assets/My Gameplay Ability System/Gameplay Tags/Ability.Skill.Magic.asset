@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: Ability.Skill.Magic
   m_EditorClassIdentifier: 
   _parent: {fileID: 11400000, guid: 49995ee186211b94ebd244fe432a4a0f, type: 2}
+  ancestorsToFind: 4
+  TagData:
+    Tag: 25786
+    Ancestors: b8640000b6640000

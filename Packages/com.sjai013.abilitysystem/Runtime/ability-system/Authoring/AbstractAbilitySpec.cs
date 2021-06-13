@@ -186,7 +186,7 @@ namespace AbilitySystem.Authoring
         /// <param name="asc">Ability System Character</param>
         /// <param name="tags">List of tags to check</param>
         /// <returns>True, if the Ability System Character has all tags</returns>
-        protected virtual bool AscHasAllTags(AbilitySystemCharacter asc, GameplayTagScriptableObject[] tags)
+        protected virtual bool AscHasAllTags(AbilitySystemCharacter asc, GameplayTagScriptableObject.GameplayTag[] tags)
         {
             // If the input ASC is not valid, assume check passed
             if (!asc) return true;
@@ -201,7 +201,7 @@ namespace AbilitySystem.Authoring
                     GameplayTagScriptableObject[] ascGrantedTags = asc.AppliedGameplayEffects[iAsc].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
                     for (var iAscTag = 0; iAscTag < ascGrantedTags.Length; iAscTag++)
                     {
-                        if (ascGrantedTags[iAscTag] == abilityTag)
+                        if (ascGrantedTags[iAscTag].TagData == abilityTag)
                         {
                             requirementPassed = true;
                         }
@@ -219,7 +219,7 @@ namespace AbilitySystem.Authoring
         /// <param name="asc">Ability System Character</param>
         /// <param name="tags">List of tags to check</param>
         /// <returns>True, if the Ability System Character has none of the tags</returns>
-        protected virtual bool AscHasNoneTags(AbilitySystemCharacter asc, GameplayTagScriptableObject[] tags)
+        protected virtual bool AscHasNoneTags(AbilitySystemCharacter asc, GameplayTagScriptableObject.GameplayTag[] tags)
         {
             // If the input ASC is not valid, assume check passed
             if (!asc) return true;
@@ -234,7 +234,7 @@ namespace AbilitySystem.Authoring
                     GameplayTagScriptableObject[] ascGrantedTags = asc.AppliedGameplayEffects[iAsc].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
                     for (var iAscTag = 0; iAscTag < ascGrantedTags.Length; iAscTag++)
                     {
-                        if (ascGrantedTags[iAscTag] == abilityTag)
+                        if (ascGrantedTags[iAscTag].TagData == abilityTag)
                         {
                             requirementPassed = false;
                         }

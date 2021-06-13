@@ -13,8 +13,24 @@ MonoBehaviour:
   m_Name: Ice Blast
   m_EditorClassIdentifier: 
   AbilityName: Projectile Ice Blast
+  AbilityTagsAuthoring:
+    AssetTag: {fileID: 11400000, guid: d2ffa0e3d25579749987fae05af7a5c1, type: 2}
+    CancelAbilitiesWithTags: []
+    BlockAbilitiesWithTags: []
+    ActivationOwnedTags: []
+    OwnerTags:
+      RequireTags: []
+      IgnoreTags: []
+    SourceTags:
+      RequireTags: []
+      IgnoreTags: []
+    TargetTags:
+      RequireTags: []
+      IgnoreTags: []
   AbilityTags:
-    AssetTag: {fileID: 0}
+    AssetTag:
+      Tag: 25790
+      Ancestors: ba640000b8640000b6640000
     CancelAbilitiesWithTags: []
     BlockAbilitiesWithTags: []
     ActivationOwnedTags: []

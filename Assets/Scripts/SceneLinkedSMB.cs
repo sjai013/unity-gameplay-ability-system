@@ -3,15 +3,16 @@ using UnityEngine.Animations;
 
 namespace Gamekit3D
 {
-    public class SceneLinkedSMB<TMonoBehaviour> : SealedSMB 
+    public class SceneLinkedSMB<TMonoBehaviour> : SealedSMB
         where TMonoBehaviour : MonoBehaviour
     {
         protected TMonoBehaviour m_MonoBehaviour;
-    
+        protected TMonoBehaviour m_MonoBehaviour2;
+
         bool m_FirstFrameHappened;
         bool m_LastFrameHappened;
 
-        public static void Initialise (Animator animator, TMonoBehaviour monoBehaviour)
+        public static void Initialise(Animator animator, TMonoBehaviour monoBehaviour)
         {
             SceneLinkedSMB<TMonoBehaviour>[] sceneLinkedSMBs = animator.GetBehaviours<SceneLinkedSMB<TMonoBehaviour>>();
 
@@ -21,10 +22,10 @@ namespace Gamekit3D
             }
         }
 
-        protected void InternalInitialise (Animator animator, TMonoBehaviour monoBehaviour)
+        protected void InternalInitialise(Animator animator, TMonoBehaviour monoBehaviour)
         {
             m_MonoBehaviour = monoBehaviour;
-            OnStart (animator);
+            OnStart(animator);
         }
 
         public sealed override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
@@ -32,14 +33,14 @@ namespace Gamekit3D
             m_FirstFrameHappened = false;
 
             OnSLStateEnter(animator, stateInfo, layerIndex);
-            OnSLStateEnter (animator, stateInfo, layerIndex, controller);
+            OnSLStateEnter(animator, stateInfo, layerIndex, controller);
         }
 
         public sealed override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
         {
-            if(!animator.gameObject.activeSelf)
+            if (!animator.gameObject.activeSelf)
                 return;
-        
+
             if (animator.IsInTransition(layerIndex) && animator.GetNextAnimatorStateInfo(layerIndex).fullPathHash == stateInfo.fullPathHash)
             {
                 OnSLTransitionToStateUpdate(animator, stateInfo, layerIndex);
@@ -51,11 +52,11 @@ namespace Gamekit3D
                 OnSLStateNoTransitionUpdate(animator, stateInfo, layerIndex);
                 OnSLStateNoTransitionUpdate(animator, stateInfo, layerIndex, controller);
             }
-        
+
             if (animator.IsInTransition(layerIndex) && !m_LastFrameHappened && m_FirstFrameHappened)
             {
                 m_LastFrameHappened = true;
-            
+
                 OnSLStatePreExit(animator, stateInfo, layerIndex);
                 OnSLStatePreExit(animator, stateInfo, layerIndex, controller);
             }
@@ -92,7 +93,7 @@ namespace Gamekit3D
         /// Called before Updates when execution of the state first starts (on transition to the state).
         /// </summary>
         public virtual void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) { }
-    
+
         /// <summary>
         /// Called after OnSLStateEnter every frame during transition to the state.
         /// </summary>

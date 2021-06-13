@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameplayTag.Authoring;
 using UnityEngine;
 
 namespace AbilitySystem.Authoring
@@ -11,7 +12,7 @@ namespace AbilitySystem.Authoring
         public GameplayEffectDefinitionContainer gameplayEffect;
 
         [SerializeField]
-        public GameplayEffectTags gameplayEffectTags;
+        public TGameplayEffectTags<GameplayTagScriptableObject> gameplayEffectTags;
 
         [SerializeField]
         public GameplayEffectPeriod Period;

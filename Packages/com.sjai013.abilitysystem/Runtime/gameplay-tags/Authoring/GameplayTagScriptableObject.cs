@@ -1,9 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
+using Unity.Mathematics;
+using System;
+using System.Linq;
 
 namespace GameplayTag.Authoring
 {
+
+
     [CreateAssetMenu(menuName = "Gameplay Ability System/Tag")]
     public class GameplayTagScriptableObject : ScriptableObject
     {
@@ -11,6 +17,9 @@ namespace GameplayTag.Authoring
         private GameplayTagScriptableObject _parent;
         public GameplayTagScriptableObject Parent { get { return _parent; } }
 
+        [SerializeField] private int ancestorsToFind = 4;
+
+        public GameplayTag TagData;
 
         /// <summary>
         /// <para>Check is this gameplay tag is a descendant of another gameplay tag.</para>
@@ -34,9 +43,71 @@ namespace GameplayTag.Authoring
                 tag = tag.Parent;
             }
 
+
             // If we've exhausted the search limit, no ancestor was found
             return false;
         }
 
+        public void OnValidate()
+        {
+            UpdateCache();
+        }
+
+        private void UpdateCache()
+        {
+            this.TagData = Build(ancestorsToFind);
+        }
+
+        public GameplayTag Build(int nSearchLimit = 4)
+        {
+            if (nSearchLimit < 0) nSearchLimit = ancestorsToFind;
+
+            var ancestors = new List<int>();
+            var parent = this.Parent;
+            for (var i = 0; i < nSearchLimit; i++)
+            {
+                ancestors.Add(parent?.GetInstanceID() ?? 0);
+                // Leave the loop early if there no further ancestors
+                parent = parent?.Parent;
+                i = math.select(i, nSearchLimit, parent == null);
+            }
+
+            return new GameplayTag()
+            {
+                Tag = this.GetInstanceID(),
+                Ancestors = ancestors.ToArray()
+            };
+        }
+
+        [Serializable]
+        public struct GameplayTag
+        {
+            public int Tag;
+            public int[] Ancestors;
+
+            public bool IsDescendantOf(GameplayTag other)
+            {
+                return (other.Ancestors.Contains(Tag));
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is GameplayTag && this == (GameplayTag)obj;
+            }
+
+            public override int GetHashCode()
+            {
+                return Tag.GetHashCode();
+            }
+            public static bool operator ==(GameplayTag x, GameplayTag y)
+            {
+                return x.Tag == y.Tag;
+            }
+
+            public static bool operator !=(GameplayTag x, GameplayTag y)
+            {
+                return !(x == y);
+            }
+        }
     }
 }

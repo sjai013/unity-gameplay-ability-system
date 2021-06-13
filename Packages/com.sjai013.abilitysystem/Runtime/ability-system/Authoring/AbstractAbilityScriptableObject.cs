@@ -1,5 +1,7 @@
 using System;
+using GameplayTag.Authoring;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AbilitySystem.Authoring
 {
@@ -14,7 +16,8 @@ namespace AbilitySystem.Authoring
         /// <summary>
         /// Tags for this ability
         /// </summary>
-        [SerializeField] public AbilityTags AbilityTags;
+        [SerializeField] private TAbilityTags<GameplayTagScriptableObject> AbilityTagsAuthoring;
+        public TAbilityTags<GameplayTagScriptableObject.GameplayTag> AbilityTags;
 
         /// <summary>
         /// The GameplayEffect that defines the cost associated with activating the ability
@@ -36,5 +39,41 @@ namespace AbilitySystem.Authoring
         /// <param name="owner">Usually the character casting thsi ability</param>
         /// <returns>Ability Spec</returns>
         public abstract AbstractAbilitySpec CreateSpec(AbilitySystemCharacter owner);
+
+        public void OnValidate()
+        {
+            this.AbilityTags = ConvertAbilityTags();
+        }
+
+        private TAbilityTags<GameplayTagScriptableObject.GameplayTag> ConvertAbilityTags()
+        {
+            return new TAbilityTags<GameplayTagScriptableObject.GameplayTag>()
+            {
+                ActivationOwnedTags = AbilityTagsAuthoring.ActivationOwnedTags.ToGameplayTagStruct(),
+                AssetTag = AbilityTagsAuthoring.AssetTag.TagData,
+                BlockAbilitiesWithTags = AbilityTagsAuthoring.BlockAbilitiesWithTags.ToGameplayTagStruct(),
+                CancelAbilitiesWithTags = AbilityTagsAuthoring.CancelAbilitiesWithTags.ToGameplayTagStruct(),
+                OwnerTags = new GameplayTagRequireIgnoreContainer<GameplayTagScriptableObject.GameplayTag>()
+                {
+                    IgnoreTags = AbilityTagsAuthoring.OwnerTags.IgnoreTags.ToGameplayTagStruct(),
+                    RequireTags = AbilityTagsAuthoring.OwnerTags.RequireTags.ToGameplayTagStruct()
+                },
+                SourceTags = new GameplayTagRequireIgnoreContainer<GameplayTagScriptableObject.GameplayTag>()
+                {
+                    IgnoreTags = AbilityTagsAuthoring.SourceTags.IgnoreTags.ToGameplayTagStruct(),
+                    RequireTags = AbilityTagsAuthoring.SourceTags.RequireTags.ToGameplayTagStruct()
+                },
+                TargetTags = new GameplayTagRequireIgnoreContainer<GameplayTagScriptableObject.GameplayTag>()
+                {
+                    IgnoreTags = AbilityTagsAuthoring.TargetTags.IgnoreTags.ToGameplayTagStruct(),
+                    RequireTags = AbilityTagsAuthoring.TargetTags.RequireTags.ToGameplayTagStruct()
+                },
+            };
+        }
+
+        private void GameplayTagScriptableObjectToGameplayTag()
+        {
+
+        }
     }
 }

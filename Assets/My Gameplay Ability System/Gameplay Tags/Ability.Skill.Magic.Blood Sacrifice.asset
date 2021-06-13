@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: Ability.Skill.Magic.Blood Sacrifice
   m_EditorClassIdentifier: 
   _parent: {fileID: 11400000, guid: 796438ec5d04b034cb1eab0fe6969cdb, type: 2}
+  ancestorsToFind: 4
+  TagData:
+    Tag: 25788
+    Ancestors: ba640000b8640000b6640000

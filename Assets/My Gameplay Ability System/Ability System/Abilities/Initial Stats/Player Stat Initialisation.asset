@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityName: 
   AbilityTags:
-    AbilityTag: {fileID: 0}
+    AssetTag: {fileID: 11400000, guid: 44e8420754d35d04e8d42484dc67efc7, type: 2}
     CancelAbilitiesWithTags: []
     BlockAbilitiesWithTags: []
     ActivationOwnedTags: []
