@@ -9,10 +9,7 @@ using UnityEngine;
 public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObject
 {
     protected Projectile projectile;
-
-    [SerializeField]
-    protected GameObject projectilePrefab;
-
+    [SerializeField] protected GameObject projectilePrefab;
     public GameplayEffectScriptableObject GameplayEffect;
     public override AbstractAbilitySpec CreateSpec(AbilitySystemCharacter owner)
     {
@@ -33,7 +30,7 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
 
         public AbilitySpec(AbstractAbilityScriptableObject ability, AbilitySystemCharacter owner) : base(ability, owner)
         {
-            casterAnimatorController = owner.GetComponent<AnimatorController>();
+            //casterAnimatorController = owner.GetComponent<AnimatorController>();
         }
 
         public override void CancelAbility()

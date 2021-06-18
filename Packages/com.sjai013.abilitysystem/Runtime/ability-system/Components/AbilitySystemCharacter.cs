@@ -79,7 +79,7 @@ namespace AbilitySystem
 
             // Every tag in the ApplicationTagRequirements.RequireTags needs to be in the character tags list
             // In other words, if any tag in ApplicationTagRequirements.RequireTags is not present, requirement is not met
-            for (var i = 0; i < geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.RequireTags.Length; i++)
+            for (var i = 0; i < geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.RequireTags?.Length; i++)
             {
                 if (!appliedTags.Contains(geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.RequireTags[i]))
                 {
@@ -89,7 +89,7 @@ namespace AbilitySystem
 
             // No tag in the ApplicationTagRequirements.IgnoreTags must in the character tags list
             // In other words, if any tag in ApplicationTagRequirements.IgnoreTags is present, requirement is not met
-            for (var i = 0; i < geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.IgnoreTags.Length; i++)
+            for (var i = 0; i < geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.IgnoreTags?.Length; i++)
             {
                 if (appliedTags.Contains(geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.IgnoreTags[i]))
                 {

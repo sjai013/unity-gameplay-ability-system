@@ -175,8 +175,6 @@ GameObject:
   - component: {fileID: 5819958208635082671}
   - component: {fileID: 8841126661248867240}
   - component: {fileID: 755175809}
-  - component: {fileID: 3925800608321998625}
-  - component: {fileID: 2788904901559796643}
   - component: {fileID: 1458093785}
   - component: {fileID: 1458093793}
   m_Layer: 0
@@ -200,6 +198,7 @@ Transform:
   - {fileID: 97772260}
   - {fileID: 4580459967667350735}
   - {fileID: 1817040938}
+  - {fileID: 3315153684521198702}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -296,14 +295,80 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialStats: {fileID: 11400000, guid: 70eb782d8b0619340b673f07804140a6, type: 2}
-  asc: {fileID: 2788904901559796643}
---- !u!114 &3925800608321998625
+  asc: {fileID: 640278077074139771}
+--- !u!114 &1458093785
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2451214545032641997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cd15f3a54f18164b9fbfe3e7a11ac2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthBarPosition: {fileID: 1817040938}
+  attribute: {fileID: 11400000, guid: e8c81bfe0848d2443b0d88a5eeb2934f, type: 2}
+  attributeMax: {fileID: 11400000, guid: cf3932c16a7bd2a4d8e3436ce00a0993, type: 2}
+  attributeSystem: {fileID: 2302315347326013114}
+  attributeColour: {r: 1, g: 0.43137255, b: 0.39215687, a: 1}
+--- !u!114 &1458093793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2451214545032641997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21c074d86024caca2a0034ce4f53f73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: e11da24b07ea4fd41b0e47cae1510d3a, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: e7f8300848cee1a4584179a3ec5eef63, type: 3}
+  m_SortingOrder: 0
+--- !u!1 &5586019358598704912
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3315153684521198702}
+  - component: {fileID: 2302315347326013114}
+  - component: {fileID: 640278077074139771}
+  - component: {fileID: 3652344175197697954}
+  m_Layer: 0
+  m_Name: AbilitySystem
+  m_TagString: AbilitySystem
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3315153684521198702
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5586019358598704912}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4974401390613997857}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2302315347326013114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5586019358598704912}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73cbd57edc91b874a8bd957309e1f62c, type: 3}
@@ -326,53 +391,34 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7fc05bea92e9b904eaec715841e623cf, type: 2}
   - {fileID: 11400000, guid: 03d5684a54c36e74c80f4a584d691c19, type: 2}
   AttributeValues: []
---- !u!114 &2788904901559796643
+--- !u!114 &640278077074139771
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2451214545032641997}
+  m_GameObject: {fileID: 5586019358598704912}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c1425312ee2f5e4da3ab46a2724a3d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attributeSystem: {fileID: 3925800608321998625}
+  _attributeSystem: {fileID: 2302315347326013114}
   Level: 1
---- !u!114 &1458093785
-MonoBehaviour:
+--- !u!136 &3652344175197697954
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2451214545032641997}
+  m_GameObject: {fileID: 5586019358598704912}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cd15f3a54f18164b9fbfe3e7a11ac2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HealthBarPosition: {fileID: 1817040938}
-  attribute: {fileID: 11400000, guid: e8c81bfe0848d2443b0d88a5eeb2934f, type: 2}
-  attributeMax: {fileID: 11400000, guid: cf3932c16a7bd2a4d8e3436ce00a0993, type: 2}
-  attributeSystem: {fileID: 3925800608321998625}
-  attributeColour: {r: 1, g: 0.43137255, b: 0.39215687, a: 1}
---- !u!114 &1458093793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2451214545032641997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f21c074d86024caca2a0034ce4f53f73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: e11da24b07ea4fd41b0e47cae1510d3a, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: e7f8300848cee1a4584179a3ec5eef63, type: 3}
-  m_SortingOrder: 0
+  m_Radius: 0.6759665
+  m_Height: 2.006355
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.013065934, z: 0.06491625}
 --- !u!1 &5784823262707244267
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,7 +519,7 @@ PrefabInstance:
     - target: {fileID: 7501879737060083370, guid: f7a307755b709af4fb81972e194eb5f6, type: 3}
       propertyPath: attributeSystemComponent
       value: 
-      objectReference: {fileID: 3925800608321998625}
+      objectReference: {fileID: 2302315347326013114}
     - target: {fileID: 7501879737060083373, guid: f7a307755b709af4fb81972e194eb5f6, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

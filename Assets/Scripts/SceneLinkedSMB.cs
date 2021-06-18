@@ -7,7 +7,6 @@ namespace Gamekit3D
         where TMonoBehaviour : MonoBehaviour
     {
         protected TMonoBehaviour m_MonoBehaviour;
-        protected TMonoBehaviour m_MonoBehaviour2;
 
         bool m_FirstFrameHappened;
         bool m_LastFrameHappened;

@@ -11,7 +11,7 @@ public class AbilityController : MonoBehaviour, DefaultInputActions.IPlayerAbili
     public AbstractAbilityScriptableObject[] Abilities;
 
     public AbstractAbilityScriptableObject[] InitialisationAbilities;
-    private AbilitySystemCharacter abilitySystemCharacter;
+    [SerializeField] private AbilitySystemCharacter abilitySystemCharacter;
 
     private AbstractAbilitySpec[] abilitySpecs;
 
@@ -22,12 +22,10 @@ public class AbilityController : MonoBehaviour, DefaultInputActions.IPlayerAbili
 
     public Transform[] CastPoint;
 
-    private CastPointComponent castPointComponent;
+    [SerializeField] private CastPointComponent castPointComponent;
 
     void Awake()
     {
-        this.abilitySystemCharacter = GetComponent<AbilitySystemCharacter>();
-        this.castPointComponent = GetComponent<CastPointComponent>();
         var spec = Abilities[0].CreateSpec(this.abilitySystemCharacter);
         this.abilitySystemCharacter.GrantAbility(spec);
         playerInput = new DefaultInputActions();
@@ -56,6 +54,7 @@ public class AbilityController : MonoBehaviour, DefaultInputActions.IPlayerAbili
             {
                 Cooldowns[i].fillAmount = 1;
             }
+
         }
     }
 

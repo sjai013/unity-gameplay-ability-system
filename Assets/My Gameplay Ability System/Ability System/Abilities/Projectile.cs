@@ -66,9 +66,14 @@ public class Projectile : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         hasCollided = true;
-        if (other.tag == "Enemy")
+        if (other.tag == "AbilitySystem")
         {
             this.Target = other.GetComponent<AbilitySystemCharacter>();
+            if (this.Target == this.Source)
+            {
+                hasCollided = false;
+                this.Target = null;
+            }
         }
     }
 
