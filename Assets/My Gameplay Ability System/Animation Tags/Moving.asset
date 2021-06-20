@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc5fb57c4f888ed4cb0595c5090181a3, type: 3}
-  m_Name: Hands.WaitingForAttack
+  m_Name: Moving
   m_EditorClassIdentifier: 
   Parent: {fileID: 0}
   ancestorsToFind: 4
   TagData:
-    Tag: 64122
+    Tag: 66930
     Ancestors: 00000000

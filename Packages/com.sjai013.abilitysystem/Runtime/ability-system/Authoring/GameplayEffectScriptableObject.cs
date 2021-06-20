@@ -22,6 +22,10 @@ namespace AbilitySystem.Authoring
             gameplayEffectTags = ConvertTags();
         }
 
+        public TGameplayEffectTags<GameplayTagScriptableObject> GetGameplayTagsAuthoring()
+        {
+            return this.gameplayEffectTagsAuthoring;
+        }
 
         private TGameplayEffectTags<GameplayTagScriptableObject.GameplayTag> ConvertTags()
         {

@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc5fb57c4f888ed4cb0595c5090181a3, type: 3}
-  m_Name: Base.Idle
+  m_Script: {fileID: 11500000, guid: 80835d05472de084c8df2d7964b6d4b8, type: 3}
+  m_Name: Hands Animation
   m_EditorClassIdentifier: 
   Parent: {fileID: 0}
   ancestorsToFind: 4
   TagData:
-    Tag: -84212
-    Ancestors: 00000000
+    Tag: 0
+    Ancestors: 

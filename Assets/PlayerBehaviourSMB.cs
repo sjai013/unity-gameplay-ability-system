@@ -5,26 +5,21 @@ using UnityEngine;
 
 public class PlayerBehaviourSMB : SceneLinkedSMB<PlayerBehaviour>
 {
-    [SerializeField] int index;
-    [SerializeField] AnimationTagScriptableObject State;
+    [SerializeField] GameplayTagScriptableObject animationId;
+    [SerializeField] AnimationTagScriptableObject[] AnimationTags;
 
-
-    public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        if (!m_MonoBehaviour) return;
-        m_MonoBehaviour.SetNextState(State, index);
-    }
 
     public override void OnSLStatePostEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (!m_MonoBehaviour) return;
-        m_MonoBehaviour.SetCurrentState(State, index);
-        m_MonoBehaviour.SetNextState(null, index);
+        m_MonoBehaviour.SetAnimationTags(AnimationTags, animationId);
     }
 
-    public override void OnSLStatePreExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+
+    public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (!m_MonoBehaviour) return;
+        m_MonoBehaviour.SetAnimationTags(default, animationId);
     }
 
 

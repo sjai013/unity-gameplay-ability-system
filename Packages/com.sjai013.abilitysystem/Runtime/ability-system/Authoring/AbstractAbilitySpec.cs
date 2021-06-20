@@ -196,15 +196,12 @@ namespace AbilitySystem.Authoring
                 var abilityTag = tags[iAbilityTag];
 
                 bool requirementPassed = false;
-                for (var iAsc = 0; iAsc < asc.AppliedGameplayEffects.Count; iAsc++)
+                for (var iAscTag = 0; iAscTag < asc.AppliedTags.Length; iAscTag++)
                 {
-                    GameplayTagScriptableObject.GameplayTag[] ascGrantedTags = asc.AppliedGameplayEffects[iAsc].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
-                    for (var iAscTag = 0; iAscTag < ascGrantedTags.Length; iAscTag++)
+                    if (asc.AppliedTags[iAscTag].TagData == abilityTag)
                     {
-                        if (ascGrantedTags[iAscTag] == abilityTag)
-                        {
-                            requirementPassed = true;
-                        }
+                        requirementPassed = true;
+                        continue;
                     }
                 }
                 // If any ability tag wasn't found, requirements failed
@@ -229,15 +226,11 @@ namespace AbilitySystem.Authoring
                 var abilityTag = tags[iAbilityTag];
 
                 bool requirementPassed = true;
-                for (var iAsc = 0; iAsc < asc.AppliedGameplayEffects.Count; iAsc++)
+                for (var iAscTag = 0; iAscTag < asc.AppliedTags.Length; iAscTag++)
                 {
-                    GameplayTagScriptableObject.GameplayTag[] ascGrantedTags = asc.AppliedGameplayEffects[iAsc].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
-                    for (var iAscTag = 0; iAscTag < ascGrantedTags.Length; iAscTag++)
+                    if (asc.AppliedTags[iAscTag].TagData == abilityTag)
                     {
-                        if (ascGrantedTags[iAscTag] == abilityTag)
-                        {
-                            requirementPassed = false;
-                        }
+                        requirementPassed = false;
                     }
                 }
                 // If any ability tag wasn't found, requirements failed

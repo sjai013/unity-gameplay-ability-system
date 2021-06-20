@@ -9,6 +9,7 @@ namespace AbilitySystem.Authoring
     {
         public static GameplayTagScriptableObject.GameplayTag[] ToGameplayTagStruct(this GameplayTagScriptableObject[] tags)
         {
+            if (tags == null) return new GameplayTagScriptableObject.GameplayTag[0];
             var _tags = new GameplayTagScriptableObject.GameplayTag[tags.Length];
             for (var i = 0; i < _tags.Length; i++)
             {

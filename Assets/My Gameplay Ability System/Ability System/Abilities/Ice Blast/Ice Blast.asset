@@ -20,7 +20,8 @@ MonoBehaviour:
     ActivationOwnedTags: []
     OwnerTags:
       RequireTags: []
-      IgnoreTags: []
+      IgnoreTags:
+      - {fileID: 11400000, guid: e9fc3aa75c92c7c47a1a4ca1d0a74d5a, type: 2}
     SourceTags:
       RequireTags: []
       IgnoreTags: []
@@ -29,14 +30,16 @@ MonoBehaviour:
       IgnoreTags: []
   AbilityTags:
     AssetTag:
-      Tag: 25790
-      Ancestors: ba640000b8640000b6640000
+      Tag: 24076
+      Ancestors: 00000000
     CancelAbilitiesWithTags: []
     BlockAbilitiesWithTags: []
     ActivationOwnedTags: []
     OwnerTags:
       RequireTags: []
-      IgnoreTags: []
+      IgnoreTags:
+      - Tag: 24490
+        Ancestors: 00000000
     SourceTags:
       RequireTags: []
       IgnoreTags: []

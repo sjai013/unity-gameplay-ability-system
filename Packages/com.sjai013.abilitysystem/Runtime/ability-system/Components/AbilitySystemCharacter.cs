@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using AbilitySystem.Authoring;
 using AttributeSystem.Authoring;
 using AttributeSystem.Components;
@@ -8,13 +9,34 @@ using UnityEngine;
 
 namespace AbilitySystem
 {
+    public interface IGameplayTagProvider
+    {
+        List<GameplayTagScriptableObject> ListTags();
+    }
     public class AbilitySystemCharacter : MonoBehaviour
     {
-        [SerializeField]
-        protected AttributeSystemComponent _attributeSystem;
+        [SerializeField] protected AttributeSystemComponent _attributeSystem;
         public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
         public List<GameplayEffectContainer> AppliedGameplayEffects = new List<GameplayEffectContainer>();
         public List<AbstractAbilitySpec> GrantedAbilities = new List<AbstractAbilitySpec>();
+        public GameplayTagScriptableObject[] AppliedTags;
+        private List<IGameplayTagProvider> TagProviders = new List<IGameplayTagProvider>();
+
+        /// <summary>
+        /// Add a tag provider, so we can add customised tag sources to the character
+        /// </summary>
+        /// <param name="source">The source of the tags</param>
+        public void RegisterTagSource(IGameplayTagProvider source)
+        {
+            if (this.TagProviders.Contains(source)) return;
+            this.TagProviders.Add(source);
+        }
+
+        public void UnregisterTagSource(IGameplayTagProvider source)
+        {
+            this.TagProviders.Remove(source);
+        }
+
         public float Level;
 
         public void GrantAbility(AbstractAbilitySpec spec)
@@ -70,18 +92,16 @@ namespace AbilitySystem
 
         bool CheckTagRequirementsMet(GameplayEffectSpec geSpec)
         {
-            /// Build temporary list of all gametags currently applied
-            var appliedTags = new List<GameplayTagScriptableObject.GameplayTag>();
-            for (var i = 0; i < AppliedGameplayEffects.Count; i++)
-            {
-                appliedTags.AddRange(AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffectTags.GrantedTags);
-            }
 
             // Every tag in the ApplicationTagRequirements.RequireTags needs to be in the character tags list
             // In other words, if any tag in ApplicationTagRequirements.RequireTags is not present, requirement is not met
-            for (var i = 0; i < geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.RequireTags?.Length; i++)
+            var geTags = geSpec.GameplayEffect.GetGameplayTagsAuthoring();
+
+            for (var i = 0; i < geTags.ApplicationTagRequirements.RequireTags?.Length; i++)
             {
-                if (!appliedTags.Contains(geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.RequireTags[i]))
+                var tag = AppliedTags.FirstOrDefault(x => x == geTags.ApplicationTagRequirements.RequireTags[i]);
+
+                if (tag == default)
                 {
                     return false;
                 }
@@ -89,9 +109,11 @@ namespace AbilitySystem
 
             // No tag in the ApplicationTagRequirements.IgnoreTags must in the character tags list
             // In other words, if any tag in ApplicationTagRequirements.IgnoreTags is present, requirement is not met
-            for (var i = 0; i < geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.IgnoreTags?.Length; i++)
+            for (var i = 0; i < geTags.ApplicationTagRequirements.IgnoreTags?.Length; i++)
             {
-                if (appliedTags.Contains(geSpec.GameplayEffect.gameplayEffectTags.ApplicationTagRequirements.IgnoreTags[i]))
+                var tag = AppliedTags.FirstOrDefault(x => x == geTags.ApplicationTagRequirements.RequireTags[i]);
+
+                if (tag != default)
                 {
                     return false;
                 }
@@ -149,6 +171,27 @@ namespace AbilitySystem
             AppliedGameplayEffects.Add(new GameplayEffectContainer() { spec = spec, modifiers = modifiersToApply.ToArray() });
         }
 
+        void UpdateAppliedTags()
+        {
+            // Build list of all gametags currently applied
+            var appliedTags = new List<GameplayTagScriptableObject>();
+
+            // Get tags applied using gameplay effects
+            for (var i = 0; i < AppliedGameplayEffects.Count; i++)
+            {
+                appliedTags.AddRange(AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayTagsAuthoring().GrantedTags);
+            }
+
+            // Get tags applied using external tag providers
+            for (var i = 0; i < TagProviders.Count; i++)
+            {
+                appliedTags.AddRange(TagProviders[i].ListTags());
+            }
+
+
+            AppliedTags = appliedTags.ToArray();
+        }
+
         void UpdateAttributeSystem()
         {
             // Set Current Value to Base Value (default position if there are no GE affecting that atribute)
@@ -196,9 +239,10 @@ namespace AbilitySystem
             // Reset all attributes to 0
             this.AttributeSystem.ResetAttributeModifiers();
             UpdateAttributeSystem();
-
             TickGameplayEffects();
             CleanGameplayEffects();
+            UpdateAppliedTags();
+
         }
     }
 }
