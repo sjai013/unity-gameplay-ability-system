@@ -13,8 +13,21 @@ public class LinearDerivedAttributeScriptableObject : AttributeScriptableObject
 
     public override AttributeValue CalculateCurrentAttributeValue(AttributeValue attributeValue, List<AttributeValue> otherAttributeValues)
     {
-        // Find desired attribute in list
-        var baseAttributeValue = otherAttributeValues.Find(x => x.Attribute == this.Attribute);
+
+        AttributeValue baseAttributeValue = default(AttributeValue);
+        var attributeValid = false;
+        // Find the appropriate attribute in the list
+        for (var i = 0; i < otherAttributeValues.Count; i++)
+        {
+            if (otherAttributeValues[i].Attribute == this.Attribute)
+            {
+                baseAttributeValue = otherAttributeValues[i];
+                attributeValid = true;
+                break;
+            }
+        }
+
+        if (!attributeValid) return new AttributeValue();
 
         // Calculate new value
         attributeValue.BaseValue = (baseAttributeValue.CurrentValue * gradient) + offset;
