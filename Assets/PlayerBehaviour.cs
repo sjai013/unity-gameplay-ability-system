@@ -11,10 +11,14 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour, IGameplayTagProvider
 {
     [SerializeField] AbilitySystemCharacter abilitySystemCharacter;
-    [SerializeField] Animator animator;
+    public Animator animator;
     Dictionary<GameplayTagScriptableObject, AnimationTagScriptableObject[]> m_AnimationTags = new Dictionary<GameplayTagScriptableObject, AnimationTagScriptableObject[]>();
+    private int attackTriggerHash = Animator.StringToHash("Attack");
 
-
+    public void TriggerAttack()
+    {
+        animator.SetTrigger(attackTriggerHash);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +57,55 @@ public class PlayerBehaviour : MonoBehaviour, IGameplayTagProvider
     public AnimationTagScriptableObject[] GetState(GameplayTagScriptableObject idTag)
     {
         return this.m_AnimationTags[idTag];
+    }
+
+    public bool HasTag(GameplayTagScriptableObject idTag, AnimationTagScriptableObject tagToFind)
+    {
+        if (this.m_AnimationTags.TryGetValue(idTag, out var animTags))
+        {
+            if (animTags == null) return false;
+            for (var i = 0; i < animTags.Length; i++)
+            {
+                if (animTags[i] == tagToFind) return true;
+            }
+        }
+        return false;
+    }
+
+    public bool HasAllTags(GameplayTagScriptableObject idTag, AnimationTagScriptableObject[] tagToFind)
+    {
+        if (this.m_AnimationTags.TryGetValue(idTag, out var animTags))
+        {
+            if (animTags == null) return false;
+            for (var i = 0; i < tagToFind.Length; i++)
+            {
+                bool matchFound = false;
+                for (var j = 0; j < animTags.Length; j++)
+                {
+                    if (animTags[j] == tagToFind[i])
+                    {
+                        matchFound = true;
+                        break;
+                    }
+                }
+                if (!matchFound) return false;
+            }
+        }
+        return false;
+    }
+
+    public bool HasAnyTags(GameplayTagScriptableObject idTag, AnimationTagScriptableObject[] tagsToFind)
+    {
+        for (var i = 0; i < tagsToFind.Length; i++)
+        {
+            if (HasTag(idTag, tagsToFind[i])) return true;
+        }
+        return false;
+    }
+
+    public bool HasNoneTags(GameplayTagScriptableObject idTag, AnimationTagScriptableObject[] tagsToFind)
+    {
+        return !HasAnyTags(idTag, tagsToFind);
     }
 
     public List<GameplayTagScriptableObject> ListTags()

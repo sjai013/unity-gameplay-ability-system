@@ -9,17 +9,13 @@ using UnityEngine;
 
 namespace AbilitySystem
 {
-    public interface IGameplayTagProvider
-    {
-        List<GameplayTagScriptableObject> ListTags();
-    }
     public class AbilitySystemCharacter : MonoBehaviour
     {
         [SerializeField] protected AttributeSystemComponent _attributeSystem;
         public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
         public List<GameplayEffectContainer> AppliedGameplayEffects = new List<GameplayEffectContainer>();
         public List<AbstractAbilitySpec> GrantedAbilities = new List<AbstractAbilitySpec>();
-        public GameplayTagScriptableObject[] AppliedTags;
+        public List<GameplayTagScriptableObject> AppliedTags;
         private List<IGameplayTagProvider> TagProviders = new List<IGameplayTagProvider>();
 
         /// <summary>
@@ -174,22 +170,20 @@ namespace AbilitySystem
         void UpdateAppliedTags()
         {
             // Build list of all gametags currently applied
-            var appliedTags = new List<GameplayTagScriptableObject>();
+            AppliedTags.Clear();
 
             // Get tags applied using gameplay effects
             for (var i = 0; i < AppliedGameplayEffects.Count; i++)
             {
-                appliedTags.AddRange(AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayTagsAuthoring().GrantedTags);
+                var grantedTags = AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayTagsAuthoring().GrantedTags;
+                if (grantedTags != null) AppliedTags.AddRange(grantedTags);
             }
 
             // Get tags applied using external tag providers
             for (var i = 0; i < TagProviders.Count; i++)
             {
-                appliedTags.AddRange(TagProviders[i].ListTags());
+                AppliedTags.AddRange(TagProviders[i].ListTags());
             }
-
-
-            AppliedTags = appliedTags.ToArray();
         }
 
         void UpdateAttributeSystem()

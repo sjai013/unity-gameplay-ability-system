@@ -49,4 +49,10 @@ MonoBehaviour:
   Cost: {fileID: 11400000, guid: 938188cd78f053b4f94356d8185a9211, type: 2}
   Cooldown: {fileID: 11400000, guid: 90a183a70b56bba4c89f4aaa7333f8bf, type: 2}
   projectilePrefab: {fileID: 5729136828840772945, guid: 4d7819ee4c942364b9d8464582a5fa27, type: 3}
+  AnimationId: {fileID: 11400000, guid: f95449d01eb615a4c94851384a8c2b67, type: 2}
   GameplayEffect: {fileID: 11400000, guid: 55bfbe6a98be171479676955a23cca05, type: 2}
+  AttackPreparationTags:
+  - {fileID: 11400000, guid: e9fc3aa75c92c7c47a1a4ca1d0a74d5a, type: 2}
+  AttackingTags:
+  - {fileID: 11400000, guid: fe146947e8408ca4eb832c450a23e482, type: 2}
+  - {fileID: 11400000, guid: 9307c57b533c71a46bb32e7453ac3094, type: 2}

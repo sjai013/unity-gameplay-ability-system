@@ -196,7 +196,7 @@ namespace AbilitySystem.Authoring
                 var abilityTag = tags[iAbilityTag];
 
                 bool requirementPassed = false;
-                for (var iAscTag = 0; iAscTag < asc.AppliedTags.Length; iAscTag++)
+                for (var iAscTag = 0; iAscTag < asc.AppliedTags.Count; iAscTag++)
                 {
                     if (asc.AppliedTags[iAscTag].TagData == abilityTag)
                     {
@@ -226,7 +226,7 @@ namespace AbilitySystem.Authoring
                 var abilityTag = tags[iAbilityTag];
 
                 bool requirementPassed = true;
-                for (var iAscTag = 0; iAscTag < asc.AppliedTags.Length; iAscTag++)
+                for (var iAscTag = 0; iAscTag < asc.AppliedTags.Count; iAscTag++)
                 {
                     if (asc.AppliedTags[iAscTag].TagData == abilityTag)
                     {

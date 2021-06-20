@@ -82,14 +82,9 @@ public class AbilityController : MonoBehaviour, DefaultInputActions.IPlayerAbili
     public void UseAbility(int i)
     {
         var spec = abilitySpecs[i];
-        int attackIdx = Random.Range(0, 2);
         if (spec.CanActivateAbility())
         {
-            castPointComponent.CastPoint = CastPoint[attackIdx];
             StartCoroutine(spec.TryActivateAbility());
-            animatorController.SetInteger("AttackIdx", attackIdx);
-            animatorController.SetTrigger("Attack");
-
         }
 
     }

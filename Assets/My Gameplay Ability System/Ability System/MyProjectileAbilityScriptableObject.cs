@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AbilitySystem;
 using AbilitySystem.Authoring;
+using GameplayTag.Authoring;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -10,14 +11,22 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
 {
     protected Projectile projectile;
     [SerializeField] protected GameObject projectilePrefab;
+    [SerializeField] GameplayTagScriptableObject AnimationId;
     public GameplayEffectScriptableObject GameplayEffect;
+    public AnimationTagScriptableObject[] AttackPreparationTags;
+    public AnimationTagScriptableObject[] AttackingTags;
+
     public override AbstractAbilitySpec CreateSpec(AbilitySystemCharacter owner)
     {
         var spec = new AbilitySpec(this, owner);
         spec.Level = owner.Level;
         spec.projectile = this.projectile;
         spec.CastPointComponent = owner.GetComponent<CastPointComponent>();
+        spec.playerBehaviour = owner.GetComponentInParent<PlayerBehaviour>();
         this.projectile = projectilePrefab.GetComponent<Projectile>();
+        spec.AnimationId = AnimationId;
+        spec.AttackPreparationTags = AttackPreparationTags;
+        spec.AttackingTags = AttackingTags;
         return spec;
     }
 
@@ -26,11 +35,14 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
     {
         public Projectile projectile;
         public CastPointComponent CastPointComponent;
-        private AnimatorController casterAnimatorController;
+        public PlayerBehaviour playerBehaviour;
+        public GameplayTagScriptableObject AnimationId;
+        public AnimationTagScriptableObject[] AttackPreparationTags;
+        public AnimationTagScriptableObject[] AttackingTags;
 
         public AbilitySpec(AbstractAbilityScriptableObject ability, AbilitySystemCharacter owner) : base(ability, owner)
         {
-            //casterAnimatorController = owner.GetComponent<AnimatorController>();
+
         }
 
         public override void CancelAbility()
@@ -69,14 +81,37 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
             yield return projectileInstance.TravelForward(this.Owner.transform.forward);
             yield return projectileInstance.Despawn();
 
-
-
             // Spawn instance of projectile prefab
         }
 
         protected override IEnumerator PreActivate()
         {
+            playerBehaviour.TriggerAttack();
+
+            // Wait to enter the Attack Preparation state
+            if (!(AttackPreparationTags == null || AttackPreparationTags.Length == 0))
+            {
+                yield return WaitForAnimationStart(AnimationId, AttackPreparationTags);
+            }
+
+            // Wait for attack animation to complete
+            if (!(AttackingTags == null || AttackingTags.Length == 0))
+            {
+                yield return WaitForAnimationComplete(AnimationId, AttackPreparationTags);
+            }
+
+            // Wait for animation finish
             yield return null;
+        }
+
+        private IEnumerator WaitForAnimationStart(GameplayTagScriptableObject animationId, AnimationTagScriptableObject[] animTags)
+        {
+            while (!playerBehaviour.HasAnyTags(AnimationId, AttackPreparationTags)) yield return null;
+        }
+
+        private IEnumerator WaitForAnimationComplete(GameplayTagScriptableObject animationId, AnimationTagScriptableObject[] animTags)
+        {
+            while (!playerBehaviour.HasNoneTags(AnimationId, AttackPreparationTags)) yield return null;
         }
     }
 }
