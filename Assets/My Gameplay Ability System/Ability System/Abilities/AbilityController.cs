@@ -91,7 +91,7 @@ public class AbilityController : MonoBehaviour, DefaultInputActions.IPlayerAbili
 
     public void OnFire1(InputAction.CallbackContext context)
     {
-        UseAbility(0);
+        if (!context.canceled) UseAbility(0);
     }
 
     public void OnFire2(InputAction.CallbackContext context)

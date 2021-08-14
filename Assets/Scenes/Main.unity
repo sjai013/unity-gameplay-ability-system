@@ -475,7 +475,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223301083}
-  m_LocalRotation: {x: 0.030829864, y: -0.0000000010748876, z: 3.31544e-11, w: 0.99952465}
+  m_LocalRotation: {x: 0.030829865, y: -0, z: -0, w: 0.99952465}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2770,6 +2770,10 @@ PrefabInstance:
       propertyPath: CastPoint.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 468311072154034804, guid: ade610acad8026b4783b8457074cc9e8, type: 3}
+      propertyPath: Abilities.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 29a3189395d5f8342ae7c953eec08b3d, type: 2}
     - target: {fileID: 468311072154034804, guid: ade610acad8026b4783b8457074cc9e8, type: 3}
       propertyPath: CastPoint.Array.data[0]
       value: 

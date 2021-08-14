@@ -6,6 +6,7 @@ using GameplayTag.Authoring;
 using UnityEditor.Animations;
 using UnityEngine;
 
+
 [CreateAssetMenu(menuName = "Gameplay Ability System/Abilities/Projectile")]
 public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObject
 {
@@ -101,7 +102,7 @@ public class MyProjectileAbilityScriptableObject : AbstractAbilityScriptableObje
             }
 
             // Wait for animation finish
-            yield return null;
+            yield break;
         }
 
         private IEnumerator WaitForAnimationStart(GameplayTagScriptableObject animationId, AnimationTagScriptableObject[] animTags)

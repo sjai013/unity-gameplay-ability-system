@@ -61,7 +61,7 @@ namespace AbilitySystem.Authoring
 
             protected override IEnumerator PreActivate()
             {
-                yield return null;
+                yield break;
             }
         }
     }

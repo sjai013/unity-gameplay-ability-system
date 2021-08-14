@@ -43,7 +43,7 @@ public class Projectile : MonoBehaviour
     public IEnumerator Spawn()
     {
         projectile.SetActive(true);
-        yield return null;
+        yield break;
     }
 
     public IEnumerator TravelForward(Vector3 forward)

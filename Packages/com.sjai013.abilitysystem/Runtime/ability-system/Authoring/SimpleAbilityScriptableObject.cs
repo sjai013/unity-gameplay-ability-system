@@ -61,7 +61,7 @@ namespace AbilitySystem.Authoring
                 var effectSpec = this.Owner.MakeOutgoingSpec((this.Ability as SimpleAbilityScriptableObject).GameplayEffect);
                 this.Owner.ApplyGameplayEffectSpecToSelf(effectSpec);
 
-                yield return null;
+                yield break;
             }
 
             /// <summary>
@@ -89,7 +89,7 @@ namespace AbilitySystem.Authoring
 
             protected override IEnumerator PreActivate()
             {
-                yield return null;
+                yield break;
             }
         }
     }
