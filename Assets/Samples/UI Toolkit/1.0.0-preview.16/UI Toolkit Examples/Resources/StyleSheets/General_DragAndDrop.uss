@@ -1,0 +1,40 @@
+.background {
+    background-color: rgb(30, 30, 30);
+    flex-grow: 1;
+}
+
+.header {
+    align-items: center;
+    background-color: slategray;
+    border-color: lightgray;
+    border-width: 2px;
+    margin: 10px;
+    padding: 5px;
+}
+
+.header__label {
+    color: white;
+    font-size: 18px;
+}
+
+.drop-area {
+    align-items: center;
+    background-color: slategray;
+    border-color: lightgray;
+    border-radius: 20px;
+    border-width: 2px;
+    flex-grow: 1;
+    justify-content: center;
+    margin: 10px;
+    padding: 5px;
+}
+
+.drop-area--dropping {
+    background-color: darkgreen;
+    opacity: 0.4;
+}
+
+.drop-area__label {
+    color: white;
+    -unity-font-style: italic;
+}

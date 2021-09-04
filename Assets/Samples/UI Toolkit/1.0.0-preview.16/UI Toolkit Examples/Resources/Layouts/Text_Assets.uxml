@@ -1,0 +1,29 @@
+<ui:UXML
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+>
+    <ui:VisualElement class="background">
+        <ui:Label text="TextCore Assets" class="title"/>
+        <ui:ScrollView>
+            <ui:VisualElement class="row" >
+            <ui:Label text='This &lt;font="Electronic Highway Sign SDF"&gt;is &lt;font="Anton SDF"&gt;a lot &lt;font="Oswald-Bold SDF"&gt;of &lt;font="Roboto-Bold SDF"&gt;different &lt;font="Bangers SDF"&gt; fonts' />
+            <ui:Label text='&lt;font="Anton SDF"&gt;' enable-rich-text="false" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="row" >
+                <ui:Label text='Smile &lt;sprite index=0&gt;!'/>
+                <ui:Label text='&lt;sprite index=0&gt;' class="disableRichText" enable-rich-text="false" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="row" >
+            <ui:Label text='&lt;gradient="Yellow to Orange - Vertical"&gt;Gradient' />
+            <ui:Label text='&lt;gradient="Yellow to Orange - Vertical"&gt;' enable-rich-text="false" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="row" >
+            <ui:Label text='This is a &lt;style="Link"&gt;link' />
+            <ui:Label text='&lt;style="Link"&gt;' enable-rich-text="false" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

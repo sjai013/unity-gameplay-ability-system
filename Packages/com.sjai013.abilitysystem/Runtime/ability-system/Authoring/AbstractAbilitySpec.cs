@@ -14,12 +14,12 @@ namespace AbilitySystem.Authoring
         /// <summary>
         /// The ability this AbilitySpec is linked to
         /// </summary>
-        public AbstractAbilityScriptableObject Ability;
+        public AbstractAbility Ability;
 
         /// <summary>
         /// The owner of the AbilitySpec - usually the source
         /// </summary>
-        protected AbilitySystemCharacter Owner;
+        public AbilitySystemCharacter Owner {get; protected set;}
 
         /// <summary>
         /// Ability level
@@ -36,27 +36,14 @@ namespace AbilitySystem.Authoring
         /// </summary>
         /// <param name="ability">Ability</param>
         /// <param name="owner">Owner - usually the character activating the ability</param>
-        public AbstractAbilitySpec(AbstractAbilityScriptableObject ability, AbilitySystemCharacter owner)
+        public AbstractAbilitySpec(AbstractAbility ability, AbilitySystemCharacter owner)
         {
             this.Ability = ability;
             this.Owner = owner;
         }
 
-        /// <summary>
-        /// Try activating the ability.  Remember to use StartCoroutine() since this 
-        /// is a couroutine, to allow abilities to span more than one frame.
-        /// </summary>
-        /// <returns></returns>
-        public virtual IEnumerator TryActivateAbility()
-        {
-            if (!CanActivateAbility()) yield break;
-
-            isActive = true;
-            yield return PreActivate();
-            yield return ActivateAbility();
-            EndAbility();
-
-        }
+        // Frame-dependant code.  Returning TRUE from this indicates the ability should end.
+        public abstract bool StepAbility();
 
         /// <summary>
         /// Checks if this ability can be activated
@@ -69,11 +56,6 @@ namespace AbilitySystem.Authoring
                     && CheckCost()
                     && CheckCooldown().TimeRemaining <= 0;
         }
-
-        /// <summary>
-        /// Cancels the ability, if it is active
-        /// </summary>
-        public abstract void CancelAbility();
 
         /// <summary>
         /// Checks if Gameplay Tag requirements allow activating this ability
@@ -91,14 +73,15 @@ namespace AbilitySystem.Authoring
         {
             float maxDuration = 0;
             if (this.Ability.Cooldown == null) return new AbilityCooldownTime();
-            var cooldownTags = this.Ability.Cooldown.gameplayEffectTags.GrantedTags;
+            var cooldownTags = this.Ability.Cooldown.GetGameplayEffectTags().GrantedTags;
 
             float longestCooldown = 0f;
 
             // Check if the cooldown tag is granted to the player, and if so, capture the remaining duration for that tag
             for (var i = 0; i < this.Owner.AppliedGameplayEffects.Count; i++)
             {
-                var grantedTags = this.Owner.AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffectTags.GrantedTags;
+                var grantedTags = this.Owner.AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayEffectTags().GrantedTags;
+                if (grantedTags == null) continue;
                 for (var iTag = 0; iTag < grantedTags.Length; iTag++)
                 {
                     for (var iCooldownTag = 0; iCooldownTag < cooldownTags.Length; iCooldownTag++)
@@ -133,18 +116,6 @@ namespace AbilitySystem.Authoring
         }
 
         /// <summary>
-        /// Method to activate before activating this ability.  This method is run after activation checks.
-        /// </summary>
-        protected abstract IEnumerator PreActivate();
-
-        /// <summary>
-        /// The logic that dictates what the ability does.  Targetting logic should be placed here.
-        /// Gameplay Effects are applied in this method.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract IEnumerator ActivateAbility();
-
-        /// <summary>
         /// Method to run once the ability ends
         /// </summary>
         public virtual void EndAbility()
@@ -153,9 +124,9 @@ namespace AbilitySystem.Authoring
         }
 
         /// <summary>
-        /// Checks whether the activating character has enough resources to activate this ability
+        /// Checks whether the activating character has enough resources to activate this ability.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True - Resources available.  False - Resources unavailable.</returns>
         public virtual bool CheckCost()
         {
             if (this.Ability.Cost == null) return true;

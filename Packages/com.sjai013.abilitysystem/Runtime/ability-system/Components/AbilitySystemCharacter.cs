@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace AbilitySystem
 {
+    [AddComponentMenu("Gameplay Ability System/Ability System Character")]
     public class AbilitySystemCharacter : MonoBehaviour
     {
         [SerializeField] protected AttributeSystemComponent _attributeSystem;
@@ -17,6 +18,7 @@ namespace AbilitySystem
         public List<AbstractAbilitySpec> GrantedAbilities = new List<AbstractAbilitySpec>();
         public List<GameplayTagScriptableObject> AppliedTags;
         private List<IGameplayTagProvider> TagProviders = new List<IGameplayTagProvider>();
+        private AbilityExecutionManager m_AbilityEM = new AbilityExecutionManager();
 
         /// <summary>
         /// Add a tag provider, so we can add customised tag sources to the character
@@ -38,6 +40,11 @@ namespace AbilitySystem
         public void GrantAbility(AbstractAbilitySpec spec)
         {
             this.GrantedAbilities.Add(spec);
+        }
+
+        public void ActivateAbility(AbstractAbilitySpec spec)
+        {
+            m_AbilityEM.AddAbility(spec);
         }
 
         public void RemoveAbilitiesWithTag(GameplayTagScriptableObject tag)
@@ -72,12 +79,13 @@ namespace AbilitySystem
                     break;
                 case EDurationPolicy.Instant:
                     ApplyInstantGameplayEffect(geSpec);
-                    return true;
+                    break;
             }
+
 
             return true;
         }
-        public GameplayEffectSpec MakeOutgoingSpec(GameplayEffectScriptableObject GameplayEffect, float? level = 1f)
+        public GameplayEffectSpec MakeOutgoingSpec(GameplayEffect GameplayEffect, float? level = 1f)
         {
             level = level ?? this.Level;
             return GameplayEffectSpec.CreateNew(
@@ -141,7 +149,11 @@ namespace AbilitySystem
                 }
                 this.AttributeSystem.SetAttributeBaseValue(attribute, attributeValue.BaseValue);
             }
+
+            spec.RaiseOnApplyEvent();
+            spec.RaiseOnRemoveEvent();
         }
+
         void ApplyDurationalGameplayEffect(GameplayEffectSpec spec)
         {
             var modifiersToApply = new List<GameplayEffectContainer.ModifierContainer>();
@@ -165,6 +177,8 @@ namespace AbilitySystem
                 modifiersToApply.Add(new GameplayEffectContainer.ModifierContainer() { Attribute = modifier.Attribute, Modifier = attributeModifier });
             }
             AppliedGameplayEffects.Add(new GameplayEffectContainer() { spec = spec, modifiers = modifiersToApply.ToArray() });
+            spec.RaiseOnApplyEvent();
+
         }
 
         void UpdateAppliedTags()
@@ -225,18 +239,69 @@ namespace AbilitySystem
 
         void CleanGameplayEffects()
         {
-            this.AppliedGameplayEffects.RemoveAll(x => x.spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration && x.spec.DurationRemaining <= 0);
+            for (var i = AppliedGameplayEffects.Count - 1; i > 0; i--)
+            {
+                var ge = AppliedGameplayEffects[i];
+                if (ge.spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration && ge.spec.DurationRemaining <= 0)
+                {
+                    ge.spec.RaiseOnRemoveEvent();
+                    AppliedGameplayEffects.RemoveAt(i);
+                }
+            }
         }
+
 
         void Update()
         {
             // Reset all attributes to 0
             this.AttributeSystem.ResetAttributeModifiers();
-            UpdateAttributeSystem();
+            // UpdateAttributeSystem();
+            m_AbilityEM.StepAbilities();
             TickGameplayEffects();
             CleanGameplayEffects();
             UpdateAppliedTags();
+        }
+    }
 
+    internal class AbilityExecutionManager
+    {
+        private float timeSinceFlush;
+        private List<AbstractAbilitySpec> m_ActiveAbilities = new List<AbstractAbilitySpec>(5);
+        private const float MAX_FLUSH_TIME = 5;
+
+        public void StepAbilities()
+        {
+            timeSinceFlush += Time.deltaTime;
+
+            // Step through all active abilities
+            for (var i = 0; i < m_ActiveAbilities.Count; i++)
+            {
+                if (m_ActiveAbilities[i] == null)
+                {
+                    continue;
+                }
+
+                if (m_ActiveAbilities[i].StepAbility())
+                {
+                    m_ActiveAbilities[i] = null;
+                }
+            }
+
+
+        }
+
+        private void FlushList()
+        {
+            if (timeSinceFlush > MAX_FLUSH_TIME)
+            {
+                timeSinceFlush = 0;
+                if (m_ActiveAbilities.Count > 0) m_ActiveAbilities.RemoveAll(x => x == null);
+            }
+        }
+
+        public void AddAbility(AbstractAbilitySpec spec)
+        {
+            m_ActiveAbilities.Add(spec);
         }
     }
 }

@@ -1,0 +1,11 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <Style src="../StyleSheets/General_RootSelectorForRuntime.uss" />
+    <VisualElement>
+        <VisualElement>
+            <Label class="label1" text="Label 1" />
+        </VisualElement>
+        <VisualElement>
+            <Label class="label2" text="Label 2"/>
+        </VisualElement>
+    </VisualElement>
+</UXML>

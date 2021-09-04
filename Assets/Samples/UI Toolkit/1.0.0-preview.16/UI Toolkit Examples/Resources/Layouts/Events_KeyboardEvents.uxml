@@ -1,0 +1,18 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <Style src="../StyleSheets/Events_KeyboardEvents.uss" />
+    <VisualElement class="background">
+        <VisualElement class="header">
+            <Label text="Tap Metronome" class="title" />
+            <Label text="(Press spacebar)" class="instructions" />
+        </VisualElement>
+        <VisualElement class="content-section">
+            <VisualElement class="content-section__tap-box">
+                <Label text="TAP" class="tap-box__label" />
+            </VisualElement>
+            <VisualElement class="content-section__display">
+                <Label text="BPM: " class="display__label" />
+                <Label text="0" class="display__bpm" />
+            </VisualElement>
+        </VisualElement>
+    </VisualElement>
+</UXML>

@@ -1,0 +1,12 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <Style src="../StyleSheets/Events_GeometryChanged.uss" />
+    <VisualElement class="menu">
+        <Button class="menu__item" text="Item 1" />
+        <Button class="menu__item" text="Item 2" />
+        <Button class="menu__item" text="Item 3" />
+        <Button class="menu__item" text="Item 4" />
+    </VisualElement>
+    <VisualElement class="container">
+        <Label class="container__label" />
+    </VisualElement>
+</UXML>

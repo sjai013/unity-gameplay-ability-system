@@ -7,7 +7,7 @@ namespace AbilitySystem
     [Serializable]
     public struct ConditionalGameplayEffectContainer
     {
-        public GameplayEffectScriptableObject GameplayEffect;
+        public GameplayEffect GameplayEffect;
         public GameplayTagScriptableObject[] RequiredSourceTags;
     }
 

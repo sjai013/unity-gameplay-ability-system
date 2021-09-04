@@ -1,0 +1,5 @@
+{
+	"displayName": "UI Toolkit Examples",
+  "description": "Examples that demonstrate workflows and API usage for both Editor and Runtime UI",
+	"createSeparatePackage": false
+}

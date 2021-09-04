@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2721483916708295935
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2721483916708295933}
+  - component: {fileID: 2721483916708295934}
+  m_Layer: 0
+  m_Name: GE_IceProjectile_Damage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2721483916708295933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2721483916708295935}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2721483916708295934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2721483916708295935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4cd8fa53de329d48a4d819712a9c90c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameplayEffect:
+    DurationPolicy: 0
+    DurationModifier: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
+    DurationMultiplier: 0
+    Modifiers:
+    - Attribute: {fileID: 11400000, guid: 348725b0db2f9844781f2847a8a473cb, type: 2}
+      ModifierOperator: 0
+      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
+      Multiplier: -0.8
+    ConditionalGameplayEffects: []
+  m_GameplayEffectTagsAuthoring:
+    AssetTag: {fileID: 0}
+    GrantedTags:
+    - {fileID: 0}
+    OngoingTagRequirements:
+      RequireTags: []
+      IgnoreTags: []
+    ApplicationTagRequirements:
+      RequireTags: []
+      IgnoreTags: []
+    RemovalTagRequirements:
+      RequireTags: []
+      IgnoreTags: []
+    RemoveGameplayEffectsWithTag: []
+  m_GameplayEffectTags:
+    AssetTag:
+      Tag: 0
+      Ancestors: 
+    GrantedTags:
+    - Tag: 0
+      Ancestors: 
+    OngoingTagRequirements:
+      RequireTags: []
+      IgnoreTags: []
+    ApplicationTagRequirements:
+      RequireTags: []
+      IgnoreTags: []
+    RemovalTagRequirements:
+      RequireTags: []
+      IgnoreTags: []
+    RemoveGameplayEffectsWithTag: []
+  m_GameplayCue: []
+  m_Period:
+    Period: 0
+    ExecuteOnApplication: 0

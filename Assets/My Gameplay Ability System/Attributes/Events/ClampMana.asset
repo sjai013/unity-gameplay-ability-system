@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481e6c76a86173a4a93f36b9da0cdb4d, type: 3}
+  m_Name: ClampMana
+  m_EditorClassIdentifier: 
+  m_PrimaryAttribute: {fileID: 11400000, guid: efdbc2e6a12082a48b2388540aded7aa, type: 2}
+  m_MaxAttribute: {fileID: 11400000, guid: c7af0423343bc504c8e1db8e6531ceba, type: 2}

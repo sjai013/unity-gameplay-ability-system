@@ -1,0 +1,25 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement class="main-container">
+        <VisualElement class="header">
+            <Label class="header-title" text="Whack-A-Button" />
+        </VisualElement>
+        <VisualElement class="score">
+            <Label class="score-label" text="Score: " />
+            <Label class="score-label score-number" text="0" />
+        </VisualElement>
+        <VisualElement class="board">
+            <VisualElement class="board__row">
+                <Button class="game-button" />
+                <Button class="game-button" />
+            </VisualElement>
+            <VisualElement class="board__row">
+                <Button class="game-button" />
+                <Button class="game-button" />
+            </VisualElement>
+            <VisualElement class="board__row">
+                <Button class="game-button" />
+                <Button class="game-button" />
+            </VisualElement>
+        </VisualElement>
+    </VisualElement>
+</UXML>

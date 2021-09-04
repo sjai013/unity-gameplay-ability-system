@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 800f52bafcd291942bb145fbd5c138ca, type: 3}
+  m_Name: Player.Cast.Ice.Charging
+  m_EditorClassIdentifier: 
+  m_GameplayCueParameters:
+    OnActivateEffect: {fileID: 2129907328134696038, guid: 99c9be0335fcd67419825264e9a90a61, type: 3}
+    Target: 1
+    ApplyPolicy: 1
+    RemovePolicy: 1
+    RemoveDelay: 1

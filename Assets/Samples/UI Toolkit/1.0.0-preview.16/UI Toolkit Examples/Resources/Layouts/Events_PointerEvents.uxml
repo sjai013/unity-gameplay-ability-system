@@ -1,0 +1,15 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <Style src="../StyleSheets/Events_PointerEvents.uss" />
+    <VisualElement class="window-container">
+        <VisualElement class="header">
+            <Label class="header__label" text="Pointer Events Demonstration" />
+        </VisualElement>
+        <VisualElement class="main-area">
+            <Label class="main-area__tooltip" />
+        </VisualElement>
+        <VisualElement class="info-block">
+            <Label class="info-block__label" text="Current Coordinates: " />
+            <Label class="info-block__label info-block__label--data" />
+        </VisualElement>
+    </VisualElement>
+</UXML>

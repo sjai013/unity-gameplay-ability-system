@@ -1,0 +1,31 @@
+Label {
+    -unity-font-definition: url("../Fonts & Materials/LiberationSans SDF.asset");
+    font-size: 50px;
+    color: white;
+}
+
+.background {
+    flex-grow: 1;
+    background-color: #2e6da4;
+}
+
+.row {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+ScrollView {
+    margin-top: 20px;
+    flex-grow: 1;
+}
+
+.title {
+    font-size: 100px;
+    justify-content: center;
+    align-items: center;
+    -unity-text-align: upper-center;
+    text-shadow: 2px 2px 3px black;
+}

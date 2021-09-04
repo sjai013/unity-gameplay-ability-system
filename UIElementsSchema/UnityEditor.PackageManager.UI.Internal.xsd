@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.PackageManager.UI.Internal" elementFormDefault="qualified" targetNamespace="UnityEditor.PackageManager.UI.Internal" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.Experimental.GraphView" elementFormDefault="qualified" targetNamespace="UnityEditor.PackageManager.UI.Internal" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
   <xs:complexType name="SelectableLabelType">
     <xs:complexContent mixed="false">
@@ -30,7 +30,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="SelectableLabel" substitutionGroup="engine:VisualElement" type="SelectableLabelType" />
+  <xs:element name="SelectableLabel" substitutionGroup="engine:VisualElement" xmlns:q1="UnityEditor.PackageManager.UI.Internal" type="q1:SelectableLabelType" />
   <xs:complexType name="AlertType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -51,7 +51,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="Alert" substitutionGroup="engine:VisualElement" type="AlertType" />
+  <xs:element name="Alert" substitutionGroup="engine:VisualElement" xmlns:q2="UnityEditor.PackageManager.UI.Internal" type="q2:AlertType" />
   <xs:complexType name="DropdownButtonType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -70,7 +70,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="DropdownButton" substitutionGroup="engine:VisualElement" type="DropdownButtonType" />
+  <xs:element name="DropdownButton" substitutionGroup="engine:VisualElement" xmlns:q3="UnityEditor.PackageManager.UI.Internal" type="q3:DropdownButtonType" />
   <xs:complexType name="LoadingSpinnerType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -91,7 +91,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="LoadingSpinner" substitutionGroup="engine:VisualElement" type="LoadingSpinnerType" />
+  <xs:element name="LoadingSpinner" substitutionGroup="engine:VisualElement" xmlns:q4="UnityEditor.PackageManager.UI.Internal" type="q4:LoadingSpinnerType" />
   <xs:complexType name="InProgressViewType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -112,7 +112,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="InProgressView" substitutionGroup="engine:VisualElement" type="InProgressViewType" />
+  <xs:element name="InProgressView" substitutionGroup="engine:VisualElement" xmlns:q5="UnityEditor.PackageManager.UI.Internal" type="q5:InProgressViewType" />
   <xs:complexType name="PackageDependenciesType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -133,7 +133,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PackageDependencies" substitutionGroup="engine:VisualElement" type="PackageDependenciesType" />
+  <xs:element name="PackageDependencies" substitutionGroup="engine:VisualElement" xmlns:q6="UnityEditor.PackageManager.UI.Internal" type="q6:PackageDependenciesType" />
   <xs:complexType name="PackageDetailsType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -154,7 +154,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PackageDetails" substitutionGroup="engine:VisualElement" type="PackageDetailsType" />
+  <xs:element name="PackageDetails" substitutionGroup="engine:VisualElement" xmlns:q7="UnityEditor.PackageManager.UI.Internal" type="q7:PackageDetailsType" />
   <xs:complexType name="PackageTagLabelType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -176,7 +176,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PackageTagLabel" substitutionGroup="engine:VisualElement" type="PackageTagLabelType" />
+  <xs:element name="PackageTagLabel" substitutionGroup="engine:VisualElement" xmlns:q8="UnityEditor.PackageManager.UI.Internal" type="q8:PackageTagLabelType" />
   <xs:complexType name="PackageListType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -197,7 +197,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PackageList" substitutionGroup="engine:VisualElement" type="PackageListType" />
+  <xs:element name="PackageList" substitutionGroup="engine:VisualElement" xmlns:q9="UnityEditor.PackageManager.UI.Internal" type="q9:PackageListType" />
   <xs:complexType name="PackageLoadBarType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -218,7 +218,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PackageLoadBar" substitutionGroup="engine:VisualElement" type="PackageLoadBarType" />
+  <xs:element name="PackageLoadBar" substitutionGroup="engine:VisualElement" xmlns:q10="UnityEditor.PackageManager.UI.Internal" type="q10:PackageLoadBarType" />
   <xs:complexType name="PackageManagerToolbarType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -239,7 +239,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PackageManagerToolbar" substitutionGroup="engine:VisualElement" type="PackageManagerToolbarType" />
+  <xs:element name="PackageManagerToolbar" substitutionGroup="engine:VisualElement" xmlns:q11="UnityEditor.PackageManager.UI.Internal" type="q11:PackageManagerToolbarType" />
   <xs:complexType name="PackageSampleListType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -260,7 +260,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PackageSampleList" substitutionGroup="engine:VisualElement" type="PackageSampleListType" />
+  <xs:element name="PackageSampleList" substitutionGroup="engine:VisualElement" xmlns:q12="UnityEditor.PackageManager.UI.Internal" type="q12:PackageSampleListType" />
   <xs:complexType name="PackageStatusBarType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -281,7 +281,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PackageStatusBar" substitutionGroup="engine:VisualElement" type="PackageStatusBarType" />
+  <xs:element name="PackageStatusBar" substitutionGroup="engine:VisualElement" xmlns:q13="UnityEditor.PackageManager.UI.Internal" type="q13:PackageStatusBarType" />
   <xs:complexType name="PackageToolbarType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -302,7 +302,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PackageToolbar" substitutionGroup="engine:VisualElement" type="PackageToolbarType" />
+  <xs:element name="PackageToolbar" substitutionGroup="engine:VisualElement" xmlns:q14="UnityEditor.PackageManager.UI.Internal" type="q14:PackageToolbarType" />
   <xs:complexType name="ProgressBarType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -323,7 +323,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ProgressBar" substitutionGroup="engine:VisualElement" type="ProgressBarType" />
+  <xs:element name="ProgressBar" substitutionGroup="engine:VisualElement" xmlns:q15="UnityEditor.PackageManager.UI.Internal" type="q15:ProgressBarType" />
   <xs:complexType name="ScopedRegistriesSettingsType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -344,7 +344,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ScopedRegistriesSettings" substitutionGroup="engine:VisualElement" type="ScopedRegistriesSettingsType" />
+  <xs:element name="ScopedRegistriesSettings" substitutionGroup="engine:VisualElement" xmlns:q16="UnityEditor.PackageManager.UI.Internal" type="q16:ScopedRegistriesSettingsType" />
   <xs:complexType name="ToolbarWindowMenuType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -366,5 +366,5 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ToolbarWindowMenu" substitutionGroup="engine:VisualElement" type="ToolbarWindowMenuType" />
+  <xs:element name="ToolbarWindowMenu" substitutionGroup="engine:VisualElement" xmlns:q17="UnityEditor.PackageManager.UI.Internal" type="q17:ToolbarWindowMenuType" />
 </xs:schema>
