@@ -53,5 +53,6 @@
         "temp/":true,
         "Temp/":true
     },
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "omnisharp.useGlobalMono": "always"
 }
