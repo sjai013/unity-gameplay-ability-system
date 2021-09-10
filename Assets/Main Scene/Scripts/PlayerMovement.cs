@@ -55,8 +55,6 @@ namespace GameplayAbilitySystemDemo
 
             GroundedState.Active = (StateMachine stateMachine) =>
             {
-                Debug.Log("Grounded State");
-
                 if (!m_IsGrounded)
                 {
                     stateMachine.NextState(FallingState);

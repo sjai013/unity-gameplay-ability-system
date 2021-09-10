@@ -7,11 +7,11 @@
       "dependencies": {}
     },
     "com.unity.2d.animation": {
-      "version": "7.0.0-pre.2",
+      "version": "7.0.0-pre.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.common": "6.0.0-pre.3",
+        "com.unity.2d.common": "6.0.0-pre.4",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
         "com.unity.modules.uielements": "1.0.0"
@@ -19,7 +19,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.common": {
-      "version": "6.0.0-pre.3",
+      "version": "6.0.0-pre.4",
       "depth": 2,
       "source": "registry",
       "dependencies": {
@@ -45,12 +45,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.psdimporter": {
-      "version": "6.0.0-pre.3",
+      "version": "6.0.0-pre.4",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.animation": "7.0.0-pre.2",
-        "com.unity.2d.common": "6.0.0-pre.3",
+        "com.unity.2d.animation": "7.0.0-pre.3",
+        "com.unity.2d.common": "6.0.0-pre.4",
         "com.unity.2d.sprite": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -108,12 +108,10 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "1.7.1",
+      "version": "1.9.0",
       "depth": 0,
       "source": "registry",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0"
-      },
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
@@ -128,9 +126,9 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.2d.animation": "7.0.0-pre.2",
+        "com.unity.2d.animation": "7.0.0-pre.3",
         "com.unity.2d.pixel-perfect": "5.0.1",
-        "com.unity.2d.psdimporter": "6.0.0-pre.3",
+        "com.unity.2d.psdimporter": "6.0.0-pre.4",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.2d.spriteshape": "7.0.0-pre.3",
         "com.unity.2d.tilemap": "1.0.0",
@@ -173,13 +171,6 @@
     },
     "com.unity.mathematics": {
       "version": "1.2.1",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.nuget.newtonsoft-json": {
-      "version": "2.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -252,7 +243,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.27",
+      "version": "1.1.29",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -272,7 +263,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.6.1",
+      "version": "1.6.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
