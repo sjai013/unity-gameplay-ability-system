@@ -8,6 +8,7 @@ namespace GameplayAbilitySystemDemo
 {
     public class PlayerMovement : MonoBehaviour
     {
+        const float DASH_TIME = 0.1f;
         const int JUMP_GROUNDED = 0;
         const int JUMP_FALLING = 10;
         const int JUMP_JUMPING = 20;
@@ -30,6 +31,7 @@ namespace GameplayAbilitySystemDemo
         [SerializeField] private float m_MovementSpeed = 1f;
         [SerializeField] private float m_JumpForce = 5f;
         [SerializeField] private float m_SlamForce = 10f;
+        [SerializeField] private float m_DashDistance = 1.4f;
         [SerializeField] private bool m_IsGrounded;
         [SerializeField] private PlayerStates m_PlayerState;
         private PlayerStates m_PreviousPlayerState;
@@ -50,6 +52,8 @@ namespace GameplayAbilitySystemDemo
         StateMachine MoveStateMachine;
         StateMachine JumpStateMachine;
         float groundedInhibitTime = 0;
+
+        float m_DashTime = 0f;
 
         void InitialiseMovementStateMachine()
         {
@@ -85,15 +89,37 @@ namespace GameplayAbilitySystemDemo
 
             MoveDash.Enter = () =>
             {
-                m_Rb.AddForce(transform.right * 5, ForceMode2D.Impulse);
+                var dashDistance = this.m_DashDistance;
+                // Raycast in direction of travel and see if there is an obstruction
+                RaycastHit2D raycastHit = Physics2D.Raycast(m_Col.bounds.center, new Vector2(m_MovementVector.x, 0), m_Col.bounds.extents.x + dashDistance, groundedMask);
+
+                if (m_MovementVector.x < 0)
+                {
+                    dashDistance *= -1.0f;
+                }
+
+                if (raycastHit.collider != null)
+                {
+                    dashDistance = math.clamp(dashDistance, -raycastHit.distance + 0.2f, raycastHit.distance - 0.2f);
+                }
+
+                Debug.Log(raycastHit.distance);
+
+                m_Rb.position = new Vector2(m_Rb.position.x + dashDistance, m_Rb.position.y);
+
             };
 
             MoveDash.Active = (StateMachine stateMachine) =>
             {
-                if (math.abs(m_Rb.velocity.x) < 0.1)
+                if (m_DashTime >= DASH_TIME)
                 {
-                    stateMachine.NextState(IdleState);
+                    stateMachine.NextState(MoveState);
                 }
+            };
+
+            MoveDash.Exit = () =>
+            {
+                m_DashTime = 0f;
             };
 
             this.MoveStateMachine = new StateMachine(IdleState);
@@ -102,6 +128,7 @@ namespace GameplayAbilitySystemDemo
             {
                 m_MovementVector = m_InputActions.PlayerMovement.Move.ReadValue<Vector2>().normalized;
                 if (math.abs(m_MovementVector.x) < 0.2f) m_MovementVector = Vector2.zero;
+                m_MovementVector.y = 0;
             };
 
         }
@@ -242,7 +269,6 @@ namespace GameplayAbilitySystemDemo
 
             if (!JumpStateMachine.IsState(JUMP_GROUNDED)) m_MovementVector = m_MovementVector / 1.2f;
 
-            m_MovementVector.y = 0;
 
             SetAimTargetFlip();
             //HandleJump();
@@ -287,7 +313,6 @@ namespace GameplayAbilitySystemDemo
         bool IsGrounded()
         {
             RaycastHit2D raycastHit = Physics2D.Raycast(m_Col.bounds.center, -transform.up, m_Col.bounds.extents.y + m_GroundTolerance, groundedMask);
-            Debug.DrawRay(m_Col.bounds.center, Vector2.down * (m_Col.bounds.extents.y + m_GroundTolerance), raycastHit.collider == null ? Color.red : Color.green);
             return raycastHit.collider != null;
         }
 
@@ -297,6 +322,11 @@ namespace GameplayAbilitySystemDemo
             {
                 var movementVelocity = m_MovementVector * m_MovementSpeed;
                 m_Rb.velocity = new Vector2(movementVelocity.x, m_Rb.velocity.y);
+            }
+
+            if (MoveStateMachine.IsState(MOVE_DASH))
+            {
+                m_DashTime += Time.deltaTime;
             }
 
         }

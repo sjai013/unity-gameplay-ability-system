@@ -2453,7 +2453,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 9fb839bb9504423cebcd255ccb783966, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -3283,7 +3283,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.6509161, y: 1}
+    m_SensorSize: {x: 1.5896008, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
     Aperture: 16
