@@ -104,6 +104,14 @@ namespace GameplayAbilitySystemDemo.Input
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""14125df4-ed31-4dde-9b29-aef627f9847d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -236,6 +244,28 @@ namespace GameplayAbilitySystemDemo.Input
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Slam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f02123c2-1ccd-47ce-9527-c268bad57466"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""487c1151-8dd9-496e-afad-b9303bd51060"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -882,6 +912,7 @@ namespace GameplayAbilitySystemDemo.Input
             m_PlayerMovement_Move = m_PlayerMovement.FindAction("Move", throwIfNotFound: true);
             m_PlayerMovement_Jump = m_PlayerMovement.FindAction("Jump", throwIfNotFound: true);
             m_PlayerMovement_Slam = m_PlayerMovement.FindAction("Slam", throwIfNotFound: true);
+            m_PlayerMovement_Dash = m_PlayerMovement.FindAction("Dash", throwIfNotFound: true);
             // PlayerLook
             m_PlayerLook = asset.FindActionMap("PlayerLook", throwIfNotFound: true);
             m_PlayerLook_Look = m_PlayerLook.FindAction("Look", throwIfNotFound: true);
@@ -1025,6 +1056,7 @@ namespace GameplayAbilitySystemDemo.Input
         private readonly InputAction m_PlayerMovement_Move;
         private readonly InputAction m_PlayerMovement_Jump;
         private readonly InputAction m_PlayerMovement_Slam;
+        private readonly InputAction m_PlayerMovement_Dash;
         public struct PlayerMovementActions
         {
             private @DefaultInputActions m_Wrapper;
@@ -1032,6 +1064,7 @@ namespace GameplayAbilitySystemDemo.Input
             public InputAction @Move => m_Wrapper.m_PlayerMovement_Move;
             public InputAction @Jump => m_Wrapper.m_PlayerMovement_Jump;
             public InputAction @Slam => m_Wrapper.m_PlayerMovement_Slam;
+            public InputAction @Dash => m_Wrapper.m_PlayerMovement_Dash;
             public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1050,6 +1083,9 @@ namespace GameplayAbilitySystemDemo.Input
                     @Slam.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnSlam;
                     @Slam.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnSlam;
                     @Slam.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnSlam;
+                    @Dash.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnDash;
+                    @Dash.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnDash;
+                    @Dash.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnDash;
                 }
                 m_Wrapper.m_PlayerMovementActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1063,6 +1099,9 @@ namespace GameplayAbilitySystemDemo.Input
                     @Slam.started += instance.OnSlam;
                     @Slam.performed += instance.OnSlam;
                     @Slam.canceled += instance.OnSlam;
+                    @Dash.started += instance.OnDash;
+                    @Dash.performed += instance.OnDash;
+                    @Dash.canceled += instance.OnDash;
                 }
             }
         }
@@ -1263,6 +1302,7 @@ namespace GameplayAbilitySystemDemo.Input
             void OnMove(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnSlam(InputAction.CallbackContext context);
+            void OnDash(InputAction.CallbackContext context);
         }
         public interface IPlayerLookActions
         {
