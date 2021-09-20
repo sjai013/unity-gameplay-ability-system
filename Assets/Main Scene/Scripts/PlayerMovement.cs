@@ -1,4 +1,8 @@
 using System;
+using AbilitySystem;
+using AbilitySystem.Authoring;
+using AttributeSystem.Authoring;
+using AttributeSystem.Components;
 using GameplayAbilitySystemDemo.Input;
 using MyGameplayAbilitySystem.StateMachine;
 using Unity.Mathematics;
@@ -8,7 +12,6 @@ namespace GameplayAbilitySystemDemo
 {
     public class PlayerMovement : MonoBehaviour
     {
-        const float DASH_TIME = 0.1f;
         const int JUMP_GROUNDED = 0;
         const int JUMP_FALLING = 10;
         const int JUMP_JUMPING = 20;
@@ -27,8 +30,9 @@ namespace GameplayAbilitySystemDemo
             Jumping = 2
         }
 
+        [SerializeField] private AbstractAbility m_DashAbility;
+        [SerializeField] private AttributeScriptableObject m_SpeedAttribute;
         [SerializeField] private float m_GroundTolerance = 0.1f;
-        [SerializeField] private float m_MovementSpeed = 1f;
         [SerializeField] private float m_JumpForce = 5f;
         [SerializeField] private float m_SlamForce = 10f;
         [SerializeField] private float m_DashDistance = 1.4f;
@@ -42,6 +46,9 @@ namespace GameplayAbilitySystemDemo
         Rigidbody2D m_Rb;
         BoxCollider2D m_Col;
         private Vector2 m_MovementVector;
+        private AttributeSystemComponent m_AttributeSystem;
+        private AbilitySystemCharacter m_AbilitySystemCharacter;
+        [SerializeField] private float m_MovementSpeed = 1f;
         private int groundedMask;
         private AimTarget m_AimTarget;
         private bool m_DoubleJumped;
@@ -59,7 +66,6 @@ namespace GameplayAbilitySystemDemo
         {
             State IdleState = new State(MOVE_IDLE);
             State MoveState = new State(MOVE_NORMAL);
-            State MoveDash = new State(MOVE_DASH);
 
             IdleState.Enter = () =>
             {
@@ -81,45 +87,6 @@ namespace GameplayAbilitySystemDemo
                     stateMachine.NextState(IdleState);
                 }
 
-                if (m_InputActions.PlayerMovement.Dash.triggered)
-                {
-                    stateMachine.NextState(MoveDash);
-                }
-            };
-
-            MoveDash.Enter = () =>
-            {
-                var dashDistance = this.m_DashDistance;
-                // Raycast in direction of travel and see if there is an obstruction
-                RaycastHit2D raycastHit = Physics2D.Raycast(m_Col.bounds.center, new Vector2(m_MovementVector.x, 0), m_Col.bounds.extents.x + dashDistance, groundedMask);
-
-                if (m_MovementVector.x < 0)
-                {
-                    dashDistance *= -1.0f;
-                }
-
-                if (raycastHit.collider != null)
-                {
-                    dashDistance = math.clamp(dashDistance, -raycastHit.distance + 0.2f, raycastHit.distance - 0.2f);
-                }
-
-                Debug.Log(raycastHit.distance);
-
-                m_Rb.position = new Vector2(m_Rb.position.x + dashDistance, m_Rb.position.y);
-
-            };
-
-            MoveDash.Active = (StateMachine stateMachine) =>
-            {
-                if (m_DashTime >= DASH_TIME)
-                {
-                    stateMachine.NextState(MoveState);
-                }
-            };
-
-            MoveDash.Exit = () =>
-            {
-                m_DashTime = 0f;
             };
 
             this.MoveStateMachine = new StateMachine(IdleState);
@@ -248,6 +215,8 @@ namespace GameplayAbilitySystemDemo
             m_InputActions.PlayerMovement.Enable();
             m_Rb = GetComponent<Rigidbody2D>();
             m_Col = GetComponent<BoxCollider2D>();
+            m_AttributeSystem = GetComponent<AttributeSystemComponent>();
+            m_AbilitySystemCharacter = GetComponent<AbilitySystemCharacter>();
 
             groundedMask = LayerMask.GetMask("Ground");
             m_AimTarget = GetComponent<AimTarget>();
@@ -257,14 +226,19 @@ namespace GameplayAbilitySystemDemo
 
         void Update()
         {
+            if (m_AttributeSystem.GetAttributeValue(m_SpeedAttribute, out var attributeValue))
+            {
+                m_MovementSpeed = attributeValue.CurrentValue;
+            }
+
             m_IsGrounded = IsGrounded();
             MoveStateMachine.TickState();
 
-            // if (m_InputActions.PlayerMovement.Dash.triggered)
-            // {
-            //     this.m_Rb.AddForce(transform.right * 10, ForceMode2D.Impulse);
-            //     Debug.Log("Dash");
-            // }
+            if (m_InputActions.PlayerMovement.Dash.triggered)
+            {
+                var dashSpec = this.m_DashAbility.CreateSpec(m_AbilitySystemCharacter);
+                m_AbilitySystemCharacter.ActivateAbility(dashSpec);
+            }
 
 
             if (!JumpStateMachine.IsState(JUMP_GROUNDED)) m_MovementVector = m_MovementVector / 1.2f;
@@ -323,12 +297,6 @@ namespace GameplayAbilitySystemDemo
                 var movementVelocity = m_MovementVector * m_MovementSpeed;
                 m_Rb.velocity = new Vector2(movementVelocity.x, m_Rb.velocity.y);
             }
-
-            if (MoveStateMachine.IsState(MOVE_DASH))
-            {
-                m_DashTime += Time.deltaTime;
-            }
-
         }
     }
 

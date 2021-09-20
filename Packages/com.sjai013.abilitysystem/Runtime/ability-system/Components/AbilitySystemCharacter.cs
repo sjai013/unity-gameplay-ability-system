@@ -255,7 +255,7 @@ namespace AbilitySystem
         {
             // Reset all attributes to 0
             this.AttributeSystem.ResetAttributeModifiers();
-            // UpdateAttributeSystem();
+            UpdateAttributeSystem();
             m_AbilityEM.StepAbilities();
             TickGameplayEffects();
             CleanGameplayEffects();

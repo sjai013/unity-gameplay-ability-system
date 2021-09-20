@@ -423,14 +423,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2734c841706a8b4385eae6ef05a4928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_DashAbility: {fileID: 3796461005231417945, guid: a9b8c2b450bbe03b3ac92a3a4d5478a4, type: 3}
+  m_SpeedAttribute: {fileID: 11400000, guid: 6eb43108b0c270d458a300392e6dc216, type: 2}
   m_GroundTolerance: 0.1
-  m_MovementSpeed: 2.5
   m_JumpForce: 5
   m_SlamForce: 10
+  m_DashDistance: 1.4
   m_IsGrounded: 0
   m_PlayerState: 0
   m_FeetLocation: {fileID: 476555088}
   m_JumpVfx: {fileID: 7959555054416409484, guid: 5a93d5ca6261d8d409a64251e4db86d2, type: 3}
+  m_MovementSpeed: 2.5
 --- !u!114 &1480405782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,6 +454,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 61be4c66c0108b3419c3781777ce714b, type: 2}
   - {fileID: 11400000, guid: efdbc2e6a12082a48b2388540aded7aa, type: 2}
   - {fileID: 11400000, guid: c7af0423343bc504c8e1db8e6531ceba, type: 2}
+  - {fileID: 11400000, guid: 6eb43108b0c270d458a300392e6dc216, type: 2}
   AttributeValues: []
 --- !u!114 &1480405783
 MonoBehaviour:

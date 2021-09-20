@@ -55,6 +55,10 @@ namespace AbilitySystem.Authoring
 
             public override bool StepAbility()
             {
+
+                if (this.CheckCooldown().TimeRemaining > 0) return true;
+                if (!this.CheckCost()) return true;
+
                 // Apply cost and cooldown
                 this.Ability.ApplyCooldownTo(this.Owner);
                 this.Ability.ApplyCostTo(this.Owner);
