@@ -19,7 +19,7 @@ namespace AbilitySystem.Authoring
         /// <summary>
         /// The owner of the AbilitySpec - usually the source
         /// </summary>
-        public AbilitySystemCharacter Owner {get; protected set;}
+        public AbilitySystemCharacter Owner { get; protected set; }
 
         /// <summary>
         /// Ability level
@@ -71,48 +71,10 @@ namespace AbilitySystem.Authoring
         /// <returns></returns>
         public virtual AbilityCooldownTime CheckCooldown()
         {
-            float maxDuration = 0;
             if (this.Ability.Cooldown == null) return new AbilityCooldownTime();
             var cooldownTags = this.Ability.Cooldown.GetGameplayEffectTags().GrantedTags;
 
-            float longestCooldown = 0f;
-
-            // Check if the cooldown tag is granted to the player, and if so, capture the remaining duration for that tag
-            for (var i = 0; i < this.Owner.AppliedGameplayEffects.Count; i++)
-            {
-                var grantedTags = this.Owner.AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayEffectTags().GrantedTags;
-                if (grantedTags == null) continue;
-                for (var iTag = 0; iTag < grantedTags.Length; iTag++)
-                {
-                    for (var iCooldownTag = 0; iCooldownTag < cooldownTags.Length; iCooldownTag++)
-                    {
-                        if (grantedTags[iTag] == cooldownTags[iCooldownTag])
-                        {
-                            // If this is an infinite GE, then return null to signify this is on CD
-                            if (this.Owner.AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.Infinite) return new AbilityCooldownTime()
-                            {
-                                TimeRemaining = float.MaxValue,
-                                TotalDuration = 0
-                            };
-
-                            var durationRemaining = this.Owner.AppliedGameplayEffects[i].spec.DurationRemaining;
-
-                            if (durationRemaining > longestCooldown)
-                            {
-                                longestCooldown = durationRemaining;
-                                maxDuration = this.Owner.AppliedGameplayEffects[i].spec.TotalDuration;
-                            }
-                        }
-
-                    }
-                }
-            }
-
-            return new AbilityCooldownTime()
-            {
-                TimeRemaining = longestCooldown,
-                TotalDuration = maxDuration
-            };
+            return this.Owner.CheckCooldownForTags(cooldownTags);
         }
 
         /// <summary>

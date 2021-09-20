@@ -20,7 +20,7 @@ namespace GameplayAbilitySystemDemo
 
         const int MOVE_IDLE = 0;
         const int MOVE_NORMAL = 10;
-        const int MOVE_DASH = 20;
+        // const int MOVE_DASH = 20;
 
         [Flags]
         public enum PlayerStates
@@ -35,13 +35,10 @@ namespace GameplayAbilitySystemDemo
         [SerializeField] private float m_GroundTolerance = 0.1f;
         [SerializeField] private float m_JumpForce = 5f;
         [SerializeField] private float m_SlamForce = 10f;
-        [SerializeField] private float m_DashDistance = 1.4f;
         [SerializeField] private bool m_IsGrounded;
         [SerializeField] private PlayerStates m_PlayerState;
-        private PlayerStates m_PreviousPlayerState;
         [SerializeField] private Transform m_FeetLocation;
         [SerializeField] GameObject m_JumpVfx;
-
         DefaultInputActions m_InputActions;
         Rigidbody2D m_Rb;
         BoxCollider2D m_Col;
@@ -51,16 +48,9 @@ namespace GameplayAbilitySystemDemo
         [SerializeField] private float m_MovementSpeed = 1f;
         private int groundedMask;
         private AimTarget m_AimTarget;
-        private bool m_DoubleJumped;
-        private bool m_JumpVfxTrigger;
-
-        private Vector3 m_JumpPosition;
-
         StateMachine MoveStateMachine;
         StateMachine JumpStateMachine;
         float groundedInhibitTime = 0;
-
-        float m_DashTime = 0f;
 
         void InitialiseMovementStateMachine()
         {

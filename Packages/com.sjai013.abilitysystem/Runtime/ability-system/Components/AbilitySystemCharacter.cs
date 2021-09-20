@@ -58,6 +58,49 @@ namespace AbilitySystem
             }
         }
 
+        public AbilityCooldownTime CheckCooldownForTags(GameplayTagScriptableObject.GameplayTag[] tags)
+        {
+            float longestCooldown = 0f;
+            float maxDuration = 0;
+
+            // Check if the cooldown tag is granted to the player, and if so, capture the remaining duration for that tag
+            for (var i = 0; i < this.AppliedGameplayEffects.Count; i++)
+            {
+                var grantedTags = this.AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayEffectTags().GrantedTags;
+                if (grantedTags == null) continue;
+                for (var iTag = 0; iTag < grantedTags.Length; iTag++)
+                {
+                    for (var iCooldownTag = 0; iCooldownTag < tags.Length; iCooldownTag++)
+                    {
+                        if (grantedTags[iTag] == tags[iCooldownTag])
+                        {
+                            // If this is an infinite GE, then return null to signify this is on CD
+                            if (this.AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.Infinite) return new AbilityCooldownTime()
+                            {
+                                TimeRemaining = float.MaxValue,
+                                TotalDuration = 0
+                            };
+
+                            var durationRemaining = this.AppliedGameplayEffects[i].spec.DurationRemaining;
+
+                            if (durationRemaining > longestCooldown)
+                            {
+                                longestCooldown = durationRemaining;
+                                maxDuration = this.AppliedGameplayEffects[i].spec.TotalDuration;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            return new AbilityCooldownTime()
+            {
+                TimeRemaining = longestCooldown,
+                TotalDuration = maxDuration
+            };
+        }
+
 
         /// <summary>
         /// Applies the gameplay effect spec to self
@@ -236,6 +279,7 @@ namespace AbilitySystem
                 }
             }
         }
+
 
         void CleanGameplayEffects()
         {
