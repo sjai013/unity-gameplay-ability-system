@@ -10,7 +10,26 @@ namespace GameplayAbilitySystemDemo
         [SerializeField] private AbstractAbility m_Ability;
         [SerializeField] private float m_UpdatePeriod;
         [SerializeField] private AbilityCooldownTime m_CooldownTime;
+
+        private AbstractAbilitySpec m_AbilitySpec;
         private float m_TimeSinceUpdate;
+
+        void Start()
+        {
+            AssignAbilitySpec();
+        }
+
+        void AssignAbilitySpec()
+        {
+            for (var i = 0; i < m_AbilitySystemCharacter.GrantedAbilities.Count; i++)
+            {
+                if (m_AbilitySystemCharacter.GrantedAbilities[i].Ability == m_Ability)
+                {
+                    m_AbilitySpec = m_AbilitySystemCharacter.GrantedAbilities[i];
+                    return;
+                }
+            }
+        }
 
         void Update()
         {

@@ -7,7 +7,7 @@ public class UseAbility : MonoBehaviour
 {
     private AbilitySystemCharacter abilitySystemCharacter;
     private DefaultInputActions m_InputActions;
-    [SerializeField] private AbstractAbility ability;
+    [SerializeField] private AbstractAbility[] ability;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +21,7 @@ public class UseAbility : MonoBehaviour
     void Update()
     {
         if (m_InputActions.PlayerAbilities.Fire1.triggered) {
-            abilitySystemCharacter.ActivateAbility(ability.CreateSpec(abilitySystemCharacter));
+            abilitySystemCharacter.ActivateAbility(ability[0].CreateSpec(abilitySystemCharacter));
         }
     }
 }

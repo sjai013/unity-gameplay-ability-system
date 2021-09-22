@@ -50,7 +50,7 @@ namespace GameplayAbilitySystemDemo.Input
                 {
                     ""name"": """",
                     ""id"": ""05f6913d-c316-48b2-a6bb-e225f14c7960"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -61,7 +61,7 @@ namespace GameplayAbilitySystemDemo.Input
                 {
                     ""name"": """",
                     ""id"": ""4e337e48-3aed-4627-9e87-e9ce08d8e951"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -250,7 +250,7 @@ namespace GameplayAbilitySystemDemo.Input
                 {
                     ""name"": """",
                     ""id"": ""f02123c2-1ccd-47ce-9527-c268bad57466"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
