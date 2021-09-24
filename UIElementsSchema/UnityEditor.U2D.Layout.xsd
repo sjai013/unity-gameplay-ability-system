@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns="UnityEditor.Overlays" xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" elementFormDefault="qualified" targetNamespace="Unity.Cloud.Collaborate.Views" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns="UnityEditor.Overlays" xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" elementFormDefault="qualified" targetNamespace="UnityEditor.U2D.Layout" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
-  <xs:complexType name="ChangesTabPageViewType">
+  <xs:complexType name="DropdownMenuType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -21,8 +21,8 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ChangesTabPageView" substitutionGroup="engine:VisualElement" xmlns:q1="Unity.Cloud.Collaborate.Views" type="q1:ChangesTabPageViewType" />
-  <xs:complexType name="MainPageViewType">
+  <xs:element name="DropdownMenu" substitutionGroup="engine:VisualElement" xmlns:q1="UnityEditor.U2D.Layout" type="q1:DropdownMenuType" />
+  <xs:complexType name="LayoutOverlayType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -42,13 +42,10 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="MainPageView" substitutionGroup="engine:VisualElement" xmlns:q2="Unity.Cloud.Collaborate.Views" type="q2:MainPageViewType" />
-  <xs:complexType name="StartPageViewType">
+  <xs:element name="LayoutOverlay" substitutionGroup="engine:VisualElement" xmlns:q2="UnityEditor.U2D.Layout" type="q2:LayoutOverlayType" />
+  <xs:complexType name="ScrollableToolbarType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="engine:VisualElement" />
-        </xs:sequence>
         <xs:attribute default="" name="name" type="xs:string" use="optional" />
         <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
         <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
@@ -59,9 +56,10 @@
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="isHorizontal" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="StartPageView" substitutionGroup="engine:VisualElement" xmlns:q3="Unity.Cloud.Collaborate.Views" type="q3:StartPageViewType" />
+  <xs:element name="ScrollableToolbar" substitutionGroup="engine:VisualElement" xmlns:q3="UnityEditor.U2D.Layout" type="q3:ScrollableToolbarType" />
 </xs:schema>

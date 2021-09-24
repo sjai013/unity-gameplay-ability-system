@@ -10,6 +10,7 @@ namespace AttributeSystem.Components
     /// </summary>
     public class AttributeSystemComponent : MonoBehaviour
     {
+
         [SerializeField]
         private AbstractAttributeEventHandler[] AttributeSystemEvents;
 

@@ -3025,7 +3025,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttributeSystemEvents: []
-  Attributes: []
+  Attributes:
+  - {fileID: 11400000, guid: 348725b0db2f9844781f2847a8a473cb, type: 2}
+  - {fileID: 11400000, guid: efdbc2e6a12082a48b2388540aded7aa, type: 2}
+  - {fileID: 11400000, guid: c7af0423343bc504c8e1db8e6531ceba, type: 2}
+  - {fileID: 11400000, guid: 61be4c66c0108b3419c3781777ce714b, type: 2}
   AttributeValues: []
 --- !u!1 &1006294973
 GameObject:
@@ -3140,7 +3144,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.0040927, y: 1}
+    m_SensorSize: {x: 1.6251342, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
     Aperture: 16
@@ -3801,6 +3805,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1480405782, guid: d2d78a9b497dffd4d8b4560ea5c1de0c, type: 3}
+      propertyPath: AttributeValues.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480405782, guid: d2d78a9b497dffd4d8b4560ea5c1de0c, type: 3}
+      propertyPath: AttributeSystemEvents.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 960834ac5ec1dc348974cea717e46bc5, type: 2}
+    - target: {fileID: 1480405782, guid: d2d78a9b497dffd4d8b4560ea5c1de0c, type: 3}
+      propertyPath: AttributeSystemEvents.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 53e8fe7ca79919a4295fba01d935417e, type: 2}
+    - target: {fileID: 1480405782, guid: d2d78a9b497dffd4d8b4560ea5c1de0c, type: 3}
+      propertyPath: AttributeValues.Array.data[0].Attribute
+      value: 
+      objectReference: {fileID: 11400000, guid: 6eb43108b0c270d458a300392e6dc216, type: 2}
+    - target: {fileID: 1480405782, guid: d2d78a9b497dffd4d8b4560ea5c1de0c, type: 3}
+      propertyPath: AttributeValues.Array.data[0].BaseValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480405782, guid: d2d78a9b497dffd4d8b4560ea5c1de0c, type: 3}
+      propertyPath: AttributeValues.Array.data[1].Attribute
+      value: 
+      objectReference: {fileID: 11400000, guid: 6eb43108b0c270d458a300392e6dc216, type: 2}
+    - target: {fileID: 1480405782, guid: d2d78a9b497dffd4d8b4560ea5c1de0c, type: 3}
+      propertyPath: AttributeValues.Array.data[2].Attribute
+      value: 
+      objectReference: {fileID: 11400000, guid: c7af0423343bc504c8e1db8e6531ceba, type: 2}
     - target: {fileID: 5259635927308013636, guid: d2d78a9b497dffd4d8b4560ea5c1de0c, type: 3}
       propertyPath: m_Name
       value: 2DPlayer

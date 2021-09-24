@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement style="flex-direction: column; width: auto; justify-content: space-between;">
+        <ui:Label text="Attribute" name="label" style="width: 100px; flex-basis: auto; -unity-text-align: middle-left; flex-shrink: 0; align-items: auto; justify-content: center; flex-grow: 0; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-right-color: rgb(255, 255, 255); border-left-width: 0; border-right-width: 1px; border-top-width: 0; border-bottom-width: 0; display: none;" />
+        <ui:TextField picking-mode="Ignore" text="-" readonly="true" binding-path="Attribute" focusable="false" />
+        <ui:VisualElement style="width: auto; flex-grow: 1; flex-basis: auto; align-items: stretch; justify-content: space-between; margin-left: 3px; flex-direction: row;">
+            <ui:VisualElement style="flex-direction: column; flex-grow: 1;">
+                <uie:FloatField label="Base" value="0" name="val_base" binding-path="BaseValue" readonly="true" style="flex-grow: 1;" />
+                <uie:FloatField value="0" name="val_current" binding-path="CurrentValue" readonly="true" label="Current" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: column; width: 100px; align-items: stretch; justify-content: flex-end;">
+                <uie:FloatField value="0" name="txtChange" />
+                <ui:VisualElement style="flex-direction: row;">
+                    <ui:Button text="+" display-tooltip-when-elided="true" name="btnIncrement" style="flex-grow: 1;" />
+                    <ui:Button text="-" display-tooltip-when-elided="true" name="btnDecrement" style="flex-grow: 1;" />
+                    <ui:Button text="R" display-tooltip-when-elided="true" name="btnReset" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.Experimental.GraphView" elementFormDefault="qualified" targetNamespace="UnityEditor.Experimental.GraphView" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns="UnityEditor.Overlays" xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" elementFormDefault="qualified" targetNamespace="UnityEditor.Experimental.GraphView" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
   <xs:complexType name="PillType">
     <xs:complexContent mixed="false">
@@ -20,7 +20,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="Pill" substitutionGroup="engine:VisualElement" type="PillType" />
+  <xs:element name="Pill" substitutionGroup="engine:VisualElement" xmlns:q1="UnityEditor.Experimental.GraphView" type="q1:PillType" />
   <xs:complexType name="ResizableElementType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -41,7 +41,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ResizableElement" substitutionGroup="engine:VisualElement" type="ResizableElementType" />
+  <xs:element name="ResizableElement" substitutionGroup="engine:VisualElement" xmlns:q2="UnityEditor.Experimental.GraphView" type="q2:ResizableElementType" />
   <xs:complexType name="StickyNoteType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -62,5 +62,5 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="StickyNote" substitutionGroup="engine:VisualElement" type="StickyNoteType" />
+  <xs:element name="StickyNote" substitutionGroup="engine:VisualElement" xmlns:q3="UnityEditor.Experimental.GraphView" type="q3:StickyNoteType" />
 </xs:schema>

@@ -12,6 +12,7 @@ namespace AbilitySystem
     [AddComponentMenu("Gameplay Ability System/Ability System Character")]
     public class AbilitySystemCharacter : MonoBehaviour
     {
+        public AttributeValue _DeleteMe;
         [SerializeField] protected AttributeSystemComponent _attributeSystem;
         public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
         public List<GameplayEffectContainer> AppliedGameplayEffects = new List<GameplayEffectContainer>();
