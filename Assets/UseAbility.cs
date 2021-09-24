@@ -20,8 +20,14 @@ public class UseAbility : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_InputActions.PlayerAbilities.Fire1.triggered) {
+        if (m_InputActions.PlayerAbilities.Fire1.triggered)
+        {
             abilitySystemCharacter.ActivateAbility(ability[0].CreateSpec(abilitySystemCharacter));
+        }
+
+        if (m_InputActions.PlayerAbilities.Fire2.triggered)
+        {
+            abilitySystemCharacter.ActivateAbility(ability[1].CreateSpec(abilitySystemCharacter));
         }
     }
 }
