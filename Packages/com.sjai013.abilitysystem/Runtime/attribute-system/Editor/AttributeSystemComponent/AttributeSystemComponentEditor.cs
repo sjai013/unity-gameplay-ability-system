@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using AttributeSystem.Components;
-
+using UnityEditor.Graphs;
 
 [CustomEditor(typeof(AttributeSystemComponent))]
 public class AttributeSystemComponentEditor : Editor
@@ -27,21 +27,20 @@ public class AttributeSystemComponentEditor : Editor
     public override VisualElement CreateInspectorGUI()
     {
         var container = new VisualElement();
- 
-        var iterator = serializedObject.GetIterator();
-        if (iterator.NextVisible(true))
+
+        // Draw Attribute System Events
+        container.Add(new PropertyField(this.serializedObject.FindProperty("AttributeSystemEvents"), "Events"));
+
+        if (Application.isPlaying)
         {
-            do
-            {
-                var propertyField = new PropertyField(iterator.Copy()) { name = "PropertyField:" + iterator.propertyPath };
-                if (iterator.propertyPath == "m_Script" && serializedObject.targetObject != null)
-                    propertyField.SetEnabled(value: false);
- 
-                container.Add(propertyField);
-            }
-            while (iterator.NextVisible(false));
+            container.Add(new PropertyField(this.serializedObject.FindProperty("AttributeValues"), "Attributes"));
         }
- 
+        else
+        {
+            container.Add(new PropertyField(this.serializedObject.FindProperty("Attributes"), "Attributes"));
+        }
+
+
         return container;
     }
 }
