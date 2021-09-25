@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using AttributeSystem.Components;
-using UnityEditor.Graphs;
+
 
 [CustomEditor(typeof(AttributeSystemComponent))]
 public class AttributeSystemComponentEditor : Editor
