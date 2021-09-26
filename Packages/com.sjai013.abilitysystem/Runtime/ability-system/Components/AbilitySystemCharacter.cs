@@ -12,11 +12,10 @@ namespace AbilitySystem
     [AddComponentMenu("Gameplay Ability System/Ability System Character")]
     public class AbilitySystemCharacter : MonoBehaviour
     {
-        public AttributeValue _DeleteMe;
         [SerializeField] protected AttributeSystemComponent _attributeSystem;
         public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
         public List<GameplayEffectContainer> AppliedGameplayEffects = new List<GameplayEffectContainer>();
-        public List<AbstractAbilitySpec> GrantedAbilities = new List<AbstractAbilitySpec>();
+        public HashSet<AbstractAbilitySpec> GrantedAbilities = new HashSet<AbstractAbilitySpec>();
         public List<GameplayTagScriptableObject> AppliedTags;
         private List<IGameplayTagProvider> TagProviders = new List<IGameplayTagProvider>();
         private AbilityExecutionManager m_AbilityEM = new AbilityExecutionManager();
@@ -43,6 +42,50 @@ namespace AbilitySystem
             this.GrantedAbilities.Add(spec);
         }
 
+        /// <summary>
+        /// Returns the first granted ability spec matching an ability
+        /// </summary>
+        /// <param name="ability">Ability to find</param>
+        /// <param name="abilitySpec">Granted ability spec</param>
+        /// <returns>True if an ability spec was found, false otherwise</returns>
+        public bool GetGrantedAbilitySpec(AbstractAbility ability, out AbstractAbilitySpec abilitySpec)
+        {
+            abilitySpec = null;
+            foreach (var spec in GrantedAbilities)
+            {
+                if (spec.Ability == ability)
+                {
+                    abilitySpec = spec;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the first granted ability spec which has an asset tag matching the passed in asset tag.
+        /// </summary>
+        /// <param name="assetTag">Asset tag to match</param>
+        /// <param name="abilitySpec">Granted ability spec</param>
+        /// <returns>True if an ability spec was found, false otherwise</returns>
+        public bool GetGrantedAbilitySpec(GameplayTagScriptableObject assetTag, out AbstractAbilitySpec abilitySpec)
+        {
+            abilitySpec = null;
+            foreach (var spec in GrantedAbilities)
+            {
+                if (spec.Ability.AbilityTags.AssetTag == assetTag.TagData)
+                {
+                    abilitySpec = spec;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Activate an ability defined by the spec.
+        /// </summary>
+        /// <param name="spec"></param>
         public void ActivateAbility(AbstractAbilitySpec spec)
         {
             m_AbilityEM.AddAbility(spec);
@@ -50,13 +93,7 @@ namespace AbilitySystem
 
         public void RemoveAbilitiesWithTag(GameplayTagScriptableObject tag)
         {
-            for (var i = GrantedAbilities.Count - 1; i >= 0; i--)
-            {
-                if (GrantedAbilities[i].Ability.AbilityTags.AssetTag == tag.TagData)
-                {
-                    GrantedAbilities.RemoveAt(i);
-                }
-            }
+            GrantedAbilities.RemoveWhere(x => x.Ability.AbilityTags.AssetTag == tag.TagData);
         }
 
         public AbilityCooldownTime CheckCooldownForTags(GameplayTagScriptableObject.GameplayTag[] tags)

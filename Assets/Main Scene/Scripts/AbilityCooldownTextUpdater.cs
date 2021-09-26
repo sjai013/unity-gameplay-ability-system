@@ -7,12 +7,12 @@ namespace GameplayAbilitySystemDemo
     public class AbilityCooldownTextUpdater : MonoBehaviour
     {
         private TextMeshProUGUI m_TextMeshPro;
-        private AbilityCooldownValue m_AbilityCooldownValue;
+        private AbilityCooldownState m_AbilityCooldownValue;
 
         void Start()
         {
             m_TextMeshPro = GetComponent<TextMeshProUGUI>();
-            m_AbilityCooldownValue = GetComponent<AbilityCooldownValue>();
+            m_AbilityCooldownValue = GetComponent<AbilityCooldownState>();
         }
 
         void Update()

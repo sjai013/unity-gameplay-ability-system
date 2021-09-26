@@ -40,8 +40,8 @@ namespace GameplayAbilitySystemDemo
         [SerializeField] private Transform m_FeetLocation;
         [SerializeField] GameObject m_JumpVfx;
         DefaultInputActions m_InputActions;
-        Rigidbody2D m_Rb;
-        BoxCollider2D m_Col;
+        [SerializeField] Rigidbody2D m_Rb;
+        [SerializeField] BoxCollider2D m_Col;
         private Vector2 m_MovementVector;
         private AttributeSystemComponent m_AttributeSystem;
         private AbilitySystemCharacter m_AbilitySystemCharacter;
@@ -203,8 +203,6 @@ namespace GameplayAbilitySystemDemo
         {
             m_InputActions = new DefaultInputActions();
             m_InputActions.PlayerMovement.Enable();
-            m_Rb = GetComponent<Rigidbody2D>();
-            m_Col = GetComponent<BoxCollider2D>();
             m_AttributeSystem = GetComponent<AttributeSystemComponent>();
             m_AbilitySystemCharacter = GetComponent<AbilitySystemCharacter>();
 
@@ -212,6 +210,9 @@ namespace GameplayAbilitySystemDemo
             m_AimTarget = GetComponent<AimTarget>();
             InitialiseMovementStateMachine();
             InitialiseJumpStateMachine();
+
+            var dashSpec = this.m_DashAbility.CreateSpec(m_AbilitySystemCharacter);
+            this.m_AbilitySystemCharacter.GrantAbility(dashSpec);
         }
 
         void Update()
@@ -220,14 +221,16 @@ namespace GameplayAbilitySystemDemo
             {
                 m_MovementSpeed = attributeValue.CurrentValue;
             }
- 
+
             m_IsGrounded = IsGrounded();
             MoveStateMachine.TickState();
 
             if (m_InputActions.PlayerMovement.Dash.triggered)
             {
-                var dashSpec = this.m_DashAbility.CreateSpec(m_AbilitySystemCharacter);
-                m_AbilitySystemCharacter.ActivateAbility(dashSpec);
+                if (m_AbilitySystemCharacter.GetGrantedAbilitySpec(m_DashAbility, out var abilitySpec))
+                {
+                    m_AbilitySystemCharacter.ActivateAbility(abilitySpec);
+                }
             }
 
 

@@ -16,8 +16,8 @@ public class AwakeAbility : MonoBehaviour
         for (var i = 0; i < m_Abilities.Length; i++)
         {
             AbstractAbilitySpec abilitySpec = m_Abilities[i].CreateSpec(abilitySystemCharacter);
+            abilitySystemCharacter.GrantAbility(abilitySpec);
             abilitySystemCharacter.ActivateAbility(abilitySpec);
-
         }
     }
 

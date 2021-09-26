@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2576341125884216714}
   - component: {fileID: 2576341125884216715}
+  - component: {fileID: 5457600889210221841}
   - component: {fileID: 2576341125884216712}
   - component: {fileID: 2576341125884216713}
   m_Layer: 5
@@ -48,6 +49,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2576341125884216709}
   m_CullTransparentMesh: 1
+--- !u!114 &5457600889210221841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2576341125884216709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b36ce984c03b91a4fa2f355471b2fe27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AbilitySystemCharacter: {fileID: 0}
+  m_Ability: {fileID: 0}
 --- !u!114 &2576341125884216712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldownOverlay: {fileID: 2576341127311016585}
   abilityIconElement: {fileID: 2576341126969677881}
+  borderIconElement: {fileID: 6234326098249719645}
   abilityIcon: {fileID: 0}
 --- !u!114 &2576341125884216713
 MonoBehaviour:
@@ -75,9 +91,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f561d072e2973f7b6ff85826cd160e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AbilitySystemCharacter: {fileID: 0}
-  m_Ability: {fileID: 8517642461774236623, guid: dd60eea24a072504694fbd03dd4f2a2c, type: 3}
   m_UpdatePeriod: 0
+  m_HasResources: 0
 --- !u!1 &2576341126604133805
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,7 +399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9189889, b: 0.740566, a: 1}
+  m_Color: {r: 0.24528301, g: 0.16723841, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

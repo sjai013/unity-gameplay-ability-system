@@ -5,16 +5,17 @@ using UnityEngine;
 
 public class UseAbility : MonoBehaviour
 {
-    private AbilitySystemCharacter abilitySystemCharacter;
+    private AbilitySystemCharacter m_AbilitySystemCharacter;
     private DefaultInputActions m_InputActions;
     [SerializeField] private AbstractAbility[] ability;
 
     // Start is called before the first frame update
     void Start()
     {
-        this.abilitySystemCharacter = GetComponent<AbilitySystemCharacter>();
+        this.m_AbilitySystemCharacter = GetComponent<AbilitySystemCharacter>();
         m_InputActions = new DefaultInputActions();
         m_InputActions.PlayerAbilities.Enable();
+        GrantAbilities();
     }
 
     // Update is called once per frame
@@ -22,12 +23,31 @@ public class UseAbility : MonoBehaviour
     {
         if (m_InputActions.PlayerAbilities.Fire1.triggered)
         {
-            abilitySystemCharacter.ActivateAbility(ability[0].CreateSpec(abilitySystemCharacter));
+            if (m_AbilitySystemCharacter.GetGrantedAbilitySpec(ability[0], out var abilitySpec))
+            {
+                m_AbilitySystemCharacter.ActivateAbility(abilitySpec);
+            }
         }
 
         if (m_InputActions.PlayerAbilities.Fire2.triggered)
         {
-            abilitySystemCharacter.ActivateAbility(ability[1].CreateSpec(abilitySystemCharacter));
+            if (m_AbilitySystemCharacter.GetGrantedAbilitySpec(ability[1], out var abilitySpec))
+            {
+                m_AbilitySystemCharacter.ActivateAbility(abilitySpec);
+            }
         }
     }
+
+    // Grant Abilities
+    void GrantAbilities()
+    {
+        var abilitySpecs = new AbstractAbilitySpec[this.ability.Length];
+        for (var i = 0; i < this.ability.Length; i++)
+        {
+            abilitySpecs[i] = ability[i].CreateSpec(m_AbilitySystemCharacter);
+            m_AbilitySystemCharacter.GrantAbility(abilitySpecs[i]);
+        }
+    }
+
+
 }
