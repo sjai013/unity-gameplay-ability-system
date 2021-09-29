@@ -137,7 +137,7 @@ MonoBehaviour:
   m_TrailVfx: {fileID: 0}
   m_MuzzleVfx: {fileID: 1670728749928758225}
   m_Projectile: {fileID: 964412485449871933}
-  projectileDelay: 0
+  projectileDelay: 0.2
   m_TargetGE:
   - {fileID: 2721483916708295934, guid: 8ecfefbb21bfb6a4c9fcef191761ccea, type: 3}
 --- !u!54 &1741206484143138965
@@ -227,9 +227,9 @@ VisualEffect:
       m_Array:
       - m_Value:
           serializedVersion: 2
-          key0: {r: 0, g: 0.43051562, b: 2.7384188, a: 0}
-          key1: {r: 1, g: 1, b: 1, a: 1}
-          key2: {r: 0, g: 0, b: 0, a: 0.8}
+          key0: {r: 0, g: 0.43051562, b: 2.7384188, a: 1}
+          key1: {r: 1, g: 1, b: 1, a: 0.8}
+          key2: {r: 0, g: 0, b: 0, a: 0}
           key3: {r: 0, g: 0, b: 0, a: 0}
           key4: {r: 0, g: 0, b: 0, a: 0}
           key5: {r: 0, g: 0, b: 0, a: 0}
@@ -243,9 +243,9 @@ VisualEffect:
           ctime5: 0
           ctime6: 0
           ctime7: 0
-          atime0: 0
-          atime1: 6554
-          atime2: 52428
+          atime0: 6554
+          atime1: 52428
+          atime2: 65535
           atime3: 65535
           atime4: 0
           atime5: 0
@@ -253,7 +253,7 @@ VisualEffect:
           atime7: 0
           m_Mode: 0
           m_NumColorKeys: 2
-          m_NumAlphaKeys: 4
+          m_NumAlphaKeys: 3
         m_Name: ColorOverLife
         m_Overridden: 1
     m_NamedObject:
@@ -329,7 +329,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070213885264730599}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: 0}
+  m_LocalPosition: {x: -0.372, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []

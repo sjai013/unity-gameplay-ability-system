@@ -87,7 +87,7 @@ MonoBehaviour:
       IgnoreTags: []
     RemoveGameplayEffectsWithTag: []
   m_GameplayCue:
-  - {fileID: 11400000, guid: 40620846c120e994f8b6133bf1909a08, type: 2}
+  - {fileID: 0}
   m_Period:
     Period: 1
     ExecuteOnApplication: 0

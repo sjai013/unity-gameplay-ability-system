@@ -70,10 +70,10 @@ MonoBehaviour:
     RemoveGameplayEffectsWithTag: []
   m_GameplayEffectTags:
     AssetTag:
-      Tag: 31580
+      Tag: 31508
       Ancestors: 00000000
     GrantedTags:
-    - Tag: 31580
+    - Tag: 31508
       Ancestors: 00000000
     OngoingTagRequirements:
       RequireTags: []
@@ -85,7 +85,8 @@ MonoBehaviour:
       RequireTags: []
       IgnoreTags: []
     RemoveGameplayEffectsWithTag: []
-  m_GameplayCue: []
+  m_GameplayCue:
+  - {fileID: 11400000, guid: 40620846c120e994f8b6133bf1909a08, type: 2}
   m_Period:
     Period: 0
     ExecuteOnApplication: 0

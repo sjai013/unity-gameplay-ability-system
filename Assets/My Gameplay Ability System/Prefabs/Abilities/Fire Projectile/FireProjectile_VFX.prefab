@@ -163,7 +163,7 @@ MonoBehaviour:
   m_TrailVfx: {fileID: 6795471383855824942}
   m_MuzzleVfx: {fileID: 1670728749928758225}
   m_Projectile: {fileID: 964412485449871933}
-  projectileDelay: 0
+  projectileDelay: 0.1
   m_TargetGE:
   - {fileID: 2721483916708295934, guid: 8ecfefbb21bfb6a4c9fcef191761ccea, type: 3}
 --- !u!54 &1741206484143138965

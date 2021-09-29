@@ -87,7 +87,7 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
         {
             if (!m_MuzzleActivated)
             {
-                this.m_MuzzleVfx.transform.SetParent(null);
+                this.m_MuzzleVfx.transform.SetParent(m_AbilitySpec.Owner.gameObject.transform);
                 Destroy(this.m_MuzzleVfx.gameObject, 0.5f);
                 m_MuzzleActivated = true;
             }

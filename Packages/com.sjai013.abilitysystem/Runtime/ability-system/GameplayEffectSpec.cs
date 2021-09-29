@@ -65,7 +65,7 @@ namespace AbilitySystem
 
             for (var i = 0; i < m_GameplayCueSpec.Length; i++)
             {
-                if (m_GameplayCueSpec[i] == null) continue;
+                if (gameplayCues[i] == null) continue;
                 m_GameplayCueSpec[i] = gameplayCues[i].CreateSpec(this);
             }
 

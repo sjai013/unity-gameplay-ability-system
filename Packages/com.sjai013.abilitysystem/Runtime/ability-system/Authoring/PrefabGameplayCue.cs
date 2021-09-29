@@ -82,7 +82,7 @@ namespace AbilitySystem.Authoring
             {
                 var targetTransform = GetPosition(gcParams.Target, spec);
                 gameObject = Instantiate(gcParams.OnActivateEffect, targetTransform.position, Quaternion.identity);
-
+                gameObject.transform.SetParent(targetTransform);
                 switch (gcParams.RemovePolicy)
                 {
                     case EGameplayCueRemovePolicy.WithGameplayEffect:
