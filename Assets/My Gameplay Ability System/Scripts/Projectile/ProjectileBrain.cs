@@ -11,33 +11,39 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
     public class ProjectileBrain : MonoBehaviour
     {
         [SerializeField] private float m_Speed;
+        [SerializeField] private AnimationCurve m_SpeedMultiplier = AnimationCurve.Linear(0, 1, 1, 1);
+        [SerializeField] private bool m_UseSpeedMultiplierCurve;
         [SerializeField] private float m_MaxLife;
         [SerializeField] private VisualEffect m_TrailVfx;
         [SerializeField] private VisualEffect m_MuzzleVfx;
+        [SerializeField] private VisualEffect m_DeathVfx;
         [SerializeField] private GameObject m_Projectile;
         [SerializeField] private float projectileDelay;
         [SerializeField] List<GameplayEffect> m_TargetGE = new List<GameplayEffect>();
         [SerializeField] private ProjectileAbility.AbilitySpec m_AbilitySpec;
-        private float currentLife;
+        private int abilitySystemLayerMask;
+        private float m_CurrentLife;
         private Vector3 m_Direction;
-        private Rigidbody m_Rb;
+        private Rigidbody2D m_Rb;
         private bool m_MuzzleActivated = false;
         private bool m_ProjectileEnabled = false;
         protected void Start()
         {
-            m_Rb = this.GetComponent<Rigidbody>();
+            m_Rb = this.GetComponent<Rigidbody2D>();
             this.m_Projectile.SetActive(false);
             ActivateMuzzle();
-            ApplyGE();
+            abilitySystemLayerMask = LayerMask.NameToLayer("Ability System Tag");
+
         }
 
-        private void ApplyGE()
+        private void ApplyGE(AbilitySystemCharacter target)
         {
+            if (target == null) return;
             for (var i = 0; i < m_TargetGE.Count; i++)
             {
                 if (m_TargetGE[i] == null) continue;
-                var GE_spec = m_AbilitySpec.Owner.MakeOutgoingSpec(m_TargetGE[i], m_AbilitySpec.Level);
-                m_AbilitySpec.Owner.ApplyGameplayEffectSpecToSelf(GE_spec);
+                var GE_spec = target.MakeOutgoingSpec(m_TargetGE[i], m_AbilitySpec.Level);
+                target.ApplyGameplayEffectSpecToSelf(GE_spec);
             }
         }
 
@@ -53,14 +59,14 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
 
         protected void Update()
         {
-            currentLife += Time.deltaTime;
+            m_CurrentLife += Time.deltaTime;
             HandleProjectile();
             HandleDeath();
         }
 
         private void HandleProjectile()
         {
-            if (!m_ProjectileEnabled && currentLife >= projectileDelay)
+            if (!m_ProjectileEnabled && m_CurrentLife >= projectileDelay)
             {
                 m_Projectile.SetActive(true);
                 m_ProjectileEnabled = true;
@@ -69,7 +75,7 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
 
         private void HandleDeath()
         {
-            if (currentLife >= m_MaxLife)
+            if (m_CurrentLife >= m_MaxLife)
             {
                 // Take trail VFX and unparent it first so it stays animating
                 if (m_TrailVfx != null)
@@ -79,7 +85,7 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
                     Destroy(m_TrailVfx.gameObject, 2f);
                 }
 
-                Destroy(gameObject);
+                Die();
             }
         }
 
@@ -97,8 +103,37 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
         {
             if (m_ProjectileEnabled)
             {
-                this.m_Rb.position += transform.right * m_Speed * Time.deltaTime;
+                var multiplier = 1f;
+                if (m_UseSpeedMultiplierCurve)
+                {
+                    multiplier = m_SpeedMultiplier.Evaluate(m_CurrentLife / m_MaxLife);
+                }
+                Vector2 offset = (transform.right * m_Speed * Time.deltaTime);
+
+                this.m_Rb.position += offset * multiplier;
             }
         }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.gameObject.layer == abilitySystemLayerMask)
+            {
+                var asc = other.GetComponent<AbilitySystemTag>()?.Owner;
+                if (asc == m_AbilitySpec.Owner) return;
+                ApplyGE(asc);
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            if (m_DeathVfx != null)
+            {
+               m_DeathVfx.gameObject.transform.SetParent(null);
+               m_DeathVfx.gameObject.SetActive(true); 
+            }
+            Destroy(gameObject);
+        }
+
     }
 }

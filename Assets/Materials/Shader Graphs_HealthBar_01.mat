@@ -77,7 +77,7 @@ Material:
     - _DstBlend: 10
     - _EnableBlendModePreserveSpecularLighting: 0
     - _EnableFogOnTransparent: 0
-    - _Health: 0.76
+    - _Health: 0.61
     - _OpaqueCullMode: 2
     - _RenderQueueType: 4
     - _SrcBlend: 1
