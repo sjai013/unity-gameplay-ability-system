@@ -85,6 +85,17 @@ namespace AbilitySystem.Authoring
             this.isActive = false;
         }
 
+        private GameplayEffectSpec m_CostCheckGE_Cache;
+
+        private GameplayEffectSpec TryGetCostSpec()
+        {
+            if (m_CostCheckGE_Cache == null || m_CostCheckGE_Cache.Level != this.Level)
+            {
+                m_CostCheckGE_Cache = this.Owner.MakeOutgoingSpec(this.Ability.Cost, this.Level);
+            }
+            return m_CostCheckGE_Cache;
+        }
+
         /// <summary>
         /// Checks whether the activating character has enough resources to activate this ability.
         /// </summary>
@@ -92,17 +103,19 @@ namespace AbilitySystem.Authoring
         public virtual bool CheckCost()
         {
             if (this.Ability.Cost == null) return true;
-            var geSpec = this.Owner.MakeOutgoingSpec(this.Ability.Cost, this.Level);
-            // If this isn't an instant cost, then assume it passes cooldown check
-            if (geSpec.GameplayEffect.gameplayEffect.DurationPolicy != EDurationPolicy.Instant) return true;
+            var costGe = TryGetCostSpec();
+            if (costGe == null) return false;
 
-            for (var i = 0; i < geSpec.GameplayEffect.gameplayEffect.Modifiers.Length; i++)
+            // If this isn't an instant cost, then assume it passes cooldown check
+            if (costGe.GameplayEffect.gameplayEffect.DurationPolicy != EDurationPolicy.Instant) return true;
+
+            for (var i = 0; i < costGe.GameplayEffect.gameplayEffect.Modifiers.Length; i++)
             {
-                var modifier = geSpec.GameplayEffect.gameplayEffect.Modifiers[i];
+                var modifier = costGe.GameplayEffect.gameplayEffect.Modifiers[i];
 
                 // Only worry about additive.  Anything else passes.
                 if (modifier.ModifierOperator != EAttributeModifier.Add) continue;
-                var costValue = (modifier.ModifierMagnitude.CalculateMagnitude(geSpec) * modifier.Multiplier).GetValueOrDefault();
+                var costValue = (modifier.ModifierMagnitude.CalculateMagnitude(costGe) * modifier.Multiplier).GetValueOrDefault();
 
                 this.Owner.AttributeSystem.GetAttributeValue(modifier.Attribute, out var attributeValue);
 
