@@ -3,7 +3,7 @@ using AbilitySystem.Authoring;
 using GameplayAbilitySystemDemo.Input;
 using UnityEngine;
 
-public class UseAbility : MonoBehaviour
+public class GrantAbility : MonoBehaviour
 {
     private AbilitySystemCharacter m_AbilitySystemCharacter;
     private DefaultInputActions m_InputActions;
