@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 1741206484143138964}
   - component: {fileID: 2096732527762066631}
   - component: {fileID: 6922718327775993867}
+  - component: {fileID: -8218447161921376064}
   m_Layer: 11
   m_Name: IceProjectile_VFX
   m_TagString: Untagged
@@ -224,6 +225,52 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.32}
   m_EdgeRadius: 0
+--- !u!114 &-8218447161921376064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741206484143138954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf14de505abe6d4fb60deb44a4f5d08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SpeedMultiplier: 8
+  m_AnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0068011913
+      value: -0.016236901
+      inSlope: -2.4787378
+      outSlope: -2.4787378
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.511304
+    - serializedVersion: 3
+      time: 0.11614506
+      value: 0.049754947
+      inSlope: 6.2135077
+      outSlope: 6.2135077
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.22803128
+      outWeight: 0.032564152
+    - serializedVersion: 3
+      time: 0.9999893
+      value: 1.9423771
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2035113068520612359
 GameObject:
   m_ObjectHideFlags: 0

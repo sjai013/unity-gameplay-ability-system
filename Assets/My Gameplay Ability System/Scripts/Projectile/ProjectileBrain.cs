@@ -10,9 +10,6 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
     [AddComponentMenu("Gameplay Ability System/Abilities/Projectile/Projectile Brain")]
     public class ProjectileBrain : MonoBehaviour
     {
-        [SerializeField] private float m_Speed;
-        [SerializeField] private AnimationCurve m_SpeedMultiplier = AnimationCurve.Linear(0, 1, 1, 1);
-        [SerializeField] private bool m_UseSpeedMultiplierCurve;
         [SerializeField] private float m_MaxLife;
         [SerializeField] private VisualEffect m_TrailVfx;
         [SerializeField] private VisualEffect m_MuzzleVfx;
@@ -21,6 +18,7 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
         [SerializeField] private float projectileDelay;
         [SerializeField] List<GameplayEffect> m_TargetGE = new List<GameplayEffect>();
         [SerializeField] private ProjectileAbility.AbilitySpec m_AbilitySpec;
+        private IProjectileSpeedEvaluator m_SpeedController;
         private int abilitySystemLayerMask;
         private float m_CurrentLife;
         private Vector3 m_Direction;
@@ -33,6 +31,11 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
             this.m_Projectile.SetActive(false);
             ActivateMuzzle();
             abilitySystemLayerMask = LayerMask.NameToLayer("Ability System Tag");
+            m_SpeedController = GetComponent<IProjectileSpeedEvaluator>();
+            if (m_SpeedController == null)
+            {
+                Debug.LogWarning("Ability Missing Speed Controller");
+            }
 
         }
 
@@ -103,14 +106,10 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
         {
             if (m_ProjectileEnabled)
             {
-                var multiplier = 1f;
-                if (m_UseSpeedMultiplierCurve)
-                {
-                    multiplier = m_SpeedMultiplier.Evaluate(m_CurrentLife / m_MaxLife);
-                }
-                Vector2 offset = (transform.right * m_Speed * Time.deltaTime);
+                var speed = m_SpeedController.Evaluate(m_CurrentLife / m_MaxLife);
+                Vector2 offset = (transform.right * speed * Time.deltaTime);
 
-                this.m_Rb.position += offset * multiplier;
+                this.m_Rb.position += offset;
             }
         }
 
@@ -129,8 +128,8 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
         {
             if (m_DeathVfx != null)
             {
-               m_DeathVfx.gameObject.transform.SetParent(null);
-               m_DeathVfx.gameObject.SetActive(true); 
+                m_DeathVfx.gameObject.transform.SetParent(null);
+                m_DeathVfx.gameObject.SetActive(true);
             }
             Destroy(gameObject);
         }

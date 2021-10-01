@@ -42,6 +42,7 @@ namespace GameplayAbilitySystemDemo
         DefaultInputActions m_InputActions;
         [SerializeField] Rigidbody2D m_Rb;
         [SerializeField] BoxCollider2D m_Col;
+        [SerializeField] BoxCollider2D m_GroundCheck;
         private Vector2 m_MovementVector;
         private AttributeSystemComponent m_AttributeSystem;
         private AbilitySystemCharacter m_AbilitySystemCharacter;
@@ -222,7 +223,6 @@ namespace GameplayAbilitySystemDemo
                 m_MovementSpeed = attributeValue.CurrentValue;
             }
 
-            m_IsGrounded = IsGrounded();
             MoveStateMachine.TickState();
 
             if (m_InputActions.PlayerMovement.Dash.triggered)
@@ -279,7 +279,8 @@ namespace GameplayAbilitySystemDemo
 
         bool IsGrounded()
         {
-            RaycastHit2D raycastHit = Physics2D.Raycast(m_Col.bounds.center, -transform.up, m_Col.bounds.extents.y + m_GroundTolerance, groundedMask);
+            //RaycastHit2D raycastHit = Physics2D.Raycast(m_Col.bounds.center, -transform.up, m_Col.bounds.extents.y + m_GroundTolerance, groundedMask);
+            RaycastHit2D raycastHit = Physics2D.BoxCast(m_GroundCheck.bounds.center, m_GroundCheck.size, 0f, Vector2.down, 0.1f, groundedMask);
             return raycastHit.collider != null;
         }
 
@@ -290,6 +291,8 @@ namespace GameplayAbilitySystemDemo
                 var movementVelocity = m_MovementVector * m_MovementSpeed;
                 m_Rb.velocity = new Vector2(movementVelocity.x, m_Rb.velocity.y);
             }
+
+            m_IsGrounded = IsGrounded();
         }
     }
 

@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 1741206484143138964}
   - component: {fileID: 2611305608233641}
   - component: {fileID: 4001422199433808163}
+  - component: {fileID: 3108377009504710464}
   m_Layer: 0
   m_Name: FireProjectile_VFX
   m_TagString: Untagged
@@ -160,32 +161,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e88e50f0b8f50824283bd416ddd3545d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Speed: 4
-  m_SpeedMultiplier:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_UseSpeedMultiplierCurve: 0
   m_MaxLife: 3
   m_TrailVfx: {fileID: 6795471383855824942}
   m_MuzzleVfx: {fileID: 1670728749928758225}
@@ -241,6 +216,61 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.37, y: 0.58}
   m_EdgeRadius: 0
+--- !u!114 &3108377009504710464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741206484143138954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf14de505abe6d4fb60deb44a4f5d08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SpeedMultiplier: 4
+  m_AnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0033430383
+      value: -0.0063398043
+      inSlope: 0.38857818
+      outSlope: 0.38857818
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.992326
+    - serializedVersion: 3
+      time: 0.19417699
+      value: 0.9957807
+      inSlope: 0.07648177
+      outSlope: 0.07648177
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.23047306
+    - serializedVersion: 3
+      time: 0.6336834
+      value: 0.9886994
+      inSlope: -0.098157234
+      outSlope: -0.098157234
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17299837
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99692124
+      value: 0.5058286
+      inSlope: -1.5078828
+      outSlope: -1.5078828
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.03673432
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2070213885264730599
 GameObject:
   m_ObjectHideFlags: 0

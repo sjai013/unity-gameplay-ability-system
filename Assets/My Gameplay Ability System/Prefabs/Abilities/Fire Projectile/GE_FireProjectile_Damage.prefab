@@ -52,7 +52,7 @@ MonoBehaviour:
     - Attribute: {fileID: 11400000, guid: 348725b0db2f9844781f2847a8a473cb, type: 2}
       ModifierOperator: 0
       ModifierMagnitude: {fileID: 11400000, guid: dc084a1fc5c5681429568ae5bba94373, type: 2}
-      Multiplier: -0.8
+      Multiplier: -1.2
     ConditionalGameplayEffects: []
   m_GameplayEffectTagsAuthoring:
     AssetTag: {fileID: 0}
