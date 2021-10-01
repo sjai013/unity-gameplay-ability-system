@@ -47,7 +47,7 @@ MonoBehaviour:
   gameplayEffect:
     DurationPolicy: 2
     DurationModifier: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-    DurationMultiplier: 0.8
+    DurationMultiplier: 0.6
     Modifiers: []
     ConditionalGameplayEffects: []
   m_GameplayEffectTagsAuthoring:
@@ -66,10 +66,10 @@ MonoBehaviour:
     RemoveGameplayEffectsWithTag: []
   m_GameplayEffectTags:
     AssetTag:
-      Tag: 52198
+      Tag: 31510
       Ancestors: 00000000
     GrantedTags:
-    - Tag: 52198
+    - Tag: 31510
       Ancestors: 00000000
     OngoingTagRequirements:
       RequireTags: []

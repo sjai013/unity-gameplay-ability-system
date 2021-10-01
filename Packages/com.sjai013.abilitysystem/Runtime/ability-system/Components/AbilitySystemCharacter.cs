@@ -214,6 +214,9 @@ namespace AbilitySystem
                 var modifier = spec.GameplayEffect.gameplayEffect.Modifiers[i];
                 var magnitude = (modifier.ModifierMagnitude.CalculateMagnitude(spec) * modifier.Multiplier).GetValueOrDefault();
                 var attribute = modifier.Attribute;
+                
+                // If attribute doesn't exist on this character, continue to next attribute
+                if (attribute == null) continue;
                 this.AttributeSystem.GetAttributeValue(attribute, out var attributeValue);
 
                 switch (modifier.ModifierOperator)

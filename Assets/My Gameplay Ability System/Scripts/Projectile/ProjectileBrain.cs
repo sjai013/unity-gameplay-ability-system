@@ -42,7 +42,7 @@ namespace MyGameplayAbilitySystem.SampleAbilities.Projectile
             for (var i = 0; i < m_TargetGE.Count; i++)
             {
                 if (m_TargetGE[i] == null) continue;
-                var GE_spec = target.MakeOutgoingSpec(m_TargetGE[i], m_AbilitySpec.Level);
+                var GE_spec = m_AbilitySpec.Owner.MakeOutgoingSpec(m_TargetGE[i], m_AbilitySpec.Level);
                 target.ApplyGameplayEffectSpecToSelf(GE_spec);
             }
         }

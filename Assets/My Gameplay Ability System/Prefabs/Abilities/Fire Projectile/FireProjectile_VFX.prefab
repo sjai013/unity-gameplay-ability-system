@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Projectile: {fileID: 964412485449871933}
   projectileDelay: 0.1
   m_TargetGE:
-  - {fileID: 2721483916708295934, guid: 8ecfefbb21bfb6a4c9fcef191761ccea, type: 3}
+  - {fileID: 2721483916708295934, guid: 5b52c1e44d995f541a7f905a34f0aeb4, type: 3}
 --- !u!50 &2611305608233641
 Rigidbody2D:
   serializedVersion: 4

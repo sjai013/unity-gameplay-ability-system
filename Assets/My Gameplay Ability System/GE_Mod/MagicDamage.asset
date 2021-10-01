@@ -9,28 +9,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f07a3ec94bc7b5e4eb8a5781b1921026, type: 3}
-  m_Name: Magic
+  m_Script: {fileID: 11500000, guid: 797ea79c34956f84b8d5ed1d3ec8e4cf, type: 3}
+  m_Name: MagicDamage
   m_EditorClassIdentifier: 
-  Name: Magic
-  m_BaseAttribute: {fileID: 11400000, guid: c7af0423343bc504c8e1db8e6531ceba, type: 2}
-  m_MappingCurve:
+  ScalingFunction:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 5
-      outSlope: 5
+      inSlope: 0.1
+      outSlope: 0.1
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 500
-      inSlope: 5
-      outSlope: 5
+      value: 10
+      inSlope: 0.1
+      outSlope: 0.1
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -38,3 +36,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  CaptureAttributeWhich: {fileID: 11400000, guid: 16eb6149ba4d39c4c9fd7885baff740d, type: 2}
+  CaptureAttributeFrom: 0
+  CaptureAttributeWhen: 0
