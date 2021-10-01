@@ -185,7 +185,7 @@ namespace AttributeSystem.Components
             {
                 var _attribute = this.AttributeValues[i];
                 prevAttributeValues.Add(_attribute);
-                this.AttributeValues[i] = _attribute.Attribute.CalculateCurrentAttributeValue(_attribute, this.AttributeValues);
+                this.AttributeValues[i] = _attribute.Attribute.CalculateAttributeValue(_attribute, this.AttributeValues);
             }
 
             for (var i = 0; i < this.AttributeSystemEvents.Length; i++)
