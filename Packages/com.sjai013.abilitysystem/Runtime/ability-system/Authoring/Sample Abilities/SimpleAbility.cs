@@ -70,6 +70,9 @@ namespace AbilitySystem.Authoring
                 {
                     var effectSpec = this.Owner.MakeOutgoingSpec(effectsToApply[i]);
                     this.Owner.ApplyGameplayEffectSpecToSelf(effectSpec);
+
+                    // Update attribute values after each GE to update calculated attributes
+                    this.Owner.AttributeSystem.UpdateAttributeCurrentValues();
                 }
 
                 return true;
