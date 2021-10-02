@@ -210,7 +210,7 @@ namespace AttributeSystem.Components
         {
             if (GetAttributeCache().TryGetValue(attribute, out var i))
             {
-                AttributeValues[i].Attribute.CalculateAttributeValue(AttributeValues[i], AttributeValues);
+                AttributeValues[i] = AttributeValues[i].Attribute.CalculateAttributeValue(AttributeValues[i], AttributeValues);
                 return true;
             }
 
