@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5748768472539580002}
   - component: {fileID: 2629288964674817144}
   m_Layer: 0
-  m_Name: GE_StatInit
+  m_Name: GE_StatInit_Derived
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,28 +51,12 @@ MonoBehaviour:
     Modifiers:
     - Attribute: {fileID: 11400000, guid: 348725b0db2f9844781f2847a8a473cb, type: 2}
       ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: 5
-    - Attribute: {fileID: 11400000, guid: 61be4c66c0108b3419c3781777ce714b, type: 2}
-      ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: 5
+      ModifierMagnitude: {fileID: 11400000, guid: 204edebe953af964cb9588f439505e99, type: 2}
+      Multiplier: 1
     - Attribute: {fileID: 11400000, guid: efdbc2e6a12082a48b2388540aded7aa, type: 2}
       ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: 5
-    - Attribute: {fileID: 11400000, guid: c7af0423343bc504c8e1db8e6531ceba, type: 2}
-      ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: 5
-    - Attribute: {fileID: 11400000, guid: 6eb43108b0c270d458a300392e6dc216, type: 2}
-      ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: 2.5
-    - Attribute: {fileID: 11400000, guid: 16eb6149ba4d39c4c9fd7885baff740d, type: 2}
-      ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: 5
+      ModifierMagnitude: {fileID: 11400000, guid: 3ae90d2512fb0284cb3eeddb0844cc93, type: 2}
+      Multiplier: 1
     ConditionalGameplayEffects: []
   m_GameplayEffectTagsAuthoring:
     AssetTag: {fileID: 0}

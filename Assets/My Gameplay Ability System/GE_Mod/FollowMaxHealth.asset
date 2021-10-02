@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 797ea79c34956f84b8d5ed1d3ec8e4cf, type: 3}
-  m_Name: MagicDamage
+  m_Name: FollowMaxHealth
   m_EditorClassIdentifier: 
   ScalingFunction:
     serializedVersion: 2
@@ -18,17 +18,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.5
-      outSlope: 0.5
+      inSlope: 1
+      outSlope: 1
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 50
-      inSlope: 0.5
-      outSlope: 0.5
+      value: 100
+      inSlope: 1
+      outSlope: 1
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -36,6 +36,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  CaptureAttributeWhich: {fileID: 11400000, guid: 16eb6149ba4d39c4c9fd7885baff740d, type: 2}
+  CaptureAttributeWhich: {fileID: 11400000, guid: 61be4c66c0108b3419c3781777ce714b, type: 2}
   CaptureAttributeFrom: 0
   CaptureAttributeWhen: 0

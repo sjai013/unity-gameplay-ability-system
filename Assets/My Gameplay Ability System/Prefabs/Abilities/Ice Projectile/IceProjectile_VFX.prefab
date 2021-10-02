@@ -135,41 +135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e88e50f0b8f50824283bd416ddd3545d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Speed: 8
-  m_SpeedMultiplier:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.0068011913
-      value: -0.016236901
-      inSlope: -2.4787378
-      outSlope: -2.4787378
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.511304
-    - serializedVersion: 3
-      time: 0.11614506
-      value: 0.049754947
-      inSlope: 6.2135077
-      outSlope: 6.2135077
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.22803128
-      outWeight: 0.032564152
-    - serializedVersion: 3
-      time: 0.9999893
-      value: 1.9423771
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_UseSpeedMultiplierCurve: 1
   m_MaxLife: 1
   m_TrailVfx: {fileID: 0}
   m_MuzzleVfx: {fileID: 1670728749928758225}
@@ -542,6 +507,7 @@ GameObject:
   - component: {fileID: 6298119148988140341}
   - component: {fileID: 6287197098170970847}
   - component: {fileID: 5268172638239799983}
+  - component: {fileID: 5496408578450009231}
   m_Layer: 11
   m_Name: VFX_Death
   m_TagString: Untagged
@@ -644,3 +610,16 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &5496408578450009231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2198225683087908426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c961ba7f21a4ea347be13cf527ba82f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TimeToDie: 1

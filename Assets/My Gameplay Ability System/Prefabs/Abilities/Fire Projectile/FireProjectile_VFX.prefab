@@ -395,6 +395,7 @@ GameObject:
   - component: {fileID: 1324278945218844332}
   - component: {fileID: 7067412624890664284}
   - component: {fileID: 9190031769844534623}
+  - component: {fileID: 5266153876417346978}
   m_Layer: 0
   m_Name: VFX_Death
   m_TagString: Untagged
@@ -497,6 +498,19 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &5266153876417346978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5989811101577347610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c961ba7f21a4ea347be13cf527ba82f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TimeToDie: 1
 --- !u!1 &6477625222623515398
 GameObject:
   m_ObjectHideFlags: 0

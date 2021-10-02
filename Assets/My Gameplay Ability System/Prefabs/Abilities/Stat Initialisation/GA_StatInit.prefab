@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.1138802, y: -2.5792344, z: 1.5645723}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -77,4 +78,5 @@ MonoBehaviour:
   Cost: {fileID: 0}
   Cooldown: {fileID: 0}
   GameplayEffects:
+  - {fileID: 2629288964674817144, guid: 1f99d93118c9c6a4cb2c8bde414f9089, type: 3}
   - {fileID: 2629288964674817144, guid: 6c1f59d9c9e667244a783b37ea362854, type: 3}

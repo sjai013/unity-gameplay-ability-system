@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2721483916708295935
+--- !u!1 &8790468619560398584
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,37 +8,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2721483916708295933}
-  - component: {fileID: 2721483916708295934}
+  - component: {fileID: 5748768472539580002}
+  - component: {fileID: 2629288964674817144}
   m_Layer: 0
-  m_Name: GE_IceProjectile_Cost
+  m_Name: GE_StatInit_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2721483916708295933
+--- !u!4 &5748768472539580002
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2721483916708295935}
+  m_GameObject: {fileID: 8790468619560398584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.1138802, y: -2.5792344, z: 1.5645723}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2721483916708295934
+--- !u!114 &2629288964674817144
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2721483916708295935}
+  m_GameObject: {fileID: 8790468619560398584}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4cd8fa53de329d48a4d819712a9c90c, type: 3}
@@ -46,18 +46,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameplayEffect:
     DurationPolicy: 0
-    DurationModifier: {fileID: 0}
-    DurationMultiplier: 0
+    DurationModifier: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
+    DurationMultiplier: 1
     Modifiers:
-    - Attribute: {fileID: 11400000, guid: efdbc2e6a12082a48b2388540aded7aa, type: 2}
+    - Attribute: {fileID: 11400000, guid: 16eb6149ba4d39c4c9fd7885baff740d, type: 2}
       ModifierOperator: 0
       ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: -1
+      Multiplier: 5
+    - Attribute: {fileID: 11400000, guid: 6eb43108b0c270d458a300392e6dc216, type: 2}
+      ModifierOperator: 0
+      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
+      Multiplier: 2.5
+    - Attribute: {fileID: 11400000, guid: cafe77d40c101f24da97cabba34dc37c, type: 2}
+      ModifierOperator: 0
+      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
+      Multiplier: 15
     ConditionalGameplayEffects: []
   m_GameplayEffectTagsAuthoring:
     AssetTag: {fileID: 0}
-    GrantedTags:
-    - {fileID: 0}
+    GrantedTags: []
     OngoingTagRequirements:
       RequireTags: []
       IgnoreTags: []
@@ -72,9 +79,7 @@ MonoBehaviour:
     AssetTag:
       Tag: 0
       Ancestors: 
-    GrantedTags:
-    - Tag: 0
-      Ancestors: 
+    GrantedTags: []
     OngoingTagRequirements:
       RequireTags: []
       IgnoreTags: []
@@ -85,8 +90,7 @@ MonoBehaviour:
       RequireTags: []
       IgnoreTags: []
     RemoveGameplayEffectsWithTag: []
-  m_GameplayCue:
-  - {fileID: 11400000, guid: 636a611f6b24fe943bbb3cdb5a1d96fd, type: 2}
+  m_GameplayCue: []
   m_Period:
     Period: 0
     ExecuteOnApplication: 0
