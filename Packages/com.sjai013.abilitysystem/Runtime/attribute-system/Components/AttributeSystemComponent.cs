@@ -178,20 +178,43 @@ namespace AttributeSystem.Components
         }
 
         private List<AttributeValue> prevAttributeValues = new List<AttributeValue>();
+
+        /// <summary>
+        /// Force all attributes to update their values
+        /// </summary>
         public void UpdateAttributeCurrentValues()
         {
             prevAttributeValues.Clear();
-            for (var i = 0; i < this.AttributeValues.Count; i++)
+            for (var i = 0; i < AttributeValues.Count; i++)
             {
-                var _attribute = this.AttributeValues[i];
-                prevAttributeValues.Add(_attribute);
-                this.AttributeValues[i] = _attribute.Attribute.CalculateAttributeValue(_attribute, this.AttributeValues);
+                var prevAttributeValue = AttributeValues[i];
+                if (UpdateAttributeCurrentValues(AttributeValues[i].Attribute))
+                {
+                    prevAttributeValues.Add(prevAttributeValue);
+
+                }
             }
 
             for (var i = 0; i < this.AttributeSystemEvents.Length; i++)
             {
-                this.AttributeSystemEvents[i].PreAttributeChange(this, prevAttributeValues, ref this.AttributeValues);
+                AttributeSystemEvents[i].PreAttributeChange(this, prevAttributeValues, ref AttributeValues);
             }
+        }
+
+        /// <summary>
+        /// Force a single attribute to update it's value
+        /// </summary>
+        /// <param name="attribute"></param>
+        /// <returns></returns>
+        private bool UpdateAttributeCurrentValues(AttributeScriptableObject attribute)
+        {
+            if (GetAttributeCache().TryGetValue(attribute, out var i))
+            {
+                AttributeValues[i].Attribute.CalculateAttributeValue(AttributeValues[i], AttributeValues);
+                return true;
+            }
+
+            return false;
         }
 
         private Dictionary<AttributeScriptableObject, int> GetAttributeCache()
