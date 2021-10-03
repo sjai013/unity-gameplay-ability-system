@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 476555088}
+  - component: {fileID: 13324097438599403}
   m_Layer: 6
   m_Name: Feet
   m_TagString: Untagged
@@ -31,6 +32,32 @@ Transform:
   m_Father: {fileID: 5259635927308013638}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &13324097438599403
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476555087}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.05, y: 0.13}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.75, y: 0.1}
+  m_EdgeRadius: 0
 --- !u!1 &631839529
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,7 +574,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DashAbility: {fileID: 3796461005231417945, guid: a9b8c2b450bbe03b3ac92a3a4d5478a4, type: 3}
   m_SpeedAttribute: {fileID: 11400000, guid: 6eb43108b0c270d458a300392e6dc216, type: 2}
-  m_GroundTolerance: 0.1
   m_JumpForce: 5
   m_SlamForce: 10
   m_IsGrounded: 0
@@ -556,6 +582,7 @@ MonoBehaviour:
   m_JumpVfx: {fileID: 7959555054416409484, guid: 5a93d5ca6261d8d409a64251e4db86d2, type: 3}
   m_Rb: {fileID: 5014535259457648214}
   m_Col: {fileID: 7987743269255927127}
+  m_GroundCheck: {fileID: 13324097438599403}
   m_MovementSpeed: 2.5
 --- !u!114 &1480405782
 MonoBehaviour:
