@@ -784,7 +784,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 257609680}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.455, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -792,6 +792,35 @@ Transform:
   m_Father: {fileID: 602407448}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &327409130 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1269831929592944499, guid: f68006ff075da55418b342ceada93231, type: 3}
+  m_PrefabInstance: {fileID: 1907416380695915055}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &327409133 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 972115060433581472, guid: f68006ff075da55418b342ceada93231, type: 3}
+  m_PrefabInstance: {fileID: 1907416380695915055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327409130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c1425312ee2f5e4da3ab46a2724a3d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &327409138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327409130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b406604a651da8b42903476a1380f659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AbilitySystemCharacter: {fileID: 327409133}
 --- !u!114 &371794981 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6234326098249719645, guid: 3168021cc55d2c056a0c3bbe54d0a295, type: 3}
@@ -4693,7 +4722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8dd0ec1660a20d4eadadb02cc64207b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ObjectToToggle: {fileID: 1465577914}
+  m_VFX: {fileID: 1465577917}
 --- !u!114 &602407450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5860,7 +5889,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1465577914}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.885, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5915,7 +5944,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1465577914}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: dcee443b3551fba4aa0b3ed85bebee27, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 20a24c2606becea498d9cfbbf8811932, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0

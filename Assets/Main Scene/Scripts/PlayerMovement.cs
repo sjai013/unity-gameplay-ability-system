@@ -224,7 +224,7 @@ namespace GameplayAbilitySystemDemo
 
             MoveStateMachine.TickState();
 
-            if (m_InputActions.PlayerMovement.Dash.triggered)
+            if (m_InputActions.PlayerMovement.Dash.triggered && MoveStateMachine.IsState(MOVE_NORMAL))
             {
                 if (m_AbilitySystemCharacter.GetGrantedAbilitySpec(m_DashAbility, out var abilitySpec))
                 {

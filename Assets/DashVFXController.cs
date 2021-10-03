@@ -1,18 +1,20 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace GameplayAbilitySystemDemo
 {
-    public class AbilityAvailabilityIndicator : MonoBehaviour
+    public class DashVFXController : MonoBehaviour
     {
-        [SerializeField] GameObject m_ObjectToToggle;
+        [SerializeField] VisualEffect m_VFX;
         private AbilityCooldownState m_AbilityCooldownValue;
 
-
+        private int useHotParamId;
         // Start is called before the first frame update
         void Start()
         {
             m_AbilityCooldownValue = GetComponent<AbilityCooldownState>();
+            useHotParamId = Shader.PropertyToID("UseHot");
 
         }
 
@@ -22,11 +24,11 @@ namespace GameplayAbilitySystemDemo
             var cd = m_AbilityCooldownValue.GetCooldownTime();
             if (!m_AbilityCooldownValue.AbilitySystemCharacterHasResources() || m_AbilityCooldownValue.GetCooldownTime().TotalDuration > 0)
             {
-                m_ObjectToToggle.SetActive(false);
+                m_VFX.SetBool(useHotParamId, false);
             }
             else
             {
-                m_ObjectToToggle.SetActive(true);
+                m_VFX.SetBool(useHotParamId, true);
             }
         }
     }
