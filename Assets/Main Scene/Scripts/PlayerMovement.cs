@@ -32,7 +32,6 @@ namespace GameplayAbilitySystemDemo
 
         [SerializeField] private AbstractAbility m_DashAbility;
         [SerializeField] private AttributeScriptableObject m_SpeedAttribute;
-        [SerializeField] private float m_GroundTolerance = 0.1f;
         [SerializeField] private float m_JumpForce = 5f;
         [SerializeField] private float m_SlamForce = 10f;
         [SerializeField] private bool m_IsGrounded;
