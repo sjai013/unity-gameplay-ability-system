@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using AbilitySystem.Authoring;
 using AttributeSystem.Components;
+using GameplayTag.Authoring;
+using UnityEngine;
 
 namespace AbilitySystem
 {
@@ -106,7 +108,6 @@ namespace AbilitySystem
                 if (this.GameplayEffect.GetPeriod().Period > 0)
                 {
                     executePeriodicTick = true;
-                    RaiseOnTickEvent();
                 }
             }
 
@@ -124,7 +125,7 @@ namespace AbilitySystem
             OnApply?.Invoke(this);
         }
 
-        private void RaiseOnTickEvent()
+        public void RaiseOnTickEvent()
         {
             OnTick?.Invoke(this);
         }
@@ -132,6 +133,84 @@ namespace AbilitySystem
         public void RaiseOnRemoveEvent()
         {
             OnRemove?.Invoke(this);
+        }
+
+        /// <summary>
+        /// Checks if the target of this gameplay effect passes the ongoing tag requirements check
+        /// </summary>
+        /// <returns>True, if the ongoing tag requirements pass.  False otherwise.</returns>
+        public bool OngoingRequirementsPassed()
+        {
+            var ongoingTags = this.GameplayEffect.GetGameplayEffectTags().OngoingTagRequirements;
+            if (AscHasAllTags(this.Target, ongoingTags.RequireTags)
+                && AscHasNoneTags(this.Target, ongoingTags.IgnoreTags)
+            )
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
+        /// Checks if an Ability System Character has all the listed tags
+        /// </summary>
+        /// <param name="asc">Ability System Character</param>
+        /// <param name="tags">List of tags to check</param>
+        /// <returns>True, if the Ability System Character has all tags</returns>
+        protected virtual bool AscHasAllTags(AbilitySystemCharacter asc, GameplayTagScriptableObject.GameplayTag[] tags)
+        {
+            // If the input ASC is not valid, assume check passed
+            if (!asc) return true;
+
+            for (var iAbilityTag = 0; iAbilityTag < tags.Length; iAbilityTag++)
+            {
+                var abilityTag = tags[iAbilityTag];
+
+                bool requirementPassed = false;
+                Debug.Log(asc.AppliedTags.Count);
+                for (var iAscTag = 0; iAscTag < asc.AppliedTags.Count; iAscTag++)
+                {
+                    if (asc.AppliedTags[iAscTag].TagData == abilityTag)
+                    {
+                        requirementPassed = true;
+                        continue;
+                    }
+                }
+                // If any ability tag wasn't found, requirements failed
+                if (!requirementPassed) return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if an Ability System Character has none of the listed tags
+        /// </summary>
+        /// <param name="asc">Ability System Character</param>
+        /// <param name="tags">List of tags to check</param>
+        /// <returns>True, if the Ability System Character has none of the tags</returns>
+        protected virtual bool AscHasNoneTags(AbilitySystemCharacter asc, GameplayTagScriptableObject.GameplayTag[] tags)
+        {
+            // If the input ASC is not valid, assume check passed
+            if (!asc) return true;
+
+            for (var iAbilityTag = 0; iAbilityTag < tags.Length; iAbilityTag++)
+            {
+                var abilityTag = tags[iAbilityTag];
+
+                bool requirementPassed = true;
+                for (var iAscTag = 0; iAscTag < asc.AppliedTags.Count; iAscTag++)
+                {
+                    if (asc.AppliedTags[iAscTag].TagData == abilityTag)
+                    {
+                        requirementPassed = false;
+                    }
+                }
+                // If any ability tag wasn't found, requirements failed
+                if (!requirementPassed) return false;
+            }
+            return true;
         }
 
     }

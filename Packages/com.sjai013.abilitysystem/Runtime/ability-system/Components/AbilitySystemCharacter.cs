@@ -314,9 +314,10 @@ namespace AbilitySystem
 
                 // Tick the periodic component
                 ge.TickPeriodic(Time.deltaTime, out var executePeriodicTick);
-                if (executePeriodicTick)
+                if (executePeriodicTick && ge.OngoingRequirementsPassed())
                 {
                     ApplyInstantGameplayEffect(ge);
+                    ge.RaiseOnTickEvent();
                 }
             }
         }
