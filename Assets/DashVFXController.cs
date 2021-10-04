@@ -9,12 +9,12 @@ namespace GameplayAbilitySystemDemo
         [SerializeField] VisualEffect m_VFX;
         private AbilityCooldownState m_AbilityCooldownValue;
 
-        private int useHotParamId;
+        private int intensityParamId;
         // Start is called before the first frame update
         void Start()
         {
             m_AbilityCooldownValue = GetComponent<AbilityCooldownState>();
-            useHotParamId = Shader.PropertyToID("UseHot");
+            intensityParamId = Shader.PropertyToID("Intensity");
 
         }
 
@@ -22,13 +22,11 @@ namespace GameplayAbilitySystemDemo
         void Update()
         {
             var cd = m_AbilityCooldownValue.GetCooldownTime();
-            if (!m_AbilityCooldownValue.AbilitySystemCharacterHasResources() || m_AbilityCooldownValue.GetCooldownTime().TotalDuration > 0)
+            m_VFX.SetFloat(intensityParamId, cd.TotalDuration == 0 ? 1 : cd.TimeRemaining / cd.TotalDuration);
+            if (!m_AbilityCooldownValue.AbilitySystemCharacterHasResources())
             {
-                m_VFX.SetBool(useHotParamId, false);
-            }
-            else
-            {
-                m_VFX.SetBool(useHotParamId, true);
+                m_VFX.SetFloat(intensityParamId, 0);
+
             }
         }
     }
