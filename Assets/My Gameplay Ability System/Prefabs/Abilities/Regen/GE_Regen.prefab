@@ -63,7 +63,8 @@ MonoBehaviour:
     GrantedTags: []
     OngoingTagRequirements:
       RequireTags: []
-      IgnoreTags: []
+      IgnoreTags:
+      - {fileID: 11400000, guid: 2648e5a2def377849a07b21d63ed820e, type: 2}
     ApplicationTagRequirements:
       RequireTags: []
       IgnoreTags: []
@@ -78,7 +79,9 @@ MonoBehaviour:
     GrantedTags: []
     OngoingTagRequirements:
       RequireTags: []
-      IgnoreTags: []
+      IgnoreTags:
+      - Tag: 37440
+        Ancestors: 8e7a0000
     ApplicationTagRequirements:
       RequireTags: []
       IgnoreTags: []
@@ -87,7 +90,7 @@ MonoBehaviour:
       IgnoreTags: []
     RemoveGameplayEffectsWithTag: []
   m_GameplayCue:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 40620846c120e994f8b6133bf1909a08, type: 2}
   m_Period:
     Period: 1
     ExecuteOnApplication: 0
