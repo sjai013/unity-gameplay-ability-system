@@ -7056,33 +7056,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: Healing Volume
       objectReference: {fileID: 0}
-    - target: {fileID: 5949393309898070028, guid: 34cac8b6b5f7132439009e8f7e9174b0, type: 3}
-      propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Overridden
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5949393309898070028, guid: 34cac8b6b5f7132439009e8f7e9174b0, type: 3}
-      propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key0.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5949393309898070028, guid: 34cac8b6b5f7132439009e8f7e9174b0, type: 3}
-      propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key0.g
-      value: 10.439251
-      objectReference: {fileID: 0}
-    - target: {fileID: 5949393309898070028, guid: 34cac8b6b5f7132439009e8f7e9174b0, type: 3}
-      propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key0.r
-      value: 1.3663942
-      objectReference: {fileID: 0}
-    - target: {fileID: 5949393309898070028, guid: 34cac8b6b5f7132439009e8f7e9174b0, type: 3}
-      propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key1.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5949393309898070028, guid: 34cac8b6b5f7132439009e8f7e9174b0, type: 3}
-      propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key1.g
-      value: 41.757004
-      objectReference: {fileID: 0}
-    - target: {fileID: 5949393309898070028, guid: 34cac8b6b5f7132439009e8f7e9174b0, type: 3}
-      propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key1.r
-      value: 5.377781
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34cac8b6b5f7132439009e8f7e9174b0, type: 3}

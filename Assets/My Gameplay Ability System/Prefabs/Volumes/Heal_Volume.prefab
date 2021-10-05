@@ -89,11 +89,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key0.g
-      value: 83.513954
+      value: 10.439251
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key0.r
-      value: 10.272388
+      value: 1.3663942
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key1.b
@@ -101,11 +101,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key1.g
-      value: 83.513954
+      value: 41.757004
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key1.r
-      value: 10.272388
+      value: 5.377781
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key2.a
