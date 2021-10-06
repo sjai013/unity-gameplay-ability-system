@@ -44,6 +44,14 @@ namespace GameplayAbilitySystemDemo.Input
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Fire 3"",
+                    ""type"": ""Button"",
+                    ""id"": ""69324f28-4211-469b-9a20-22e8b70dc4e4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -66,6 +74,17 @@ namespace GameplayAbilitySystemDemo.Input
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Fire 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65580ebb-888f-4e64-8156-ad87e44d6626"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Fire 3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -282,6 +301,14 @@ namespace GameplayAbilitySystemDemo.Input
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Position"",
+                    ""type"": ""Value"",
+                    ""id"": ""e011e6eb-bc67-4a6c-a34b-9253ff8fddab"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -326,6 +353,17 @@ namespace GameplayAbilitySystemDemo.Input
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a2cf156-da9c-462b-8139-eaf59a221b94"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse;Touch"",
+                    ""action"": ""Position"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -905,6 +943,7 @@ namespace GameplayAbilitySystemDemo.Input
             m_PlayerAbilities = asset.FindActionMap("PlayerAbilities", throwIfNotFound: true);
             m_PlayerAbilities_Fire1 = m_PlayerAbilities.FindAction("Fire 1", throwIfNotFound: true);
             m_PlayerAbilities_Fire2 = m_PlayerAbilities.FindAction("Fire 2", throwIfNotFound: true);
+            m_PlayerAbilities_Fire3 = m_PlayerAbilities.FindAction("Fire 3", throwIfNotFound: true);
             // Player
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             // PlayerMovement
@@ -916,6 +955,7 @@ namespace GameplayAbilitySystemDemo.Input
             // PlayerLook
             m_PlayerLook = asset.FindActionMap("PlayerLook", throwIfNotFound: true);
             m_PlayerLook_Look = m_PlayerLook.FindAction("Look", throwIfNotFound: true);
+            m_PlayerLook_Position = m_PlayerLook.FindAction("Position", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -989,12 +1029,14 @@ namespace GameplayAbilitySystemDemo.Input
         private IPlayerAbilitiesActions m_PlayerAbilitiesActionsCallbackInterface;
         private readonly InputAction m_PlayerAbilities_Fire1;
         private readonly InputAction m_PlayerAbilities_Fire2;
+        private readonly InputAction m_PlayerAbilities_Fire3;
         public struct PlayerAbilitiesActions
         {
             private @DefaultInputActions m_Wrapper;
             public PlayerAbilitiesActions(@DefaultInputActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @Fire1 => m_Wrapper.m_PlayerAbilities_Fire1;
             public InputAction @Fire2 => m_Wrapper.m_PlayerAbilities_Fire2;
+            public InputAction @Fire3 => m_Wrapper.m_PlayerAbilities_Fire3;
             public InputActionMap Get() { return m_Wrapper.m_PlayerAbilities; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1010,6 +1052,9 @@ namespace GameplayAbilitySystemDemo.Input
                     @Fire2.started -= m_Wrapper.m_PlayerAbilitiesActionsCallbackInterface.OnFire2;
                     @Fire2.performed -= m_Wrapper.m_PlayerAbilitiesActionsCallbackInterface.OnFire2;
                     @Fire2.canceled -= m_Wrapper.m_PlayerAbilitiesActionsCallbackInterface.OnFire2;
+                    @Fire3.started -= m_Wrapper.m_PlayerAbilitiesActionsCallbackInterface.OnFire3;
+                    @Fire3.performed -= m_Wrapper.m_PlayerAbilitiesActionsCallbackInterface.OnFire3;
+                    @Fire3.canceled -= m_Wrapper.m_PlayerAbilitiesActionsCallbackInterface.OnFire3;
                 }
                 m_Wrapper.m_PlayerAbilitiesActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1020,6 +1065,9 @@ namespace GameplayAbilitySystemDemo.Input
                     @Fire2.started += instance.OnFire2;
                     @Fire2.performed += instance.OnFire2;
                     @Fire2.canceled += instance.OnFire2;
+                    @Fire3.started += instance.OnFire3;
+                    @Fire3.performed += instance.OnFire3;
+                    @Fire3.canceled += instance.OnFire3;
                 }
             }
         }
@@ -1111,11 +1159,13 @@ namespace GameplayAbilitySystemDemo.Input
         private readonly InputActionMap m_PlayerLook;
         private IPlayerLookActions m_PlayerLookActionsCallbackInterface;
         private readonly InputAction m_PlayerLook_Look;
+        private readonly InputAction m_PlayerLook_Position;
         public struct PlayerLookActions
         {
             private @DefaultInputActions m_Wrapper;
             public PlayerLookActions(@DefaultInputActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @Look => m_Wrapper.m_PlayerLook_Look;
+            public InputAction @Position => m_Wrapper.m_PlayerLook_Position;
             public InputActionMap Get() { return m_Wrapper.m_PlayerLook; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1128,6 +1178,9 @@ namespace GameplayAbilitySystemDemo.Input
                     @Look.started -= m_Wrapper.m_PlayerLookActionsCallbackInterface.OnLook;
                     @Look.performed -= m_Wrapper.m_PlayerLookActionsCallbackInterface.OnLook;
                     @Look.canceled -= m_Wrapper.m_PlayerLookActionsCallbackInterface.OnLook;
+                    @Position.started -= m_Wrapper.m_PlayerLookActionsCallbackInterface.OnPosition;
+                    @Position.performed -= m_Wrapper.m_PlayerLookActionsCallbackInterface.OnPosition;
+                    @Position.canceled -= m_Wrapper.m_PlayerLookActionsCallbackInterface.OnPosition;
                 }
                 m_Wrapper.m_PlayerLookActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1135,6 +1188,9 @@ namespace GameplayAbilitySystemDemo.Input
                     @Look.started += instance.OnLook;
                     @Look.performed += instance.OnLook;
                     @Look.canceled += instance.OnLook;
+                    @Position.started += instance.OnPosition;
+                    @Position.performed += instance.OnPosition;
+                    @Position.canceled += instance.OnPosition;
                 }
             }
         }
@@ -1293,6 +1349,7 @@ namespace GameplayAbilitySystemDemo.Input
         {
             void OnFire1(InputAction.CallbackContext context);
             void OnFire2(InputAction.CallbackContext context);
+            void OnFire3(InputAction.CallbackContext context);
         }
         public interface IPlayerActions
         {
@@ -1307,6 +1364,7 @@ namespace GameplayAbilitySystemDemo.Input
         public interface IPlayerLookActions
         {
             void OnLook(InputAction.CallbackContext context);
+            void OnPosition(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

@@ -58,6 +58,81 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.75, y: 0.1}
   m_EdgeRadius: 0
+--- !u!1 &602407447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 602407448}
+  - component: {fileID: 602407450}
+  - component: {fileID: 602407449}
+  - component: {fileID: 602407451}
+  m_Layer: 6
+  m_Name: DashCooldown
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &602407448
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602407447}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5259635927308013638}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &602407450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602407447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b36ce984c03b91a4fa2f355471b2fe27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AbilitySystemCharacter: {fileID: 1480405787}
+  m_Ability: {fileID: 3796461005231417945, guid: a9b8c2b450bbe03b3ac92a3a4d5478a4, type: 3}
+--- !u!114 &602407449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602407447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8dd0ec1660a20d4eadadb02cc64207b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_VFX: {fileID: 631839531}
+--- !u!114 &602407451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602407447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f561d072e2973f7b6ff85826cd160e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UpdatePeriod: 0
+  m_HasResources: 0
 --- !u!1 &631839529
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +446,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 22d88df9604867249b4d4a3681f39bf3, type: 3}
   m_Color: {r: 0.7764706, g: 0.94450414, b: 1, a: 1}
   m_FlipX: 0
@@ -516,6 +591,8 @@ GameObject:
   - component: {fileID: 4893303620016912011}
   - component: {fileID: 769049341}
   - component: {fileID: 5014535259457648214}
+  - component: {fileID: 1589001236}
+  - component: {fileID: 1589001244}
   m_Layer: 6
   m_Name: 2DPlayer
   m_TagString: Untagged
@@ -540,6 +617,7 @@ Transform:
   - {fileID: 476555088}
   - {fileID: 1915487703}
   - {fileID: 631839532}
+  - {fileID: 602407448}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -601,11 +679,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 53e8fe7ca79919a4295fba01d935417e, type: 2}
   Attributes:
   - {fileID: 11400000, guid: 348725b0db2f9844781f2847a8a473cb, type: 2}
-  - {fileID: 11400000, guid: 61be4c66c0108b3419c3781777ce714b, type: 2}
   - {fileID: 11400000, guid: efdbc2e6a12082a48b2388540aded7aa, type: 2}
-  - {fileID: 11400000, guid: c7af0423343bc504c8e1db8e6531ceba, type: 2}
-  - {fileID: 11400000, guid: 6eb43108b0c270d458a300392e6dc216, type: 2}
   - {fileID: 11400000, guid: 16eb6149ba4d39c4c9fd7885baff740d, type: 2}
+  - {fileID: 11400000, guid: 6eb43108b0c270d458a300392e6dc216, type: 2}
+  - {fileID: 11400000, guid: cafe77d40c101f24da97cabba34dc37c, type: 2}
+  - {fileID: 11400000, guid: 61be4c66c0108b3419c3781777ce714b, type: 2}
+  - {fileID: 11400000, guid: c7af0423343bc504c8e1db8e6531ceba, type: 2}
   AttributeValues: []
 --- !u!114 &1480405783
 MonoBehaviour:
@@ -663,9 +742,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ability:
+  - {fileID: 3796461005231417945, guid: a9b8c2b450bbe03b3ac92a3a4d5478a4, type: 3}
   - {fileID: 8517642461774236623, guid: dd60eea24a072504694fbd03dd4f2a2c, type: 3}
   - {fileID: 8517642461774236623, guid: 2f279a1a23f19024c8e765fa11fc4923, type: 3}
-  - {fileID: 3796461005231417945, guid: a9b8c2b450bbe03b3ac92a3a4d5478a4, type: 3}
+  - {fileID: 4113247057617280209, guid: ffe647ad20ed62847aa64c33b577565b, type: 3}
 --- !u!50 &5014535259457648214
 Rigidbody2D:
   serializedVersion: 4
@@ -687,3 +767,35 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1589001236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5259635927308013636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8042e52a3b19b574c90f02b8608049f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthAttribute: {fileID: 11400000, guid: 348725b0db2f9844781f2847a8a473cb, type: 2}
+  MaxHealthAttribute: {fileID: 11400000, guid: 61be4c66c0108b3419c3781777ce714b, type: 2}
+  ManaAttribute: {fileID: 11400000, guid: efdbc2e6a12082a48b2388540aded7aa, type: 2}
+  MaxManaAttribute: {fileID: 11400000, guid: c7af0423343bc504c8e1db8e6531ceba, type: 2}
+  HealthManaFullTag: {fileID: 11400000, guid: 2648e5a2def377849a07b21d63ed820e, type: 2}
+  m_AbilitySystemCharacter: {fileID: 1480405787}
+  ActiveTags: []
+--- !u!114 &1589001244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5259635927308013636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47abc37af4618b04aa5f2a877402ebed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CursorWorldPosition: {x: 0, y: 0}

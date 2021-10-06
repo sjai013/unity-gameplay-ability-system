@@ -23,7 +23,7 @@ public class GrantAbility : MonoBehaviour
     {
         if (m_InputActions.PlayerAbilities.Fire1.triggered)
         {
-            if (m_AbilitySystemCharacter.GetGrantedAbilitySpec(ability[0], out var abilitySpec))
+            if (m_AbilitySystemCharacter.GetGrantedAbilitySpec(ability[1], out var abilitySpec))
             {
                 m_AbilitySystemCharacter.ActivateAbility(abilitySpec);
             }
@@ -31,7 +31,15 @@ public class GrantAbility : MonoBehaviour
 
         if (m_InputActions.PlayerAbilities.Fire2.triggered)
         {
-            if (m_AbilitySystemCharacter.GetGrantedAbilitySpec(ability[1], out var abilitySpec))
+            if (m_AbilitySystemCharacter.GetGrantedAbilitySpec(ability[2], out var abilitySpec))
+            {
+                m_AbilitySystemCharacter.ActivateAbility(abilitySpec);
+            }
+        }
+
+        if (m_InputActions.PlayerAbilities.Fire3.triggered)
+        {
+            if (m_AbilitySystemCharacter.GetGrantedAbilitySpec(ability[3], out var abilitySpec))
             {
                 m_AbilitySystemCharacter.ActivateAbility(abilitySpec);
             }
