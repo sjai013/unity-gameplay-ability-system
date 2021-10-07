@@ -32,12 +32,18 @@ public class LightningBoltAbilityBrain : MonoBehaviour
         m_TimeToDamage -= Time.deltaTime;
         if (m_TimeToDamage <= 0)
         {
+            // Place raycast slightly above target, so we can raycast down from it
             var hit = Physics2D.Raycast((Vector2)this.transform.position + new Vector2(0, 1.5f), Vector2.down, m_Distance, colliderLayer);
             if (hit.collider != null)
             {
                 var target = hit.collider.gameObject.GetComponent<AbilitySystemTag>()?.Owner;
                 if (target == null) return;
                 var GE_spec = m_AbilitySpec.Owner.MakeOutgoingSpec(m_TargetGameplayEffect, m_AbilitySpec.Level);
+
+                // Set target
+                GE_spec.SetTarget(target);
+
+                // Apply GE
                 target.ApplyGameplayEffectSpecToSelf(GE_spec);
             }
             this.enabled = false;

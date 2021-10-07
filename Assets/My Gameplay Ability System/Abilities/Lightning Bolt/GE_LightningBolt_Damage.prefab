@@ -50,9 +50,9 @@ MonoBehaviour:
     DurationMultiplier: 1
     Modifiers:
     - Attribute: {fileID: 11400000, guid: 348725b0db2f9844781f2847a8a473cb, type: 2}
-      ModifierOperator: 0
+      ModifierOperator: 1
       ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: -1.3
+      Multiplier: 0.95
     ConditionalGameplayEffects: []
   m_GameplayEffectTagsAuthoring:
     AssetTag: {fileID: 0}
