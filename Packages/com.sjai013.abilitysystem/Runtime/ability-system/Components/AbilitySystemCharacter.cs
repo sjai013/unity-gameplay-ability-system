@@ -22,6 +22,7 @@ namespace AbilitySystem
 
         /// <summary>
         /// Add a tag provider, so we can add customised tag sources to the character
+        /// 
         /// </summary>
         /// <param name="source">The source of the tags</param>
         public void RegisterTagSource(IGameplayTagProvider source)
@@ -30,6 +31,11 @@ namespace AbilitySystem
             this.TagProviders.Add(source);
         }
 
+
+        /// <summary>
+        /// Removes a tag provider
+        /// </summary>
+        /// <param name="source">Tag provider to remove</param>
         public void UnregisterTagSource(IGameplayTagProvider source)
         {
             this.TagProviders.Remove(source);
@@ -214,7 +220,7 @@ namespace AbilitySystem
                 var modifier = spec.GameplayEffect.gameplayEffect.Modifiers[i];
                 var magnitude = (modifier.ModifierMagnitude.CalculateMagnitude(spec) * modifier.Multiplier).GetValueOrDefault();
                 var attribute = modifier.Attribute;
-                
+
                 // If attribute doesn't exist on this character, continue to next attribute
                 if (attribute == null) continue;
                 this.AttributeSystem.GetAttributeValue(attribute, out var attributeValue);
@@ -273,8 +279,11 @@ namespace AbilitySystem
             // Get tags applied using gameplay effects
             for (var i = 0; i < AppliedGameplayEffects.Count; i++)
             {
-                var grantedTags = AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayTagsAuthoring().GrantedTags;
-                if (grantedTags != null) AppliedTags.AddRange(grantedTags);
+                var grantedTags_Authoring = AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayTagsAuthoring().GrantedTags;
+                if (grantedTags_Authoring != null)
+                {
+                    AppliedTags.AddRange(grantedTags_Authoring);
+                }
             }
 
             // Get tags applied using external tag providers

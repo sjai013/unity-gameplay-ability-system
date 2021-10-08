@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2576341125884216712}
   - component: {fileID: 2576341125884216713}
   m_Layer: 5
-  m_Name: CooldownIcon
+  m_Name: UI_AbilityCooldown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
