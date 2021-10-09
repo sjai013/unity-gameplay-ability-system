@@ -35,6 +35,8 @@ namespace AbilitySystem
 
         private GameplayCueScriptableObject.AbstractGameplayCueSpec[] m_GameplayCueSpec;
 
+        public bool IsActive { get; private set; }
+
         public static GameplayEffectSpec CreateNew(GameplayEffect GameplayEffect, AbilitySystemCharacter Source, float Level = 1)
         {
             return new GameplayEffectSpec(GameplayEffect, Source, Level);
@@ -133,6 +135,11 @@ namespace AbilitySystem
         public void RaiseOnRemoveEvent()
         {
             OnRemove?.Invoke(this);
+        }
+
+        public void UpdateState()
+        {
+            this.IsActive = OngoingRequirementsPassed();
         }
 
         /// <summary>

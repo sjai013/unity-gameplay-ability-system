@@ -59,8 +59,9 @@ MonoBehaviour:
       Multiplier: 0.5
     ConditionalGameplayEffects: []
   m_GameplayEffectTagsAuthoring:
-    AssetTag: {fileID: 0}
-    GrantedTags: []
+    AssetTag: {fileID: 11400000, guid: 3d2f5417df1cc15428a9988709b4bb90, type: 2}
+    GrantedTags:
+    - {fileID: 11400000, guid: 3d2f5417df1cc15428a9988709b4bb90, type: 2}
     OngoingTagRequirements:
       RequireTags: []
       IgnoreTags:
@@ -74,14 +75,16 @@ MonoBehaviour:
     RemoveGameplayEffectsWithTag: []
   m_GameplayEffectTags:
     AssetTag:
-      Tag: 0
-      Ancestors: 
-    GrantedTags: []
+      Tag: 157710
+      Ancestors: 647b0000
+    GrantedTags:
+    - Tag: 157710
+      Ancestors: 647b0000
     OngoingTagRequirements:
       RequireTags: []
       IgnoreTags:
-      - Tag: 37440
-        Ancestors: 8e7a0000
+      - Tag: 31572
+        Ancestors: 647b0000
     ApplicationTagRequirements:
       RequireTags: []
       IgnoreTags: []

@@ -7,13 +7,22 @@ using UnityEngine;
 public class GameplayEffectIconAssetDatabase : ScriptableObject
 {
     [SerializeField] private GameplayEffectIconMap[] m_IconMap;
-
     private Dictionary<GameplayTagScriptableObject.GameplayTag, Sprite> m_Cache;
 
 
     public void Reset()
     {
         m_Cache = BuildLookupTable();
+    }
+
+    public GameplayEffectIconMap[] ListIconMap()
+    {
+        return m_IconMap;
+    }
+
+    public Sprite Get(GameplayTagScriptableObject.GameplayTag tag)
+    {
+        return m_Cache[tag];
     }
 
     public bool HasIcon(GameplayTagScriptableObject.GameplayTag tag, out Sprite sprite)

@@ -8,37 +8,48 @@ using UnityEngine;
 
 public class PlayerBuffManager : MonoBehaviour
 {
-    [SerializeField] private AbilitySystemCharacter m_AbilitySystemCharacter;
+    [SerializeField] private GameplayTagAggregator m_GameplayTagAggregator;
     [SerializeField] private GameplayEffectIconAssetDatabase m_AssetDatabase;
-    [SerializeField] Dictionary<GameplayTagScriptableObject.GameplayTag, (GameplayEffectContainer geContainer, Sprite sprite)> m_ActiveBuffs = new Dictionary<GameplayTagScriptableObject.GameplayTag, (GameplayEffectContainer geContainer, Sprite sprite)>();
-
     [SerializeField] private UIBuffElement[] m_BuffElements;
 
+    bool GetHighestDurationRemaining(List<GameplayEffectContainer> geContainers, out float durationPercentRemaining)
+    {
+        var durationRemaining = 0f;
+        var totalDuration = -1f;
+        for (var i = 0; i < geContainers.Count; i++)
+        {
+            var spec = geContainers[i].spec;
+            if (!spec.IsActive) continue;
+            if (spec.TotalDuration > totalDuration)
+            {
+                durationRemaining = spec.DurationRemaining;
+                totalDuration = spec.TotalDuration;
+            }
+        }
+        durationPercentRemaining = durationRemaining / totalDuration;
+        return totalDuration >= 0f;
+
+    }
     // Update is called once per frame
     void Update()
     {
-        m_ActiveBuffs.Clear();
+        var tagsToSearch = m_AssetDatabase.ListIconMap();
 
-        for (var i = 0; i < m_AbilitySystemCharacter.AppliedGameplayEffects.Count; i++)
-        {
-            var tags = m_AbilitySystemCharacter.AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayEffectTags().GrantedTags;
-            for (var nTag = 0; nTag < tags.Length; nTag++)
-            {
-                TryAddBuffToList(tags[nTag], m_AbilitySystemCharacter.AppliedGameplayEffects[i]);
-            }
-        }
-
-        // Enable and set up the buff display for active buffs
         int buffPointer = 0;
-        foreach (var item in m_ActiveBuffs)
+        for (var i = 0; i < tagsToSearch.Length; i++)
         {
-            if (buffPointer >= m_BuffElements.Length) break;
-            var sprite = item.Value.sprite;
-            var spec = item.Value.geContainer.spec;
-            var durationRemaining = spec.DurationRemaining / spec.TotalDuration;
-            m_BuffElements[buffPointer].Initialise(item.Value.sprite, durationRemaining);
-            m_BuffElements[buffPointer].gameObject.SetActive(true);
-            buffPointer++;
+
+            // Check if this tag exists on the player
+            if (m_GameplayTagAggregator.TryGetGameplayEffectsForTag(tagsToSearch[i].Tag.TagData, out var geContainers) && geContainers.Count > 0)
+            {
+                if (GetHighestDurationRemaining(geContainers, out var durationRemaining))
+                {
+                    var sprite = tagsToSearch[i].Icon;
+                    m_BuffElements[buffPointer].Initialise(sprite, durationRemaining);
+                    m_BuffElements[buffPointer].gameObject.SetActive(true);
+                    buffPointer++;
+                }
+            }
         }
 
         for (var i = buffPointer; i < m_BuffElements.Length; i++)
@@ -46,34 +57,5 @@ public class PlayerBuffManager : MonoBehaviour
             m_BuffElements[i].gameObject.SetActive(false);
         }
     }
-
-    bool TryAddBuffToList(GameplayTagScriptableObject.GameplayTag tag, GameplayEffectContainer geContainer)
-    {
-        // Check if the passed in tags need to be handled
-        if (!(m_AssetDatabase.HasIcon(tag, out var sprite)))
-        {
-            return false;
-        }
-
-        // If this tag is already in list of buffs to display,
-        // compare it to the one that's being added - the one that
-        // should remain is the one with the longer time remaining
-        if (m_ActiveBuffs.TryGetValue(tag, out var buff))
-        {
-            if (geContainer.spec.DurationRemaining > buff.geContainer.spec.DurationRemaining)
-            {
-                m_ActiveBuffs[tag] = (geContainer, sprite);
-            }
-        }
-        else
-        {
-            m_ActiveBuffs[tag] = (geContainer, sprite);
-        }
-
-        return true;
-    }
-
-
-
 
 }
