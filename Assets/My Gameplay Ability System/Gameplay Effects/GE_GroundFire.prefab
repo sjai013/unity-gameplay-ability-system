@@ -45,14 +45,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameplayEffect:
-    DurationPolicy: 0
+    DurationPolicy: 1
     DurationModifier: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
     DurationMultiplier: 0
     Modifiers:
     - Attribute: {fileID: 11400000, guid: 348725b0db2f9844781f2847a8a473cb, type: 2}
       ModifierOperator: 0
       ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: -5
+      Multiplier: -0.5
     ConditionalGameplayEffects: []
   m_GameplayEffectTagsAuthoring:
     AssetTag: {fileID: 11400000, guid: 7b231b4e3b1b0ce45942d963110604e9, type: 2}
@@ -69,7 +69,7 @@ MonoBehaviour:
     RemoveGameplayEffectsWithTag: []
   m_GameplayEffectTags:
     AssetTag:
-      Tag: 42034
+      Tag: 32040
       Ancestors: 00000000
     GrantedTags: []
     OngoingTagRequirements:
@@ -84,5 +84,5 @@ MonoBehaviour:
     RemoveGameplayEffectsWithTag: []
   m_GameplayCue: []
   m_Period:
-    Period: 0
-    ExecuteOnApplication: 0
+    Period: 0.1
+    ExecuteOnApplication: 1

@@ -9,7 +9,7 @@ using UnityEngine;
 public class GameplayTagAggregator : MonoBehaviour
 {
     public AbilitySystemCharacter m_AbilitySystemCharacter { get; private set; }
-    public Dictionary<GameplayTagScriptableObject.GameplayTag, List<GameplayEffectContainer>> GameplayEffectContainers { get; private set; } = new Dictionary<GameplayTagScriptableObject.GameplayTag, List<GameplayEffectContainer>>();
+    public Dictionary<GameplayTagScriptableObject.GameplayTag, List<GameplayEffectSpec>> GameplayEffectSpecs { get; private set; } = new();
     void Start()
     {
         m_AbilitySystemCharacter = GetComponent<AbilitySystemCharacter>();
@@ -22,16 +22,16 @@ public class GameplayTagAggregator : MonoBehaviour
     private int m_UnusedTags;
     private int m_TotalTags;
 
-    public bool TryGetGameplayEffectsForTag(GameplayTagScriptableObject.GameplayTag tag, out List<GameplayEffectContainer> gameplayEffectContainers)
+    public bool TryGetGameplayEffectsForTag(GameplayTagScriptableObject.GameplayTag tag, out List<GameplayEffectSpec> geSpec)
     {
-        return GameplayEffectContainers.TryGetValue(tag, out gameplayEffectContainers);
+        return GameplayEffectSpecs.TryGetValue(tag, out geSpec);
     }
 
     void Update()
     {
         if (m_UnusedTags >= m_TotalTags*2 && m_UnusedTags > 0 && m_TotalTags > 0)
         {
-            GameplayEffectContainers.Clear();
+            GameplayEffectSpecs.Clear();
         }
 
         m_UnusedTags = 0;
@@ -39,7 +39,7 @@ public class GameplayTagAggregator : MonoBehaviour
 
         var appliedGe = m_AbilitySystemCharacter.AppliedGameplayEffects;
 
-        foreach (var item in GameplayEffectContainers)
+        foreach (var item in GameplayEffectSpecs)
         {
             if (item.Value.Count == 0)
             {
@@ -51,22 +51,22 @@ public class GameplayTagAggregator : MonoBehaviour
 
         for (var i = 0; i < appliedGe.Count; i++)
         {
-            var tags = appliedGe[i].spec.GameplayEffect.GetGameplayEffectTags().GrantedTags;
+            var tags = appliedGe[i].GameplayEffect.GetGameplayEffectTags().GrantedTags;
             AddOrUpdateTags(appliedGe[i], tags);
         }
 
     }
 
-    private void AddOrUpdateTags(GameplayEffectContainer geContainer, GameplayTagScriptableObject.GameplayTag[] tags)
+    private void AddOrUpdateTags(GameplayEffectSpec geSpec, GameplayTagScriptableObject.GameplayTag[] tags)
     {
         for (var iTag = 0; iTag < tags.Length; iTag++)
         {
-            if (!GameplayEffectContainers.TryGetValue(tags[iTag], out var geContainers))
+            if (!GameplayEffectSpecs.TryGetValue(tags[iTag], out var geContainers))
             {
-                GameplayEffectContainers[tags[iTag]] = new List<GameplayEffectContainer>();
+                GameplayEffectSpecs[tags[iTag]] = new List<GameplayEffectSpec>();
             }
 
-            GameplayEffectContainers[tags[iTag]].Add(geContainer);
+            GameplayEffectSpecs[tags[iTag]].Add(geSpec);
             m_TotalTags++;
         }
     }

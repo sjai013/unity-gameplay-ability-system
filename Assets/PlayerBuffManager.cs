@@ -12,13 +12,13 @@ public class PlayerBuffManager : MonoBehaviour
     [SerializeField] private GameplayEffectIconAssetDatabase m_AssetDatabase;
     [SerializeField] private UIBuffElement[] m_BuffElements;
 
-    bool GetHighestDurationRemaining(List<GameplayEffectContainer> geContainers, out float durationPercentRemaining)
+    bool GetHighestDurationRemaining(List<GameplayEffectSpec> geContainers, out float durationPercentRemaining)
     {
         var durationRemaining = 0f;
         var totalDuration = -1f;
         for (var i = 0; i < geContainers.Count; i++)
         {
-            var spec = geContainers[i].spec;
+            var spec = geContainers[i];
             if (!spec.IsActive) continue;
             if (spec.TotalDuration > totalDuration)
             {

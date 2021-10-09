@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AbilitySystem.Authoring;
+using AttributeSystem.Authoring;
 using AttributeSystem.Components;
 using GameplayTag.Authoring;
 using UnityEngine;
@@ -36,6 +37,8 @@ namespace AbilitySystem
         private GameplayCueScriptableObject.AbstractGameplayCueSpec[] m_GameplayCueSpec;
 
         public bool IsActive { get; private set; }
+
+        public ModifierContainer[] modifiers;
 
         public static GameplayEffectSpec CreateNew(GameplayEffect GameplayEffect, AbilitySystemCharacter Source, float Level = 1)
         {
@@ -219,6 +222,14 @@ namespace AbilitySystem
             }
             return true;
         }
+
+
+        public class ModifierContainer
+        {
+            public AttributeScriptableObject Attribute;
+            public AttributeModifier Modifier;
+        }
+
 
     }
 

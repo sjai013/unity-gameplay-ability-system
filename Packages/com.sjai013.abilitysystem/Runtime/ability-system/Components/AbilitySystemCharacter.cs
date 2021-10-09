@@ -14,11 +14,12 @@ namespace AbilitySystem
     {
         [SerializeField] protected AttributeSystemComponent _attributeSystem;
         public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
-        public List<GameplayEffectContainer> AppliedGameplayEffects = new List<GameplayEffectContainer>();
-        public HashSet<AbstractAbilitySpec> GrantedAbilities = new HashSet<AbstractAbilitySpec>();
+        public List<GameplayEffectSpec> AppliedGameplayEffects = new();
+        public HashSet<AbstractAbilitySpec> GrantedAbilities = new();
         public List<GameplayTagScriptableObject> AppliedTags;
-        private List<IGameplayTagProvider> TagProviders = new List<IGameplayTagProvider>();
-        private AbilityExecutionManager m_AbilityEM = new AbilityExecutionManager();
+        public float Level;
+        private List<IGameplayTagProvider> TagProviders = new();
+        private AbilityExecutionManager m_AbilityEM = new();
 
         /// <summary>
         /// Add a tag provider, so we can add customised tag sources to the character
@@ -31,6 +32,25 @@ namespace AbilitySystem
             this.TagProviders.Add(source);
         }
 
+        /// <summary>
+        /// Removes a Gameplay Effect Spec, given that spec
+        /// </summary>
+        /// <param name="spec">Gameplay Effect Spec to remove</param>
+        /// <returns>True, if remove was successful</returns>
+        public bool RemoveGameplayEffect(GameplayEffectSpec spec)
+        {
+            return AppliedGameplayEffects.Remove(spec);
+        }
+
+        /// <summary>
+        /// Removes all Gameplay Effect Specs matching a Gameplay Effect (matched using their Asset Tag)
+        /// </summary>
+        /// <param name="ge">Gameplay Effect to match</param>
+        /// <returns>Number of Gameplay Effect Specs removed</returns>
+        public int RemoveGameplayEffect(GameplayEffect ge)
+        {
+            return AppliedGameplayEffects.RemoveAll(x => x.GameplayEffect.GetGameplayEffectTags().AssetTag == ge.GetGameplayEffectTags().AssetTag);
+        }
 
         /// <summary>
         /// Removes a tag provider
@@ -41,7 +61,6 @@ namespace AbilitySystem
             this.TagProviders.Remove(source);
         }
 
-        public float Level;
 
         public void GrantAbility(AbstractAbilitySpec spec)
         {
@@ -110,7 +129,7 @@ namespace AbilitySystem
             // Check if the cooldown tag is granted to the player, and if so, capture the remaining duration for that tag
             for (var i = 0; i < this.AppliedGameplayEffects.Count; i++)
             {
-                var grantedTags = this.AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayEffectTags().GrantedTags;
+                var grantedTags = this.AppliedGameplayEffects[i].GameplayEffect.GetGameplayEffectTags().GrantedTags;
                 if (grantedTags == null) continue;
                 for (var iTag = 0; iTag < grantedTags.Length; iTag++)
                 {
@@ -119,18 +138,18 @@ namespace AbilitySystem
                         if (grantedTags[iTag] == tags[iCooldownTag])
                         {
                             // If this is an infinite GE, then return null to signify this is on CD
-                            if (this.AppliedGameplayEffects[i].spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.Infinite) return new AbilityCooldownTime()
+                            if (this.AppliedGameplayEffects[i].GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.Infinite) return new AbilityCooldownTime()
                             {
                                 TimeRemaining = float.MaxValue,
                                 TotalDuration = 0
                             };
 
-                            var durationRemaining = this.AppliedGameplayEffects[i].spec.DurationRemaining;
+                            var durationRemaining = this.AppliedGameplayEffects[i].DurationRemaining;
 
                             if (durationRemaining > longestCooldown)
                             {
                                 longestCooldown = durationRemaining;
-                                maxDuration = this.AppliedGameplayEffects[i].spec.TotalDuration;
+                                maxDuration = this.AppliedGameplayEffects[i].TotalDuration;
                             }
                         }
 
@@ -246,7 +265,7 @@ namespace AbilitySystem
 
         void ApplyDurationalGameplayEffect(GameplayEffectSpec spec)
         {
-            var modifiersToApply = new List<GameplayEffectContainer.ModifierContainer>();
+            var modifiersToApply = new List<GameplayEffectSpec.ModifierContainer>();
             for (var i = 0; i < spec.GameplayEffect.gameplayEffect.Modifiers.Length; i++)
             {
                 var modifier = spec.GameplayEffect.gameplayEffect.Modifiers[i];
@@ -264,11 +283,11 @@ namespace AbilitySystem
                         attributeModifier.Override = magnitude;
                         break;
                 }
-                modifiersToApply.Add(new GameplayEffectContainer.ModifierContainer() { Attribute = modifier.Attribute, Modifier = attributeModifier });
+                modifiersToApply.Add(new() { Attribute = modifier.Attribute, Modifier = attributeModifier });
             }
-            AppliedGameplayEffects.Add(new GameplayEffectContainer() { spec = spec, modifiers = modifiersToApply.ToArray() });
+            spec.modifiers = modifiersToApply.ToArray();
             spec.RaiseOnApplyEvent();
-
+            AppliedGameplayEffects.Add(spec);
         }
 
         void UpdateAppliedTags()
@@ -279,7 +298,7 @@ namespace AbilitySystem
             // Get tags applied using gameplay effects
             for (var i = 0; i < AppliedGameplayEffects.Count; i++)
             {
-                var grantedTags_Authoring = AppliedGameplayEffects[i].spec.GameplayEffect.GetGameplayTagsAuthoring().GrantedTags;
+                var grantedTags_Authoring = AppliedGameplayEffects[i].GameplayEffect.GetGameplayTagsAuthoring().GrantedTags;
                 if (grantedTags_Authoring != null)
                 {
                     AppliedTags.AddRange(grantedTags_Authoring);
@@ -313,7 +332,7 @@ namespace AbilitySystem
         {
             for (var i = 0; i < this.AppliedGameplayEffects.Count; i++)
             {
-                var ge = this.AppliedGameplayEffects[i].spec;
+                var ge = this.AppliedGameplayEffects[i];
 
                 // Can't tick instant GE
                 if (ge.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.Instant) continue;
@@ -337,9 +356,9 @@ namespace AbilitySystem
             for (var i = AppliedGameplayEffects.Count - 1; i > 0; i--)
             {
                 var ge = AppliedGameplayEffects[i];
-                if (ge.spec.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration && ge.spec.DurationRemaining <= 0)
+                if (ge.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.HasDuration && ge.DurationRemaining <= 0)
                 {
-                    ge.spec.RaiseOnRemoveEvent();
+                    ge.RaiseOnRemoveEvent();
                     AppliedGameplayEffects.RemoveAt(i);
                 }
             }
