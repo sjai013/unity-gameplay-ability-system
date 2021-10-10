@@ -30,9 +30,10 @@ public class ApplyGameplayEffectOnEnter : MonoBehaviour
             {
                 var asc = ascTag.Owner;
 
-                if (!m_CachedSpecs.TryGetValue(asc, out var specs)) // Cache exists, check validity
+                if (!m_CachedSpecs.TryGetValue(asc, out var specs)) // Cache does not exists, so create empty records for it
                 {
                     specs = new GameplayEffectSpec[m_GameplayEffects.Length];
+                    m_CachedSpecs.Add(asc, specs);
                 }
 
                 for (var i = 0; i < m_GameplayEffects.Length; i++) // If any of the specs is invalid, apply it now.  Assume length if always fixed
