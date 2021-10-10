@@ -76,7 +76,7 @@ MonoBehaviour:
   - {fileID: 3381230203231498128, guid: d7dde26ec1b67de45a5eb09b72c0d4e5, type: 3}
   - {fileID: 3381230203231498128, guid: 85c41951005c4e447b11bb59ef196530, type: 3}
   m_Level: 1
-  RemoveOnExit: 0
+  RemoveOnExit: 1
 --- !u!1 &864862968880425926
 GameObject:
   m_ObjectHideFlags: 0

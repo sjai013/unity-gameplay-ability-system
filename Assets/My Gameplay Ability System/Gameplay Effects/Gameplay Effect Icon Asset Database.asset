@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Gameplay Effect Icon Asset Database
   m_EditorClassIdentifier: 
   m_IconMap:
-  - Icon: {fileID: 21300000, guid: cd1c9edabb78efe0aabdabfaedd2ccef, type: 3}
-    Tag: {fileID: 11400000, guid: 3d2f5417df1cc15428a9988709b4bb90, type: 2}
+  - Icon: {fileID: 21300000, guid: 8da82175b7d008b48a09d9716e69774f, type: 3}
+    Tag: {fileID: 11400000, guid: eee0da38738fe2d42b1587fc9b38b089, type: 2}
