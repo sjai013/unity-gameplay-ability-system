@@ -593,6 +593,7 @@ GameObject:
   - component: {fileID: 5014535259457648214}
   - component: {fileID: 1589001236}
   - component: {fileID: 1589001244}
+  - component: {fileID: 1018465927715646722}
   m_Layer: 6
   m_Name: 2DPlayer
   m_TagString: Untagged
@@ -713,7 +714,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c1425312ee2f5e4da3ab46a2724a3d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attributeSystem: {fileID: 1480405782}
+  m_AttributeSystem: {fileID: 1480405782}
+  m_GameplayTagAggregator: {fileID: 1018465927715646722}
+  AppliedGameplayEffects: []
   AppliedTags: []
   Level: 0
 --- !u!114 &4893303620016912011
@@ -799,3 +802,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CursorWorldPosition: {x: 0, y: 0}
+--- !u!114 &1018465927715646722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5259635927308013636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7ca722142faa9943af4933a6eeb0335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

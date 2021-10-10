@@ -7,9 +7,10 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class ApplyGameplayEffectOnEnter : MonoBehaviour
 {
-    [SerializeField] private GameplayEffect m_GameplayEffect;
+    [SerializeField] private GameplayEffect[] m_GameplayEffects;
     [SerializeField] private float m_Level;
-    private Dictionary<AbilitySystemCharacter, GameplayEffectSpec> m_CachedSpecs = new(5);
+    [SerializeField] private bool RemoveOnExit;
+    private Dictionary<AbilitySystemCharacter, GameplayEffectSpec[]> m_CachedSpecs = new(5);
     private BoxCollider2D m_Col;
     private int abilitySystemLayerMask;
 
@@ -28,11 +29,20 @@ public class ApplyGameplayEffectOnEnter : MonoBehaviour
             if (ascTag != null)
             {
                 var asc = ascTag.Owner;
-                if (!m_CachedSpecs.TryGetValue(asc, out var spec))
+
+                if (!m_CachedSpecs.TryGetValue(asc, out var specs)) // Cache exists, check validity
                 {
-                    spec = asc.MakeOutgoingSpec(m_GameplayEffect, 1);
-                    asc.ApplyGameplayEffectSpecToSelf(spec);
-                    m_CachedSpecs.Add(asc, spec);
+                    specs = new GameplayEffectSpec[m_GameplayEffects.Length];
+                }
+
+                for (var i = 0; i < m_GameplayEffects.Length; i++) // If any of the specs is invalid, apply it now.  Assume length if always fixed
+                {
+                    if (!asc.HasActiveGameplayEffect(specs[i]))
+                    {
+                        var spec = asc.MakeOutgoingSpec(m_GameplayEffects[i], this.m_Level);
+                        asc.ApplyGameplayEffectSpecToSelf(spec);
+                        specs[i] = spec;
+                    }
                 }
             }
         }
@@ -41,13 +51,14 @@ public class ApplyGameplayEffectOnEnter : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
+        if (!RemoveOnExit) return;
         var ascTag = other.GetComponent<AbilitySystemTag>();
         if (ascTag != null)
         {
             var asc = ascTag.Owner;
-            if (m_CachedSpecs.TryGetValue(asc, out var spec))
+            if (m_CachedSpecs.TryGetValue(asc, out var specs))
             {
-                asc.RemoveGameplayEffect(spec);
+                asc.RemoveActiveGameplayEffect(specs);
                 m_CachedSpecs.Remove(asc);
             }
         }

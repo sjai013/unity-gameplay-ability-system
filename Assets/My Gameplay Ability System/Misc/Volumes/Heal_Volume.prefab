@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 864862968633647936, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_Name
-      value: Heal_Volume
+      value: Healing Volume
       objectReference: {fileID: 0}
     - target: {fileID: 864862968633647939, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_RootOrder
@@ -17,11 +17,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 864862968633647939, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.254
+      value: 5.003
       objectReference: {fileID: 0}
     - target: {fileID: 864862968633647939, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.487
+      value: -2.469
       objectReference: {fileID: 0}
     - target: {fileID: 864862968633647939, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -59,21 +59,41 @@ PrefabInstance:
       propertyPath: m_GameplayEffect
       value: 
       objectReference: {fileID: 3381230203231498128, guid: de6c3b74b72491847b31573c573492ed, type: 3}
+    - target: {fileID: 864862968633647949, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
+      propertyPath: m_GameplayEffects.Array.data[1]
+      value: 
+      objectReference: {fileID: 3381230203231498128, guid: de6c3b74b72491847b31573c573492ed, type: 3}
+    - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
+      propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
+      propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Name
+      value: Mask
+      objectReference: {fileID: 0}
+    - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
+      propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Value
+      value: 
+      objectReference: {fileID: 2800000, guid: 00437f61566e6439d82ec57315c594a4, type: 3}
+    - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Name
       value: AlphaOverLife
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
+      propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.atime0
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.atime1
-      value: 5975
+      value: 65535
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.atime2
-      value: 27947
+      value: 65535
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.ctime1
@@ -85,7 +105,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key0.a
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key0.g
@@ -94,6 +114,10 @@ PrefabInstance:
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key0.r
       value: 1.3663942
+      objectReference: {fileID: 0}
+    - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
+      propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key1.a
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key1.b
@@ -109,7 +133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key2.a
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.key2.b
@@ -124,12 +148,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
+      propertyPath: m_PropertySheet.m_NamedObject.m_Array.Array.data[0].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Overridden
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.m_NumAlphaKeys
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 864862968880425923, guid: a99db6f8be97f3f4cb3e943cf461c2e4, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.m_NumColorKeys

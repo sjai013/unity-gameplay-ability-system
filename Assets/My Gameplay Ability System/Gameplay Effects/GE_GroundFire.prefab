@@ -56,7 +56,9 @@ MonoBehaviour:
     ConditionalGameplayEffects: []
   m_GameplayEffectTagsAuthoring:
     AssetTag: {fileID: 11400000, guid: 7b231b4e3b1b0ce45942d963110604e9, type: 2}
-    GrantedTags: []
+    GrantedTags:
+    - {fileID: 11400000, guid: eee0da38738fe2d42b1587fc9b38b089, type: 2}
+    - {fileID: 11400000, guid: 3c552491ce89bf643960a414c78839bd, type: 2}
     OngoingTagRequirements:
       RequireTags: []
       IgnoreTags: []
@@ -71,7 +73,11 @@ MonoBehaviour:
     AssetTag:
       Tag: 32040
       Ancestors: 00000000
-    GrantedTags: []
+    GrantedTags:
+    - Tag: 188946
+      Ancestors: 16e20200647b0000
+    - Tag: 232890
+      Ancestors: 00000000
     OngoingTagRequirements:
       RequireTags: []
       IgnoreTags: []

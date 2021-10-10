@@ -29,7 +29,7 @@ public class GameplayTagAggregator : MonoBehaviour
 
     void Update()
     {
-        if (m_UnusedTags >= m_TotalTags*2 && m_UnusedTags > 0 && m_TotalTags > 0)
+        if (m_UnusedTags >= m_TotalTags * 2 && m_UnusedTags > 0 && m_TotalTags > 0)
         {
             GameplayEffectSpecs.Clear();
         }
@@ -51,8 +51,11 @@ public class GameplayTagAggregator : MonoBehaviour
 
         for (var i = 0; i < appliedGe.Count; i++)
         {
-            var tags = appliedGe[i].GameplayEffect.GetGameplayEffectTags().GrantedTags;
-            AddOrUpdateTags(appliedGe[i], tags);
+            var grantedTags = appliedGe[i].GameplayEffect.GetGameplayEffectTags().GrantedTags;
+            var assetTag = appliedGe[i].GameplayEffect.GetGameplayEffectTags().AssetTag;
+
+            AddOrUpdateTags(appliedGe[i], grantedTags);
+            AddOrUpdateTag(appliedGe[i], assetTag);
         }
 
     }
@@ -61,14 +64,20 @@ public class GameplayTagAggregator : MonoBehaviour
     {
         for (var iTag = 0; iTag < tags.Length; iTag++)
         {
-            if (!GameplayEffectSpecs.TryGetValue(tags[iTag], out var geContainers))
-            {
-                GameplayEffectSpecs[tags[iTag]] = new List<GameplayEffectSpec>();
-            }
-
-            GameplayEffectSpecs[tags[iTag]].Add(geSpec);
+            AddOrUpdateTag(geSpec, tags[iTag]);
             m_TotalTags++;
         }
+    }
+
+    private void AddOrUpdateTag(GameplayEffectSpec geSpec, GameplayTagScriptableObject.GameplayTag tag)
+    {
+        if (!GameplayEffectSpecs.TryGetValue(tag, out var cachedSpec))
+        {
+            cachedSpec = new();
+            GameplayEffectSpecs[tag] = cachedSpec;
+        }
+
+        cachedSpec.Add(geSpec);
     }
 
 }

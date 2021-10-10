@@ -179,7 +179,6 @@ namespace AbilitySystem
                 var abilityTag = tags[iAbilityTag];
 
                 bool requirementPassed = false;
-                Debug.Log(asc.AppliedTags.Count);
                 for (var iAscTag = 0; iAscTag < asc.AppliedTags.Count; iAscTag++)
                 {
                     if (asc.AppliedTags[iAscTag].TagData == abilityTag)

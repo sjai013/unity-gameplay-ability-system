@@ -10,10 +10,13 @@ using UnityEngine;
 namespace AbilitySystem
 {
     [AddComponentMenu("Gameplay Ability System/Ability System Character")]
+    [RequireComponent(typeof(GameplayTagAggregator))]
+
     public class AbilitySystemCharacter : MonoBehaviour
     {
-        [SerializeField] protected AttributeSystemComponent _attributeSystem;
-        public AttributeSystemComponent AttributeSystem { get { return _attributeSystem; } set { _attributeSystem = value; } }
+        [SerializeField] protected AttributeSystemComponent m_AttributeSystem;
+        [SerializeField] private GameplayTagAggregator m_GameplayTagAggregator;
+        public AttributeSystemComponent AttributeSystem { get { return m_AttributeSystem; } set { m_AttributeSystem = value; } }
         public List<GameplayEffectSpec> AppliedGameplayEffects = new();
         public HashSet<AbstractAbilitySpec> GrantedAbilities = new();
         public List<GameplayTagScriptableObject> AppliedTags;
@@ -37,9 +40,45 @@ namespace AbilitySystem
         /// </summary>
         /// <param name="spec">Gameplay Effect Spec to remove</param>
         /// <returns>True, if remove was successful</returns>
-        public bool RemoveGameplayEffect(GameplayEffectSpec spec)
+        public bool RemoveActiveGameplayEffect(GameplayEffectSpec spec)
         {
             return AppliedGameplayEffects.Remove(spec);
+        }
+
+        /// <summary>
+        /// Removes a list of Gameplay Effect Specs, given the specs
+        /// </summary>
+        /// <param name="specs">List of specs to remove</param>
+        /// <returns>True, if atleast one spec was removed</returns>
+        public bool RemoveActiveGameplayEffect(List<GameplayEffectSpec> specs)
+        {
+            var removed = false;
+            for (var i = 0; i < specs.Count; i++)
+            {
+                if (RemoveActiveGameplayEffect(specs[i]))
+                {
+                    removed = true;
+                }
+            }
+            return removed;
+        }
+
+        /// <summary>
+        /// Removes a list of Gameplay Effect Specs, given the specs
+        /// </summary>
+        /// <param name="specs">List of specs to remove</param>
+        /// <returns>True, if atleast one spec was removed</returns>
+        public bool RemoveActiveGameplayEffect(GameplayEffectSpec[] specs)
+        {
+            var removed = false;
+            for (var i = 0; i < specs.Length; i++)
+            {
+                if (RemoveActiveGameplayEffect(specs[i]))
+                {
+                    removed = true;
+                }
+            }
+            return removed;
         }
 
         /// <summary>
@@ -47,9 +86,15 @@ namespace AbilitySystem
         /// </summary>
         /// <param name="ge">Gameplay Effect to match</param>
         /// <returns>Number of Gameplay Effect Specs removed</returns>
-        public int RemoveGameplayEffect(GameplayEffect ge)
+        public int RemoveActiveGameplayEffect(GameplayEffect ge)
         {
             return AppliedGameplayEffects.RemoveAll(x => x.GameplayEffect.GetGameplayEffectTags().AssetTag == ge.GetGameplayEffectTags().AssetTag);
+        }
+
+        public bool HasActiveGameplayEffect(GameplayEffectSpec spec)
+        {
+            if (spec == null) return false;
+            return AppliedGameplayEffects.Contains(spec);
         }
 
         /// <summary>
@@ -164,7 +209,6 @@ namespace AbilitySystem
             };
         }
 
-
         /// <summary>
         /// Applies the gameplay effect spec to self
         /// </summary>
@@ -191,6 +235,7 @@ namespace AbilitySystem
 
             return true;
         }
+
         public GameplayEffectSpec MakeOutgoingSpec(GameplayEffect GameplayEffect, float? level = 1f)
         {
             level = level ?? this.Level;
@@ -202,7 +247,6 @@ namespace AbilitySystem
 
         bool CheckTagRequirementsMet(GameplayEffectSpec geSpec)
         {
-
             // Every tag in the ApplicationTagRequirements.RequireTags needs to be in the character tags list
             // In other words, if any tag in ApplicationTagRequirements.RequireTags is not present, requirement is not met
             var geTags = geSpec.GameplayEffect.GetGameplayTagsAuthoring();
@@ -261,11 +305,12 @@ namespace AbilitySystem
 
             spec.RaiseOnApplyEvent();
             spec.RaiseOnRemoveEvent();
+            HandleRemoveGameplayEffectsWithTag(spec);
         }
 
         void ApplyDurationalGameplayEffect(GameplayEffectSpec spec)
         {
-            var modifiersToApply = new List<GameplayEffectSpec.ModifierContainer>();
+            GameplayEffectSpec.ModifierContainer[] modifiersToApply = new GameplayEffectSpec.ModifierContainer[spec.GameplayEffect.gameplayEffect.Modifiers.Length];
             for (var i = 0; i < spec.GameplayEffect.gameplayEffect.Modifiers.Length; i++)
             {
                 var modifier = spec.GameplayEffect.gameplayEffect.Modifiers[i];
@@ -283,11 +328,25 @@ namespace AbilitySystem
                         attributeModifier.Override = magnitude;
                         break;
                 }
-                modifiersToApply.Add(new() { Attribute = modifier.Attribute, Modifier = attributeModifier });
+                modifiersToApply[i] = new() { Attribute = modifier.Attribute, Modifier = attributeModifier };
             }
-            spec.modifiers = modifiersToApply.ToArray();
+            spec.modifiers = modifiersToApply;
             spec.RaiseOnApplyEvent();
+            HandleRemoveGameplayEffectsWithTag(spec);
             AppliedGameplayEffects.Add(spec);
+        }
+
+        private void HandleRemoveGameplayEffectsWithTag(GameplayEffectSpec spec)
+        {
+            // Remove Gameplay Effects With Tag
+            var geToRemove = spec.GameplayEffect.GetGameplayEffectTags().RemoveGameplayEffectsWithTag;
+            for (var i = 0; i < geToRemove.Length; i++)
+            {
+                if (m_GameplayTagAggregator.TryGetGameplayEffectsForTag(geToRemove[i], out var geSpecs))
+                {
+                    this.RemoveActiveGameplayEffect(geSpecs);
+                }
+            }
         }
 
         void UpdateAppliedTags()
