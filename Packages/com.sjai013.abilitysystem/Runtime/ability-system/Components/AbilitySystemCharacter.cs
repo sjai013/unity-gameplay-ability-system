@@ -399,11 +399,14 @@ namespace AbilitySystem
                 // Update time remaining.  Stritly, it's only really valid for durational GE, but calculating for infinite GE isn't harmful
                 ge.UpdateRemainingDuration(Time.deltaTime);
                 ge.UpdateState();
+                
                 // Tick the periodic component
                 ge.TickPeriodic(Time.deltaTime, out var executePeriodicTick);
-                if (executePeriodicTick && ge.IsActive)
+                if (executePeriodicTick && ge.IsActive && ge.PeriodDefinition.GameplayEffect != null)
                 {
-                    ApplyInstantGameplayEffect(ge);
+                    var spec = MakeOutgoingSpec(ge.PeriodDefinition.GameplayEffect, ge.Level);
+                    spec.SetTarget(ge.Target);
+                    spec.Target.ApplyGameplayEffectSpecToSelf(spec);
                     ge.RaiseOnTickEvent();
                 }
             }

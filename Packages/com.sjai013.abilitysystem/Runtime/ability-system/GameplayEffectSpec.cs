@@ -61,7 +61,8 @@ namespace AbilitySystem
                 this.TotalDuration = this.DurationRemaining;
             }
 
-            this.TimeUntilPeriodTick = this.GameplayEffect.GetPeriod().Period;
+            this.PeriodDefinition = GameplayEffect.GetPeriod();
+            this.TimeUntilPeriodTick = this.PeriodDefinition.Period;
             // By setting the time to 0, we make sure it gets executed at first opportunity
             if (this.GameplayEffect.GetPeriod().ExecuteOnApplication)
             {

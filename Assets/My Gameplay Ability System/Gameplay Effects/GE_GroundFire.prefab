@@ -48,11 +48,7 @@ MonoBehaviour:
     DurationPolicy: 1
     DurationModifier: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
     DurationMultiplier: 0
-    Modifiers:
-    - Attribute: {fileID: 11400000, guid: 348725b0db2f9844781f2847a8a473cb, type: 2}
-      ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: -0.5
+    Modifiers: []
     ConditionalGameplayEffects: []
   m_GameplayEffectTagsAuthoring:
     AssetTag: {fileID: 11400000, guid: 7b231b4e3b1b0ce45942d963110604e9, type: 2}
@@ -71,12 +67,12 @@ MonoBehaviour:
     RemoveGameplayEffectsWithTag: []
   m_GameplayEffectTags:
     AssetTag:
-      Tag: 32040
+      Tag: 52280
       Ancestors: 00000000
     GrantedTags:
-    - Tag: 188946
-      Ancestors: 16e20200647b0000
-    - Tag: 232890
+    - Tag: 51774
+      Ancestors: 40ca000046ca0000
+    - Tag: 52272
       Ancestors: 00000000
     OngoingTagRequirements:
       RequireTags: []
@@ -91,4 +87,5 @@ MonoBehaviour:
   m_GameplayCue: []
   m_Period:
     Period: 0.1
+    GameplayEffect: {fileID: 3381230203231498128, guid: 14488b927353944428f78417c42507e3, type: 3}
     ExecuteOnApplication: 1

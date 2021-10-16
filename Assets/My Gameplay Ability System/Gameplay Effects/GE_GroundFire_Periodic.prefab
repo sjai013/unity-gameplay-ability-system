@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3381230203231498131}
   - component: {fileID: 3381230203231498128}
   m_Layer: 0
-  m_Name: GE_GroundHeal
+  m_Name: GE_GroundFire_Periodic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,23 +45,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameplayEffect:
-    DurationPolicy: 1
+    DurationPolicy: 0
     DurationModifier: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
     DurationMultiplier: 0
     Modifiers:
     - Attribute: {fileID: 11400000, guid: 348725b0db2f9844781f2847a8a473cb, type: 2}
       ModifierOperator: 0
       ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: 0.5
-    - Attribute: {fileID: 11400000, guid: efdbc2e6a12082a48b2388540aded7aa, type: 2}
-      ModifierOperator: 0
-      ModifierMagnitude: {fileID: 11400000, guid: e2f5c6f7b7907de499cf46bfca4bbe7e, type: 2}
-      Multiplier: 0.28
+      Multiplier: -0.5
     ConditionalGameplayEffects: []
   m_GameplayEffectTagsAuthoring:
-    AssetTag: {fileID: 11400000, guid: a71d96270b387124b9429a3953fd58fa, type: 2}
-    GrantedTags:
-    - {fileID: 11400000, guid: 3c552491ce89bf643960a414c78839bd, type: 2}
+    AssetTag: {fileID: 0}
+    GrantedTags: []
     OngoingTagRequirements:
       RequireTags: []
       IgnoreTags: []
@@ -74,11 +69,9 @@ MonoBehaviour:
     RemoveGameplayEffectsWithTag: []
   m_GameplayEffectTags:
     AssetTag:
-      Tag: 52360
-      Ancestors: 00000000
-    GrantedTags:
-    - Tag: 52272
-      Ancestors: 00000000
+      Tag: 0
+      Ancestors: 
+    GrantedTags: []
     OngoingTagRequirements:
       RequireTags: []
       IgnoreTags: []
@@ -91,6 +84,6 @@ MonoBehaviour:
     RemoveGameplayEffectsWithTag: []
   m_GameplayCue: []
   m_Period:
-    Period: 0.1
-    GameplayEffect: {fileID: 3381230203231498128, guid: 43096cc712baf8a4889e551ed42b42d7, type: 3}
+    Period: 0
+    GameplayEffect: {fileID: 0}
     ExecuteOnApplication: 0
