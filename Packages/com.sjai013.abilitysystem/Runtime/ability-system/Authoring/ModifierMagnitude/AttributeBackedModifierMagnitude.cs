@@ -31,10 +31,10 @@ namespace AbilitySystem.ModifierMagnitude
             spec.SourceCapturedAttribute = sourceAttributeValue;
         }
 
-        public override float? CalculateMagnitude(GameplayEffectSpec spec)
+        public override float? CalculateMagnitude(GameplayEffectSpec spec, float modifier)
         {
 
-            return ScalingFunction.Evaluate(GetCapturedAttribute(spec).GetValueOrDefault().CurrentValue);
+            return ScalingFunction.Evaluate(GetCapturedAttribute(spec).GetValueOrDefault().CurrentValue) * modifier;
         }
 
         private AttributeValue? GetCapturedAttribute(GameplayEffectSpec spec)

@@ -12,7 +12,7 @@ namespace AbilitySystem.Authoring
         public GameplayEffectDefinitionContainer gameplayEffect;
 
         [SerializeField] private TGameplayEffectTags<GameplayTagScriptableObject> m_GameplayEffectTagsAuthoring;
-        [SerializeField] private TGameplayEffectTags<GameplayTagScriptableObject.GameplayTag> m_GameplayEffectTags;
+        [HideInInspector] private TGameplayEffectTags<GameplayTagScriptableObject.GameplayTag> m_GameplayEffectTags;
         [SerializeField] private GameplayCueScriptableObject[] m_GameplayCue;
         [SerializeField] private GameplayEffectPeriod m_Period;
 
@@ -20,7 +20,7 @@ namespace AbilitySystem.Authoring
         {
             return this.m_GameplayCue;
         }
-        
+
         public TGameplayEffectTags<GameplayTagScriptableObject.GameplayTag> GetGameplayEffectTags()
         {
             return m_GameplayEffectTags;

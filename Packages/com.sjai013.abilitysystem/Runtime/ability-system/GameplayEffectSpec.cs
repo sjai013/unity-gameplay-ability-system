@@ -57,7 +57,7 @@ namespace AbilitySystem
             this.Level = Level;
             if (this.GameplayEffect.gameplayEffect.DurationModifier)
             {
-                this.DurationRemaining = this.GameplayEffect.gameplayEffect.DurationModifier.CalculateMagnitude(this).GetValueOrDefault() * this.GameplayEffect.gameplayEffect.DurationMultiplier;
+                this.DurationRemaining = this.GameplayEffect.gameplayEffect.DurationModifier.CalculateMagnitude(this, this.GameplayEffect.gameplayEffect.DurationMultiplier).GetValueOrDefault();
                 this.TotalDuration = this.DurationRemaining;
             }
 

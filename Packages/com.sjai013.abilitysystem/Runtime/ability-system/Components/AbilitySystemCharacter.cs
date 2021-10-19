@@ -281,7 +281,7 @@ namespace AbilitySystem
             for (var i = 0; i < spec.GameplayEffect.gameplayEffect.Modifiers.Length; i++)
             {
                 var modifier = spec.GameplayEffect.gameplayEffect.Modifiers[i];
-                var magnitude = (modifier.ModifierMagnitude.CalculateMagnitude(spec) * modifier.Multiplier).GetValueOrDefault();
+                var magnitude = (modifier.ModifierMagnitude.CalculateMagnitude(spec, modifier.Multiplier)).GetValueOrDefault();
                 var attribute = modifier.Attribute;
 
                 // If attribute doesn't exist on this character, continue to next attribute
@@ -314,7 +314,7 @@ namespace AbilitySystem
             for (var i = 0; i < spec.GameplayEffect.gameplayEffect.Modifiers.Length; i++)
             {
                 var modifier = spec.GameplayEffect.gameplayEffect.Modifiers[i];
-                var magnitude = (modifier.ModifierMagnitude.CalculateMagnitude(spec) * modifier.Multiplier).GetValueOrDefault();
+                var magnitude = (modifier.ModifierMagnitude.CalculateMagnitude(spec, modifier.Multiplier)).GetValueOrDefault();
                 var attributeModifier = new AttributeModifier();
                 switch (modifier.ModifierOperator)
                 {
@@ -399,7 +399,7 @@ namespace AbilitySystem
                 // Update time remaining.  Stritly, it's only really valid for durational GE, but calculating for infinite GE isn't harmful
                 ge.UpdateRemainingDuration(Time.deltaTime);
                 ge.UpdateState();
-                
+
                 // Tick the periodic component
                 ge.TickPeriodic(Time.deltaTime, out var executePeriodicTick);
                 if (executePeriodicTick && ge.IsActive && ge.PeriodDefinition.GameplayEffect != null)

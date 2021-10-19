@@ -115,7 +115,7 @@ namespace AbilitySystem.Authoring
 
                 // Only worry about additive.  Anything else passes.
                 if (modifier.ModifierOperator != EAttributeModifier.Add) continue;
-                var costValue = (modifier.ModifierMagnitude.CalculateMagnitude(costGe) * modifier.Multiplier).GetValueOrDefault();
+                var costValue = (modifier.ModifierMagnitude.CalculateMagnitude(costGe, modifier.Multiplier)).GetValueOrDefault();
 
                 this.Owner.AttributeSystem.GetAttributeValue(modifier.Attribute, out var attributeValue);
 

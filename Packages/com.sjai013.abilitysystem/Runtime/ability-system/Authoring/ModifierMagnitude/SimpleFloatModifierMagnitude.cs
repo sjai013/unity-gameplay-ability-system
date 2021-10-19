@@ -14,9 +14,9 @@ namespace AbilitySystem
         public override void Initialise(GameplayEffectSpec spec)
         {
         }
-        public override float? CalculateMagnitude(GameplayEffectSpec spec)
+        public override float? CalculateMagnitude(GameplayEffectSpec spec, float modifier)
         {
-            return ScalingFunction.Evaluate(spec.Level);
+            return ScalingFunction.Evaluate(spec.Level) * modifier;
         }
     }
 }

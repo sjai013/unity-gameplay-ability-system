@@ -17,6 +17,6 @@ namespace AbilitySystem.ModifierMagnitude
         /// </summary>
         /// <param name="spec">Gameplay Effect Spec</param>
         /// <returns></returns>
-        public abstract float? CalculateMagnitude(GameplayEffectSpec spec);
+        public abstract float? CalculateMagnitude(GameplayEffectSpec spec, float multiplier);
     }
 }
