@@ -16,6 +16,7 @@ namespace AbilitySystem
     {
         [SerializeField] protected AttributeSystemComponent m_AttributeSystem;
         [SerializeField] private GameplayTagAggregator m_GameplayTagAggregator;
+        [SerializeField] private TickProvider m_TickProvider;
         public AttributeSystemComponent AttributeSystem { get { return m_AttributeSystem; } set { m_AttributeSystem = value; } }
         public List<GameplayEffectSpec> AppliedGameplayEffects = new();
         public HashSet<AbstractAbilitySpec> GrantedAbilities = new();
@@ -389,6 +390,7 @@ namespace AbilitySystem
 
         void TickGameplayEffects()
         {
+            var tickValue = m_TickProvider.TickMagnitude();
             for (var i = 0; i < this.AppliedGameplayEffects.Count; i++)
             {
                 var ge = this.AppliedGameplayEffects[i];
@@ -397,11 +399,11 @@ namespace AbilitySystem
                 if (ge.GameplayEffect.gameplayEffect.DurationPolicy == EDurationPolicy.Instant) continue;
 
                 // Update time remaining.  Stritly, it's only really valid for durational GE, but calculating for infinite GE isn't harmful
-                ge.UpdateRemainingDuration(Time.deltaTime);
+                ge.UpdateRemainingDuration(tickValue);
                 ge.UpdateState();
 
                 // Tick the periodic component
-                ge.TickPeriodic(Time.deltaTime, out var executePeriodicTick);
+                ge.TickPeriodic(tickValue, out var executePeriodicTick);
                 if (executePeriodicTick && ge.IsActive && ge.PeriodDefinition.GameplayEffect != null)
                 {
                     var spec = MakeOutgoingSpec(ge.PeriodDefinition.GameplayEffect, ge.Level);

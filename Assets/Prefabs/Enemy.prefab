@@ -453,6 +453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AttributeSystem: {fileID: 972022386}
   m_GameplayTagAggregator: {fileID: 700990718874273536}
+  m_TickProvider: {fileID: 11400000, guid: decce820e723e224aab260d4384c371e, type: 2}
   AppliedGameplayEffects: []
   AppliedTags: []
   Level: 0
