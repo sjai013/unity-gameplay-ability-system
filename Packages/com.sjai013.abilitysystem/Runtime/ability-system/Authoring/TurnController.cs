@@ -6,26 +6,31 @@ namespace AbilitySystem
 
     public class TurnController : MonoBehaviour
     {
-        [SerializeField] private int m_Turn = 0;
+
         [SerializeField] private bool m_NextTurn;
-        [SerializeField] public bool TickTurn { get; private set; }
+        [SerializeField] private TurnTickProvider m_TurnTickProvider;
         public void Update()
         {
             if (m_NextTurn)
             {
-                m_Turn += 1;
-                TickTurn = true;
+                m_TurnTickProvider.IncrementTurn();
+                m_TurnTickProvider.TickTurn = true;
                 m_NextTurn = false;
             }
             else
             {
-                TickTurn = false;
+                m_TurnTickProvider.TickTurn = false;
             }
+        }
+
+        public void NextTurn()
+        {
+            m_NextTurn = true;
         }
 
         public int GetCurrentTurn()
         {
-            return m_Turn;
+            return m_TurnTickProvider.GetCurrentTurn();
         }
 
     }

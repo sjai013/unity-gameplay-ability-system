@@ -9089,10 +9089,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1480405787, guid: d2d78a9b497dffd4d8b4560ea5c1de0c, type: 3}
-      propertyPath: m_TickProvider
-      value: 
-      objectReference: {fileID: 11400000, guid: decce820e723e224aab260d4384c371e, type: 2}
     - target: {fileID: 5259635927308013636, guid: d2d78a9b497dffd4d8b4560ea5c1de0c, type: 3}
       propertyPath: m_Name
       value: 2DPlayer
@@ -10970,10 +10966,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 972115060433581472, guid: f68006ff075da55418b342ceada93231, type: 3}
-      propertyPath: m_TickProvider
-      value: 
-      objectReference: {fileID: 11400000, guid: decce820e723e224aab260d4384c371e, type: 2}
     - target: {fileID: 1269831929592944499, guid: f68006ff075da55418b342ceada93231, type: 3}
       propertyPath: m_Name
       value: Enemy
