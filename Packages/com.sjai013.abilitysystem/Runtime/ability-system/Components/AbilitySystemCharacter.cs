@@ -16,7 +16,7 @@ namespace AbilitySystem
     {
         [SerializeField] protected AttributeSystemComponent m_AttributeSystem;
         [SerializeField] private GameplayTagAggregator m_GameplayTagAggregator;
-        [SerializeField] private TickProvider m_TickProvider;
+        [SerializeField] private TickSystem m_TickSystem;
         public AttributeSystemComponent AttributeSystem { get { return m_AttributeSystem; } set { m_AttributeSystem = value; } }
         public List<GameplayEffectSpec> AppliedGameplayEffects = new();
         public HashSet<AbstractAbilitySpec> GrantedAbilities = new();
@@ -24,6 +24,11 @@ namespace AbilitySystem
         public float Level;
         private List<IGameplayTagProvider> TagProviders = new();
         private AbilityExecutionManager m_AbilityEM = new();
+
+        void Start()
+        {
+            m_TickSystem.RegisterAbilitySystemCharacter(this);
+        }
 
         /// <summary>
         /// Add a tag provider, so we can add customised tag sources to the character
@@ -374,9 +379,10 @@ namespace AbilitySystem
 
         void UpdateAttributeSystem()
         {
+            // Reset all attributes to 0
+            this.AttributeSystem.ResetAttributeModifiers();
+
             // Set Current Value to Base Value (default position if there are no GE affecting that atribute)
-
-
             for (var i = 0; i < this.AppliedGameplayEffects.Count; i++)
             {
                 var modifiers = this.AppliedGameplayEffects[i].modifiers;
@@ -388,9 +394,8 @@ namespace AbilitySystem
             }
         }
 
-        void TickGameplayEffects()
+        void TickGameplayEffects(float tickValue)
         {
-            var tickValue = m_TickProvider.TickMagnitude();
             for (var i = 0; i < this.AppliedGameplayEffects.Count; i++)
             {
                 var ge = this.AppliedGameplayEffects[i];
@@ -428,29 +433,31 @@ namespace AbilitySystem
             }
         }
 
-
-        void Update()
+        public void UpdateGameplayEffects(float tickValue)
         {
-            // Reset all attributes to 0
-            this.AttributeSystem.ResetAttributeModifiers();
-            UpdateAttributeSystem();
-            m_AbilityEM.StepAbilities();
-            TickGameplayEffects();
+            TickGameplayEffects(tickValue);
             CleanGameplayEffects();
+        }
+
+        public void UpdateAbilitySpecs()
+        {
+            m_AbilityEM.StepAbilities();
+        }
+
+        public void Tick(float tickValue)
+        {
+            UpdateAttributeSystem();
+            UpdateAbilitySpecs();
+            UpdateGameplayEffects(tickValue);
             UpdateAppliedTags();
         }
     }
 
     internal class AbilityExecutionManager
     {
-        private float timeSinceFlush;
         private List<AbstractAbilitySpec> m_ActiveAbilities = new List<AbstractAbilitySpec>(5);
-        private const float MAX_FLUSH_TIME = 5;
-
         public void StepAbilities()
         {
-            timeSinceFlush += Time.deltaTime;
-
             // Step through all active abilities
             for (var i = 0; i < m_ActiveAbilities.Count; i++)
             {
@@ -464,19 +471,7 @@ namespace AbilitySystem
                     m_ActiveAbilities[i] = null;
                 }
             }
-
-
         }
-
-        private void FlushList()
-        {
-            if (timeSinceFlush > MAX_FLUSH_TIME)
-            {
-                timeSinceFlush = 0;
-                if (m_ActiveAbilities.Count > 0) m_ActiveAbilities.RemoveAll(x => x == null);
-            }
-        }
-
         public void AddAbility(AbstractAbilitySpec spec)
         {
             m_ActiveAbilities.Add(spec);
