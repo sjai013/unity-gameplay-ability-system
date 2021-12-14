@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+using GameplayAbilitySystem.AttributeSystem.DOTS.Components;
 using MyGameplayAbilitySystem.AttributeSystem.DOTS.Components;
 using Unity.Entities;
 using UnityEngine;
@@ -19,20 +21,14 @@ namespace MyGameplayAbilitySystem.AttributeSystem.DOTS.Components
             {
                 var entity = EntityManager.CreateEntity(archetype);
                 EntityManager.SetComponentData<AttributeHealth.Base>(entity, new AttributeHealth.Base() { Value = Random.Range(0, 100) });
-                EntityManager.SetComponentData<AttributeHealth.Modifiers>(entity, new AttributeHealth.Modifiers() { Add = Random.Range(0, 100), Multiply = Random.Range(0.8f,1.2f) });
+                EntityManager.SetComponentData<AttributeHealth.Modifiers>(entity, new AttributeHealth.Modifiers() { Add = Random.Range(0, 100), Multiply = Random.Range(0.8f, 1.2f) });
             }
         }
-        protected override void OnCreate()
+        protected override void S()
         {
-            RegisterAttribute<AttributeHealth.Current, AttributeHealth.Base, AttributeHealth.Modifiers>();
-            RegisterAttribute<AttributeMaxHealth.Current, AttributeMaxHealth.Base, AttributeMaxHealth.Modifiers>();
+            attributes.Add(new AttributeHealth());
+            attributes.Add(new AttributeMaxHealth());
             CreateTestEntities();
-        }
-
-        protected override void OnUpdate()
-        {
-            ScheduleJob<AttributeHealth.Current, AttributeHealth.Base, AttributeHealth.Modifiers>();
-            ScheduleJob<AttributeMaxHealth.Current, AttributeMaxHealth.Base, AttributeMaxHealth.Modifiers>();
         }
     }
 }

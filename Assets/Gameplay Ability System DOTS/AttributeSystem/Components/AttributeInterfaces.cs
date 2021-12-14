@@ -1,3 +1,5 @@
+using Unity.Jobs;
+
 namespace GameplayAbilitySystem.AttributeSystem.DOTS.Components
 {
     public interface IAttributeModifiers
@@ -14,5 +16,11 @@ namespace GameplayAbilitySystem.AttributeSystem.DOTS.Components
     public interface IAttributeBaseValue
     {
         float Value { get; set; }
+    }
+
+    public interface IAttributeRegisterer
+    {
+        void RegisterAttribute(GameplayAbilitySystem.AttributeSystem.DOTS.Components.AttributeSystem attributeSystem);
+        JobHandle ScheduleJob(GameplayAbilitySystem.AttributeSystem.DOTS.Components.AttributeSystem attributeSystem);
     }
 }

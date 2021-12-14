@@ -1,10 +1,21 @@
 using GameplayAbilitySystem.AttributeSystem.DOTS.Components;
 using Unity.Entities;
+using Unity.Jobs;
 
 namespace MyGameplayAbilitySystem.AttributeSystem.DOTS.Components
 {
-    public class AttributeMaxHealth
+    public class AttributeMaxHealth : IAttributeRegisterer
     {
+        public void RegisterAttribute(GameplayAbilitySystem.AttributeSystem.DOTS.Components.AttributeSystem attributeSystem)
+        {
+            attributeSystem.RegisterAttribute<Current, Base, Modifiers>();
+        }
+
+        public JobHandle ScheduleJob(GameplayAbilitySystem.AttributeSystem.DOTS.Components.AttributeSystem attributeSystem)
+        {
+            return attributeSystem.ScheduleJob<Current, Base, Modifiers>();
+        }
+
         public struct Current : IComponentData, IAttributeCurrentValue
         {
             public float _value;

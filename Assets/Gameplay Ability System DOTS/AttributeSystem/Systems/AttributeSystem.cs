@@ -9,10 +9,29 @@ namespace GameplayAbilitySystem.AttributeSystem.DOTS.Components
 {
     public abstract class AttributeSystem : SystemBase
     {
+        protected List<IAttributeRegisterer> attributes = new List<IAttributeRegisterer>();
         EntityQuery m_Query;
         Dictionary<(System.Type, System.Type, System.Type), EntityQuery> m_Querys = new Dictionary<(System.Type, System.Type, System.Type), EntityQuery>();
 
-        protected void RegisterAttribute<T1, T2, T3>()
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+            this.S();
+            for (var i = 0; i < attributes.Count; i++)
+            {
+                attributes[i].RegisterAttribute(this);
+            }
+        }
+        protected override void OnUpdate()
+        {
+            for (var i = 0; i < attributes.Count; i++)
+            {
+                attributes[i].ScheduleJob(this);
+            }
+        }
+        protected abstract void S();
+
+        public void RegisterAttribute<T1, T2, T3>()
         where T1 : struct, IComponentData, IAttributeCurrentValue
         where T2 : struct, IComponentData, IAttributeBaseValue
         where T3 : struct, IComponentData, IAttributeModifiers
@@ -23,7 +42,7 @@ namespace GameplayAbilitySystem.AttributeSystem.DOTS.Components
             m_Querys.Add((typeof(T1), typeof(T2), typeof(T3)), query);
         }
 
-        protected JobHandle ScheduleJob<T1, T2, T3>()
+        public JobHandle ScheduleJob<T1, T2, T3>()
         where T1 : struct, IComponentData, IAttributeCurrentValue
         where T2 : struct, IComponentData, IAttributeBaseValue
         where T3 : struct, IComponentData, IAttributeModifiers
