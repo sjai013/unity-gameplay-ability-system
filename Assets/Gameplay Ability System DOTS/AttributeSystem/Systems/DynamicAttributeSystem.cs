@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using GameplayAbilitySystem.AttributeSystem.DOTS.Components;
 using MyGameplayAbilitySystem.AttributeSystem.DOTS.Components;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
@@ -53,6 +54,7 @@ namespace GameplayAbilitySystem.AttributeSystem.DOTS.Systems
         }
 
 
+        [BurstCompile]
         struct AttributeJob : IJobChunk
         {
             public int nTypes;
