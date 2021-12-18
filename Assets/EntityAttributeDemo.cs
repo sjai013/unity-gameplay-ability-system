@@ -11,10 +11,11 @@ public class EntityAttributeDemo : MonoBehaviour
     CreateTestAttributeSystem system;
     public int entityIndex;
     public PlayerAttribute Health;
-    public PlayerAttribute MaxHealth;
+    public PlayerAttribute Strength;
     public PlayerAttribute Mana;
     public PlayerAttribute MaxMana;
     public PlayerAttribute Speed;
+    public PlayerAttribute MaxHealth;
 
     // Update is called once per frame
     void Update()
@@ -24,10 +25,13 @@ public class EntityAttributeDemo : MonoBehaviour
         {
             return;
         }
-        Health = system.EntityManager.GetComponentData<AttributeHealth>(system.AttributeEntities[entityIndex]).Value;
-        MaxHealth = system.EntityManager.GetComponentData<AttributeMaxHealth>(system.AttributeEntities[entityIndex]).Value;
-        Mana = system.EntityManager.GetComponentData<AttributeMana>(system.AttributeEntities[entityIndex]).Value;
-        MaxMana = system.EntityManager.GetComponentData<AttributeMaxMana>(system.AttributeEntities[entityIndex]).Value;
-        Speed = system.EntityManager.GetComponentData<AttributeSpeed>(system.AttributeEntities[entityIndex]).Value;
+
+        var entity = system.AttributeEntities[entityIndex];
+        Health = system.EntityManager.HasComponent<AttributeHealth>(entity) ? system.EntityManager.GetComponentData<AttributeHealth>(entity).Value : new PlayerAttribute();
+        Mana = system.EntityManager.HasComponent<AttributeMana>(entity) ? system.EntityManager.GetComponentData<AttributeMana>(entity).Value : new PlayerAttribute();
+        MaxMana = system.EntityManager.HasComponent<AttributeMaxMana>(entity) ? system.EntityManager.GetComponentData<AttributeMaxMana>(entity).Value : new PlayerAttribute();
+        Strength = system.EntityManager.HasComponent<AttributeStrength>(entity) ? system.EntityManager.GetComponentData<AttributeStrength>(entity).Value : new PlayerAttribute();
+        Speed = system.EntityManager.HasComponent<AttributeSpeed>(entity) ? system.EntityManager.GetComponentData<AttributeSpeed>(entity).Value : new PlayerAttribute();
+        MaxHealth = system.EntityManager.HasComponent<AttributeMaxHealth>(entity) ? system.EntityManager.GetComponentData<AttributeMaxHealth>(entity).Value : new PlayerAttribute();
     }
 }

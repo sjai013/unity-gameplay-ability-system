@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using GameplayAbilitySystem.AttributeSystem.DOTS.Components;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -6,7 +7,7 @@ using Unity.Mathematics;
 namespace MyGameplayAbilitySystem.AttributeSystem.DOTS.Components
 {
 
-    public struct AttributeMaxHealth : IAttributeData
+    public struct AttributeStrength : IAttributeData, IComponentData
     {
         public PlayerAttribute Value;
     }
@@ -29,6 +30,16 @@ namespace MyGameplayAbilitySystem.AttributeSystem.DOTS.Components
     public struct AttributeSpeed : IAttributeData, IComponentData
     {
         public PlayerAttribute Value;
+    }
+
+    public struct AttributeMaxHealth : IAttributeDerivedData, IComponentData
+    {
+        public PlayerAttribute Value;
+        public AttributeStrength Strength;
+        public float CalculateBase()
+        {
+            return Strength.Value.BaseValue * 1.5f;
+        }
     }
 
 }

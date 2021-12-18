@@ -15,20 +15,19 @@ namespace MyGameplayAbilitySystem.AttributeSystem.DOTS.Components
         public List<Entity> AttributeEntities = new List<Entity>();
         public void CreateTestEntities()
         {
-            var archetype = EntityManager.CreateArchetype(typeof(AttributeHealth), typeof(AttributeMaxHealth), typeof(AttributeMana), typeof(AttributeMaxMana), typeof(AttributeSpeed));
+            var archetype1 = EntityManager.CreateArchetype(typeof(AttributeHealth), typeof(AttributeStrength), typeof(AttributeMana), typeof(AttributeMaxMana), typeof(AttributeSpeed), typeof(AttributeMaxHealth));
             var componentTypes = DynamicAttributeSystem.GetAttributeTypes();
 
             for (var i = 0; i < 10000; i++)
             {
-
-                var entity = EntityManager.CreateEntity(archetype);
+                var entity = EntityManager.CreateEntity(archetype1);
 
                 EntityManager.SetComponentData<AttributeHealth>(entity, new AttributeHealth()
                 {
                     Value = CreateRandom()
                 });
 
-                EntityManager.SetComponentData<AttributeMaxHealth>(entity, new AttributeMaxHealth()
+                EntityManager.SetComponentData<AttributeStrength>(entity, new AttributeStrength()
                 {
                     Value = CreateRandom()
                 });
@@ -49,7 +48,13 @@ namespace MyGameplayAbilitySystem.AttributeSystem.DOTS.Components
                 });
 
 
+                EntityManager.SetComponentData<AttributeMaxHealth>(entity, new AttributeMaxHealth()
+                {
+                    Value = CreateRandom()
+                });
+
                 AttributeEntities.Add(entity);
+
             }
         }
 

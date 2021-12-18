@@ -7,6 +7,10 @@ using Unity.Mathematics;
 namespace GameplayAbilitySystem.AttributeSystem.DOTS.Components
 {
     public interface IAttributeData : IComponentData { }
+    public interface IAttributeDerivedData : IAttributeData, IComponentData
+    {
+        float CalculateBase();
+    }
 
     [Serializable]
     public struct PlayerAttribute
@@ -28,7 +32,6 @@ namespace GameplayAbilitySystem.AttributeSystem.DOTS.Components
                 BaseValue = baseValue
             };
         }
-
     }
 
     [Serializable]
@@ -37,5 +40,6 @@ namespace GameplayAbilitySystem.AttributeSystem.DOTS.Components
         public float Add;
         public float Multiply;
     }
+
 
 }
