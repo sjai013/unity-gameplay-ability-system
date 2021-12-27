@@ -1,0 +1,28 @@
+{
+    "Name": "Primary",
+    "Description": "Primary attribute group",
+    "Attributes": [
+        {
+            "AttributeName": "Health",
+            "AttributeDescription": "The a mount of damage player can take.",
+            "AttributeModifiers": [
+                {
+                    "Clamp": { 
+                        "Attribute": "MaxHealth"
+                    }
+                }
+            ]
+        },
+        {
+            "AttributeName": "MaxHealth",
+            "AttributeDescription": "The maximum health the player can have",
+            "AttributeModifiers": [
+                {
+                    "Clamp": {
+                        "Attribute": "MaxHealth"
+                    }
+                }
+            ]
+        }
+    ]
+}
