@@ -1,13 +1,47 @@
 {
-    "Name": "Primary",
+    "Namespace": "MyGameplayAbilitySystem.Attributes",
+    "Name": "Primary", 
     "Description": "Primary attribute group",
-    "Attributes": [
+    "Attributes": [ 
+        {  
+            "AttributeName": "Strength",  
+            "AttributeDescription": "The character's strength", 
+            "AttributeModifiers": [ 
+                {
+                    "Clamp": {
+                        "Attribute": "MaxHealth"
+                    }
+                }
+            ] 
+        }, 
         {
-            "AttributeName": "Health",
-            "AttributeDescription": "The a mount of damage player can take.",
+            "AttributeName": "Agility",
+            "AttributeDescription": "The character's agility",
             "AttributeModifiers": [
                 {
-                    "Clamp": { 
+                    "Clamp": {
+                        "Attribute": "MaxHealth"
+                    }
+                }
+            ]
+        },
+        {
+            "AttributeName": "Intelligence",
+            "AttributeDescription": "The character's intelligence",
+            "AttributeModifiers": [
+                {
+                    "Clamp": {
+                        "Attribute": "MaxHealth"
+                    }
+                }
+            ]
+        },
+        { 
+            "AttributeName": "Health", 
+            "AttributeDescription": "The amount of damage player can take",
+            "AttributeModifiers": [ 
+                { 
+                    "Clamp": {
                         "Attribute": "MaxHealth"
                     }
                 }
@@ -23,6 +57,21 @@
                     }
                 }
             ]
-        }
+        },
+        {
+            "AttributeName": "Mana",
+            "AttributeDescription": "The amount of mana the player can use to cast spell.",
+            "AttributeModifiers": [
+                {
+                    "Clamp": {
+                        "Attribute": "MaxMana"
+                    }
+                }
+            ]
+        },
+        {
+            "AttributeName": "MaxMana",
+            "AttributeDescription": "The maximum mana the player can have"
+        }        
     ]
 }

@@ -1,0 +1,40 @@
+
+        /// <summary>
+        /// {DESCRIPTION}
+        /// </summary>
+        public sealed class Attribute{NAME} : GameplayAbilitySystem.AttributeSystem.IAttribute
+        {
+
+            /// <summary>
+            /// Base Value of Attribute
+            /// </summary>
+            public struct BaseValue : Unity.Entities.IComponentData
+            {
+
+                /// <summary>
+                /// Value of component
+                /// </summary>
+                public int Value;
+            }
+
+            /// <summary>
+            /// Current Value of Attribute
+            /// </summary>
+            public struct CurrentValue : Unity.Entities.IComponentData
+            {
+                /// <summary>
+                /// Total additive modifiers
+                /// </summary>
+                public short Add;
+
+                /// <summary>
+                /// Total multiplicative modifiers
+                /// </summary>
+                public short Multiply;
+
+                /// <summary>
+                /// Value of component
+                /// </summary>
+                public int Value;
+            }
+        }
