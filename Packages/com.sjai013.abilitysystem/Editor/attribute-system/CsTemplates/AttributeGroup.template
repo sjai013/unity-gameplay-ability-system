@@ -1,7 +1,0 @@
-    /// <summary>
-    /// {DESCRIPTION}
-    /// </summary>
-    public sealed class AttributeGroup{NAME} : GameplayAbilitySystem.AttributeSystem.IAttributeGroup
-    {
-        {CONTENTS}
-    }

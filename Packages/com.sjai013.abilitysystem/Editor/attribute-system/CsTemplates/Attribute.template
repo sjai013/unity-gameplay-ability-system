@@ -23,18 +23,24 @@
             public struct CurrentValue : Unity.Entities.IComponentData
             {
                 /// <summary>
+                /// Value of component
+                /// </summary>
+                public int Value;
+            }
+
+            /// <summary>
+            /// Attribute modifiers
+            /// </summary>
+            public struct Modifier : Unity.Entities.IComponentData
+            {
+                /// <summary>
                 /// Total additive modifiers
                 /// </summary>
-                public short Add;
+                public Unity.Mathematics.half Add;
 
                 /// <summary>
                 /// Total multiplicative modifiers
                 /// </summary>
-                public short Multiply;
-
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
+                public Unity.Mathematics.half Multiply;
             }
         }

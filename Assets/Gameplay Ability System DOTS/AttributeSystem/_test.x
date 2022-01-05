@@ -9,20 +9,56 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MyGameplayAbilitySystem.Attributes
+using Unity.Entities;
+
+namespace _MyGameplayAbilitySystem.Attributes
 {
-        /// <summary>
+
+
+    /// <summary>
     /// Primary attribute group
     /// </summary>
     public sealed class AttributeGroupPrimary : GameplayAbilitySystem.AttributeSystem.IAttributeGroup
     {
-        
+        public enum EAttribute
+        {
+            Strength, Agility, Intelligence, Health, MaxHealth, Mana, MaxMana
+        }
+
+        public static GameplayAbilitySystem.AttributeSystem.GenericBaseValue GetBaseValue(EAttribute attr, EntityManager em, Entity e)
+        {
+            switch (attr)
+            {
+                case EAttribute.Strength:
+                    return em.GetComponentData<AttributeStrength.BaseValue>(e);
+                case EAttribute.Agility:
+                    return em.GetComponentData<AttributeStrength.BaseValue>(e);
+                default:
+                    return new GameplayAbilitySystem.AttributeSystem.GenericBaseValue();
+            }
+        }
+
+        public static GameplayAbilitySystem.AttributeSystem.GenericCurrentValue GetCurrentValue(EntityManager em, Entity e)
+        {
+            return em.GetComponentData<AttributeStrength.CurrentValue>(e);
+        }
+
+        public static void SetBaseValue(EntityManager em, Entity e, GameplayAbilitySystem.AttributeSystem.GenericBaseValue v)
+        {
+            em.SetComponentData<AttributeStrength.BaseValue>(e, v);
+        }
+
+        public static void SetCurrentValue(EntityManager em, Entity e, GameplayAbilitySystem.AttributeSystem.GenericCurrentValue v)
+        {
+            em.SetComponentData<AttributeStrength.CurrentValue>(e, v);
+        }
+
+
         /// <summary>
         /// The character's strength
         /// </summary>
         public sealed class AttributeStrength : GameplayAbilitySystem.AttributeSystem.IAttribute
         {
-
             /// <summary>
             /// Base Value of Attribute
             /// </summary>
@@ -33,6 +69,22 @@ namespace MyGameplayAbilitySystem.Attributes
                 /// Value of component
                 /// </summary>
                 public int Value;
+
+                public static implicit operator GameplayAbilitySystem.AttributeSystem.GenericBaseValue(BaseValue v)
+                {
+                    return new GameplayAbilitySystem.AttributeSystem.GenericBaseValue()
+                    {
+                        Value = v.Value
+                    };
+                }
+
+                public static implicit operator BaseValue(GameplayAbilitySystem.AttributeSystem.GenericBaseValue v)
+                {
+                    return new BaseValue()
+                    {
+                        Value = v.Value
+                    };
+                }
             }
 
             /// <summary>
@@ -54,6 +106,26 @@ namespace MyGameplayAbilitySystem.Attributes
                 /// Value of component
                 /// </summary>
                 public int Value;
+
+                public static implicit operator GameplayAbilitySystem.AttributeSystem.GenericCurrentValue(CurrentValue v)
+                {
+                    return new GameplayAbilitySystem.AttributeSystem.GenericCurrentValue()
+                    {
+                        Value = v.Value,
+                        Add = v.Add,
+                        Multiply = v.Multiply
+                    };
+                }
+
+                public static implicit operator CurrentValue(GameplayAbilitySystem.AttributeSystem.GenericCurrentValue v)
+                {
+                    return new CurrentValue()
+                    {
+                        Value = v.Value,
+                        Add = v.Add,
+                        Multiply = v.Multiply
+                    };
+                }
             }
         }
 

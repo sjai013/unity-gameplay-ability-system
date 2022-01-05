@@ -1,0 +1,16 @@
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Entities;
+
+public class {NAME}AttributeSystem : SystemBase
+{
+    protected override void OnUpdate()
+    {
+        NativeArray<JobHandle> jobHandles = new NativeArray<JobHandle>({LENGTH}, Allocator.Temp);
+        
+        {JOBS}
+
+        this.Dependency = JobHandle.CombineDependencies(jobHandles);
+        jobHandles.Dispose();
+    }
+}

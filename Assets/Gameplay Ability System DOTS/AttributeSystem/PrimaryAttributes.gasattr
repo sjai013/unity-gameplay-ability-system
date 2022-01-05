@@ -1,0 +1,93 @@
+{
+  "Name": "Primary",  
+  "Attributes": [
+    {
+      "Name": "Strength",  
+      "Description": "The character's strength",  
+      "Groups": [  
+        "Primary",
+        "Hero"
+      ]
+    }, 
+    {
+      "Name": "Intelligence",
+      "Description": "The character's intelligence",
+      "Groups": [
+        "Primary",
+        "Hero"
+      ]
+    },
+    {
+      "Name": "Agility",
+      "Description": "The character's agility",
+      "Groups": [
+        "Primary",
+        "Hero"
+      ]
+    },
+    {
+      "Name": "MaxHealth",
+      "Description": "The character's maximum health",
+      "Groups": [
+        "Hero"
+      ],
+      "Modifiers": [
+        {
+          "Name": "CoefficientCalculated",
+          "Params": {
+            "Attribute": "Strength",
+            "0": "",
+            "1": ""
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Health",
+      "Description": "The character health",
+      "Groups": [
+        "Hero"
+      ],
+      "Modifiers": [
+        {
+          "Name": "Clamp",
+          "Params": {
+            "Attribute": "MaxMana"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "MaxMana",
+      "Description": "The character's maximum mana",
+      "Groups": [
+        "Hero"
+      ],
+      "Modifiers": [
+        {
+          "Name": "CoefficientCalculated",
+          "Params": {
+            "Attribute": "Intelligence",
+            "0": "",
+            "1": ""
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Mana",
+      "Description": "The character mana",
+      "Groups": [
+        "Hero"
+      ],
+      "Modifiers": [
+        {
+          "Name": "Clamp",
+          "Params": {
+            "Attribute": "MaxMana"
+          }
+        }
+      ]
+    }
+  ]
+}

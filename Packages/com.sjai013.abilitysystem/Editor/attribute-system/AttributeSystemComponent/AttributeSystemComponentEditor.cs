@@ -2,10 +2,10 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using AttributeSystem.Components;
+// using AttributeSystem.Components;
 
 
-[CustomEditor(typeof(AttributeSystemComponent))]
+// [CustomEditor(typeof(AttributeSystemComponent))]
 public class AttributeSystemComponentEditor : Editor
 {
     VisualElement rootElement;

@@ -1,0 +1,6 @@
+
+        jobHandles[{INDEX}] = Entities.ForEach(
+            (ref Attribute{ATTRIBUTE}.CurrentValue currentValue, in Attribute{ATTRIBUTE}.Modifier modifier, in Attribute{ATTRIBUTE}.BaseValue baseValue) =>
+            {
+                currentValue.Value = (int) (baseValue.Value + modifier.Add + (baseValue.Value * modifier.Multiply));
+            }).Schedule(this.Dependency);
