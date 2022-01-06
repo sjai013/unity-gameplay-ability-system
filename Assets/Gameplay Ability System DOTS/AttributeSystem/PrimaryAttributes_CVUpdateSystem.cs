@@ -2,7 +2,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Entities;
 
-public class PrimaryAttributeSystem : SystemBase
+public class PrimaryAttributeCurrentValueUpdateSystem : SystemBase
 {
     protected override void OnUpdate()
     {

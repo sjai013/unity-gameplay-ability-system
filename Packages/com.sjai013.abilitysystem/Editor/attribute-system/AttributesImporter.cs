@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEditor.AssetImporters;
 
@@ -44,7 +46,8 @@ namespace GameplayAbilitySystem.AttributeSystem.Editor
             var directory = Path.GetDirectoryName(assetPath);
             var fileName = Path.GetFileNameWithoutExtension(assetPath);
             var componentsFilePath = Path.Combine(directory, fileName) + "_Components.cs";
-            var currentValueCalculationSystemFilePath = Path.Combine(directory, fileName) + "_CVSystem.cs";
+            var currentValueCalculationSystemFilePath = Path.Combine(directory, fileName) + "_CVUpdateSystem.cs";
+            var attributeArchetypesFilePath = Path.Combine(directory, fileName) + "_AttributeArchetypes.cs";
 
             var sourceFileName = ctx.assetPath;
             var attributeStructs = GenerateAttributeStructs(attributes);
@@ -52,10 +55,12 @@ namespace GameplayAbilitySystem.AttributeSystem.Editor
             var currentValueJobs = GenerateCurrentValueJobs(attributes);
             var currentValueSystem = GenerateCurrentValueSystem(attributes, currentValueJobs);
 
+            var archetypeDict = CreateComponentArchetypeGroups(attributes);
+            var archetypeClasses = GenerateAttributeArchetypeClasses(archetypeDict);
+
             WriteFile(componentsFilePath, attributeStructs);
-
-
             WriteFile(currentValueCalculationSystemFilePath, currentValueSystem);
+            WriteFile(attributeArchetypesFilePath, archetypeClasses);
             // // Generate wrapper class starting at the inner most group for each attribute group
             // // Each asset represents a single attribute group
 
@@ -122,6 +127,52 @@ namespace GameplayAbilitySystem.AttributeSystem.Editor
             return fragment;
         }
 
+        private Dictionary<string, List<string>> CreateComponentArchetypeGroups(AttributesFileSchema schema)
+        {
+            Dictionary<string, List<string>> componentGroups = new Dictionary<string, List<string>>(schema.Attributes.Length);
+            for (var i = 0; i < schema.Attributes.Length; i++)
+            {
+                var groups = schema.Attributes[i].Groups;
+                for (var g = 0; g < groups.Length; g++)
+                {
+                    var groupName = groups[g];
+                    var attributeTypeName = schema.Attributes[i].Name;
+                    if (componentGroups.TryGetValue(groupName, out var list))
+                    {
+                        list.Add(attributeTypeName);
+                    }
+                    else
+                    {
+                        componentGroups.Add(groupName, new List<string>() { attributeTypeName });
+                    }
+                }
+            }
+
+            return componentGroups;
+        }
+
+        private string GenerateAttributeArchetypeClasses(Dictionary<string, List<string>> archetypes)
+        {
+            List<string> classes = new List<string>(archetypes.Keys.Count);
+            foreach (var entry in archetypes)
+            {
+                var @class = GenerateAttributeArchetypeClass(entry.Key, entry.Value);
+                classes.Add(@class);
+            }
+
+            return string.Join(Environment.NewLine, classes);
+        }
+
+        private string GenerateAttributeArchetypeClass(string name, List<string> types)
+        {
+            return new AttributeArchetypeClassTemplate().Generate(name, GenerateAttributeArchetypeMethod(name, types));
+        }
+
+        private string GenerateAttributeArchetypeMethod(string attributeName, List<string> types)
+        {
+            var properTypes = types.Select(x => $"Attribute{x}").ToList();
+            return new AttributeArchetypeMethodTemplate().Generate(attributeName, properTypes);
+        }
 
     }
 }

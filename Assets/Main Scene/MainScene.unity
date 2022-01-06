@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 262.36157, g: 325.07837, b: 430.26367, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -7986,7 +7986,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.1005292, y: 1}
+    m_SensorSize: {x: 2.344491, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
     Aperture: 16
@@ -8101,43 +8101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef6417b9a8fc2d41bca7329eff97f0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityIndex: 0
-  Health:
-    BaseValue: 0
-    CurrentValue: 0
-    Modifiers:
-      Add: 0
-      Multiply: 0
-  Strength:
-    BaseValue: 0
-    CurrentValue: 0
-    Modifiers:
-      Add: 0
-      Multiply: 0
-  Mana:
-    BaseValue: 0
-    CurrentValue: 0
-    Modifiers:
-      Add: 0
-      Multiply: 0
-  MaxMana:
-    BaseValue: 0
-    CurrentValue: 0
-    Modifiers:
-      Add: 0
-      Multiply: 0
-  Speed:
-    BaseValue: 0
-    CurrentValue: 0
-    Modifiers:
-      Add: 0
-      Multiply: 0
-  MaxHealth:
-    BaseValue: 0
-    CurrentValue: 0
-    Modifiers:
-      Add: 0
-      Multiply: 0
 --- !u!1 &1102902647
 GameObject:
   m_ObjectHideFlags: 0

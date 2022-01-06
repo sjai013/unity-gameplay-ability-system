@@ -1,16 +1,16 @@
 {
-  "Name": "Primary",  
+  "Name": "Primary",
   "Attributes": [
     {
-      "Name": "Strength",  
-      "Description": "The character's strength",  
-      "Groups": [  
-        "Primary",
+      "Name": "Strength",
+      "Description": "The character's strength",
+      "Groups": [
+        "Primary",  
         "Hero"
-      ]
+      ] 
     }, 
     {
-      "Name": "Intelligence",
+      "Name": "Intelligence", 
       "Description": "The character's intelligence",
       "Groups": [
         "Primary",

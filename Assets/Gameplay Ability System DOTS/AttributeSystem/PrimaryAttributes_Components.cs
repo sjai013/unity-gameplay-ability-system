@@ -1,328 +1,384 @@
+/// <summary>
+/// The character's strength
+/// </summary>
+public sealed class AttributeStrength : GameplayAbilitySystem.AttributeSystem.IAttribute
+{
+    public static Unity.Entities.EntityArchetype GetArchetype(Unity.Entities.EntityManager em) 
+    {
+        return em.CreateArchetype(GetTypes());
+    }
+
+    public static Unity.Entities.ComponentType[] GetTypes() 
+    {
+        return new Unity.Entities.ComponentType[] {typeof(BaseValue), typeof(CurrentValue), typeof(Modifier)};
+    }
+
+    /// <summary>
+    /// Base Value of Attribute
+    /// </summary>
+    public struct BaseValue : Unity.Entities.IComponentData
+    {
 
         /// <summary>
-        /// The character's strength
+        /// Value of component
         /// </summary>
-        public sealed class AttributeStrength : GameplayAbilitySystem.AttributeSystem.IAttribute
-        {
+        public int Value;
+    }
 
-            /// <summary>
-            /// Base Value of Attribute
-            /// </summary>
-            public struct BaseValue : Unity.Entities.IComponentData
-            {
+    /// <summary>
+    /// Current Value of Attribute
+    /// </summary>
+    public struct CurrentValue : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Value of component
+        /// </summary>
+        public int Value;
+    }
 
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
-
-            /// <summary>
-            /// Current Value of Attribute
-            /// </summary>
-            public struct CurrentValue : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
-
-            /// <summary>
-            /// Attribute modifiers
-            /// </summary>
-            public struct Modifier : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Total additive modifiers
-                /// </summary>
-                public Unity.Mathematics.half Add;
-
-                /// <summary>
-                /// Total multiplicative modifiers
-                /// </summary>
-                public Unity.Mathematics.half Multiply;
-            }
-        }
-
+    /// <summary>
+    /// Attribute modifiers
+    /// </summary>
+    public struct Modifier : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Total additive modifiers
+        /// </summary>
+        public Unity.Mathematics.half Add;
 
         /// <summary>
-        /// The character's intelligence
+        /// Total multiplicative modifiers
         /// </summary>
-        public sealed class AttributeIntelligence : GameplayAbilitySystem.AttributeSystem.IAttribute
-        {
+        public Unity.Mathematics.half Multiply;
+    }
+}
 
-            /// <summary>
-            /// Base Value of Attribute
-            /// </summary>
-            public struct BaseValue : Unity.Entities.IComponentData
-            {
+/// <summary>
+/// The character's intelligence
+/// </summary>
+public sealed class AttributeIntelligence : GameplayAbilitySystem.AttributeSystem.IAttribute
+{
+    public static Unity.Entities.EntityArchetype GetArchetype(Unity.Entities.EntityManager em) 
+    {
+        return em.CreateArchetype(GetTypes());
+    }
 
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
+    public static Unity.Entities.ComponentType[] GetTypes() 
+    {
+        return new Unity.Entities.ComponentType[] {typeof(BaseValue), typeof(CurrentValue), typeof(Modifier)};
+    }
 
-            /// <summary>
-            /// Current Value of Attribute
-            /// </summary>
-            public struct CurrentValue : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
-
-            /// <summary>
-            /// Attribute modifiers
-            /// </summary>
-            public struct Modifier : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Total additive modifiers
-                /// </summary>
-                public Unity.Mathematics.half Add;
-
-                /// <summary>
-                /// Total multiplicative modifiers
-                /// </summary>
-                public Unity.Mathematics.half Multiply;
-            }
-        }
-
+    /// <summary>
+    /// Base Value of Attribute
+    /// </summary>
+    public struct BaseValue : Unity.Entities.IComponentData
+    {
 
         /// <summary>
-        /// The character's agility
+        /// Value of component
         /// </summary>
-        public sealed class AttributeAgility : GameplayAbilitySystem.AttributeSystem.IAttribute
-        {
+        public int Value;
+    }
 
-            /// <summary>
-            /// Base Value of Attribute
-            /// </summary>
-            public struct BaseValue : Unity.Entities.IComponentData
-            {
+    /// <summary>
+    /// Current Value of Attribute
+    /// </summary>
+    public struct CurrentValue : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Value of component
+        /// </summary>
+        public int Value;
+    }
 
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
-
-            /// <summary>
-            /// Current Value of Attribute
-            /// </summary>
-            public struct CurrentValue : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
-
-            /// <summary>
-            /// Attribute modifiers
-            /// </summary>
-            public struct Modifier : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Total additive modifiers
-                /// </summary>
-                public Unity.Mathematics.half Add;
-
-                /// <summary>
-                /// Total multiplicative modifiers
-                /// </summary>
-                public Unity.Mathematics.half Multiply;
-            }
-        }
-
+    /// <summary>
+    /// Attribute modifiers
+    /// </summary>
+    public struct Modifier : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Total additive modifiers
+        /// </summary>
+        public Unity.Mathematics.half Add;
 
         /// <summary>
-        /// The character's maximum health
+        /// Total multiplicative modifiers
         /// </summary>
-        public sealed class AttributeMaxHealth : GameplayAbilitySystem.AttributeSystem.IAttribute
-        {
+        public Unity.Mathematics.half Multiply;
+    }
+}
 
-            /// <summary>
-            /// Base Value of Attribute
-            /// </summary>
-            public struct BaseValue : Unity.Entities.IComponentData
-            {
+/// <summary>
+/// The character's agility
+/// </summary>
+public sealed class AttributeAgility : GameplayAbilitySystem.AttributeSystem.IAttribute
+{
+    public static Unity.Entities.EntityArchetype GetArchetype(Unity.Entities.EntityManager em) 
+    {
+        return em.CreateArchetype(GetTypes());
+    }
 
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
+    public static Unity.Entities.ComponentType[] GetTypes() 
+    {
+        return new Unity.Entities.ComponentType[] {typeof(BaseValue), typeof(CurrentValue), typeof(Modifier)};
+    }
 
-            /// <summary>
-            /// Current Value of Attribute
-            /// </summary>
-            public struct CurrentValue : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
-
-            /// <summary>
-            /// Attribute modifiers
-            /// </summary>
-            public struct Modifier : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Total additive modifiers
-                /// </summary>
-                public Unity.Mathematics.half Add;
-
-                /// <summary>
-                /// Total multiplicative modifiers
-                /// </summary>
-                public Unity.Mathematics.half Multiply;
-            }
-        }
-
+    /// <summary>
+    /// Base Value of Attribute
+    /// </summary>
+    public struct BaseValue : Unity.Entities.IComponentData
+    {
 
         /// <summary>
-        /// The character health
+        /// Value of component
         /// </summary>
-        public sealed class AttributeHealth : GameplayAbilitySystem.AttributeSystem.IAttribute
-        {
+        public int Value;
+    }
 
-            /// <summary>
-            /// Base Value of Attribute
-            /// </summary>
-            public struct BaseValue : Unity.Entities.IComponentData
-            {
+    /// <summary>
+    /// Current Value of Attribute
+    /// </summary>
+    public struct CurrentValue : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Value of component
+        /// </summary>
+        public int Value;
+    }
 
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
-
-            /// <summary>
-            /// Current Value of Attribute
-            /// </summary>
-            public struct CurrentValue : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
-
-            /// <summary>
-            /// Attribute modifiers
-            /// </summary>
-            public struct Modifier : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Total additive modifiers
-                /// </summary>
-                public Unity.Mathematics.half Add;
-
-                /// <summary>
-                /// Total multiplicative modifiers
-                /// </summary>
-                public Unity.Mathematics.half Multiply;
-            }
-        }
-
+    /// <summary>
+    /// Attribute modifiers
+    /// </summary>
+    public struct Modifier : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Total additive modifiers
+        /// </summary>
+        public Unity.Mathematics.half Add;
 
         /// <summary>
-        /// The character's maximum mana
+        /// Total multiplicative modifiers
         /// </summary>
-        public sealed class AttributeMaxMana : GameplayAbilitySystem.AttributeSystem.IAttribute
-        {
+        public Unity.Mathematics.half Multiply;
+    }
+}
 
-            /// <summary>
-            /// Base Value of Attribute
-            /// </summary>
-            public struct BaseValue : Unity.Entities.IComponentData
-            {
+/// <summary>
+/// The character's maximum health
+/// </summary>
+public sealed class AttributeMaxHealth : GameplayAbilitySystem.AttributeSystem.IAttribute
+{
+    public static Unity.Entities.EntityArchetype GetArchetype(Unity.Entities.EntityManager em) 
+    {
+        return em.CreateArchetype(GetTypes());
+    }
 
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
+    public static Unity.Entities.ComponentType[] GetTypes() 
+    {
+        return new Unity.Entities.ComponentType[] {typeof(BaseValue), typeof(CurrentValue), typeof(Modifier)};
+    }
 
-            /// <summary>
-            /// Current Value of Attribute
-            /// </summary>
-            public struct CurrentValue : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
-
-            /// <summary>
-            /// Attribute modifiers
-            /// </summary>
-            public struct Modifier : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Total additive modifiers
-                /// </summary>
-                public Unity.Mathematics.half Add;
-
-                /// <summary>
-                /// Total multiplicative modifiers
-                /// </summary>
-                public Unity.Mathematics.half Multiply;
-            }
-        }
-
+    /// <summary>
+    /// Base Value of Attribute
+    /// </summary>
+    public struct BaseValue : Unity.Entities.IComponentData
+    {
 
         /// <summary>
-        /// The character mana
+        /// Value of component
         /// </summary>
-        public sealed class AttributeMana : GameplayAbilitySystem.AttributeSystem.IAttribute
-        {
+        public int Value;
+    }
 
-            /// <summary>
-            /// Base Value of Attribute
-            /// </summary>
-            public struct BaseValue : Unity.Entities.IComponentData
-            {
+    /// <summary>
+    /// Current Value of Attribute
+    /// </summary>
+    public struct CurrentValue : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Value of component
+        /// </summary>
+        public int Value;
+    }
 
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
+    /// <summary>
+    /// Attribute modifiers
+    /// </summary>
+    public struct Modifier : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Total additive modifiers
+        /// </summary>
+        public Unity.Mathematics.half Add;
 
-            /// <summary>
-            /// Current Value of Attribute
-            /// </summary>
-            public struct CurrentValue : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Value of component
-                /// </summary>
-                public int Value;
-            }
+        /// <summary>
+        /// Total multiplicative modifiers
+        /// </summary>
+        public Unity.Mathematics.half Multiply;
+    }
+}
 
-            /// <summary>
-            /// Attribute modifiers
-            /// </summary>
-            public struct Modifier : Unity.Entities.IComponentData
-            {
-                /// <summary>
-                /// Total additive modifiers
-                /// </summary>
-                public Unity.Mathematics.half Add;
+/// <summary>
+/// The character health
+/// </summary>
+public sealed class AttributeHealth : GameplayAbilitySystem.AttributeSystem.IAttribute
+{
+    public static Unity.Entities.EntityArchetype GetArchetype(Unity.Entities.EntityManager em) 
+    {
+        return em.CreateArchetype(GetTypes());
+    }
 
-                /// <summary>
-                /// Total multiplicative modifiers
-                /// </summary>
-                public Unity.Mathematics.half Multiply;
-            }
-        }
+    public static Unity.Entities.ComponentType[] GetTypes() 
+    {
+        return new Unity.Entities.ComponentType[] {typeof(BaseValue), typeof(CurrentValue), typeof(Modifier)};
+    }
+
+    /// <summary>
+    /// Base Value of Attribute
+    /// </summary>
+    public struct BaseValue : Unity.Entities.IComponentData
+    {
+
+        /// <summary>
+        /// Value of component
+        /// </summary>
+        public int Value;
+    }
+
+    /// <summary>
+    /// Current Value of Attribute
+    /// </summary>
+    public struct CurrentValue : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Value of component
+        /// </summary>
+        public int Value;
+    }
+
+    /// <summary>
+    /// Attribute modifiers
+    /// </summary>
+    public struct Modifier : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Total additive modifiers
+        /// </summary>
+        public Unity.Mathematics.half Add;
+
+        /// <summary>
+        /// Total multiplicative modifiers
+        /// </summary>
+        public Unity.Mathematics.half Multiply;
+    }
+}
+
+/// <summary>
+/// The character's maximum mana
+/// </summary>
+public sealed class AttributeMaxMana : GameplayAbilitySystem.AttributeSystem.IAttribute
+{
+    public static Unity.Entities.EntityArchetype GetArchetype(Unity.Entities.EntityManager em) 
+    {
+        return em.CreateArchetype(GetTypes());
+    }
+
+    public static Unity.Entities.ComponentType[] GetTypes() 
+    {
+        return new Unity.Entities.ComponentType[] {typeof(BaseValue), typeof(CurrentValue), typeof(Modifier)};
+    }
+
+    /// <summary>
+    /// Base Value of Attribute
+    /// </summary>
+    public struct BaseValue : Unity.Entities.IComponentData
+    {
+
+        /// <summary>
+        /// Value of component
+        /// </summary>
+        public int Value;
+    }
+
+    /// <summary>
+    /// Current Value of Attribute
+    /// </summary>
+    public struct CurrentValue : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Value of component
+        /// </summary>
+        public int Value;
+    }
+
+    /// <summary>
+    /// Attribute modifiers
+    /// </summary>
+    public struct Modifier : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Total additive modifiers
+        /// </summary>
+        public Unity.Mathematics.half Add;
+
+        /// <summary>
+        /// Total multiplicative modifiers
+        /// </summary>
+        public Unity.Mathematics.half Multiply;
+    }
+}
+
+/// <summary>
+/// The character mana
+/// </summary>
+public sealed class AttributeMana : GameplayAbilitySystem.AttributeSystem.IAttribute
+{
+    public static Unity.Entities.EntityArchetype GetArchetype(Unity.Entities.EntityManager em) 
+    {
+        return em.CreateArchetype(GetTypes());
+    }
+
+    public static Unity.Entities.ComponentType[] GetTypes() 
+    {
+        return new Unity.Entities.ComponentType[] {typeof(BaseValue), typeof(CurrentValue), typeof(Modifier)};
+    }
+
+    /// <summary>
+    /// Base Value of Attribute
+    /// </summary>
+    public struct BaseValue : Unity.Entities.IComponentData
+    {
+
+        /// <summary>
+        /// Value of component
+        /// </summary>
+        public int Value;
+    }
+
+    /// <summary>
+    /// Current Value of Attribute
+    /// </summary>
+    public struct CurrentValue : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Value of component
+        /// </summary>
+        public int Value;
+    }
+
+    /// <summary>
+    /// Attribute modifiers
+    /// </summary>
+    public struct Modifier : Unity.Entities.IComponentData
+    {
+        /// <summary>
+        /// Total additive modifiers
+        /// </summary>
+        public Unity.Mathematics.half Add;
+
+        /// <summary>
+        /// Total multiplicative modifiers
+        /// </summary>
+        public Unity.Mathematics.half Multiply;
+    }
+}
