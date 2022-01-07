@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
+using MyGameplayAbilitySystem.Attributes;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -8,14 +8,21 @@ public class AttributeTestSystem : SystemBase
     const int size = 100000;
     protected override void OnCreate()
     {
+        Test1();
+    }
+
+    private void Test1()
+    {
         NativeArray<Entity> entities1 = new NativeArray<Entity>(size, Allocator.Temp);
-        EntityManager.CreateEntity(PrimaryAttributeGroup.PrimaryArchetype(EntityManager), entities1);
+        EntityManager.CreateEntity(PrimaryAttributeArchetypeFactory.PrimaryAttributeArchetype(EntityManager), entities1);
         entities1.Dispose();
 
         NativeArray<Entity> entities2 = new NativeArray<Entity>(size, Allocator.Temp);
-        EntityManager.CreateEntity(HeroAttributeGroup.HeroArchetype(EntityManager), entities2);
+        EntityManager.CreateEntity(PrimaryAttributeArchetypeFactory.HeroAttributeArchetype(EntityManager), entities2);
         entities2.Dispose();
     }
+
+
     protected override void OnUpdate()
     {
 

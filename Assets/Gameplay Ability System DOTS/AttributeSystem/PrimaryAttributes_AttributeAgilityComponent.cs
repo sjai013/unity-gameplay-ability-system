@@ -1,9 +1,9 @@
-namespace {NAMESPACE}
+namespace MyGameplayAbilitySystem.Attributes
 {
     /// <summary>
-    /// {DESCRIPTION}
+    /// The character's agility
     /// </summary>
-    public sealed class Attribute{NAME} : GameplayAbilitySystem.AttributeSystem.IAttribute
+    public sealed class AttributeAgility : GameplayAbilitySystem.AttributeSystem.IAttribute
     {
         public static Unity.Entities.EntityArchetype GetArchetype(Unity.Entities.EntityManager em) 
         {

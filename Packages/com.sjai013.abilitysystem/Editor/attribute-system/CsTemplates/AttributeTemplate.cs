@@ -7,10 +7,11 @@ namespace GameplayAbilitySystem
     {
         protected override string fileName => "Attribute.template";
 
-        public string Generate(string name, string description)
+        public string Generate(string @namespace, string name, string description)
         {
             return Replace(new List<(string From, string To)>()
             {
+                ("NAMESPACE", @namespace),
                 ("NAME", name),
                 ("DESCRIPTION", description)
             });

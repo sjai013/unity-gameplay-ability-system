@@ -45,20 +45,23 @@ namespace GameplayAbilitySystem.AttributeSystem.Editor
             // Create file at same location as imported asset
             var directory = Path.GetDirectoryName(assetPath);
             var fileName = Path.GetFileNameWithoutExtension(assetPath);
-            var componentsFilePath = Path.Combine(directory, fileName) + "_Components.cs";
             var currentValueCalculationSystemFilePath = Path.Combine(directory, fileName) + "_CVUpdateSystem.cs";
             var attributeArchetypesFilePath = Path.Combine(directory, fileName) + "_AttributeArchetypes.cs";
 
             var sourceFileName = ctx.assetPath;
-            var attributeStructs = GenerateAttributeStructs(attributes);
+            var attributeStructsDict = GenerateAttributeStructs(attributes);
 
             var currentValueJobs = GenerateCurrentValueJobs(attributes);
-            var currentValueSystem = GenerateCurrentValueSystem(attributes, currentValueJobs);
+            var currentValueSystem = GenerateCurrentValueSystem(attributes, currentValueJobs, ctx.assetPath);
 
             var archetypeDict = CreateComponentArchetypeGroups(attributes);
-            var archetypeClasses = GenerateAttributeArchetypeClasses(archetypeDict);
+            var archetypeClasses = GenerateAttributeArchetypeClass(attributes.Namespace, attributes.Name, archetypeDict);
 
-            WriteFile(componentsFilePath, attributeStructs);
+            foreach (var item in attributeStructsDict)
+            {
+                var componentsFilePath = Path.Combine(directory, fileName) + "_Attribute" + item.Key + "Component.cs";
+                WriteFile(componentsFilePath, item.Value);
+            }
             WriteFile(currentValueCalculationSystemFilePath, currentValueSystem);
             WriteFile(attributeArchetypesFilePath, archetypeClasses);
             // // Generate wrapper class starting at the inner most group for each attribute group
@@ -96,16 +99,14 @@ namespace GameplayAbilitySystem.AttributeSystem.Editor
             File.WriteAllText(wrapperFilePath, content);
         }
 
-        private string GenerateAttributeStructs(AttributesFileSchema schema)
+        private Dictionary<string, string> GenerateAttributeStructs(AttributesFileSchema schema)
         {
             var attributes = schema.Attributes;
-            string[] fragmentsArr = new string[attributes.Length];
+            var fragments = new Dictionary<string, string>();
             for (var i = 0; i < attributes.Length; i++)
             {
-                fragmentsArr[i] = new AttributeTemplate().Generate(attributes[i].Name, attributes[i].Description);
+                fragments[attributes[i].Name]= new AttributeTemplate().Generate(schema.Namespace, attributes[i].Name, attributes[i].Description);
             }
-
-            string fragments = String.Join(Environment.NewLine, fragmentsArr);
             return fragments;
         }
 
@@ -121,9 +122,9 @@ namespace GameplayAbilitySystem.AttributeSystem.Editor
             return fragments;
         }
 
-        private string GenerateCurrentValueSystem(AttributesFileSchema schema, string jobsFragment)
+        private string GenerateCurrentValueSystem(AttributesFileSchema schema, string jobsFragment, string sourcePath)
         {
-            var fragment = new CVSystemTemplate().Generate(schema.Attributes.Length, schema.Name, jobsFragment);
+            var fragment = new CVSystemTemplate().Generate(schema.Attributes.Length, schema.Namespace, schema.Name, jobsFragment, version.ToString(), sourcePath);
             return fragment;
         }
 
@@ -151,21 +152,20 @@ namespace GameplayAbilitySystem.AttributeSystem.Editor
             return componentGroups;
         }
 
-        private string GenerateAttributeArchetypeClasses(Dictionary<string, List<string>> archetypes)
+        private string GenerateAttributeArchetypeClass(string @namespace, string name, Dictionary<string, List<string>> archetypes)
         {
-            List<string> classes = new List<string>(archetypes.Keys.Count);
+            List<string> methodsList = new List<string>();
             foreach (var entry in archetypes)
             {
-                var @class = GenerateAttributeArchetypeClass(entry.Key, entry.Value);
-                classes.Add(@class);
+                var attributeName = entry.Key;
+                var types = entry.Value;
+                methodsList.Add(GenerateAttributeArchetypeMethod(attributeName, types));
+                // var @class = GenerateAttributeArchetypeClass(entry.Key, entry.Value);
+                // classes.Add(@class);
             }
 
-            return string.Join(Environment.NewLine, classes);
-        }
-
-        private string GenerateAttributeArchetypeClass(string name, List<string> types)
-        {
-            return new AttributeArchetypeClassTemplate().Generate(name, GenerateAttributeArchetypeMethod(name, types));
+            var methods = string.Join(Environment.NewLine, methodsList);
+            return new AttributeArchetypeClassTemplate().Generate(@namespace, name, methods);
         }
 
         private string GenerateAttributeArchetypeMethod(string attributeName, List<string> types)

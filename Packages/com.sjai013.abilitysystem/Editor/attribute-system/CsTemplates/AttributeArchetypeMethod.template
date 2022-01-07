@@ -1,4 +1,4 @@
-    public static Unity.Entities.EntityArchetype {NAME}Archetype(Unity.Entities.EntityManager em)
-    {
-        return em.CreateArchetype({CONTENT});
-    }
+        public static Unity.Entities.EntityArchetype {NAME}AttributeArchetype(Unity.Entities.EntityManager em)
+        {
+            return em.CreateArchetype({CONTENT});
+        }

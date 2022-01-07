@@ -1,15 +1,16 @@
 {
   "Name": "Primary",
+  "Namespace": "MyGameplayAbilitySystem.Attributes",
   "Attributes": [
     {
       "Name": "Strength",
       "Description": "The character's strength",
-      "Groups": [
+      "Groups": [ 
         "Primary",  
-        "Hero"
-      ] 
+        "Hero"  
+      ]    
     }, 
-    {
+    { 
       "Name": "Intelligence", 
       "Description": "The character's intelligence",
       "Groups": [
@@ -23,12 +24,12 @@
       "Groups": [
         "Primary",
         "Hero"
-      ]
-    },
-    {
+      ]  
+    }, 
+    {  
       "Name": "MaxHealth",
       "Description": "The character's maximum health",
-      "Groups": [
+      "Groups": [ 
         "Hero"
       ],
       "Modifiers": [

@@ -1,3 +1,7 @@
-public static class {NAME}AttributeGroup {
-    {CONTENT}
+namespace {NAMESPACE}
+{
+    public static class {NAME}AttributeArchetypeFactory 
+    {
+{CONTENT}
+    }
 }

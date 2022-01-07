@@ -19,6 +19,7 @@ namespace GameplayAbilitySystem.AttributeSystem.Editor
     internal class AttributesFileSchema
     {
         public string Name { get; set; }
+        public string Namespace { get; set; }
         public Attribute[] Attributes { get; set; }
     }
 }
