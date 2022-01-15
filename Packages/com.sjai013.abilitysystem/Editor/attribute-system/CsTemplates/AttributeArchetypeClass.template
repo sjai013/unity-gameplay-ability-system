@@ -1,3 +1,4 @@
+using System.Linq;
 namespace {NAMESPACE}
 {
     public static class {NAME}AttributeArchetypeFactory 

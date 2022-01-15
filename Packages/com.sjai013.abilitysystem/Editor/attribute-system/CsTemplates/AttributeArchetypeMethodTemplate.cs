@@ -9,12 +9,12 @@ namespace GameplayAbilitySystem
     {
         protected override string fileName => "AttributeArchetypeMethod.template";
 
-        public string Generate(string name, List<string> types)
+        public string Generate(string name, List<string> types) 
         {
             return Replace(new List<(string From, string To)>()
             {
                 ("NAME", name),
-                ("CONTENT", string.Join(",",types.Select(x => $"{x}.GetTypes()")))
+                ("CONTENT", string.Join(".Concat",types.Select(x => $"({x}.GetTypes())")) + ".ToArray()")
             });
         }
     }

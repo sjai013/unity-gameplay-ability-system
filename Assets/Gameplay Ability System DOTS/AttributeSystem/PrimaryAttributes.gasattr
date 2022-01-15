@@ -7,10 +7,10 @@
       "Description": "The character's strength",
       "Groups": [ 
         "Primary",  
-        "Hero"  
+        "Hero"    
       ]    
-    }, 
-    { 
+    },  
+    {  
       "Name": "Intelligence", 
       "Description": "The character's intelligence",
       "Groups": [
