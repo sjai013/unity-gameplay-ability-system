@@ -1,4 +1,8 @@
-﻿# Unity Gameplay Ability System
+# REPOSITORY NO LONGER IN DEVELOPMENT
+This repository has not been updated in some time, and I do not have time to spend on this.  As a result, I am archiving this repository.
+Existing README is below.
+---
+# Unity Gameplay Ability System
 Gameplay Ability System for Unity (or GAS for short) is a Unity framework for creating games which contain any kind of abilities (e.g. DotA, Skyrim).  The framework helps to simplify the interaction between components in a unified manner.  
 
 This project is heavily inspired by the Unreal Gameplay Ability System, and uses similar terminology, but the implementation is specific to Unity.
